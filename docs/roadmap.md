@@ -9,7 +9,7 @@ Publish a professional portfolio serving employers and consulting clients equall
 - Local build and validation: passed, including navigation, assets, contact restrictions, and unchanged PGP key.
 - Preview review and publication: approved by Aaron on October 26, 2026.
 - MVP release: published through PR #1; the YouTube subscription button followed in PR #2. Live domains, pages, images, and the unchanged PGP key were verified.
-- Design polish: charcoal/blue styling and system-font refinements implemented locally from `6335594`, preserving the latest manual content. Awaiting design review before publication.
+- Design polish: approved by Aaron on October 26, 2026. Combined with manual text edits through `4b3ad29`, including the removal of education/certifications from the Experience page, for the next GitHub Pages release.
 
 ## Approved career record
 
