@@ -1,0 +1,27 @@
+title: Aaron Schneider
+description: Software engineering, DevSecOps, automation, and AI research. Experience, selected work, articles, and demos by Aaron Schneider.
+url: https://www.aaronschneider.org
+baseurl: ""
+timezone: America/New_York
+markdown: kramdown
+kramdown:
+  input: GFM
+collections:
+  experience:
+    output: false
+  work:
+    output: false
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - SECURITY.md
+  - docs
+  - vendor
+  - scripts
+  - requirements-pdf.txt

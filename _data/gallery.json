@@ -1,0 +1,271 @@
+[
+  {
+    "id": "propoint",
+    "title": "ProPoint / Super Salon",
+    "description": "Point-of-sale software, salon scheduling, and mobile Guest Pass screens.",
+    "items": [
+      {
+        "title": "Guest Pass \u2014 find a salon",
+        "alt": "Guest Pass mobile screens showing nearby salon locations, estimated wait times, and store details.",
+        "image": "/assets/portfolio/guestpass-mockups-01-orig.webp",
+        "thumbnail": "/assets/portfolio/thumbs/guestpass-mockups-01-orig.webp",
+        "width": 509,
+        "height": 380,
+        "thumbnail_version": "3acb0788044d"
+      },
+      {
+        "title": "Guest Pass \u2014 book a service",
+        "alt": "Guest Pass mobile screens for choosing a stylist, appointment time, and salon services.",
+        "image": "/assets/portfolio/guestpass-mockups-02-orig.webp",
+        "thumbnail": "/assets/portfolio/thumbs/guestpass-mockups-02-orig.webp",
+        "width": 509,
+        "height": 380,
+        "thumbnail_version": "0e312c2e7c46"
+      },
+      {
+        "title": "Salon appointment calendar",
+        "alt": "Salon scheduling interface with appointment columns organized by stylist.",
+        "image": "/assets/portfolio/a03-calendar-large-orig.webp",
+        "thumbnail": "/assets/portfolio/thumbs/a03-calendar-large-orig.webp",
+        "width": 389,
+        "height": 380,
+        "thumbnail_version": "78ef3e81714e"
+      },
+      {
+        "title": "Super Salon point of sale",
+        "alt": "Super Salon desktop point-of-sale interface with product, service, and transaction controls.",
+        "image": "/assets/portfolio/supersalon.webp",
+        "thumbnail": "/assets/portfolio/thumbs/supersalon.webp",
+        "width": 520,
+        "height": 293,
+        "thumbnail_version": "bf4cafd69f42"
+      }
+    ]
+  },
+  {
+    "id": "bayer",
+    "title": "Bayer / Ciber",
+    "description": "Brand websites, product information, and mobile sales tools.",
+    "items": [
+      {
+        "title": "Aleve \u2014 brand website",
+        "alt": "Aleve website with product navigation, a campaign feature, and pain-relief information.",
+        "image": "/assets/portfolio/portfolio-aleve.webp",
+        "thumbnail": "/assets/portfolio/thumbs/portfolio-aleve.webp",
+        "width": 400,
+        "height": 350,
+        "thumbnail_version": "9edca1e9360f"
+      },
+      {
+        "title": "Aleve \u2014 story page",
+        "alt": "Aleve website showing a customer story and product information.",
+        "image": "/assets/portfolio/portfolio-aleve2.webp",
+        "thumbnail": "/assets/portfolio/thumbs/portfolio-aleve2.webp",
+        "width": 490,
+        "height": 350,
+        "thumbnail_version": "23b71042ea5f"
+      },
+      {
+        "title": "Bayer Aspirin",
+        "alt": "Bayer Advanced Aspirin website with product information and campaign content.",
+        "image": "/assets/portfolio/portfolio-aspirin.webp",
+        "thumbnail": "/assets/portfolio/thumbs/portfolio-aspirin.webp",
+        "width": 490,
+        "height": 350,
+        "thumbnail_version": "8e29b1953888"
+      },
+      {
+        "title": "TruBiotics",
+        "alt": "TruBiotics website with a product feature and navigation for probiotic information.",
+        "image": "/assets/portfolio/portfolio-trubiotics.webp",
+        "thumbnail": "/assets/portfolio/thumbs/portfolio-trubiotics.webp",
+        "width": 490,
+        "height": 350,
+        "thumbnail_version": "369b54697ef0"
+      },
+      {
+        "title": "Essure",
+        "alt": "Localized Essure website with product information and campaign imagery.",
+        "image": "/assets/portfolio/portfolio-essure.webp",
+        "thumbnail": "/assets/portfolio/thumbs/portfolio-essure.webp",
+        "width": 490,
+        "height": 315,
+        "thumbnail_version": "6e834d7e1770"
+      },
+      {
+        "title": "Human joint visualization",
+        "alt": "Interactive joint visualization interface with a three-dimensional knee illustration and navigation.",
+        "image": "/assets/portfolio/portfolio-hjv.webp",
+        "thumbnail": "/assets/portfolio/thumbs/portfolio-hjv.webp",
+        "width": 490,
+        "height": 350,
+        "thumbnail_version": "2c26027a5c6c"
+      },
+      {
+        "title": "Pest Management \u2014 mobile overview",
+        "alt": "Bayer Pest Management mobile application showing a product menu and rate calculator.",
+        "image": "/assets/portfolio/portfolio-pest-management.webp",
+        "thumbnail": "/assets/portfolio/thumbs/portfolio-pest-management.webp",
+        "width": 490,
+        "height": 350,
+        "thumbnail_version": "4061aa1003ae"
+      },
+      {
+        "title": "Backed by Bayer \u2014 mobile overview",
+        "alt": "Backed by Bayer mobile application showing a product menu and application-rate calculator.",
+        "image": "/assets/portfolio/portfolio-backedbybayer.webp",
+        "thumbnail": "/assets/portfolio/thumbs/portfolio-backedbybayer.webp",
+        "width": 490,
+        "height": 350,
+        "thumbnail_version": "4fda39b9f839"
+      },
+      {
+        "title": "Pest Management \u2014 product navigation",
+        "alt": "Bayer Pest Management mobile menu with products, pests, calculator, and distributor options.",
+        "image": "/assets/portfolio/portfolio-cellphone1.webp",
+        "thumbnail": "/assets/portfolio/thumbs/portfolio-cellphone1.webp",
+        "width": 214,
+        "height": 380,
+        "thumbnail_version": "898126c8e0dc"
+      },
+      {
+        "title": "Pest Management \u2014 rate calculation",
+        "alt": "Bayer Pest Management mobile calculator displaying an application rate above an ant photograph.",
+        "image": "/assets/portfolio/portfolio-cellphone2.webp",
+        "thumbnail": "/assets/portfolio/thumbs/portfolio-cellphone2.webp",
+        "width": 285,
+        "height": 380,
+        "thumbnail_version": "f5b37d82f2c7"
+      },
+      {
+        "title": "Backed by Bayer \u2014 product navigation",
+        "alt": "Backed by Bayer mobile menu with product, disease, promotion, and representative options.",
+        "image": "/assets/portfolio/portfolio-cellphone3.webp",
+        "thumbnail": "/assets/portfolio/thumbs/portfolio-cellphone3.webp",
+        "width": 214,
+        "height": 380,
+        "thumbnail_version": "6d2582cbaacc"
+      },
+      {
+        "title": "Backed by Bayer \u2014 rate calculation",
+        "alt": "Backed by Bayer mobile calculator with product, area, and spray-volume fields.",
+        "image": "/assets/portfolio/portfolio-cellphone4.webp",
+        "thumbnail": "/assets/portfolio/thumbs/portfolio-cellphone4.webp",
+        "width": 214,
+        "height": 380,
+        "thumbnail_version": "e6358a70ae63"
+      }
+    ]
+  },
+  {
+    "id": "berkeley",
+    "title": "Berkeley Communications",
+    "description": "Web products, video publishing tools, and internal business software.",
+    "items": [
+      {
+        "title": "Berkeley Communications website",
+        "alt": "Berkeley Communications website presenting data-storage, networking, and support services.",
+        "image": "/assets/portfolio/newberkcom.webp",
+        "thumbnail": "/assets/portfolio/thumbs/newberkcom.webp",
+        "width": 400,
+        "height": 262,
+        "thumbnail_version": "312e1937f3d0"
+      },
+      {
+        "title": "Inventory management",
+        "alt": "Internal inventory interface with product fields, search controls, and administrative options.",
+        "image": "/assets/portfolio/berkcom-inventory.webp",
+        "thumbnail": "/assets/portfolio/thumbs/berkcom-inventory.webp",
+        "width": 490,
+        "height": 354,
+        "thumbnail_version": "08a5df548f9a"
+      },
+      {
+        "title": "ADrive",
+        "alt": "ADrive web interface displaying folders, uploaded files, and file-management controls.",
+        "image": "/assets/portfolio/adrive.webp",
+        "thumbnail": "/assets/portfolio/thumbs/adrive.webp",
+        "width": 490,
+        "height": 358,
+        "thumbnail_version": "c2072de14bc4"
+      },
+      {
+        "title": "FilmClick \u2014 film festival",
+        "alt": "FilmClick website displaying online film festival content and featured videos.",
+        "image": "/assets/portfolio/filmclick1.webp",
+        "thumbnail": "/assets/portfolio/thumbs/filmclick1.webp",
+        "width": 400,
+        "height": 256,
+        "thumbnail_version": "1962601f7abf"
+      },
+      {
+        "title": "FilmClick \u2014 community",
+        "alt": "FilmClick community website displaying video listings, member activity, and navigation.",
+        "image": "/assets/portfolio/filmclick2.webp",
+        "thumbnail": "/assets/portfolio/thumbs/filmclick2.webp",
+        "width": 397,
+        "height": 262,
+        "thumbnail_version": "a192dbe296dd"
+      },
+      {
+        "title": "Looklister \u2014 website",
+        "alt": "Looklister website presenting a video-listing service for online sellers.",
+        "image": "/assets/portfolio/looklister.webp",
+        "thumbnail": "/assets/portfolio/thumbs/looklister.webp",
+        "width": 490,
+        "height": 344,
+        "thumbnail_version": "84bfedb8d4e1"
+      },
+      {
+        "title": "Looklister \u2014 video builder",
+        "alt": "Looklister interface with listing fields and a drag-and-drop video area.",
+        "image": "/assets/portfolio/looklister2.webp",
+        "thumbnail": "/assets/portfolio/thumbs/looklister2.webp",
+        "width": 490,
+        "height": 352,
+        "thumbnail_version": "1573ca6ba4c8"
+      },
+      {
+        "title": "Volo Labs",
+        "alt": "Volo Labs website with company information and product-development service content.",
+        "image": "/assets/portfolio/vololabs.webp",
+        "thumbnail": "/assets/portfolio/thumbs/vololabs.webp",
+        "width": 400,
+        "height": 263,
+        "thumbnail_version": "981dbbfb1534"
+      }
+    ]
+  },
+  {
+    "id": "westinghouse",
+    "title": "Westinghouse",
+    "description": "A brand visual from the Westinghouse project archive.",
+    "items": [
+      {
+        "title": "Westinghouse \u2014 brand visual",
+        "alt": "Westinghouse brand banner with historic logos and a portrait of George Westinghouse.",
+        "image": "/assets/portfolio/westinghouse.webp",
+        "thumbnail": "/assets/portfolio/thumbs/westinghouse.webp",
+        "width": 520,
+        "height": 240,
+        "thumbnail_version": "f079706ddf6a"
+      }
+    ]
+  },
+  {
+    "id": "bucky-ball",
+    "title": "Bucky Ball Web",
+    "description": "An earlier web-services project.",
+    "items": [
+      {
+        "title": "Bucky Ball Web",
+        "alt": "Bucky Ball Web website with a client-login area and web-services content.",
+        "image": "/assets/portfolio/buckyball.webp",
+        "thumbnail": "/assets/portfolio/thumbs/buckyball.webp",
+        "width": 400,
+        "height": 300,
+        "thumbnail_version": "ad391ded85af"
+      }
+    ]
+  }
+]
