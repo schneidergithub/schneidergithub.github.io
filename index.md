@@ -5,15 +5,15 @@ permalink: /
 ---
 <section class="hero">
   <div>
-    <p class="eyebrow">Software engineering · DevSecOps · Automation</p>
-    <h1>Building software.<br>systematic approach<br>to how it gets built.</h1>
-    <p class="lead">Hi, I'm Aaron Schneider! I have over 25+ years of experience across full-stack development, cloud architecture, QA automation, and engineering management.</p>
+    <p class="eyebrow">Software Engineer · DevSecOps · AI Research</p>
+    <h1>Building software.<br>A systematic approach.</h1>
+    <p class="lead">Hi, I'm Aaron Schneider. <br> I have over 25+ years of experience across full-stack development, cloud architecture, QA automation, and engineering management.</p>
     <div class="actions"><a class="button" href="{{ '/work/' | relative_url }}">Explore selected work</a><a class="button secondary" href="{{ '/experience/' | relative_url }}">View experience</a></div>
   </div>
   <aside class="focus-panel" aria-labelledby="focus-title">
     <p class="eyebrow">Current focus</p>
-    <h2 id="focus-title">AI research, grounded in engineering.</h2>
-    <p>At CommonDevOps, we follow methods from the Scaled Agile Framework for developing software. We are researching how AI can help, with a focus on project management, DevSecOps and test-driven development.</p>
+    <h2 id="focus-title">AI research.</h2>
+    <p>At CommonDevOps, we are submitting a <a href="https://github.com/harbor-framework/terminal-bench-science/pull/1513">benchmark task</a> to terminal-bench-science.  Terminal Bench Science is based out of Standford University and used for testing the latest AI models. </p>
     <a href="{{ '/work/#commondevops' | relative_url }}">See the work <span aria-hidden="true">→</span></a>
   </aside>
 </section>
