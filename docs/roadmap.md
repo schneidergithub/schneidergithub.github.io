@@ -8,7 +8,8 @@ Publish a professional portfolio serving employers and consulting clients equall
 - Four main pages, PGP utility, six project cards, and six publication links: implemented locally.
 - Local build and validation: passed, including navigation, assets, contact restrictions, and unchanged PGP key.
 - Preview review and publication: approved by Aaron on October 26, 2026.
-- Release: publish this approved version through a pull request to `main`, then verify the live domains and assets.
+- MVP release: published through PR #1; the YouTube subscription button followed in PR #2. Live domains, pages, images, and the unchanged PGP key were verified.
+- Design polish: charcoal/blue styling and system-font refinements implemented locally from `6335594`, preserving the latest manual content. Awaiting design review before publication.
 
 ## Approved career record
 
@@ -45,7 +46,7 @@ Pre-MVP revision: `accccc0362059e3baf3d1aac9ae521ef45661b2c`. Rollback uses a re
 
 ## Later iterations
 
-1. Discuss and implement the visual redesign.
+1. Review the local charcoal/blue design polish, then publish the approved version through a pull request.
 2. Expand selected project cards into case studies with supporting evidence.
 3. Add approved screenshots, published videos, and original articles incrementally.
 4. Consider a wider historical archive only if useful.
