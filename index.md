@@ -13,7 +13,7 @@ permalink: /
   <aside class="focus-panel" aria-labelledby="focus-title">
     <p class="eyebrow">Current focus</p>
     <h2 id="focus-title">AI research.</h2>
-    <p>At CommonDevOps, we are submitting a <a href="https://github.com/harbor-framework/terminal-bench-science/pull/1513">benchmark task</a> to terminal-bench-science.  Terminal Bench Science is based out of Standford University and used for testing the latest AI models. </p>
+    <p>At CommonDevOps, we are submitting a <a href="https://github.com/harbor-framework/terminal-bench-science/pull/1513">benchmark task</a> to terminal-bench-science.  <a href="https://www.tbench.ai/news/terminal-bench-science-0-1">Terminal Bench Science</a> is based out of Stanford University and used for testing the latest AI models from Google, Anthropic and OpenAI. </p>
     <a href="{{ '/work/#commondevops' | relative_url }}">See the work <span aria-hidden="true">→</span></a>
   </aside>
 </section>
