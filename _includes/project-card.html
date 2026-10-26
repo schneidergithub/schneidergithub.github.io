@@ -1,0 +1,17 @@
+<article class="project-card" id="{{ project.slug }}">
+  <div class="card-copy">
+    <p class="eyebrow">{{ project.category | escape }}</p>
+    <h2>{{ project.title | escape }}</h2>
+    <p class="context">{{ project.context | escape }}</p>
+    <p>{{ project.summary | escape }}</p>
+    <div class="project-detail">{{ project.content }}</div>
+    <p class="outcome"><strong>Outcome</strong> {{ project.outcome | escape }}</p>
+    <ul class="tags" aria-label="Technologies and methods">{% for tag in project.technologies %}<li>{{ tag | escape }}</li>{% endfor %}</ul>
+  </div>
+  {% if project.image %}
+  <figure>
+    <a class="image-link" href="{{ project.image | relative_url }}" aria-label="View full-size screenshot: {{ project.image_alt | escape }}"><img src="{{ project.image | relative_url }}" alt="{{ project.image_alt | escape }}" width="{{ project.image_width }}" height="{{ project.image_height }}" loading="lazy" decoding="async"></a>
+    <figcaption>{{ project.caption | escape }}</figcaption>
+  </figure>
+  {% endif %}
+</article>
