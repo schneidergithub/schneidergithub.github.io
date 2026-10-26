@@ -33,6 +33,7 @@ permalink: /
     <div class="audience"><h3>For employers</h3><p>Explore my experience in software engineering, DevSecOps, automation, and technical leadership.</p><div class="actions"><a class="button secondary" href="{{ '/experience/' | relative_url }}">View experience</a><a class="button secondary" href="https://www.linkedin.com/in/aarondrewschneider/">Connect on LinkedIn <span aria-hidden="true">↗</span></a></div></div>
     <div class="audience"><h3>For consulting clients</h3><p>Contact me directly about individual consulting, or connect with CommonDevOps about a team engagement.</p><div class="actions"><a class="button secondary" href="https://www.linkedin.com/in/aarondrewschneider/">Individual consulting <span aria-hidden="true">↗</span></a><a class="button secondary" href="https://www.linkedin.com/company/commondevops/">CommonDevOps team <span aria-hidden="true">↗</span></a></div></div>
   </div>
+  <div class="actions"><a class="button secondary" href="https://www.youtube.com/@commondevops?sub_confirmation=1">Subscribe to CommonDevOps on YouTube <span aria-hidden="true">↗</span></a></div>
 </section>
 
 <section class="section" aria-labelledby="writing-title">
