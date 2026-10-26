@@ -6,14 +6,14 @@ permalink: /
 <section class="hero">
   <div>
     <p class="eyebrow">Software engineering · DevSecOps · Automation</p>
-    <h1>Building software.<br>Improving how<br>it gets built.</h1>
-    <p class="lead">I'm Aaron Schneider. I bring 25+ years of experience across full-stack development, cloud architecture, QA automation, and engineering management.</p>
+    <h1>Building software.<br>systematic approach<br>to how it gets built.</h1>
+    <p class="lead">Hi, I'm Aaron Schneider! I have over 25+ years of experience across full-stack development, cloud architecture, QA automation, and engineering management.</p>
     <div class="actions"><a class="button" href="{{ '/work/' | relative_url }}">Explore selected work</a><a class="button secondary" href="{{ '/experience/' | relative_url }}">View experience</a></div>
   </div>
   <aside class="focus-panel" aria-labelledby="focus-title">
     <p class="eyebrow">Current focus</p>
     <h2 id="focus-title">AI research, grounded in engineering.</h2>
-    <p>At CommonDevOps, I work with a scrum team researching and developing software using frontier cloud models and local LLMs, with a focus on DevSecOps and test-driven development.</p>
+    <p>At CommonDevOps, we follow methods from the Scaled Agile Framework for developing software. We are researching how AI can help, with a focus on project management, DevSecOps and test-driven development.</p>
     <a href="{{ '/work/#commondevops' | relative_url }}">See the work <span aria-hidden="true">→</span></a>
   </aside>
 </section>
@@ -28,7 +28,7 @@ permalink: /
 </section>
 
 <section class="section" id="connect" aria-labelledby="connect-title">
-  <p class="eyebrow">Let's connect</p><h2 id="connect-title">Experience for your team.<br>Engineering for your next challenge.</h2>
+  <p class="eyebrow">Let's connect</p><h2 id="connect-title">Experience for your team.<br>Systematic engineering for your project.</h2>
   <div class="split">
     <div class="audience"><h3>For employers</h3><p>Explore my experience in software engineering, DevSecOps, automation, and technical leadership.</p><div class="actions"><a class="button secondary" href="{{ '/experience/' | relative_url }}">View experience</a><a class="button secondary" href="https://www.linkedin.com/in/aarondrewschneider/">Connect on LinkedIn <span aria-hidden="true">↗</span></a></div></div>
     <div class="audience"><h3>For consulting clients</h3><p>Contact me directly about individual consulting, or connect with CommonDevOps about a team engagement.</p><div class="actions"><a class="button secondary" href="https://www.linkedin.com/in/aarondrewschneider/">Individual consulting <span aria-hidden="true">↗</span></a><a class="button secondary" href="https://www.linkedin.com/company/commondevops/">CommonDevOps team <span aria-hidden="true">↗</span></a></div></div>
@@ -36,6 +36,6 @@ permalink: /
 </section>
 
 <section class="section" aria-labelledby="writing-title">
-  <div class="section-heading"><h2 id="writing-title">Articles & demos</h2><a href="{{ '/articles/' | relative_url }}">View the collection <span aria-hidden="true">→</span></a></div>
+  <div class="section-heading"><h2 id="writing-title">Articles & Demos</h2><a href="{{ '/articles/' | relative_url }}">View the collection <span aria-hidden="true">→</span></a></div>
   <ul class="reading-list">{% for item in site.data.publications limit:3 %}<li><a href="{{ item.url | escape }}">{{ item.title | escape }} <span aria-hidden="true">↗</span></a><span>{{ item.type }} · {{ item.publisher | escape }}</span></li>{% endfor %}</ul>
 </section>
