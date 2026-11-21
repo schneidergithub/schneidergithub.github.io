@@ -1,11 +1,18 @@
-name: Experience page checks
+name: Portfolio page checks
 on:
   pull_request:
     paths:
+      - 'work.md'
+      - 'work/**'
+      - '_work/**'
+      - '_includes/project-card.html'
+      - '_layouts/**'
+      - 'sitemap.xml'
+      - 'assets/portfolio/**'
+      - 'scripts/check_case_studies.cjs'
       - 'experience.md'
       - '_experience/**'
       - 'assets/experience/**'
-      - 'assets/portfolio/thumbs/**'
       - 'assets/site.css'
       - 'scripts/check_experience_browser.cjs'
       - 'scripts/check_site.py'
@@ -13,10 +20,17 @@ on:
   push:
     branches: [main]
     paths:
+      - 'work.md'
+      - 'work/**'
+      - '_work/**'
+      - '_includes/project-card.html'
+      - '_layouts/**'
+      - 'sitemap.xml'
+      - 'assets/portfolio/**'
+      - 'scripts/check_case_studies.cjs'
       - 'experience.md'
       - '_experience/**'
       - 'assets/experience/**'
-      - 'assets/portfolio/thumbs/**'
       - 'assets/site.css'
 permissions:
   contents: read
@@ -41,6 +55,7 @@ jobs:
         run: |
           python3 -m http.server 8765 --directory _site --bind 127.0.0.1 &
           node scripts/check_experience_browser.cjs http://127.0.0.1:8765/experience/
+          node scripts/check_case_studies.cjs http://127.0.0.1:8765
       - uses: actions/upload-artifact@v4
         with:
           name: experience-previews
@@ -51,7 +66,8 @@ jobs:
           NODE_PATH: ${{ runner.temp }}/browser/node_modules
         run: |
           for attempt in {1..30}; do
-            if node scripts/check_experience_browser.cjs https://www.aaronschneider.org/experience/; then exit 0; fi
+            if node scripts/check_experience_browser.cjs https://www.aaronschneider.org/experience/ &&
+               node scripts/check_case_studies.cjs https://www.aaronschneider.org; then exit 0; fi
             sleep 10
           done
           exit 1

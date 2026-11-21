@@ -23,7 +23,7 @@ img{display:block;max-width:100%;height:auto}
 .brand-mark{display:grid;place-items:center;width:2.6rem;height:2.6rem;border:1px solid var(--line);border-radius:50%;color:var(--accent);font-size:.875rem;letter-spacing:.03em}
 nav{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem}
 nav a{padding-block:.5rem;font-size:.9rem;text-decoration:none;color:var(--muted)}
-nav a:hover,nav a[aria-current=page]{color:var(--accent);text-decoration:underline}
+nav a:hover,nav a[aria-current]{color:var(--accent);text-decoration:underline}
 main{min-height:65vh}
 .hero{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:3rem;align-items:center;padding-block:5rem}
 .eyebrow{text-transform:uppercase;letter-spacing:.1em;font-size:.75rem;font-weight:700;color:var(--muted);margin-bottom:1rem}
@@ -55,6 +55,24 @@ main{min-height:65vh}
 .project-card h2{font-size:1.65rem}
 .context{font-size:.875rem;color:var(--muted)}
 .project-detail p{color:var(--muted)}
+.case-link{margin:.75rem 0}
+.case-link a,.study-back{display:inline-flex;align-items:center;min-height:44px}
+.case-study{max-width:62rem;margin-inline:auto;padding-block:2rem 4rem}
+.study-back{margin-bottom:1.5rem;font-size:.95rem}
+.study-header{padding-bottom:1.5rem;border-bottom:1px solid var(--line)}
+.study-header h1{font-size:clamp(2.4rem,5vw,3.8rem);max-width:24ch;margin-bottom:1rem}
+.study-header .lead{margin-bottom:0}
+.study-copy{max-width:68ch;margin-top:2rem}
+.study-copy h2,.study-evidence h2{font-size:clamp(1.4rem,3vw,1.85rem);margin-block:1.75rem .65rem}
+.study-copy table{border-collapse:collapse;width:100%;margin:1rem 0 1.5rem}
+.study-copy th,.study-copy td{padding:.7rem .8rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+.study-copy th{background:var(--panel);font-weight:600}
+.study-evidence{border-top:1px solid var(--line);margin-top:2rem}
+.study-figures{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr));gap:1.5rem;align-items:start}
+.study-figures figure{margin:0;padding:0;min-width:0}
+.study-image{display:grid;place-items:center;background:#fff;border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.study-image img{width:auto;max-width:100%;max-height:28rem}
+.study-figures figcaption{padding:.65rem .1rem 0}
 .outcome{padding-top:1rem;border-top:1px solid var(--line);font-size:.95rem}
 .outcome strong{color:var(--accent);display:block;margin-bottom:.25rem}
 .tags{list-style:none;display:flex;flex-wrap:wrap;gap:.4rem;padding:0;margin:1.3rem 0 0}

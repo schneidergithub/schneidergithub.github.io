@@ -82,11 +82,20 @@ Approved November 21, 2026. [Release PR #7](https://github.com/schneidergithub/s
 2. Run `bundle exec jekyll build` and `python3 scripts/check_site.py`. Use a temporary rendered copy to confirm that removing one role's image or restoring its date causes the expected failure.
 3. Inspect the page at 1280 and 375 CSS pixels and attach representative previews to the pull request. After the GitHub Pages deployment, open the [published Experience page](https://www.aaronschneider.org/experience/) and verify the images load from the deployed paths.
 
+## Selected Work case studies
+
+Three project cards now open detailed case studies. Each explains Aaron’s contribution and an observed result. The ProPoint and Aleve stories also link to full-size historical screenshots.
+
+| Case study | Evidence used |
+| --- | --- |
+| [ProPoint checkout](../work/super-salon-checkout.md) | Project notes describe a discounted purchase that produced a one-cent difference after synchronization. The product archive supplies desktop and SaaS screenshots. |
+| [Indiana case archives](../work/indiana-case-archives.md) | The pilot account documents the filename issue and correction. Aaron’s rollout account scopes the file counts and monthly storage savings per county across 92 counties. |
+| [Bayer’s Aleve website](../work/bayer-aleve.md) | Aaron’s role history establishes lead development through Ciber. The archived homepage and story page document the delivered site. |
+
 ## Later portfolio work
 
-1. Expand selected project cards into case studies with supporting evidence.
-2. Add approved screenshots, published videos, and original articles incrementally.
-3. Consider a wider historical archive only if useful.
+1. Add approved screenshots, published videos, and original articles incrementally.
+2. Consider a wider historical archive only if useful.
 
 ## Approved career record
 

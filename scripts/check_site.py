@@ -12,6 +12,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / '_site'
 PAGES = ['/', '/experience/', '/work/', '/articles/', '/pgp/', '/404.html']
+STUDIES = ['/work/super-salon-checkout/', '/work/indiana-case-archives/', '/work/bayer-aleve/']
 errors = []
 
 class Page(HTMLParser):
@@ -107,7 +108,7 @@ def file_for(route):
     return path / 'index.html' if route.endswith('/') else path
 
 parsed = {}
-for route in PAGES:
+for route in PAGES + STUDIES:
     path = file_for(route)
     if not path.exists():
         errors.append(f'Missing page: {route}'); continue
@@ -138,6 +139,11 @@ for route, name, count in [('/work/', 'project-card', 6), ('/articles/', 'public
 if '/experience/' in parsed:
     check_experience(file_for('/experience/'))
 
+sitemap = file_for('/sitemap.xml').read_text()
+for route in STUDIES:
+    if route not in parsed['/work/'].links or f'<loc>https://www.aaronschneider.org{route}</loc>' not in sitemap:
+        errors.append(f'{route}: missing from Selected Work or the sitemap')
+
 for private in ['docs', 'scripts', 'Gemfile', 'Gemfile.lock', 'README.md', 'SECURITY.md', 'requirements-pdf.txt']:
     if (SITE / private).exists(): errors.append(f'Build exposed source-only file: {private}')
 if (ROOT / 'CNAME').read_text().strip() != 'www.aaronschneider.org': errors.append('Custom domain changed')
@@ -152,6 +158,6 @@ if any(p.suffix.lower() in ['.mov', '.mp4', '.wav'] for p in SITE.rglob('*')): e
 
 if errors:
     print('\n'.join(errors)); sys.exit(1)
-print(f'PASS: {len(PAGES)} pages; navigation, anchors, assets, metadata, content counts, contact restrictions, and publishing exclusions.')
+print(f'PASS: {len(parsed)} pages; navigation, anchors, assets, metadata, content counts, contact restrictions, and publishing exclusions.')
 print('PGP SHA-256:', hashlib.sha256(key.encode()).hexdigest())
 print('Published size:', sum(p.stat().st_size for p in SITE.rglob('*') if p.is_file()), 'bytes')
