@@ -11,6 +11,64 @@ Serve employers and consulting clients through a portfolio of career experience,
 - MVP release: published through PR #1; the YouTube subscription button followed in PR #2. Live domains, pages, images, and the unchanged PGP key were verified.
 - The charcoal-and-blue design and manual edits through `4b3ad29` merged in [PR #3](https://github.com/schneidergithub/schneidergithub.github.io/pull/3), including removal of education and certifications from the Experience page. [PR #4](https://github.com/schneidergithub/schneidergithub.github.io/pull/4) added versioned stylesheet and favicon URLs.
 
+## Next three sprints · Mobile browsing, project evidence and contact
+
+**Planning status, November 21, 2026.** Proposed for kickoff following the post-MVP design review. The technical project manager and Scrum Master sequenced the releases with marketing, UX and graphic design, frontend and accessibility QA. Each sprint delivers a complete visitor journey and can ship independently. The published MVP and its acceptance record follow below.
+
+| Order | Sprint goal | Stories | Forecast | Review question |
+| --- | --- | ---: | ---: | --- |
+| 1 | Navigate and play a recording on a phone | 4 | 15 points | Can a visitor identify and start the featured recording from the first screen? |
+| 2 | Find a case study and browse the visual archive | 4 | 13 points | Can a hiring manager open a case directly and inspect an archive group on demand? |
+| 3 | Recognize Aaron’s contribution and reach the right contact | 5 | 13 points | Can a reader identify the outcome and reach Aaron or the consulting team directly from the case? |
+
+**Capacity.** Forecast 41 relative points across three two-week sprints, about six calendar weeks from kickoff. The last three releases delivered 15, 8 and 7 points. This forecast assumes overlapping editorial, design and frontend work with QA throughout. The TPM will use actual availability at kickoff and completed work at each review to revise the next forecast. Each sprint identifies the first story to move if capacity tightens.
+
+### Sprint 1 · Navigate and play a recording on a phone
+
+At 375px the production header takes 167px. On Articles & Demos the first 150 × 84px poster sits beside empty space, and the first recording title begins about 824px down. The sprint gives that space back to the visitor and preserves the homepage typography. [Production captures](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44959272962/artifacts/14729070992)
+
+| Visitor story | Owner | Points | Implementation and acceptance |
+| --- | --- | ---: | --- |
+| Find any main page from a phone | UX + frontend | 5 | Use one set of four navigation links. Where the links stop fitting, put Aaron’s name and a labeled Menu control in one row. At 375px and default text, the closed header is at most 80px tall. Enter or Space opens the menu, its state is announced, Tab reaches each link, Escape closes it and returns focus. Keep the current page or Work section identifiable, 44px touch targets and all destinations reachable with JavaScript off. |
+| Identify and play the featured recording | Frontend + media design | 5 | Place the featured title above a wide 16:9 poster. Pair the remaining recording titles and smaller covers in compact rows. At 375 × 812 and default text, the entire first title and Play control are visible before scrolling. Activate Play there, expand the player to the content width, and close playback by keyboard. Preserve all eight local covers and entry fragments, the three inline players, and direct YouTube links when JavaScript is off. |
+| Scan sections without repeated dividers | Graphic design + frontend | 3 | Shorten the Articles introduction and compact its format navigation while keeping the three labels, counts and anchors. Use one visual boundary at the transition into Recordings, and spacing between ordinary siblings. Apply the same treatment to the homepage results band. Compare phone and desktop captures for hierarchy. Keep blue action links, underlines, visible gold focus and reduced-motion behavior. |
+| Recognize the homepage proof link on a phone | Editorial + UX | 2 | Lead the link with Westinghouse and its 3× Elasticsearch throughput result. At 375px the client name sits with the result, both hero actions remain visible, and the link opens the existing case. Preserve the one-line champagne signature at desktop widths and its natural reflow with enlarged text. |
+
+**Sequence and review.** Capture the closed phone header and Articles screen. Build the menu and publication layout in parallel, then tune the spacing with the real title and play control in place. Replace the tests that require a two-row phone menu and equal publication cover widths. Add a 375 × 812 check alongside the existing 900px-high checks. If navigation needs a script, include that exact asset in the existing static check and both workflow path filters. Demo from a cold Articles visit, play and close the recording, then reach Work from the menu. If capacity tightens, carry the 2-point homepage proof-link edit forward.
+
+### Sprint 2 · Find a case study and browse the visual archive
+
+Today the Projects jump skips the five case studies, and the phone gallery stacks 26 frames at 240px each. That costs 6,240px in frames before captions and spacing. The design target is five visible representative images with the complete archive available on demand.
+
+| Visitor story | Owner | Points | Implementation and acceptance |
+| --- | --- | ---: | --- |
+| Go straight to the case studies | Product + frontend | 3 | Put Case studies first in Work’s section navigation, followed by Project summaries and Gallery. Match the destination headings to the link labels. Each jump lands on its visible heading. Keep all five outcome-labeled case links together, six project cards reachable, and existing project fragments working. |
+| Browse a project gallery on demand | Frontend + accessibility QA | 5 | Show five representative images in the default phone view. Provide keyboard-operable disclosures for ProPoint (4 images), Bayer (12) and Berkeley (8). Westinghouse and Bucky Ball Web each open their single image directly. Expanded groups expose their full set once, including the representative. Visible labels and announced states identify each group and its count. |
+| Recognize the work from one image | Graphic design + editorial | 3 | Choose the five covers from the existing attributed archive. Review each at 375px and desktop size. Give the representative an informative caption identifying the work or artifact. Check that logos, screenshots and historical branding are framed legibly and credited to the appropriate project or client. |
+| Open a shared gallery or project link | Frontend + QA | 2 | Preserve every existing group ID, project fragment and full-size image URL. Test direct entry to all five groups and a legacy project link, expand a group, open an original, and return to the group. With JavaScript off, all 26 originals remain reachable. Update gallery checks to expand multi-image groups before verifying them. |
+
+**Sequence and review.** Establish the navigation destinations first. Design selects the covers while frontend builds a disclosure using one multi-image group and one singleton. Then apply it to all groups. Demo from Explore selected work to a case, return to its matching project and open the Bayer group from a shared link. Confirm five image previews on initial phone load and all 26 distinct originals across the expanded archive. If capacity tightens, use the existing captions and carry the 3-point editorial and art refinement forward.
+
+### Sprint 3 · Recognize the contribution and reach the right contact
+
+Use the approved career record and published case studies for copy. This release shortens the path from evidence to contact for hiring managers and consulting clients. The science case and publications retain their original public URLs.
+
+| Visitor story | Owner | Points | Implementation and acceptance |
+| --- | --- | ---: | --- |
+| Spot engineering leadership on Experience | Editorial + product | 3 | Lead the Nuix entry with Aaron’s leadership of 12 engineers across multiple time zones. Follow it with architecture and delivery details. A reviewer can identify the team scope from the opening bullet. Keep the 11 role thumbnails, existing case links and date-free presentation. |
+| Understand the Super Salon result at a glance | Marketing + frontend | 2 | Lead the homepage highlight with the checkout error caught before release. Keep the one-cent difference as supporting evidence and retain the case link. The case identifies the online and desktop totals and attributes the finding to automated testing. |
+| Read the scientific case heading on a phone | Editorial + UX | 2 | Shorten the display headline so “meta-analysis” stays together at 375px and default text. Keep the case URL, both co-authors, Aaron’s review and analysis roles, the presentation and merged-task links, and its dedicated sharing artwork. Verify the heading and dependent link labels in context. |
+| Contact the right person from any case | Product + frontend | 3 | Use the shared case ending to link directly to Aaron’s LinkedIn for hiring or individual consulting and separately to CommonDevOps on LinkedIn for a team engagement. On each of the five cases, each contact takes one activation. Keep Return to project, retain the homepage contact hub, and use one visual boundary for the case ending. |
+| Share a publication without obscuring its main action | UX + frontend | 3 | Give Play or the original article or report link visual priority. Replace repeated “Link to entry” wording with a quieter native Permalink whose accessible name includes the title. A reader can copy its address through the browser, share it and land on the same entry with JavaScript off. Verify all eight fragments and the recording, investigation and case cross-links. |
+
+**Sequence and review.** Editorial verifies the claims against the Nuix and Super Salon records while frontend updates the common case ending. Use the first review pass for a recruiter reading Experience, followed by a consulting buyer entering through a shared case. Verify both contact destinations on all five cases, each matching project return, and a shared article link. If capacity tightens, carry the 3-point publication permalink refinement into the backlog.
+
+### Working agreement for these releases
+
+- **Kickoff and delivery.** Product confirms the sprint goal and cut line. The Scrum Master monitors blockers at the daily check-in. Frontend and QA update the affected regression check in the same implementation PR as each intentional behavior change, including the existing exact proof-link text and case contact destinations.
+- **Definition of done.** The Jekyll build, static checks and relevant browser journeys pass on preview. Exercise the changed controls with keyboard and JavaScript disabled where a fallback is specified. Check 320px with enlarged text for clipping or horizontal scrolling, inspect phone, tablet and desktop captures, and retain visible focus and the desktop signature.
+- **Review, release and retro.** A virtual reviewer outside implementation demonstrates the sprint’s visitor journey. After implementation approval and merge, verify GitHub Pages on the custom domain and attach the PR, checks and before/after captures to this roadmap. The TPM records accepted and carried stories. The Scrum Master assigns one retrospective action with an owner for the next planning session.
+
 ## Current MVP release
 
 **Live on November 21, 2026.** The team delivered and accepted three consecutive sprints, with 12 stories and 30 planned points. The site now has five case studies, eight publications and eleven Experience entries. Each sprint passed its custom-domain checks before the next began. [Production portfolio](https://www.aaronschneider.org/)
