@@ -12,7 +12,7 @@ permalink: /
   <aside class="focus-panel" aria-labelledby="focus-title">
     <p class="eyebrow">Current focus</p>
     <h2 id="focus-title">Can an AI agent reproduce a scientific result?</h2>
-    <p>Dr. Ian Miller and I co-authored a task for Terminal-Bench-Science that asks agents to reconstruct effect sizes from published studies of depression. The project has merged our task.</p>
+    <p>Terminal-Bench-Science tests how AI agents handle scientific workflows. Dr. Ian Miller and I co-authored its “MDD Executive Function” meta-analysis task. I also review DevOps and infrastructure changes and analyze trial results.</p>
     <a href="{{ '/articles/' | relative_url }}#benchmark-presentation">Explore the presentation and task <span aria-hidden="true">→</span></a>
   </aside>
 </section>
