@@ -92,6 +92,8 @@ main{min-height:65vh}
 .study-header h1{font-size:clamp(2.4rem,5vw,3.8rem);max-width:24ch;margin-bottom:1rem}
 .study-header .lead{margin-bottom:0}
 .study-copy{max-width:68ch;margin-top:2rem}
+.study-copy h2[tabindex]{width:fit-content;max-width:100%;scroll-margin-top:1rem}
+.study-copy h2[tabindex]:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
 .study-copy h2,.study-evidence h2{font-size:clamp(1.4rem,3vw,1.85rem);margin-block:1.75rem .65rem}
 .study-copy table{border-collapse:collapse;width:100%;margin:1rem 0 1.5rem}
 .study-copy th,.study-copy td{padding:.7rem .8rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}

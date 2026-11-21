@@ -11,6 +11,24 @@ Serve employers and consulting clients through a portfolio of career experience,
 - MVP release: published through PR #1; the YouTube subscription button followed in PR #2. Live domains, pages, images, and the unchanged PGP key were verified.
 - The charcoal-and-blue design and manual edits through `4b3ad29` merged in [PR #3](https://github.com/schneidergithub/schneidergithub.github.io/pull/3), including removal of education and certifications from the Experience page. [PR #4](https://github.com/schneidergithub/schneidergithub.github.io/pull/4) added versioned stylesheet and favicon URLs.
 
+## Three-sprint content release · Scientific QA, incident investigation and engineering leadership
+
+**Kickoff and review, November 21, 2026.** The technical project manager, product reviewer, editor, frontend developer and QA reviewed the production portfolio and the timestamped video sources. The benchmark case described the task but offered little evidence about testing its grader. The node-ipc investigation had a report and interview entry, but no case explaining Aaron’s contribution. The Experience page named two leadership roles but gave hiring managers no direct links to either role.
+
+| Sprint | Visitor story | Owner | Points | Implementation and acceptance |
+| --- | --- | --- | ---: | --- |
+| 1 · Scientific QA | Understand how the team checked its grader | Editorial | 5 | Extend the scientific case with three checks. Describe the spreadsheet comparison, reasons recorded against expected rows, and comparison of verifier rules with the participant instructions. Link each example to the corresponding public recording at the cited time. |
+| 1 | Find the guide from the benchmark presentation | Frontend | 3 | Add a descriptive native link from the existing recording entry to a shareable heading. Preserve the full case, play control, original recording and merged submission. |
+| 1 | Open the cited evidence from a shared link | QA + design | 2 | Verify the link round trip, video IDs and times, heading visibility at phone and desktop widths, and direct entry with JavaScript disabled. |
+| 2 · Incident investigation | Distinguish the investigator’s evidence from participant recollections | Editorial | 5 | Publish a sixth case covering Aaron’s domain, DNS and registrar investigation and the limits of public attribution. Link the report, first-edition DOI, and labeled passages from the maintainer and researcher interviews. |
+| 2 | Choose the correct CommonDevOps case | Frontend | 5 | Connect the new case to Work and the incident report/interview. Give publication, project and role entry points unambiguous destinations for the incident and the benchmark. Keep existing case URLs and project returns. |
+| 2 | Verify both research paths | QA + product | 3 | Exercise both cases from Work and the collection. Inspect the evidence links, sitemap, contact routes and the preexisting benchmark round trip. |
+| 3 · Engineering leadership | Compare leadership scope at two employers | Editorial + UX | 5 | Create a concise Experience section covering the Nuix team of 12 across time zones and the Yo Pagos scrum team of five. Tie each scope to its documented engineering responsibilities. |
+| 3 | Share the actual role with a hiring team | Frontend | 3 | Give all eleven roles stable readable fragment IDs, with usable direct role links on the two featured leadership examples. Link from Selected Work to the leadership section and preserve the date-free role list, thumbnails and individual contact. |
+| 3 | Follow an employer link on a phone or by keyboard | QA + design | 2 | Demonstrate the Work-to-Experience journey, both employer jumps and a direct no-JavaScript role visit. Check visible focus and layout with enlarged text. |
+
+**Delivery.** Nine stories, 33 planned points. Each sprint has its own implementation PR, independent reader review, GitHub Pages release and check on the custom domain. The scrum master records decisions and one action from each retrospective here. Source notes stay outside the public repository. The portfolio publishes original prose and links readers to public recordings and primary records.
+
 ## Released sprints · Mobile browsing, project evidence and contact
 
 **Live and accepted, November 21, 2026.** The virtual scrum team delivered all 13 stories from the approved plan, totaling 41 planned points. Each release passed its production review before the next sprint began. Product, design, frontend and QA closed the series with all approved work accepted. [Approved plan #25](https://github.com/schneidergithub/schneidergithub.github.io/pull/25) · [Production portfolio](https://www.aaronschneider.org/)

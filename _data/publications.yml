@@ -9,7 +9,10 @@
   type: "Video"
   publisher: "YouTube"
   url: "https://www.youtube.com/watch?v=e26_SSPpOP0"
-  description: "What does it take for an AI agent to reproduce a scientific result? This presentation introduces a Terminal-Bench-Science task in which agents select eligible comparisons from studies of executive function in major depressive disorder, extract the statistics, and calculate effect sizes."
+  description: "In this Terminal-Bench-Science task, AI agents select eligible comparisons from studies of executive function in major depressive disorder, extract the statistics, and calculate effect sizes."
+  guide:
+    label: "See how the team checked the grader"
+    url: "/work/scientific-ai-benchmark/#checking-the-grader"
   attribution: "Benchmark task by Dr. Ian Miller and Aaron Schneider"
   related:
     label: "View the merged benchmark task"
