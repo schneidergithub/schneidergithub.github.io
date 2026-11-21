@@ -1,6 +1,7 @@
 ---
 order: 2
 slug: "indiana"
+organization: "Indiana State Department"
 featured: true
 home_highlight:
   organization: "Indiana prosecutors"

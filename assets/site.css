@@ -271,7 +271,6 @@ a{color:inherit}
 .work-intro{padding-bottom:1.75rem}
 .work-projects > h2:focus-visible,.study-directory > h2:focus-visible,.portfolio-gallery > h2:focus-visible{width:fit-content;outline:3px solid var(--focus);outline-offset:4px}
 .work-jumps{gap:.3rem 1rem}
-.work-jumps a:not(:first-child){border-color:transparent;background:transparent;text-decoration:underline}
 .gallery-jumps{margin-block:.5rem 2rem;gap:.25rem 1.5rem}
 .gallery-jumps a{display:inline-flex;align-items:center;gap:.3rem;min-height:44px;line-height:1.4}
 .portfolio-gallery>h2{font-size:clamp(2rem,4vw,3rem);max-width:22ch}
@@ -325,6 +324,7 @@ a{color:inherit}
 .section-jumps a{font-weight:600;background:var(--panel)}
 
 .section-jumps a:hover{background:var(--panel);text-decoration:underline}
+.work-jumps a,.work-jumps a:hover{padding-inline:0;border:0;background:transparent;text-decoration:underline}
 
 .section-jumps .count,.gallery-jumps .count{margin-left:0}
 

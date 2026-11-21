@@ -29,15 +29,17 @@ async function check() {
         const version = new URL(url).hostname === '127.0.0.1' ? 'preview' : 'live';
         await page.screenshot({ path: path.join(reviewDir, version + '-nuix-375x812.jpg'), quality: 82 });
       }
-      const evidence = await page.locator('.role a.role-study').evaluateAll(links =>
-        Object.fromEntries(links.map(link => [link.closest('.role').querySelector('h2').textContent.trim(), link.pathname])));
+      const evidence = await roles.evaluateAll(items => Object.fromEntries(items.map(role => [
+        role.querySelector('h2').textContent.trim(),
+        [...role.querySelectorAll('a.role-study')].map(link => link.pathname).sort()
+      ]).filter(([, links]) => links.length)));
       assert.deepEqual(evidence, {
-        CommonDevOps: '/work/scientific-ai-benchmark/',
-        'Sogeti / Capgemini': '/work/westinghouse-performance/',
-        BCforward: '/work/indiana-case-archives/',
-        'ProPoint Global': '/work/super-salon-checkout/',
-        Ciber: '/work/bayer-aleve/'
-      }, 'Experience must link each engagement to its own case');
+        CommonDevOps: ['/work/node-ipc-investigation/', '/work/scientific-ai-benchmark/'],
+        'Sogeti / Capgemini': ['/work/westinghouse-performance/'],
+        BCforward: ['/work/indiana-case-archives/'],
+        'ProPoint Global': ['/work/super-salon-checkout/'],
+        Ciber: ['/work/bayer-aleve/']
+      }, 'Experience must link each engagement to all its own case studies');
       if (width === 1280) {
         const signature = await roles.evaluateAll(articles => articles.map(article => ({
           text: article.innerText.trim(),

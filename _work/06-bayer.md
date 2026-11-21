@@ -1,6 +1,7 @@
 ---
 order: 6
 slug: "bayer"
+organization: "Bayer"
 featured: false
 title: "Bayer web & mobile applications"
 category: "Web & mobile engineering"

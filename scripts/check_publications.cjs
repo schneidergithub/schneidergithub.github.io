@@ -335,10 +335,26 @@ async function checkDiscovery(page) {
       assert.ok(await row.locator('h3 a').isVisible());
     }
   }
-  for (const [from, to] of [['node-ipc-report', 'node-ipc-interview'], ['node-ipc-interview', 'node-ipc-report']]) {
-    const link = page.locator('#' + from + ' .publication-context');
+  for (const [from, to, jumpLabel] of [
+    ['node-ipc-report', 'node-ipc-interview', 'Interview details on this page'],
+    ['node-ipc-interview', 'node-ipc-report', 'Report details on this page']
+  ]) {
+    const row = page.locator('#' + from);
+    const incident = row.locator('.publication-case');
+    const incidentPath = '/work/node-ipc-investigation/';
+    assert.equal(await incident.getAttribute('href'), incidentPath);
+    assert.ok(await row.getByRole('link', { name: /case study.*node-ipc/i }).isVisible());
+    if (from === 'node-ipc-report') {
+      await Promise.all([page.waitForURL(new URL(incidentPath, origin).href), incident.press('Enter')]);
+      const reportEntry = page.locator('.study-copy a[href="/articles/#node-ipc-report"]');
+      await Promise.all([page.waitForURL(collection + '#' + from), reportEntry.press('Enter')]);
+      assert.ok(await page.locator('li.publication:target h3').isVisible());
+    }
+    const link = row.getByRole('link', { name: jumpLabel, exact: true });
+    assert.equal(await link.getAttribute('href'), '#' + to);
     await link.press('Enter');
     assert.equal(page.url(), collection + '#' + to);
+    assert.ok(await page.locator('li.publication:target h3').isVisible());
   }
 }
 

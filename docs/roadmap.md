@@ -29,6 +29,28 @@ Serve employers and consulting clients through a portfolio of career experience,
 
 **Delivery.** Nine stories, 33 planned points. Each sprint has its own implementation PR, independent reader review, GitHub Pages release and check on the custom domain. The scrum master records decisions and one action from each retrospective here. Source notes stay outside the public repository. The portfolio publishes original prose and links readers to public recordings and primary records.
 
+### Editorial and navigation refinement during Sprint 2
+
+Product and the technical project manager reviewed the November 21 transcript editorial recommendations with the UI/UX specialist, graphic designer, professional writers and accessibility QA. The writers check each story against its public source. UX traces the advertised action to its actual destination. Graphic design reviews how primary actions, source links, current location and keyboard focus read on phone and desktop. Each discipline takes part in sprint review.
+
+| Visitor interaction found in review | Release decision and acceptance |
+| --- | --- |
+| Both case-study return links jumped into the same Work project card. | Sprint 2. Give the header an **All case studies** link to the directory heading. Name the organization in the ending link and take readers to its actual project summary. Verify both from a directly shared case. |
+| Report and interview links promised to read or watch but only scrolled to another collection entry. | Sprint 2. Label those jumps as entry details. Use the investigation for Aaron’s evidence, the report for the full findings, and the maintainer and researcher clips for their own accounts. |
+| The homepage project browse link landed on the case directory. Three Work jumps looked like one selected tab and two ordinary links. | Sprint 2. Link **View all projects** to Project summaries. Style the three section jumps as peers. Keep the focus indicator on the selected heading. |
+| On recordings, selecting the poster played here but selecting its title left the site. The home research panel sent readers to another copy of its poster. | Sprint 3. Give inline playback and the external YouTube source distinct visible labels. Give the research panel a written alternative linking straight to the grader guide. Preserve the overview recording, disclosure close control and no-script source. |
+| The chess recording demonstrates two product failures that file-existence checks miss. | Sprint 3. Publish **The chess puzzle that gave away the answer** on Work. Link the real local-generation milestone and the orientation, reveal and test-review clips. Identify suggested frame checks as proposals. Connect it to the Super Salon QA case and its parent project. |
+
+**Revised scope.** Three additional stories: case and collection wayfinding (3 points, Sprint 2), the chess QA case (5, Sprint 3), and predictable recording actions (3, Sprint 3). The series now contains 12 stories and 44 planned points. The leadership release retains its original role-sharing stories. On the CommonDevOps role, replace the generic research bullet with the documented benchmark co-authorship and trial-analysis responsibilities.
+
+**Ordered follow-up backlog.** First, commission **What a fresh sandbox inherits from GitHub** as a signed engineering essay. Use the August 7 discussion at 58:13 and the chess milestone’s separation of local rendering from authorized publication. Introduce a clearly named editorial section so the essay can be distinguished from monthly roundups. Next, unify image navigation across cases and the archive. Use a consistent full-size treatment, default same-tab behavior and a browser Back test that restores the expanded gallery. Before selecting more source material, verify attribution and an observable engineering decision. Revisit the Elo essay and the PMAC project when there is a specific evaluation question or demonstrated implementation to show.
+
+### Sprint 1 review · Scientific QA
+
+**Accepted and live.** All three stories shipped (10 planned points). The editor checked the claims against the three timestamped recording passages. QA entered from the benchmark presentation, followed the grader guide, verified the three recording destinations and returned to the presentation. Mobile and desktop captures showed focus on the guide heading. Direct entry also worked with JavaScript disabled. [Release #30](https://github.com/schneidergithub/schneidergithub.github.io/pull/30) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44963286032)
+
+**Retrospective.** Keeping each technical example beside its timestamp made the guide easy to verify during editorial review. For the incident case, editorial will give each participant account its own attribution and nearby source link.
+
 ## Released sprints · Mobile browsing, project evidence and contact
 
 **Live and accepted, November 21, 2026.** The virtual scrum team delivered all 13 stories from the approved plan, totaling 41 planned points. Each release passed its production review before the next sprint began. Product, design, frontend and QA closed the series with all approved work accepted. [Approved plan #25](https://github.com/schneidergithub/schneidergithub.github.io/pull/25) · [Production portfolio](https://www.aaronschneider.org/)

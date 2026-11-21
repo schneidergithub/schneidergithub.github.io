@@ -10,8 +10,13 @@ const studies = [
   { card: 'indiana', path: 'indiana-case-archives', images: 0 },
   { card: 'bayer', path: 'bayer-aleve', images: 2 },
   { card: 'westinghouse', path: 'westinghouse-performance', images: 0 },
-  { card: 'commondevops', path: 'scientific-ai-benchmark', images: 0 }
+  { card: 'commondevops', path: 'scientific-ai-benchmark', label: 'Reconstructing scientific results in Terminal-Bench-Science', images: 0 },
+  { card: 'commondevops', path: 'node-ipc-investigation', label: 'Investigating the node-ipc supply-chain compromise', images: 0 }
 ];
+const projectNames = {
+  propoint: 'ProPoint Global', indiana: 'Indiana State Department', bayer: 'Bayer',
+  westinghouse: 'Westinghouse', commondevops: 'CommonDevOps'
+};
 
 async function checkShareImage(page, file) {
   const image = await page.locator('meta[property="og:image"]').getAttribute('content');
@@ -59,9 +64,9 @@ async function checkDirectory(page, workUrl) {
   assert.deepEqual(await entryLinks.evaluateAll(links => links.map(a => a.pathname).sort()), studies.map(study => '/work/' + study.path + '/').sort());
   await entryLinks.filter({ hasText: /Elasticsearch throughput/ }).press('Enter');
   assert.equal(page.url(), workUrl + 'westinghouse-performance/');
-  await page.locator('.study-ending').getByRole('link', { name: 'Return to project' }).press('Enter');
-  assert.equal(page.url(), workUrl + '#westinghouse');
-  assert.ok(await page.locator(':target').getByRole('heading').first().isVisible());
+  await page.locator('.study-header').getByRole('link', { name: 'All case studies', exact: true }).press('Enter');
+  assert.equal(page.url(), workUrl + '#case-studies-title');
+  assert.ok(await page.locator('h2:target').evaluate(el => el === document.activeElement), 'All case studies should focus the directory heading');
 }
 
 async function checkGallery(page, workUrl, width, directEntry) {
@@ -157,31 +162,39 @@ async function check() {
     for (const width of [375, 1280]) {
       const page = await browser.newPage({ viewport: { width, height: width === 375 ? 812 : 900 } });
       await page.goto(new URL('/', workUrl).href);
+      const allProjects = page.getByRole('link', { name: 'View all projects', exact: true });
+      assert.equal(await allProjects.getAttribute('href'), '/work/#project-summaries');
+      await allProjects.press('Enter');
+      assert.equal(page.url(), workUrl + '#project-summaries');
+      assert.equal(await page.locator('h2:target').innerText(), 'Project summaries');
+      await page.goBack();
       await page.getByRole('link', { name: 'Explore selected work' }).press('Enter');
       assert.equal(page.url(), workUrl);
       await checkDirectory(page, workUrl);
       if (width === 1280) await checkShareImage(page, 'aaron-schneider.jpg');
       for (const study of studies) {
-        const link = page.locator('#' + study.card).getByRole('link', { name: /^Read case study/ });
+        const link = page.locator('#' + study.card).getByRole('link', study.label ? { name: study.label, exact: true } : { name: /^Read case study/ });
         const label = await link.textContent();
         await link.click({ timeout: 5000 });
         assert.equal(page.url(), workUrl + study.path + '/');
         const title = await page.locator('main h1').innerText();
-        assert.ok(title && label.includes(title), 'Case-study link and headline disagree');
+        assert.ok(title && (study.label ? label.trim() === study.label : label.includes(title)), 'Case-study link must identify its destination');
         const ending = page.locator('.study-ending');
+        const directory = page.locator('.study-header').getByRole('link', { name: 'All case studies', exact: true });
+        assert.equal(await directory.getAttribute('href'), '/work/#case-studies-title');
         const actions = ending.getByRole('link');
         assert.equal(await page.locator('.site-footer a[href*="linkedin.com"]').count(), 0, 'Keep each contact choice in the case ending');
         assert.equal(await page.locator('.site-footer a[href="/pgp/"]').count(), 1);
         assert.equal(await actions.count(), 3);
         assert.equal(await ending.getByRole('link', { name: /Aaron.*LinkedIn/i }).getAttribute('href'), 'https://www.linkedin.com/in/aarondrewschneider/');
         assert.equal(await ending.getByRole('link', { name: /CommonDevOps.*LinkedIn/i }).getAttribute('href'), 'https://www.linkedin.com/company/commondevops/');
-        const projectReturn = ending.getByRole('link', { name: 'Return to project', exact: true });
+        const projectReturn = ending.getByRole('link', { name: projectNames[study.card] + ' project summary', exact: true });
         assert.equal(await projectReturn.getAttribute('href'), '/work/#' + study.card);
         if (study.card === 'westinghouse') {
           assert.match(await page.locator('.case-study').innerText(), /Elasticsearch/i);
           if (width === 1280) await checkShareImage(page, 'westinghouse-performance.jpg');
         }
-        if (study.card === 'commondevops') {
+        if (study.path === 'scientific-ai-benchmark') {
           assert.equal(await page.locator('h1').innerText(), 'Can AI reproduce a meta-analysis?');
           if (width === 375) {
             const fits = await page.locator('h1').evaluate(el => {
@@ -204,6 +217,30 @@ async function check() {
           fs.mkdirSync(dir, { recursive: true });
           const version = new URL(workUrl).hostname === '127.0.0.1' ? 'preview' : 'live';
           await page.screenshot({ path: path.join(dir, version + '-benchmark-case-' + width + '.jpg'), fullPage: true, quality: 80 });
+        }
+        if (study.path === 'node-ipc-investigation') {
+          const copy = page.locator('.study-copy');
+          assert.equal(title, 'node-ipc and the evidence in the domain records');
+          assert.ok(await copy.locator('a[href="https://commondevops.com/node-ipc-supply-chain-incident-report/"]').isVisible());
+          assert.ok(await copy.locator('a[href="https://doi.org/10.6084/m9.figshare.33865414.v1"]').isVisible());
+          assert.ok(await copy.locator('a[href="/articles/#node-ipc-report"]').isVisible());
+          for (const [id, seconds, guest, timestamp] of [
+            ['TZ04u6cj1ls', 414, /maintainer Brandon Miller/i, '6:54'], ['eSvYhh7_Kyo', 252, /researcher Roni Carta/i, '4:12']
+          ]) {
+            const clip = copy.locator('a[href="https://www.youtube.com/watch?v=' + id + '&t=' + seconds + 's"]');
+            assert.ok(await clip.isVisible());
+            const context = await clip.evaluate(el => el.closest('li, p').innerText);
+            assert.match(context, guest);
+            assert.ok(context.includes(timestamp), 'Identify the timestamp for each recorded perspective');
+          }
+          if (width === 1280) {
+            await checkShareImage(page, 'aaron-schneider.jpg');
+          } else {
+            await captureWork(page, 'node-ipc-case');
+            const heading = copy.getByRole('heading', { name: 'What a domain record can establish' });
+            await heading.evaluate(el => el.scrollIntoView({ block: 'start' }));
+            await captureWork(page, 'node-ipc-evidence');
+          }
         }
         const images = page.locator('.study-evidence img');
         assert.equal(await images.count(), study.images);
@@ -230,6 +267,7 @@ async function check() {
         }
         await projectReturn.press('Enter');
         assert.equal(page.url(), workUrl + '#' + study.card);
+        assert.ok(await page.locator('.project-card:target h2').isVisible(), 'Project summary should return to its own card');
       }
       console.log(width + 'px: verified ' + studies.length + ' case studies, contact paths and project returns.');
       if (width === 1280) await checkGallery(page, workUrl, width, false);

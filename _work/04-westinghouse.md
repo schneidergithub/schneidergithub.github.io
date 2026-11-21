@@ -1,6 +1,7 @@
 ---
 order: 4
 slug: "westinghouse"
+organization: "Westinghouse"
 featured: true
 home_highlight:
   organization: "Westinghouse"
