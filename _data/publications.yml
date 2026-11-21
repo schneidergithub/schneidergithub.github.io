@@ -1,9 +1,9 @@
 - title: "Reconstructing a meta-analysis with AI agents"
   preview:
-    src: "/assets/publications/benchmark.jpg"
-    alt: "Presenters beside a slide showing how the benchmark task was authored"
-    width: 320
-    height: 180
+    src: "/assets/publications/benchmark-meta-analysis.jpg"
+    alt: "Reconstructing a meta-analysis with AI agents, with portraits of three presentation participants"
+    width: 1280
+    height: 720
   id: benchmark-presentation
   type: "Video"
   publisher: "YouTube"

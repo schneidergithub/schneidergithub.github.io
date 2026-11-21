@@ -5,16 +5,16 @@ permalink: /
 ---
 <section class="hero">
   <div>
-    <p class="eyebrow">Software Engineer · DevSecOps · AI Research</p>
+    <p class="eyebrow">Software Engineer · DevSecOps · AI&nbsp;Research</p>
     <h1>Building software. <span class="hero-signature">A systematic approach.</span></h1>
     <div class="actions"><a class="button" href="{{ '/work/' | relative_url }}">Explore selected work</a><a class="button secondary" href="{{ '/experience/' | relative_url }}">View experience</a></div>
   </div>
   <aside class="focus-panel" aria-labelledby="focus-title">
-    <p class="eyebrow">Current focus</p>
+    <p class="eyebrow">Terminal-Bench-Science</p>
+    <h2 id="focus-title">Can an AI agent reproduce a scientific result?</h2>
     {% assign benchmark = site.data.publications | where: 'id', 'benchmark-presentation' | first %}
     <div class="focus-media">{% include publication-media.html publication=benchmark play_label="Play presentation" eager=true %}</div>
-    <h2 id="focus-title">Can an AI agent reproduce a scientific result?</h2>
-    <p>Terminal-Bench-Science tests how AI agents handle scientific workflows. Dr. Ian Miller and I co-authored its “MDD Executive Function” meta-analysis task. I also review DevOps and infrastructure changes and analyze trial results.</p>
+    <p>Dr. Ian Miller and I co-authored “MDD Executive Function,” a task that asks AI agents to reconstruct a meta-analysis from published studies of depression. I also review DevOps and infrastructure changes and analyze trial results.</p>
     <a href="{{ '/articles/' | relative_url }}#benchmark-presentation">Explore the presentation and task <span aria-hidden="true">→</span></a>
   </aside>
 </section>
