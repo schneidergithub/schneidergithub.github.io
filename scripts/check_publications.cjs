@@ -256,6 +256,52 @@ async function checkFallbacks(page) {
   assert.equal(await page.locator('iframe').count(), 0);
 }
 
+async function checkGraderGuide(page, directEntry = false) {
+  const route = '/work/scientific-ai-benchmark/#checking-the-grader';
+  const url = new URL(route, origin).href;
+  if (directEntry) {
+    await page.goto(url);
+  } else {
+    const entry = page.locator('#benchmark-presentation').getByRole('link', { name: /check.*grader/i });
+    assert.equal(await entry.getAttribute('href'), route);
+    await Promise.all([page.waitForURL(url), entry.press('Enter')]);
+  }
+  const heading = page.locator('.study-copy h2:target');
+  await heading.waitFor({ state: 'visible', timeout: 5000 });
+  assert.equal(await heading.getAttribute('id'), 'checking-the-grader');
+  const target = await heading.evaluate(el => {
+    const box = el.getBoundingClientRect();
+    return { focused: document.activeElement === el, inViewport: box.top >= -1 && box.bottom <= innerHeight };
+  });
+  assert.ok(target.focused && target.inViewport, 'The guide link must land on its visible, focused heading');
+
+  const sources = page.locator('.study-copy a[href^="https://www.youtube.com/watch?"]');
+  assert.equal(await sources.count(), 3);
+  for (const [id, seconds, label] of [
+    ['ICz5Q1s5QAg', 471, '7:51'], ['zPNJW0DI5PA', 806, '13:26'], ['fN4p2HbGkog', 791, '13:11']
+  ]) {
+    const link = sources.filter({ hasText: label });
+    assert.ok(await link.isVisible(), 'Missing source timestamp ' + label);
+    const sourceUrl = new URL(await link.getAttribute('href'));
+    assert.equal(sourceUrl.searchParams.get('v'), id);
+    assert.equal(sourceUrl.searchParams.get('t'), seconds + 's');
+    assert.ok(await link.evaluate(el => Boolean(document.querySelector('h2:target').compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)),
+      'Timestamp should appear in the guide after its heading');
+  }
+  const mergedTask = page.locator('.study-copy a[href="https://github.com/harbor-framework/terminal-bench-science/pull/1513"]');
+  assert.ok(await mergedTask.isVisible());
+  if (directEntry || page.viewportSize().width === 1280) {
+    const dir = path.join(process.env.RUNNER_TEMP || os.tmpdir(), 'homepage-previews');
+    fs.mkdirSync(dir, { recursive: true });
+    const version = new URL(origin).hostname === '127.0.0.1' ? 'preview' : 'live';
+    await page.screenshot({ path: path.join(dir, version + '-grader-guide-' + page.viewportSize().width + '.jpg'), quality: 82, animations: 'disabled' });
+  }
+  const back = page.locator('.study-copy').getByRole('link', { name: /watch.*research presentation/i });
+  assert.equal(await back.getAttribute('href'), presentation);
+  await Promise.all([page.waitForURL(new URL(presentation, origin).href), back.press('Enter')]);
+  assert.ok(await page.locator('#benchmark-presentation:target summary').isVisible());
+}
+
 async function checkDiscovery(page) {
   const collection = new URL('/articles/', origin).href;
   const caseUrl = new URL('/work/scientific-ai-benchmark/', origin).href;
@@ -387,6 +433,7 @@ async function checkNoScript(browser) {
   assert.ok(await page.locator(':target').evaluate(el => getComputedStyle(el).outlineStyle === 'none'), 'A shared URL should emphasize the title without outlining the whole article row');
   assert.ok(await page.locator(':target h3').evaluate(el => parseFloat(getComputedStyle(el, '::before').borderInlineStartWidth) > 0), 'Mark the heading of the incoming publication');
   await page.screenshot({ path: path.join(reviewDir, version + '-shared-recording-375x812.jpg'), quality: 82 });
+  await checkGraderGuide(page, true);
   await checkDiscovery(page);
   await checkFallbacks(page);
   await page.close();
@@ -411,6 +458,7 @@ async function checkCollection(page, width) {
   assert.equal(await benchmark.locator('h3 a').getAttribute('href'), 'https://www.youtube.com/watch?v=e26_SSPpOP0');
   assert.equal(await benchmark.getByRole('link', { name: /merged benchmark/ }).getAttribute('href'), 'https://github.com/harbor-framework/terminal-bench-science/pull/1513');
   assert.equal(await page.locator('#node-ipc-report .publication-related').getAttribute('href'), 'https://doi.org/10.6084/m9.figshare.33865414');
+  await checkGraderGuide(page);
   await checkDiscovery(page);
   const publications = page.locator('li.publication');
   assert.equal(await publications.count(), 8);

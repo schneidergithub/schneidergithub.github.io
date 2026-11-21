@@ -38,7 +38,7 @@ groups:
     </div>
     <div class="publication-copy">
       {% if item.period or item.date %}<p class="publication-date">{% if item.period %}{{ item.period | escape }} issue{% endif %}{% if item.period and item.date %} · {% endif %}{% if item.date %}Published <time datetime="{{ item.date }}">{{ item.date | date: '%B %-d, %Y' }}</time>{% endif %}</p>{% endif %}
-      <p>{{ item.description | escape }}</p>
+      <p>{{ item.description | escape }}{% if item.guide %} <a href="{{ item.guide.url | relative_url | escape }}">{{ item.guide.label | escape }}</a>.{% endif %}</p>
       <p class="attribution">{{ item.attribution | escape }}</p>
       <p class="publication-actions">
         {% if item.related %}<a class="publication-related" href="{{ item.related.url | escape }}">{{ item.related.label | escape }}&nbsp;<span aria-hidden="true">↗</span></a>{% endif %}
