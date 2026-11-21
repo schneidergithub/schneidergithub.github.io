@@ -42,8 +42,8 @@ groups:
       <p class="attribution">{{ item.attribution | escape }}</p>
       <p class="publication-actions">
         {% if item.related %}<a class="publication-related" href="{{ item.related.url | escape }}">{{ item.related.label | escape }}&nbsp;<span aria-hidden="true">↗</span></a>{% endif %}
-        {% if item.case_project %}
-          {% assign study = site.pages | where: 'layout', 'case-study' | where: 'project', item.case_project | first %}
+        {% if item.case_url %}
+          {% assign study = site.pages | where: 'url', item.case_url | first %}
           {% if study %}<a class="publication-case" href="{{ study.url | relative_url }}">Read the case study<span class="visually-hidden"> — {{ study.title | escape }}</span></a>{% endif %}
         {% endif %}
         {% if item.companion %}<a class="publication-context" href="#{{ item.companion.id | escape }}">{{ item.companion.label | escape }}</a>{% endif %}

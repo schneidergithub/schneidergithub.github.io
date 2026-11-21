@@ -6,8 +6,10 @@
     <p>{{ project.summary | escape }}</p>
     <div class="project-detail">{{ project.content }}</div>
     <p class="outcome"><strong>Outcome</strong> {{ project.outcome | escape }}</p>
-    {% assign study = site.pages | where: 'layout', 'case-study' | where: 'project', project.slug | first %}
-    {% if study %}<p class="case-link"><a href="{{ study.url | relative_url }}">Read case study<span class="visually-hidden"> — {{ study.title | escape }}</span></a></p>{% endif %}
+    {% assign studies = site.pages | where: 'layout', 'case-study' | where: 'project', project.slug | sort: 'title' %}
+    {% for study in studies %}
+    <p class="case-link"><a href="{{ study.url | relative_url }}">{% if studies.size > 1 %}{{ study.link_label | default: study.title | escape }}{% else %}Read case study<span class="visually-hidden"> — {{ study.title | escape }}</span>{% endif %}</a></p>
+    {% endfor %}
     <ul class="tags" aria-label="Technologies and methods">{% for tag in project.technologies %}<li>{{ tag | escape }}</li>{% endfor %}</ul>
   </div>
   {% if project.image %}

@@ -53,13 +53,13 @@ permalink: /
 <section class="section selected-results" aria-labelledby="selected-title">
   <div class="section-heading">
     <h2 id="selected-title">Selected work</h2>
-    <a href="{{ '/work/' | relative_url }}">View all projects</a>
+    <a href="{{ '/work/' | relative_url }}#project-summaries">View all projects</a>
   </div>
   <div class="feature-grid">
     {% assign projects = site.work | where: 'featured', true | sort: 'order' %}
     {% for project in projects %}
     {% assign highlight = project.home_highlight %}
-    {% assign study = site.pages | where: 'layout', 'case-study' | where: 'project', project.slug | first %}
+    {% assign studies = site.pages | where: 'layout', 'case-study' | where: 'project', project.slug %}
     <article class="feature">
       <p class="eyebrow">{{ highlight.organization | escape }}</p>
       {% if highlight.value %}
@@ -68,7 +68,7 @@ permalink: /
       <h3 class="feature-result result-statement">{{ highlight.label | escape }}</h3>
       {% endif %}
       <p>{{ highlight.description | escape }}</p>
-      <a href="{% if study %}{{ study.url | relative_url }}{% else %}{{ '/work/' | relative_url }}#{{ project.slug | escape }}{% endif %}">{{ highlight.link_label | escape }}</a>
+      <a href="{% if studies.size == 1 %}{{ studies.first.url | relative_url }}{% else %}{{ '/work/' | relative_url }}#{{ project.slug | escape }}{% endif %}">{{ highlight.link_label | escape }}</a>
     </article>
     {% endfor %}
   </div>

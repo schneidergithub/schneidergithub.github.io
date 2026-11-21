@@ -1,6 +1,7 @@
 ---
 order: 5
 slug: "propoint"
+organization: "ProPoint Global"
 featured: true
 home_highlight:
   organization: "ProPoint · Super Salon"

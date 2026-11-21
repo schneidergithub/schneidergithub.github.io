@@ -16,8 +16,10 @@ permalink: /experience/
   <div class="role-details">
     {{ role.content }}
     {% if role.case_project %}
-      {% assign study = site.pages | where: 'layout', 'case-study' | where: 'project', role.case_project | first %}
-      {% if study %}<a class="role-study" href="{{ study.url | relative_url }}">{{ study.link_label | default: study.title | escape }}</a>{% endif %}
+      {% assign studies = site.pages | where: 'layout', 'case-study' | where: 'project', role.case_project | sort: 'title' %}
+      {% for study in studies %}
+      <div><a class="role-study" href="{{ study.url | relative_url }}">{{ study.link_label | default: study.title | escape }}</a></div>
+      {% endfor %}
     {% endif %}
   </div>
 </article>
