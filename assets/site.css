@@ -255,6 +255,7 @@ a{color:inherit}
 .section-jumps a,.gallery-jumps a{color:var(--accent);text-decoration:underline}
 .count{display:inline-block;margin-left:.4rem;color:var(--muted);font-size:.875rem;font-weight:400;letter-spacing:0}
 .work-intro{padding-bottom:1.75rem}
+.work-projects > h2:focus-visible,.study-directory > h2:focus-visible,.portfolio-gallery > h2:focus-visible{width:fit-content;outline:3px solid var(--focus);outline-offset:4px}
 .work-jumps{gap:.3rem 1rem}
 .work-jumps a:not(:first-child){border-color:transparent;background:transparent;text-decoration:underline}
 .gallery-jumps{margin-block:.5rem 2rem;gap:.25rem 1.5rem}

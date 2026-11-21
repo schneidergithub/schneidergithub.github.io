@@ -47,8 +47,8 @@ async function checkDirectory(page, workUrl) {
     await jump.press('Enter');
     assert.equal(page.url(), workUrl + fragment);
     const target = page.locator(':target');
-    const heading = await target.evaluate(el => el.matches('h2') ? el.textContent : el.querySelector('h2')?.textContent);
-    assert.equal(heading?.trim(), name);
+    assert.equal(await target.evaluate(el => el.tagName), 'H2', 'Focus the section heading after a jump');
+    assert.equal((await target.innerText()).trim(), name);
   }
   if (page.viewportSize().width === 375) {
     assert.equal(await page.locator('.gallery-group .thumbnail-card a:visible').count(), 5, 'Start with one image per group on phones');

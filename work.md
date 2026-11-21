@@ -29,8 +29,8 @@ permalink: /work/
   </div>
 </section>
 
-<section class="section portfolio-gallery" id="portfolio-gallery" tabindex="-1" aria-labelledby="gallery-title">
-  <h2 id="gallery-title">Gallery</h2>
+<section class="section portfolio-gallery" aria-labelledby="portfolio-gallery">
+  <h2 id="portfolio-gallery" tabindex="-1"><span id="gallery-title">Gallery</span></h2>
   <nav class="gallery-jumps" aria-label="Portfolio image groups">
     {% for group in site.data.gallery %}<a href="#gallery-{{ group.id }}">{{ group.title | escape }} <span class="count">{{ group.items.size }}</span></a>{% endfor %}
   </nav>
