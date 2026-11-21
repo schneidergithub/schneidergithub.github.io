@@ -1,0 +1,7 @@
+<figure class="thumbnail-card">
+  <a href="{{ include.item.image | relative_url }}" target="_blank" rel="noopener" aria-label="Open {{ include.item.title | escape }} image in a new tab">
+    <span class="thumbnail-frame"><img src="{{ include.item.thumbnail | relative_url }}?v={{ include.item.thumbnail_version }}" alt="{{ include.item.alt | escape }}" width="{{ include.item.width }}" height="{{ include.item.height }}" loading="lazy" decoding="async"></span>
+    {% unless include.item.caption %}<span class="thumbnail-label">{{ include.item.title | escape }} <span aria-hidden="true">↗</span></span>{% endunless %}
+  </a>
+  {% if include.item.caption %}<figcaption>{{ include.item.caption | escape }}</figcaption>{% endif %}
+</figure>
