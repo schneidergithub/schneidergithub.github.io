@@ -3,6 +3,8 @@ order: 3
 organization: "Yo Pagos"
 title: "DevSecOps Architect & Manager"
 period: "August 2023 – September 2024"
+thumbnail: "/assets/experience/yo-pagos.png"
+thumbnail_alt: "Yo.cr Pagos mobile payment logo."
 ---
 - Designed and implemented the company's DevSecOps framework for a fintech SaaS platform.
 - Built internal tools and integrations with Python, shell scripts, and JavaScript; delivered playbooks and architecture documentation.
