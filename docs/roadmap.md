@@ -13,6 +13,16 @@ Serve employers and consulting clients through a portfolio of career experience,
 
 ## Current MVP release
 
+**Live on November 21, 2026.** The team delivered and accepted three consecutive sprints, with 12 stories and 30 planned points. The site now has five case studies, eight publications and eleven Experience entries. Each sprint passed its custom-domain checks before the next began. [Production portfolio](https://www.aaronschneider.org/)
+
+| Sprint | Published outcome | Production verification |
+| --- | --- | --- |
+| Engineering result to contact | Westinghouse case, homepage proof link, Work and Experience entry points, case endings, sharing artwork and visual updates. | [Release #21](https://github.com/schneidergithub/schneidergithub.github.io/pull/21) · [Checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44958313958) |
+| Publication discovery | Eight directly linkable entries grouped into recordings, monthly reviews and investigations, with a reciprocal report/interview link. | [Release #22](https://github.com/schneidergithub/schneidergithub.github.io/pull/22) · [Checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44958809861) |
+| Scientific benchmark contribution | A fifth case explains Aaron’s work, links to the recording and merged task, and has its own share card. | [Release #23](https://github.com/schneidergithub/schneidergithub.github.io/pull/23) · [Checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44959272962) |
+
+### Original MVP acceptance record
+
 **Complete and live on November 21, 2026.** All approved MVP acceptance criteria have been met. [Production portfolio](https://www.aaronschneider.org/)
 
 | Area | Delivered | Release |
@@ -24,9 +34,13 @@ Serve employers and consulting clients through a portfolio of career experience,
 
 The release passed the nine-page build check and deployed through GitHub Pages. Production checks covered widths of 320, 375, 768, and 1280 pixels, including keyboard operation of the video players at phone and desktop widths. [Deployment](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44946994980) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44946995033)
 
-## Sprint · Show the contribution behind the scientific benchmark
+## Released sprint · Show the contribution behind the scientific benchmark
 
 **Goal.** A technical hiring manager can distinguish Aaron’s contribution to Terminal-Bench-Science from the work the benchmark asks an agent to do, and open the public evidence directly.
+
+**Sprint review.** An independent virtual reviewer read the published phone and desktop captures. They identified both co-authors, Aaron’s separate infrastructure and analysis roles, the agent’s three scientific steps, and the links to the submission and recording. QA verified the five case routes, recording-to-case round trip with and without JavaScript, and the new 1200 × 630 sharing image. Product and QA accepted the three stories. [Live case](https://www.aaronschneider.org/work/scientific-ai-benchmark/) · [Pages deployment](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44959272713) · [Production captures](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44959272962/artifacts/14729070992)
+
+**Retrospective.** Keep the reader’s actual starting point in the acceptance checks. Across the three releases the team entered from the homepage, an Experience role and a shared publication fragment. For future contributions, editorial should pair the author’s account with the primary evidence, and QA should run the newest reader journey first in CI, then confirm both directions on the custom domain.
 
 | Story | Points | Owner and acceptance |
 | --- | ---: | --- |
