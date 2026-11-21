@@ -7,7 +7,7 @@ const { chromium } = require('playwright-core');
 const origin = process.argv[2];
 const presentation = '/articles/#benchmark-presentation';
 const ids = ['e26_SSPpOP0', 'TZ04u6cj1ls', 'i0a7tXSLj3c'];
-const reviewWidths = [375, 1280];
+const reviewWidths = [375, 768, 1280];
 
 async function decodeCover(image) {
   await image.scrollIntoViewIfNeeded();
@@ -72,6 +72,53 @@ async function captureHome(page, version) {
   await page.screenshot({ path: prefix + '-full.jpg', quality: 76, fullPage: true, animations: 'disabled' });
 }
 
+async function checkActionTargets(links, sameRow = false) {
+  const boxes = await links.evaluateAll(items => items.map(link => {
+    const box = link.getBoundingClientRect();
+    const range = document.createRange();
+    range.selectNodeContents(link);
+    const text = range.getBoundingClientRect();
+    return {
+      top: box.top, bottom: box.bottom, left: box.left, right: box.right,
+      fits: box.height >= 44 && box.left >= 0 && box.right <= innerWidth &&
+        text.left >= box.left - 1 && text.right <= box.right + 1 &&
+        text.top >= box.top - 1 && text.bottom <= box.bottom + 1
+    };
+  }));
+  assert.ok(boxes.every(box => box.fits), 'Hero action targets must fit with all text visible');
+  const [work, experience] = boxes;
+  assert.ok(work.right <= experience.left || work.bottom <= experience.top, 'Hero actions overlap');
+  if (sameRow) assert.ok(Math.min(work.bottom, experience.bottom) > Math.max(work.top, experience.top), 'Hero actions must share a row at 375px');
+}
+
+async function checkResearchFeature(panel, width) {
+  assert.equal((await panel.locator('.eyebrow').textContent()).trim(), 'Terminal-Bench-Science');
+  assert.equal((await panel.locator('h2').textContent()).trim(), 'Can an AI agent reproduce a scientific result?');
+  const byPosition = await panel.evaluate(element => {
+    const label = element.querySelector('.eyebrow');
+    const question = element.querySelector('h2');
+    const player = element.querySelector('summary');
+    return {
+      documentOrder: !!(label.compareDocumentPosition(question) & Node.DOCUMENT_POSITION_FOLLOWING) &&
+        !!(question.compareDocumentPosition(player) & Node.DOCUMENT_POSITION_FOLLOWING),
+      visualOrder: label.getBoundingClientRect().bottom <= question.getBoundingClientRect().top + 1 &&
+        question.getBoundingClientRect().bottom <= player.getBoundingClientRect().top + 1,
+      playBottom: player.querySelector('.play-mark').getBoundingClientRect().bottom + scrollY
+    };
+  });
+  assert.ok(byPosition.documentOrder && byPosition.visualOrder, 'Identify the research before playback at ' + width + 'px');
+  if (width === 375) assert.ok(byPosition.playBottom <= panel.page().viewportSize().height, 'Play control must fit on the first phone screen');
+  const cover = panel.locator('.publication-video img');
+  await decodeCover(cover);
+  const dimensions = await cover.evaluate(img => ({
+    width: img.naturalWidth, height: img.naturalHeight,
+    declaredWidth: Number(img.getAttribute('width')), declaredHeight: Number(img.getAttribute('height'))
+  }));
+  assert.ok(dimensions.width >= 960 && dimensions.width * 9 === dimensions.height * 16, 'Expected a high-resolution 16:9 research poster');
+  assert.equal(dimensions.declaredWidth, dimensions.width);
+  assert.equal(dimensions.declaredHeight, dimensions.height);
+}
+
 async function checkHomepage(page) {
   const width = page.viewportSize().width;
   if (width <= 375) {
@@ -95,11 +142,36 @@ async function checkHomepage(page) {
   const heroLinks = page.locator('.hero h1 + .actions a');
   assert.deepEqual(await heroLinks.allTextContents(), ['Explore selected work', 'View experience']);
   assert.deepEqual(await heroLinks.evaluateAll(links => links.map(link => link.pathname)), ['/work/', '/experience/']);
+  await checkActionTargets(heroLinks, width === 375);
+  if (width === 320 || width === 375) {
+    const largerText = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+    await checkActionTargets(heroLinks);
+    await largerText.evaluate(style => style.remove());
+  }
+  if (width === 375) {
+    const grouped = await page.locator('.hero > div > .eyebrow').evaluate(label => {
+      const range = document.createRange();
+      const text = label.firstChild;
+      const phrase = text.textContent.match(/AI\s+Research/);
+      if (!phrase) return false;
+      range.setStart(text, phrase.index);
+      range.setEnd(text, phrase.index + phrase[0].length);
+      return range.getClientRects().length === 1;
+    });
+    assert.ok(grouped, 'Keep AI Research together on phones');
+    assert.ok(await heroLinks.last().evaluate(link => getComputedStyle(link).textDecorationLine.includes('underline')), 'The secondary phone action must read as a link');
+    await heroLinks.last().focus();
+    await page.keyboard.press('Shift+Tab');
+    for (const link of await heroLinks.all()) {
+      assert.ok(await link.evaluate(el => el.matches(':focus-visible') && getComputedStyle(el).outlineStyle !== 'none'), 'Hero action must show keyboard focus');
+      await page.keyboard.press('Tab');
+    }
+  }
   const hero = page.locator('.focus-panel');
   assert.equal(await hero.locator('.publication-video').count(), 1);
   const benchmark = hero.getByRole('link', { name: /presentation and task/i });
   assert.equal(await benchmark.getAttribute('href'), presentation);
-  await decodeCover(hero.locator('.publication-video img'));
+  await checkResearchFeature(hero, width);
 
   const cards = page.locator('#home-media .media-card');
   assert.equal(await cards.count(), 4);
@@ -156,9 +228,11 @@ async function checkNoScript(browser) {
 }
 
 async function checkCollection(page, width) {
+  const homePoster = await page.locator('.focus-panel .video-poster img').getAttribute('src');
   await page.locator('.focus-panel').getByRole('link', { name: /presentation and task/i }).click();
   assert.equal(page.url(), new URL(presentation, origin).href);
   const benchmark = page.locator('#benchmark-presentation');
+  assert.equal(await benchmark.locator('.video-poster img').getAttribute('src'), homePoster, 'Both benchmark entries should use the shared cover');
   assert.equal(await benchmark.locator('h2 a').getAttribute('href'), 'https://www.youtube.com/watch?v=e26_SSPpOP0');
   assert.equal(await benchmark.getByRole('link', { name: /merged benchmark/ }).getAttribute('href'), 'https://github.com/harbor-framework/terminal-bench-science/pull/1513');
   const publications = page.locator('li.publication');
@@ -200,8 +274,8 @@ async function check() {
         await captureHome(page, 'before');
       } else {
         await checkHomepage(page);
-        if (reviewWidths.includes(width)) {
-          await captureHome(page, new URL(origin).hostname === '127.0.0.1' ? 'preview' : 'live');
+        if (reviewWidths.includes(width)) await captureHome(page, new URL(origin).hostname === '127.0.0.1' ? 'preview' : 'live');
+        if (width === 375 || width === 1280) {
           await checkPlayers(page);
           await checkCollection(page, width);
           console.log(width + 'px: verified all three embedded players on both the homepage and Articles & Demos.');
