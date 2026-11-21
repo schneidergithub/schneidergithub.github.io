@@ -30,19 +30,22 @@ async function checkPlayers(page) {
     assert.ok(ids.includes(id), 'Unknown YouTube video ' + id);
     seen.push(id);
     const embed = 'https://www.youtube-nocookie.com/embed/' + id;
-    const response = page.waitForResponse(r => r.request().isNavigationRequest() && r.url().startsWith(embed + '?'));
     const toggle = disclosure.locator('summary');
-    await page.keyboard.press('Tab');
     await toggle.focus();
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Shift+Tab');
     const focusVisible = await toggle.evaluate(el => {
       const style = getComputedStyle(el);
       return el.matches(':focus-visible') && style.outlineStyle !== 'none' && parseFloat(style.outlineWidth) > 0;
     });
-    assert.ok(focusVisible, 'The keyboard play control needs a visible focus outline');
-    await toggle.press('Enter');
+    assert.ok(focusVisible, 'Missing keyboard focus outline for ' + id + ' on ' + start);
+    const [response] = await Promise.all([
+      page.waitForResponse(r => r.request().isNavigationRequest() && r.url().startsWith(embed + '?')),
+      toggle.press('Enter')
+    ]);
     const frame = disclosure.locator('iframe');
     await frame.waitFor({ state: 'visible' });
-    assert.ok((await response).ok(), 'YouTube embed failed to load for ' + id);
+    assert.ok(response.ok(), 'YouTube embed failed to load for ' + id);
     assert.equal(await page.locator('.publication-video[open]').count(), 1);
     assert.equal(await page.locator('iframe').count(), 1);
     assert.ok(await frame.getAttribute('title'));
