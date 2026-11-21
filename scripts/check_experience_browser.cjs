@@ -48,12 +48,13 @@ async function check() {
             bodyLeft: rect('.role-details').left,
             bodyTop: rect('.role-details').top,
             headingFits: article.querySelector('.role-heading').scrollWidth <= article.querySelector('.role-heading').clientWidth,
-            imageTakesFocus: img.closest('a, button, [tabindex]') !== null,
+            imageTakesFocus: article.contains(img.closest('a[href], button, [tabindex]:not([tabindex="-1"])')),
             fit: getComputedStyle(img).objectFit
           };
         });
         assert.equal(layout.fit, 'contain', layout.name);
-        assert.ok(layout.headingFits && !layout.imageTakesFocus, layout.name);
+        assert.ok(layout.headingFits, 'Heading overflow: ' + layout.name);
+        assert.ok(!layout.imageTakesFocus, 'Thumbnail creates a keyboard stop: ' + layout.name);
         assert.ok(layout.imageRight <= layout.headingLeft, layout.name);
         assert.ok(layout.headingBottom <= layout.bodyTop, layout.name);
         const expectedLeft = width === 375 ? layout.imageLeft : layout.headingLeft;
