@@ -1,4 +1,4 @@
-# Snapshot after the public homepage sprint
+# Final post-review visual verification
 name: Homepage visual review
 on:
   push:
@@ -34,6 +34,11 @@ jobs:
               if(!result.ok()) throw Error('HTTP ' + result.status());
               const lazy=page.locator('main img');
               if(await lazy.count()!==5 || await page.locator('.publication-video').count()!==3) throw Error('Previous homepage still served.');
+              const navY=await page.locator('.site-header nav a').evaluateAll(els=>els.map(e=>Math.round(e.getBoundingClientRect().y)));
+              if(width===375 && !(navY[0]===navY[1] && navY[1]<navY[2] && navY[2]===navY[3])) throw Error('Previous phone navigation still served.');
+              const cardHeights=await page.locator('.media-card').evaluateAll(els=>els.map(e=>Math.round(e.getBoundingClientRect().height)));
+              if(width===1280 && Math.max(...cardHeights)-Math.min(...cardHeights)>1) throw Error('Previous desktop media card layout still served.');
+              console.log('GEOMETRY',width,JSON.stringify(navY),JSON.stringify(cardHeights));
               for(const img of await lazy.all()){
                 await img.scrollIntoViewIfNeeded(); await img.evaluate(el=>el.decode());
               }
