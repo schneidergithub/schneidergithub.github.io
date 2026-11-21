@@ -24,6 +24,35 @@ Serve employers and consulting clients through a portfolio of career experience,
 
 The release passed the nine-page build check and deployed through GitHub Pages. Production checks covered widths of 320, 375, 768, and 1280 pixels, including keyboard operation of the video players at phone and desktop widths. [Deployment](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44946994980) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44946995033)
 
+## Next sprint · Introduce the research before playback
+
+**Planned November 21, 2026.** A first-time visitor can identify what Terminal-Bench-Science investigates before pressing play, then watch the presentation or follow the work to the merged task. The baseline is the published champagne signature and two hero actions. [Headline release](https://github.com/schneidergithub/schneidergithub.github.io/pull/16) · [Production screenshots and checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44954781285)
+
+**Forecast.** Five relative points across two stories. Allow two to three focused person-days including artwork, implementation, review and release verification. The estimate assumes the team uses the poster fallback below if a clear source frame is unavailable.
+
+### Story 1 · Understand the featured research (3 points)
+
+As a hiring manager, I want to know what Aaron and Dr. Ian Miller investigated before I decide to watch their presentation.
+
+- **Design and editorial.** Use “Terminal-Bench-Science” as the label and place “Can an AI agent reproduce a scientific result?” ahead of the play control. Credit both co-authors and retain Aaron’s infrastructure review and trial analysis roles. Spend up to 90 minutes looking for a genuine presentation frame at least 960 × 540 with a recognizable subject. If the recording cannot supply a sharp crop, create a local 16:9 title card from the presentation’s verified title. Leave the lower left clear for the play control.
+- **Implementation.** Change the feature order in [the homepage](../index.md). Adjust the 641–850px tablet grid in [the stylesheet](../assets/site.css) to match that reading order. Update the benchmark’s shared [publication record](../_data/publications.yml) with the new local image, its actual dimensions and a description of its contents.
+- **Acceptance.** The label and question precede the play control visually and in document order on phone, tablet and desktop. The poster is recognizable at homepage size and at the collection’s 150px width. The presentation opens inline by keyboard with visible focus, closes cleanly and offers the direct YouTube link with JavaScript disabled. The existing presentation link still leads to its collection entry and merged task.
+
+### Story 2 · Scan the hero and choose an action on a phone (2 points)
+
+As a visitor using a phone, I want to read each specialization as a phrase and reach either portfolio action without losing sight of the featured research.
+
+- **Implementation.** Keep “AI Research” together and balance the lines of the research question. At 375px, pair “Explore selected work” with an underlined “View experience” link in the same row. Allow wrapping as space or enlarged text requires.
+- **Acceptance.** At 375 × 900 the two actions fit on one row at default text size and the initial screen shows the research play control. Each action has a tap target at least 44px high, a visible keyboard focus state and its existing destination. At 320px and with 200% text, controls can reflow without overlap, clipping or horizontal scrolling. At desktop widths the champagne signature stays on one line.
+
+### Delivery and sprint review
+
+1. **Design and frontend** select the cover and render it at both sizes. Frontend can develop the mobile controls while design sources the frame.
+2. **Frontend and QA** integrate both stories and extend the [homepage browser checks](../scripts/check_publications.cjs) for reading order, cover dimensions and action layout. Run the existing build and seven-width browser suite. Inspect the 768px tablet layout and compare the 375px and 1280px captures with the baseline.
+3. **Product and QA** open the preview with the player closed. Ask a reviewer to name the benchmark and describe its question before playback. Then use the keyboard to play and close it and follow the link to the task. After merge, verify the Pages deployment and the portfolio checks against the custom domain before marking the sprint complete.
+
+**Follow-up order.** Review the before-and-after captures first. Next, evaluate a single Westinghouse throughput link near the hero actions for visitors seeking engineering results. Then compare a neutral panel border and soft shadow against the existing blue edge. Consider a brief reduced-motion-aware transition on the play control and buttons after the static design review. Revisit section backgrounds and dividers only if readers still miss the project results.
+
 ## Experience thumbnails
 
 Approved November 21, 2026. [Release PR #7](https://github.com/schneidergithub/schneidergithub.github.io/pull/7) implements one thumbnail per role. The source records retain their dates and use the existing `order` field for display.
