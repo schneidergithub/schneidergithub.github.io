@@ -27,20 +27,101 @@ async function checkShareImage(page, file) {
   assert.deepEqual(dimensions, [1200, 630], 'Wrong share image dimensions for ' + image);
 }
 
-async function checkGallery(page, workUrl, width) {
+async function captureWork(page, name) {
+  const dir = path.join(process.env.RUNNER_TEMP || os.tmpdir(), 'homepage-previews');
+  fs.mkdirSync(dir, { recursive: true });
+  const version = new URL(page.url()).hostname === '127.0.0.1' ? 'preview' : 'live';
+  await page.screenshot({ path: path.join(dir, version + '-work-' + name + '-' + page.viewportSize().width + '.jpg'), quality: 82, animations: 'disabled' });
+}
+
+async function checkDirectory(page, workUrl) {
+  const jumps = page.getByRole('navigation', { name: 'Selected work sections' }).getByRole('link');
+  const sections = [
+    ['#case-studies-title', 'Case studies'], ['#project-summaries', 'Project summaries'], ['#portfolio-gallery', 'Gallery']
+  ];
+  assert.deepEqual(await jumps.evaluateAll(links => links.map(a => a.hash)), sections.map(([fragment]) => fragment));
+  await captureWork(page, 'directory');
+  for (const [index, [fragment, name]] of sections.entries()) {
+    const jump = jumps.nth(index);
+    assert.ok((await jump.innerText()).trim().startsWith(name), 'Work link should identify ' + name);
+    await jump.press('Enter');
+    assert.equal(page.url(), workUrl + fragment);
+    const target = page.locator(':target');
+    assert.equal(await target.evaluate(el => el.tagName), 'H2', 'Focus the section heading after a jump');
+    assert.equal((await target.innerText()).trim(), name);
+  }
+  if (page.viewportSize().width === 375) {
+    assert.equal(await page.locator('.gallery-group .thumbnail-card a:visible').count(), 5, 'Start with one image per group on phones');
+    await captureWork(page, 'gallery');
+  }
+  await page.goto(workUrl + '#case-studies-title');
+  const entryLinks = page.locator('.study-directory a');
+  assert.deepEqual(await entryLinks.evaluateAll(links => links.map(a => a.pathname).sort()), studies.map(study => '/work/' + study.path + '/').sort());
+  await entryLinks.filter({ hasText: /Elasticsearch throughput/ }).press('Enter');
+  assert.equal(page.url(), workUrl + 'westinghouse-performance/');
+  await page.locator('.study-ending').getByRole('link', { name: 'Return to project' }).press('Enter');
+  assert.equal(page.url(), workUrl + '#westinghouse');
+  assert.ok(await page.locator(':target').getByRole('heading').first().isVisible());
+}
+
+async function checkGallery(page, workUrl, width, directEntry) {
+  await page.goto(workUrl + '#portfolio-gallery');
+  const images = page.locator('.gallery-group .thumbnail-card a');
+  const originals = gallery.flatMap(group => group.items.map(item => item.image));
+  assert.equal(new Set(originals).size, 26);
+  assert.deepEqual(await images.evaluateAll(links => links.map(a => a.pathname).sort()), [...originals].sort());
+  assert.equal(await page.locator('.gallery-group details').count(), 3);
+  if (width === 375) {
+    assert.equal(await page.locator('.gallery-group .thumbnail-card a:visible').count(), 5);
+  }
   for (const group of gallery) {
     const fragment = '#gallery-' + group.id;
-    await page.locator('.gallery-jumps').getByRole('link', { name: group.title + ' ' + group.items.length, exact: true }).click();
+    if (directEntry) {
+      await page.goto(workUrl + fragment);
+    } else {
+      await page.locator('.gallery-jumps').getByRole('link', { name: group.title + ' ' + group.items.length, exact: true }).press('Enter');
+    }
     assert.equal(page.url(), workUrl + fragment);
-    const section = page.locator(fragment);
+    const section = page.locator('.gallery-group:target');
     assert.equal(await section.locator('h3').innerText(), group.title);
     assert.equal(await section.locator('.gallery-heading p').first().innerText(), group.description);
+    const cover = section.locator(':scope > .thumbnail-card');
+    assert.equal(await cover.locator('a').getAttribute('href'), group.items[0].image);
+    assert.equal(await cover.locator('figcaption').innerText(), group.items[0].caption);
+    const details = section.locator('details');
+    const summary = details.locator('summary');
+    if (group.items.length > 1) {
+      const toggleLabel = await summary.innerText();
+      assert.ok(toggleLabel.includes(String(group.items.length)), 'Identify the gallery size on the disclosure');
+      assert.equal(await details.getAttribute('open'), null);
+      await summary.press('Enter');
+      assert.ok(await details.evaluate(el => el.open), 'Keyboard should open the image group');
+    } else {
+      assert.equal(await details.count(), 0, 'A single image opens directly');
+    }
     const photos = section.locator('.thumbnail-card a');
-    assert.deepEqual(await photos.evaluateAll(links => links.map(link => link.pathname)), group.items.map(item => item.image));
+    assert.deepEqual(await photos.evaluateAll(links => links.map(a => a.pathname).sort()), group.items.map(item => item.image).sort());
+    assert.equal(await section.locator('.thumbnail-card a:visible').count(), group.items.length);
     for (const photo of await photos.all()) {
       const image = photo.locator('img');
       await image.scrollIntoViewIfNeeded();
       await image.evaluate(img => img.decode());
+    }
+    if (directEntry && group.id === 'bayer') {
+      await summary.scrollIntoViewIfNeeded();
+      await captureWork(page, 'bayer-expanded');
+      const original = details.locator('.thumbnail-card a').first();
+      const url = new URL(await original.getAttribute('href'), workUrl).href;
+      const [imageTab] = await Promise.all([page.waitForEvent('popup'), original.press('Enter')]);
+      await imageTab.waitForURL(url);
+      await imageTab.close();
+      assert.equal(page.url(), workUrl + fragment);
+      assert.ok(await details.evaluate(el => el.open));
+    }
+    if (group.items.length > 1) {
+      await summary.press('Space');
+      assert.equal(await details.getAttribute('open'), null);
+      assert.equal(await section.locator('.thumbnail-card a:visible').count(), 1);
     }
     if (width === 1280) {
       for (const item of group.items) {
@@ -61,6 +142,10 @@ async function checkGallery(page, workUrl, width) {
       await page.goto(workUrl);
     }
   }
+  if (directEntry) {
+    await page.goto(workUrl + '#westinghouse');
+    assert.ok(await page.locator(':target').getByRole('heading').first().isVisible(), 'A shared legacy project fragment must resolve without JavaScript');
+  }
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Work page overflows');
   console.log(width + 'px: verified the gallery highlights, image groups, and related project links.');
 }
@@ -70,12 +155,11 @@ async function check() {
   const browser = await chromium.launch({ channel: 'chrome' });
   try {
     for (const width of [375, 1280]) {
-      const page = await browser.newPage({ viewport: { width, height: 900 } });
-      const index = await page.goto(workUrl);
-      assert.ok(index.ok(), 'Selected Work failed to load');
-      const routes = studies.map(study => '/work/' + study.path + '/').sort();
-      const entryLinks = page.locator('.study-directory a');
-      assert.deepEqual(await entryLinks.evaluateAll(links => links.map(a => a.pathname).sort()), routes);
+      const page = await browser.newPage({ viewport: { width, height: width === 375 ? 812 : 900 } });
+      await page.goto(new URL('/', workUrl).href);
+      await page.getByRole('link', { name: 'Explore selected work' }).press('Enter');
+      assert.equal(page.url(), workUrl);
+      await checkDirectory(page, workUrl);
       if (width === 1280) await checkShareImage(page, 'aaron-schneider.jpg');
       for (const study of studies) {
         const link = page.locator('#' + study.card).getByRole('link', { name: /^Read case study/ });
@@ -115,9 +199,12 @@ async function check() {
         assert.equal(page.url(), workUrl + '#' + study.card);
       }
       console.log(width + 'px: verified ' + studies.length + ' case studies, contact paths and project returns.');
-      await checkGallery(page, workUrl, width);
+      if (width === 1280) await checkGallery(page, workUrl, width, false);
       await page.close();
     }
+    const mobile = await browser.newPage({ viewport: { width: 375, height: 812 }, javaScriptEnabled: false });
+    await checkGallery(mobile, workUrl, 375, true);
+    await mobile.close();
   } finally {
     await browser.close();
   }

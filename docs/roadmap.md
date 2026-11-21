@@ -13,7 +13,7 @@ Serve employers and consulting clients through a portfolio of career experience,
 
 ## Next three sprints · Mobile browsing, project evidence and contact
 
-**Planning status, November 21, 2026.** Proposed for kickoff following the post-MVP design review. The technical project manager and Scrum Master sequenced the releases with marketing, UX and graphic design, frontend and accessibility QA. Each sprint delivers a complete visitor journey and can ship independently. The published MVP and its acceptance record follow below.
+**Kickoff, November 21, 2026.** Aaron approved the three-sprint plan following the post-MVP design review. The technical project manager and Scrum Master sequenced the releases with marketing, UX and graphic design, frontend and accessibility QA. Each sprint delivers a complete visitor journey and can ship independently. The published MVP and its acceptance record follow below.
 
 | Order | Sprint goal | Stories | Forecast | Review question |
 | --- | --- | ---: | ---: | --- |
@@ -35,6 +35,10 @@ At 375px the production header takes 167px. On Articles & Demos the first 150 ×
 | Recognize the homepage proof link on a phone | Editorial + UX | 2 | Lead the link with Westinghouse and its 3× Elasticsearch throughput result. At 375px the client name sits with the result, both hero actions remain visible, and the link opens the existing case. Preserve the one-line champagne signature at desktop widths and its natural reflow with enlarged text. |
 
 **Sequence and review.** Capture the closed phone header and Articles screen. Build the menu and publication layout in parallel, then tune the spacing with the real title and play control in place. Replace the tests that require a two-row phone menu and equal publication cover widths. Add a 375 × 812 check alongside the existing 900px-high checks. If navigation needs a script, include that exact asset in the existing static check and both workflow path filters. Demo from a cold Articles visit, play and close the recording, then reach Work from the menu. If capacity tightens, carry the 2-point homepage proof-link edit forward.
+
+**Released and reviewed.** Product and QA accepted all four stories (15 points). At 375 × 812 the header fell from 167px to about 64px. The featured recording title moved from about 824px to 367px, and the full poster and Play control fit by 649px. The custom-domain suite exercised the keyboard menu, full-width recording, source links and JavaScript-disabled navigation. The desktop headline retained its approved color, typeface and single line. [Release #26](https://github.com/schneidergithub/schneidergithub.github.io/pull/26) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44961206287) · [Production captures](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44961206287/artifacts/14729542096)
+
+**Retrospective.** The exact 375 × 812 capture let design compare what visitors saw before their first scroll. QA will use a capture at the same dimensions for the Work walkthrough in Sprint 2. Frontend will restore a visible destination cue when it revises publication permalinks in Sprint 3.
 
 ### Sprint 2 · Find a case study and browse the visual archive
 
