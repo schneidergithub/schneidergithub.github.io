@@ -14,6 +14,8 @@
     label: "View the merged benchmark task"
     url: "https://github.com/harbor-framework/terminal-bench-science/pull/1513"
 - title: "Cybersecurity Must Keep Pace with AI"
+  home_featured: true
+  home_summary: "The October review examines how teams supervise AI agents and protect the software they release."
   id: october-review
   type: "Article"
   period: "October 2026"
@@ -30,6 +32,8 @@
     label: "Read the PDF edition"
     url: "https://www.aaronschneider.org/common-devops-reports/reports/2026-10/common-devops-october-2026.pdf"
 - title: "node-ipc Supply Chain Incident Report"
+  home_featured: true
+  home_summary: "I investigated the domain and registrar records behind the compromise of an npm package."
   id: node-ipc-report
   type: "Research report"
   publisher: "CommonDevOps"
@@ -57,6 +61,8 @@
   description: "A September roundup examining model releases, agent behavior, cybersecurity disclosures, and lessons from CommonDevOps research."
   attribution: "CommonDevOps · Aaron S., Ian Miller, and Javier Bonilla"
 - title: "Node-IPC incident interview with creator Brandon Miller"
+  home_featured: true
+  home_summary: "Brandon Miller shares the origins of node-ipc and his perspective on the incident as its maintainer."
   preview:
     src: "/assets/publications/node-ipc-interview.jpg"
     alt: "Video artwork tracing an expired domain to the node-ipc package"
@@ -80,6 +86,8 @@
   description: "A review of autonomous AI capabilities and cybersecurity incidents, connecting public disclosures with practical engineering questions."
   attribution: "Published by CommonDevOps on LinkedIn"
 - title: "AI security research livestream"
+  home_featured: true
+  home_summary: "Ian Miller and I discuss security disclosures from OpenAI, Anthropic, and the AI Security Institute."
   preview:
     src: "/assets/publications/security-livestream.jpg"
     alt: "Livestream participants reviewing an illustrated document on screen"

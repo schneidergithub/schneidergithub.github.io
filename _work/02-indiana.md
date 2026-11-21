@@ -2,6 +2,11 @@
 order: 2
 slug: "indiana"
 featured: true
+home_highlight:
+  value: "92"
+  label: "Indiana counties"
+  description: "I automated file archiving for closed cases. When a prosecutor reopened a case, its files were restored automatically."
+  link_label: "Read the archive case study"
 title: "Case-management modernization"
 category: "Enterprise automation"
 context: "Indiana State Department · BCforward engagement"

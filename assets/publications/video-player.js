@@ -4,7 +4,7 @@ for (const disclosure of document.querySelectorAll('.publication-video')) {
     if (disclosure.open) {
       if (!player) {
         const template = disclosure.querySelector('template');
-        disclosure.append(template.content.cloneNode(true));
+        template.after(template.content.cloneNode(true));
       }
     } else if (player) {
       player.remove();

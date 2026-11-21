@@ -1,0 +1,17 @@
+{% assign media = include.publication %}
+{% capture preview %}<img class="publication-preview" src="{{ media.preview.src | relative_url | escape }}" alt="{{ media.preview.alt | escape }}" width="{{ media.preview.width }}" height="{{ media.preview.height }}"{% if include.eager %} fetchpriority="high"{% else %} loading="lazy"{% endif %} decoding="async">{% endcapture %}
+{% if media.type == 'Video' %}
+{% assign video_id = media.url | remove: 'https://www.youtube.com/watch?v=' %}
+<details class="publication-video" name="publication-players">
+  <summary>
+    <span class="video-poster"><span aria-hidden="true">{{ preview }}<span class="play-mark">{% if include.play_label %}<span class="play-caption">{{ include.play_label | escape }}</span>{% endif %}</span></span><span class="visually-hidden">Play {{ media.title | escape }}</span></span>
+    <span class="close-player">Close player<span class="visually-hidden"> for {{ media.title | escape }}</span></span>
+  </summary>
+  <template><iframe width="640" height="360" src="https://www.youtube-nocookie.com/embed/{{ video_id | escape }}?autoplay=1&amp;playsinline=1" title="{{ media.title | escape }}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></template>
+  <a class="watch-source" href="{{ media.url | escape }}">Watch on YouTube<span class="visually-hidden"> · {{ media.title | escape }}</span></a>
+</details>
+{% elsif include.link_cover %}
+<a class="collection-cover" href="{{ media.url | escape }}" tabindex="-1">{{ preview }}</a>
+{% else %}
+{{ preview }}
+{% endif %}
