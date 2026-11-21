@@ -2,7 +2,11 @@
   {
     "id": "propoint",
     "title": "ProPoint / Super Salon",
-    "description": "Point-of-sale software, salon scheduling, and mobile Guest Pass screens.",
+    "description": "I developed and tested Super Salon\u2019s checkout software. One automated test caught a one-cent difference between the online and desktop records of the same sale.",
+    "related": {
+      "label": "Read the checkout case study",
+      "url": "/work/super-salon-checkout/"
+    },
     "items": [
       {
         "title": "Guest Pass \u2014 find a salon",
@@ -45,7 +49,11 @@
   {
     "id": "bayer",
     "title": "Bayer / Ciber",
-    "description": "Brand websites, product information, and mobile sales tools.",
+    "description": "I led development of the Aleve and Bayer Aspirin websites and built two mobile apps for Bayer\u2019s sales team.",
+    "related": {
+      "label": "Read the Aleve case study",
+      "url": "/work/bayer-aleve/"
+    },
     "items": [
       {
         "title": "Aleve \u2014 brand website",
@@ -160,7 +168,7 @@
   {
     "id": "berkeley",
     "title": "Berkeley Communications",
-    "description": "Web products, video publishing tools, and internal business software.",
+    "description": "I built the company\u2019s inventory system, automated marketing workflows, and ran its web hosting on in-house servers.",
     "items": [
       {
         "title": "Berkeley Communications website",
@@ -239,10 +247,14 @@
   {
     "id": "westinghouse",
     "title": "Westinghouse",
-    "description": "A brand visual from the Westinghouse project archive.",
+    "description": "I tested the performance of Westinghouse\u2019s $20 million website ahead of a new release.",
+    "related": {
+      "label": "See the performance-testing results",
+      "url": "/work/#westinghouse"
+    },
     "items": [
       {
-        "title": "Westinghouse \u2014 brand visual",
+        "title": "Westinghouse company history banner",
         "alt": "Westinghouse brand banner with historic logos and a portrait of George Westinghouse.",
         "image": "/assets/portfolio/westinghouse.webp",
         "thumbnail": "/assets/portfolio/thumbs/westinghouse.webp",
@@ -255,10 +267,10 @@
   {
     "id": "bucky-ball",
     "title": "Bucky Ball Web",
-    "description": "An earlier web-services project.",
+    "description": "As co-owner, I built and hosted more than 100 websites for small and midsize businesses.",
     "items": [
       {
-        "title": "Bucky Ball Web",
+        "title": "Bucky Ball Web homepage",
         "alt": "Bucky Ball Web website with a client-login area and web-services content.",
         "image": "/assets/portfolio/buckyball.webp",
         "thumbnail": "/assets/portfolio/thumbs/buckyball.webp",

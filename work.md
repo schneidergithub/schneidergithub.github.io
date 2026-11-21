@@ -8,12 +8,15 @@ permalink: /work/
 
 <section class="section portfolio-gallery" id="portfolio-gallery" aria-labelledby="gallery-title">
   <p class="eyebrow">Portfolio</p>
-  <h2 id="gallery-title">Websites, products & interfaces</h2>
-  <p class="lead">Screenshots and visuals from projects across my career.</p>
+  <h2 id="gallery-title">Project highlights</h2>
   <nav class="gallery-jumps" aria-label="Portfolio image groups">{% for group in site.data.gallery %}<a href="#gallery-{{ group.id }}">{{ group.title | escape }} <span class="count">{{ group.items.size }}</span></a>{% endfor %}</nav>
   {% for group in site.data.gallery %}
   <section class="gallery-group" id="gallery-{{ group.id }}" aria-labelledby="gallery-{{ group.id }}-title">
-    <div class="gallery-heading"><h3 id="gallery-{{ group.id }}-title">{{ group.title | escape }}</h3><p>{{ group.description | escape }}</p></div>
+    <div class="gallery-heading">
+      <h3 id="gallery-{{ group.id }}-title">{{ group.title | escape }}</h3>
+      <p>{{ group.description | escape }}</p>
+      {% if group.related %}<p class="case-link"><a href="{{ group.related.url | relative_url | escape }}">{{ group.related.label | escape }}</a></p>{% endif %}
+    </div>
     <div class="thumbnail-grid">{% for item in group.items %}
       <figure class="thumbnail-card">
         <a href="{{ item.image | relative_url }}" target="_blank" rel="noopener" aria-label="Open {{ item.title | escape }} image in a new tab"><span class="thumbnail-frame"><img src="{{ item.thumbnail | relative_url }}?v={{ item.thumbnail_version }}" alt="{{ item.alt | escape }}" width="{{ item.width }}" height="{{ item.height }}" loading="lazy" decoding="async"></span><span class="thumbnail-label">{{ item.title | escape }} <span aria-hidden="true">↗</span></span></a>

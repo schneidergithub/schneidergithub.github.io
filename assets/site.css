@@ -183,8 +183,10 @@ a{color:inherit}
 .gallery-jumps{margin-block:1.7rem 2.5rem;padding-block:1rem;border-top:1px solid var(--line);border-bottom:1px solid var(--line);gap:.3rem 1.5rem}
 .portfolio-gallery>h2{font-size:clamp(2rem,4vw,3rem);max-width:22ch}
 .gallery-group{padding-block:1rem 2.6rem;scroll-margin-top:1.5rem}
+.gallery-heading{margin-bottom:1.4rem}
 .gallery-heading h3{font-size:1.45rem;margin-bottom:.5rem}
-.gallery-heading p{color:var(--muted);font-size:.95rem;margin-bottom:1.4rem}
+.gallery-heading p{color:var(--muted);font-size:.95rem;max-width:68ch;margin-bottom:0}
+.gallery-heading .case-link{margin:.25rem 0 0}
 .thumbnail-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
 .thumbnail-card{margin:0;padding:0;background:var(--panel);border:1px solid var(--line);border-radius:5px;overflow:visible}
 .thumbnail-card a{display:block;height:100%;text-decoration:none;border-radius:5px}
