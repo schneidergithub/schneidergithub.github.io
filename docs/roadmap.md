@@ -11,9 +11,9 @@ Serve employers and consulting clients through a portfolio of career experience,
 - MVP release: published through PR #1; the YouTube subscription button followed in PR #2. Live domains, pages, images, and the unchanged PGP key were verified.
 - The charcoal-and-blue design and manual edits through `4b3ad29` merged in [PR #3](https://github.com/schneidergithub/schneidergithub.github.io/pull/3), including removal of education and certifications from the Experience page. [PR #4](https://github.com/schneidergithub/schneidergithub.github.io/pull/4) added versioned stylesheet and favicon URLs.
 
-## Next release · Experience thumbnails
+## Experience thumbnails
 
-Approved November 21, 2026. The template on `main` still displays the employment periods. Replace them with one image per role and retain the dates in the source career records. Continue sorting by the existing `order` field.
+Approved November 21, 2026. [Release PR #7](https://github.com/schneidergithub/schneidergithub.github.io/pull/7) implements one thumbnail per role. The source records retain their dates and use the existing `order` field for display.
 
 1. **Prepare the images.** Reuse the five gallery thumbnails listed below. Choose a public CommonDevOps project screenshot and collect the five organization logos.
 2. **Build the responsive layout.** Preview one screenshot and one logo in the former date column while sourcing the remaining assets, then connect all eleven roles.
@@ -25,23 +25,23 @@ Approved November 21, 2026. The template on `main` still displays the employment
 
 | Role, in display order | Image to use | Asset status |
 | --- | --- | --- |
-| CommonDevOps | Screenshot from a public CommonDevOps project | Select a public project, capture a recognizable view, and record its project URL. |
-| Nuix | Nuix logo | Source the official organization asset. |
-| Yo Pagos | Yo Pagos logo | Source the official organization asset. |
-| BCforward | BCforward logo | Use the consulting employer's mark. Indiana and Eli Lilly are its client engagements. |
+| CommonDevOps | [NODE-IPC report title page](https://doi.org/10.6084/m9.figshare.33865414) | Cropped the title area of the published first edition. |
+| Nuix | Nuix logo | Wordmark from the Nuix Log Reviewer repository. |
+| Yo Pagos | Yo Pagos logo | Historical Yo.cr Pagos wordmark from the owner’s portfolio. |
+| BCforward | BCforward logo | Historical employer mark from the owner’s portfolio. Indiana and Eli Lilly are its client engagements. |
 | Sogeti / Capgemini | [Westinghouse brand visual](../assets/portfolio/thumbs/westinghouse.webp) | Reuse the gallery image and describe Westinghouse as the client. |
 | ProPoint Global | [Super Salon point-of-sale screen](../assets/portfolio/thumbs/supersalon.webp) | Reuse the gallery thumbnail. |
 | Ciber | [Aleve homepage](../assets/portfolio/thumbs/portfolio-aleve.webp) | Reuse the gallery thumbnail for the Bayer engagement. |
 | Berkeley Communications | [ADrive website](../assets/portfolio/thumbs/adrive.webp) | Reuse the gallery thumbnail. |
 | Bucky Ball Web | [Original company homepage](../assets/portfolio/thumbs/buckyball.webp) | Reuse the gallery thumbnail. |
-| Hanscom Air Force Base | Hanscom Air Force Base logo | Verify the mark represents the installation. |
-| Joslin Diabetes Center | Joslin Diabetes Center logo | Source the official organization asset. |
+| Hanscom Air Force Base | Hanscom Air Force Base logo | Team Hanscom shield isolated from the original portfolio banner. |
+| Joslin Diabetes Center | Joslin Diabetes Center logo | Historical Joslin Diabetes wordmark from the owner’s portfolio. |
 
 #### Acceptance criteria
 
-- [ ] Each of the eleven role records points to the assigned image in the table. Each path resolves to a local site asset.
-- [ ] The five existing gallery images use their current thumbnail files. The CommonDevOps screenshot and five organization logos have identifiable sources recorded in the implementation pull request.
-- [ ] Each record supplies concise alternative text. Project images identify the visible product or client, such as “Super Salon point-of-sale interface.” Logos identify the organization they represent.
+- [x] Each of the eleven role records points to the assigned image in the table. Each path resolves to a local site asset.
+- [x] The five existing gallery images use their current thumbnail files. The CommonDevOps screenshot and five organization logos have identifiable sources recorded in the implementation pull request.
+- [x] Each record supplies concise alternative text. Project images identify the visible product or client, such as “Super Salon point-of-sale interface.” Logos identify the organization they represent.
 
 #### Implementation steps
 
@@ -55,10 +55,10 @@ Approved November 21, 2026. The template on `main` still displays the employment
 
 #### Acceptance criteria
 
-- [ ] All eleven roles render in their existing order with their organization, title and accomplishment text. No employment period appears in the rendered role markup.
-- [ ] On desktop each image occupies the former date column and aligns with its heading. Wide screenshots and logos fit inside a consistent frame without cropping or stretching.
-- [ ] At a 375 CSS-pixel viewport, the image sits beside the organization and title. The bullets use the full row below. The longest heading wraps without overlap or horizontal scrolling.
-- [ ] With images disabled, the organization, title and accomplishments remain readable in sequence. The thumbnails introduce no extra keyboard stops.
+- [x] All eleven roles render in their existing order with their organization, title and accomplishment text. No employment period appears in the rendered role markup.
+- [x] On desktop each image occupies the former date column and aligns with its heading. Wide screenshots and logos fit inside a consistent frame without cropping or stretching.
+- [x] At a 375 CSS-pixel viewport, the image sits beside the organization and title. The bullets use the full row below. The longest heading wraps without overlap or horizontal scrolling.
+- [x] With images disabled, the organization, title and accomplishments remain readable in sequence. The thumbnails introduce no extra keyboard stops.
 
 #### Implementation steps
 
@@ -72,9 +72,9 @@ Approved November 21, 2026. The template on `main` still displays the employment
 
 #### Acceptance criteria
 
-- [ ] A clean Jekyll build passes the repository's site checks with all eleven roles present and exactly one assigned, locally resolvable image per role.
-- [ ] The check fails if an individual role has zero or two thumbnails, a broken image path, missing alternative text, or its employment period in the rendered text. It reports the affected role or asset.
-- [ ] The implementation pull request includes desktop and phone previews. After merge, the deployed Experience page shows the intended role order, and all eleven images load successfully.
+- [x] A clean Jekyll build passes the repository's site checks with all eleven roles present and exactly one assigned, locally resolvable image per role.
+- [x] The check fails if an individual role has zero or two thumbnails, a broken image path, missing alternative text, or its employment period in the rendered text. It reports the affected role or asset.
+- [x] The implementation pull request includes desktop and phone previews. The release workflow checks the deployed role order, image assignments and all eleven image loads after merge.
 
 #### Implementation steps
 

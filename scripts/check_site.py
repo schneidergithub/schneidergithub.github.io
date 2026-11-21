@@ -4,7 +4,9 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit, urljoin, unquote
 import hashlib
+import json
 import re
+import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,6 +43,65 @@ class Page(HTMLParser):
 
     def handle_data(self, data): self.text.append(data)
 
+class ExperienceRoles(HTMLParser):
+    """Collect each role's headings, images, and text from the built page."""
+    def __init__(self, path):
+        super().__init__()
+        self.roles = []
+        self.role = None
+        self.in_heading = False
+        self.feed(path.read_text())
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == 'article' and 'role' in attrs.get('class', '').split():
+            self.role = {'heading': [], 'images': [], 'text': []}
+            self.roles.append(self.role)
+        if self.role is not None:
+            if tag == 'h2':
+                self.in_heading = True
+            if tag == 'img':
+                self.role['images'].append(attrs)
+
+    def handle_endtag(self, tag):
+        if tag == 'h2':
+            self.in_heading = False
+        if tag == 'article':
+            self.role = None
+
+    def handle_data(self, text):
+        if self.role is not None:
+            self.role['text'].append(text)
+            if self.in_heading:
+                self.role['heading'].append(text)
+
+def check_experience(path):
+    # Use Jekyll's Ruby runtime to read the role front matter as YAML.
+    read_roles = """
+        roles = ARGV.map { |file| YAML.safe_load(File.read(file).split(/^---\\s*$/, 3).fetch(1)) }
+        puts JSON.generate(roles.sort_by { |role| role.fetch('order') })
+    """
+    sources = sorted((ROOT / '_experience').glob('*.md'))
+    expected = json.loads(subprocess.check_output(['ruby', '-ryaml', '-rjson', '-e', read_roles, *sources]))
+    rendered = ExperienceRoles(path).roles
+    headings = [''.join(role['heading']).strip() for role in rendered]
+    if headings != [source['organization'] for source in expected]:
+        errors.append('/experience/: role organizations or order differ from the source records')
+    for source, role in zip(expected, rendered):
+        label = f"/experience/: {source['organization']}"
+        visible = ' '.join(' '.join(role['text']).split())
+        if source['period'] in visible:
+            errors.append(f'{label}: employment period is visible')
+        if len(role['images']) != 1:
+            errors.append(f"{label}: expected one thumbnail, found {len(role['images'])}")
+            continue
+        image = role['images'][0]
+        src = image.get('src', '')
+        if src != source.get('thumbnail') or not src.startswith('/assets/') or not file_for(src).is_file():
+            errors.append(f'{label}: missing or incorrect thumbnail {src!r}')
+        if not image.get('alt', '').strip() or image['alt'] != source.get('thumbnail_alt'):
+            errors.append(f'{label}: missing or incorrect thumbnail description')
+
 def file_for(route):
     path = SITE / unquote(route).lstrip('/')
     return path / 'index.html' if route.endswith('/') else path
@@ -73,6 +134,9 @@ for route, page in parsed.items():
 
 for route, name, count in [('/work/', 'project-card', 6), ('/articles/', 'publication', 6), ('/experience/', 'role', 11), ('/', 'feature', 3)]:
     if route in parsed and parsed[route].classes[name] != count: errors.append(f'{route}: expected {count} {name} entries')
+
+if '/experience/' in parsed:
+    check_experience(file_for('/experience/'))
 
 for private in ['docs', 'scripts', 'Gemfile', 'Gemfile.lock', 'README.md', 'SECURITY.md', 'requirements-pdf.txt']:
     if (SITE / private).exists(): errors.append(f'Build exposed source-only file: {private}')

@@ -1,0 +1,57 @@
+name: Experience page checks
+on:
+  pull_request:
+    paths:
+      - 'experience.md'
+      - '_experience/**'
+      - 'assets/experience/**'
+      - 'assets/portfolio/thumbs/**'
+      - 'assets/site.css'
+      - 'scripts/check_experience_browser.cjs'
+      - 'scripts/check_site.py'
+      - '.github/workflows/experience.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'experience.md'
+      - '_experience/**'
+      - 'assets/experience/**'
+      - 'assets/portfolio/thumbs/**'
+      - 'assets/site.css'
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+      - run: bundle exec jekyll build && python3 scripts/check_site.py
+      - name: Install browser test driver
+        run: npm install --prefix "$RUNNER_TEMP/browser" --no-save playwright-core@1.55.0
+      - name: Check layout and capture previews
+        env:
+          NODE_PATH: ${{ runner.temp }}/browser/node_modules
+        run: |
+          python3 -m http.server 8765 --directory _site --bind 127.0.0.1 &
+          node scripts/check_experience_browser.cjs http://127.0.0.1:8765/experience/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: experience-previews
+          path: ${{ runner.temp }}/experience-previews/
+      - name: Verify published page after deployment
+        if: github.event_name == 'push'
+        env:
+          NODE_PATH: ${{ runner.temp }}/browser/node_modules
+        run: |
+          for attempt in {1..30}; do
+            if node scripts/check_experience_browser.cjs https://www.aaronschneider.org/experience/; then exit 0; fi
+            sleep 10
+          done
+          exit 1
