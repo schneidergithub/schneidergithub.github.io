@@ -24,7 +24,21 @@ Serve employers and consulting clients through a portfolio of career experience,
 
 The release passed the nine-page build check and deployed through GitHub Pages. Production checks covered widths of 320, 375, 768, and 1280 pixels, including keyboard operation of the video players at phone and desktop widths. [Deployment](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44946994980) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44946995033)
 
-## Sprint · Find and share publications
+## Sprint · Show the contribution behind the scientific benchmark
+
+**Goal.** A technical hiring manager can distinguish Aaron’s contribution to Terminal-Bench-Science from the work the benchmark asks an agent to do, and open the public evidence directly.
+
+| Story | Points | Owner and acceptance |
+| --- | ---: | --- |
+| Read the scientific AI case | 3 | Editorial publishes the fifth case study at `/work/scientific-ai-benchmark/`. Name both task co-authors, explain selection of study comparisons, extraction of statistics and calculation of effect sizes, and identify the merged task as the outcome. Describe infrastructure review and trial analysis separately. Link to the recording and merged PR. |
+| Follow the contribution from either direction | 2 | Frontend connects the CommonDevOps Work card, case directory, Experience role and benchmark recording to the case. Preserve the homepage research destination, the recording’s original source and its direct merged-task link. The case and recording link back to one another with JavaScript disabled. |
+| Share the scientific AI work | 2 | Design ships a dedicated 1200 × 630 share card legible at 300px. The benchmark and Westinghouse cases each select their own art, and pages without a case-specific card retain the portfolio default. QA verifies delivered metadata, image bytes and all five case routes on the published site. |
+
+**Sprint demo.** Start at the CommonDevOps role, identify what Aaron co-authored, follow the citation to the merged task, and return from the recording to the case. Confirm that the case explains the task without claiming an agent score or a clinical result.
+
+## Released sprint · Find and share publications
+
+**Review and retrospective.** Product and QA accepted all three stories. The phone capture shows the three format choices and their counts. The production suite followed the eight entry links, verified the related investigation and interview, and exercised the direct recording fallback with JavaScript disabled. QA will bring this full entry-to-source journey into the next sprint’s first content check. [Release](https://github.com/schneidergithub/schneidergithub.github.io/pull/22) · [Pages](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44958809695) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44958809861)
 
 **Goal.** A reader can go directly to a recording, monthly review or investigation, choose where to read or watch, and share that exact entry. Product and QA found that five of eight entries lacked a stable fragment and all formats appeared in one list.
 

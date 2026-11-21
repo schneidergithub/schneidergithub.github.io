@@ -5,6 +5,7 @@
     width: 1280
     height: 720
   id: benchmark-presentation
+  case_project: commondevops
   type: "Video"
   publisher: "YouTube"
   url: "https://www.youtube.com/watch?v=e26_SSPpOP0"

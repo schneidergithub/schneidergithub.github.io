@@ -1,4 +1,7 @@
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 const { chromium } = require('playwright-core');
 const gallery = require('../_data/gallery.json');
 
@@ -6,7 +9,8 @@ const studies = [
   { card: 'propoint', path: 'super-salon-checkout', images: 2 },
   { card: 'indiana', path: 'indiana-case-archives', images: 0 },
   { card: 'bayer', path: 'bayer-aleve', images: 2 },
-  { card: 'westinghouse', path: 'westinghouse-performance', images: 0 }
+  { card: 'westinghouse', path: 'westinghouse-performance', images: 0 },
+  { card: 'commondevops', path: 'scientific-ai-benchmark', images: 0 }
 ];
 
 async function checkShareImage(page, file) {
@@ -88,6 +92,13 @@ async function check() {
           assert.match(await page.locator('.case-study').innerText(), /Elasticsearch/i);
           if (width === 1280) await checkShareImage(page, 'westinghouse-performance.jpg');
         }
+        if (study.card === 'commondevops') {
+          if (width === 1280) await checkShareImage(page, 'tbs-meta-analysis.jpg');
+          const dir = path.join(process.env.RUNNER_TEMP || os.tmpdir(), 'homepage-previews');
+          fs.mkdirSync(dir, { recursive: true });
+          const version = new URL(workUrl).hostname === '127.0.0.1' ? 'preview' : 'live';
+          await page.screenshot({ path: path.join(dir, version + '-benchmark-case-' + width + '.jpg'), fullPage: true, quality: 80 });
+        }
         const images = page.locator('.study-evidence img');
         assert.equal(await images.count(), study.images);
         for (const image of await images.all()) {
@@ -103,7 +114,7 @@ async function check() {
         await page.getByRole('link', { name: 'Back to Selected Work' }).click();
         assert.equal(page.url(), workUrl + '#' + study.card);
       }
-      console.log(width + 'px: verified four case studies, contact paths and project returns.');
+      console.log(width + 'px: verified ' + studies.length + ' case studies, contact paths and project returns.');
       await checkGallery(page, workUrl, width);
       await page.close();
     }

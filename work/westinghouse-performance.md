@@ -1,6 +1,8 @@
 ---
 layout: case-study
 project: westinghouse
+share_image: /assets/portfolio/share/westinghouse-performance.jpg
+share_alt: "Aaron Schneider’s Westinghouse case study. 3× Elasticsearch throughput. Performance testing through Sogeti / Capgemini."
 permalink: /work/westinghouse-performance/
 title: "Tripling Elasticsearch throughput at Westinghouse"
 context: "Westinghouse · Sogeti / Capgemini engagement"
