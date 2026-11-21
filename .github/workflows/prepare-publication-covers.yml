@@ -11,8 +11,10 @@ jobs:
     steps:
       - name: Collect published thumbnail originals
         run: |
+          python3 -m venv /tmp/covers-env
+          /tmp/covers-env/bin/pip install --quiet pillow
           mkdir -p covers
-          python3 - <<'PY'
+          /tmp/covers-env/bin/python - <<'PY'
           import base64, io, pathlib, subprocess
           from PIL import Image
           urls = {
@@ -37,7 +39,7 @@ jobs:
         run: |
           curl -fsSL --max-time 12 https://www.aaronschneider.org/common-devops-reports/reports/2026-09/ -o /tmp/september.html
           google-chrome --headless --no-sandbox --disable-gpu --hide-scrollbars --window-size=1100,800 --screenshot=/tmp/issue.png file:///tmp/september.html
-          python3 - <<'PY'
+          /tmp/covers-env/bin/python - <<'PY'
           from PIL import Image
           im=Image.open('/tmp/issue.png').convert('RGB')
           # Masthead begins after the page's 36px top margin. Include publisher and headline.
@@ -47,7 +49,7 @@ jobs:
       - name: Export web-sized covers
         if: always()
         run: |
-          python3 - <<'PY'
+          /tmp/covers-env/bin/python - <<'PY'
           import base64, pathlib
           for file in sorted(pathlib.Path('covers').glob('*.jpg')):
               data=base64.b64encode(file.read_bytes()).decode()
