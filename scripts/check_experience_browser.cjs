@@ -14,11 +14,21 @@ async function check() {
   const browser = await chromium.launch({ channel: 'chrome' });
   try {
     for (const width of [1280, 375]) {
-      const page = await browser.newPage({ viewport: { width, height: 960 } });
+      const page = await browser.newPage({ viewport: { width, height: width === 375 ? 812 : 960 } });
       const response = await page.goto(url, { waitUntil: 'load', timeout: 20000 });
       assert.ok(response.ok(), 'Experience page returned HTTP ' + response.status());
       const roles = page.locator('article.role');
       assert.equal(await roles.count(), 11);
+      const nuix = roles.filter({ has: page.getByRole('heading', { name: 'Nuix', exact: true }) });
+      assert.match(await nuix.locator('.role-details li').first().innerText(), /led.*12 engineers.*multiple time zones/i);
+      if (width === 375) {
+        await nuix.evaluate(el => el.scrollIntoView({ block: 'start' }));
+        await nuix.locator('img').evaluate(image => image.decode());
+        const reviewDir = path.join(temp, 'homepage-previews');
+        fs.mkdirSync(reviewDir, { recursive: true });
+        const version = new URL(url).hostname === '127.0.0.1' ? 'preview' : 'live';
+        await page.screenshot({ path: path.join(reviewDir, version + '-nuix-375x812.jpg'), quality: 82 });
+      }
       const evidence = await page.locator('.role a.role-study').evaluateAll(links =>
         Object.fromEntries(links.map(link => [link.closest('.role').querySelector('h2').textContent.trim(), link.pathname])));
       assert.deepEqual(evidence, {

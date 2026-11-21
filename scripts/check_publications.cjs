@@ -216,7 +216,6 @@ async function checkHomepage(page) {
 
   const projects = [
     ['/work/indiana-case-archives/', /92.*counties|counties.*92/is],
-    ['/work/super-salon-checkout/', /1¢|one.cent|1.cent|\$0\.01/i],
     ['/work/westinghouse-performance/', /3\s*[×x]|tripl|threefold/i]
   ];
   for (const [dest, result] of projects) {
@@ -224,6 +223,9 @@ async function checkHomepage(page) {
     assert.equal(await project.count(), 1, 'Missing featured project ' + dest);
     assert.match(await project.innerText(), result);
   }
+  const checkout = page.locator('.feature').filter({ has: page.locator('a[href="/work/super-salon-checkout/"]') });
+  assert.match(await checkout.locator('h3').innerText(), /caught.*checkout.*before release/i);
+  assert.match(await checkout.locator('p').last().innerText(), /automated test.*one.cent.*online.*desktop/i);
   const contacts = page.locator('#connect a');
   const destinations = await contacts.evaluateAll(links => links.map(a => a.href));
   assert.deepEqual(destinations.sort(), [
@@ -279,7 +281,9 @@ async function checkDiscovery(page) {
     for (const entry of entries) {
       const row = page.locator('li#' + entry);
       const permalink = row.locator('.entry-permalink');
-      assert.ok(await permalink.isVisible(), 'Missing entry link for ' + entry);
+      const title = await row.locator('h3 a').evaluate(a => a.firstChild.textContent.trim());
+      assert.equal(await permalink.getAttribute('href'), '#' + entry);
+      assert.ok(await row.getByRole('link', { name: 'Permalink — ' + title, exact: true }).isVisible(), 'Missing descriptive permalink for ' + entry);
       await permalink.press('Enter');
       assert.equal(page.url(), collection + '#' + entry);
       assert.ok(await row.locator('h3 a').isVisible());
@@ -358,8 +362,14 @@ async function checkPhoneEntry(browser) {
 }
 
 async function checkNoScript(browser) {
-  const page = await browser.newPage({ javaScriptEnabled: false, viewport: { width: 375, height: 900 } });
+  const page = await browser.newPage({ javaScriptEnabled: false, viewport: { width: 375, height: 812 } });
   await page.goto(origin);
+  const reviewDir = path.join(process.env.RUNNER_TEMP || os.tmpdir(), 'homepage-previews');
+  fs.mkdirSync(reviewDir, { recursive: true });
+  const version = new URL(origin).hostname === '127.0.0.1' ? 'preview' : 'live';
+  const checkout = page.locator('.feature').filter({ has: page.locator('a[href="/work/super-salon-checkout/"]') });
+  await checkout.evaluate(el => el.scrollIntoView({ block: 'center' }));
+  await page.screenshot({ path: path.join(reviewDir, version + '-super-salon-outcome-375x812.jpg'), quality: 82 });
   const header = page.locator('.site-header');
   const links = header.locator('nav a');
   assert.deepEqual(await links.evaluateAll(items => items.map(a => a.pathname)), ['/', '/experience/', '/work/', '/articles/']);
@@ -374,6 +384,9 @@ async function checkNoScript(browser) {
   await page.reload();
   assert.equal(page.url(), deepLink);
   assert.ok(await page.locator(':target h3').isVisible(), 'Shared entry must resolve without JavaScript');
+  assert.ok(await page.locator(':target').evaluate(el => getComputedStyle(el).outlineStyle === 'none'), 'A shared URL should emphasize the title without outlining the whole article row');
+  assert.ok(await page.locator(':target h3').evaluate(el => parseFloat(getComputedStyle(el, '::before').borderInlineStartWidth) > 0), 'Mark the heading of the incoming publication');
+  await page.screenshot({ path: path.join(reviewDir, version + '-shared-recording-375x812.jpg'), quality: 82 });
   await checkDiscovery(page);
   await checkFallbacks(page);
   await page.close();

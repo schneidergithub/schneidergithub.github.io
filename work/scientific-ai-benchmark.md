@@ -2,7 +2,7 @@
 layout: case-study
 project: commondevops
 permalink: /work/scientific-ai-benchmark/
-title: "Testing AI agents on a published meta-analysis"
+title: "Can AI reproduce a meta-analysis?"
 link_label: "Reconstructing scientific results in Terminal-Bench-Science"
 context: "CommonDevOps · Scientific AI benchmarking"
 description: "Dr. Ian Miller and I co-authored “MDD Executive Function” for Terminal-Bench-Science. The task asks an AI agent to reconstruct effect sizes from published studies of executive function in major depressive disorder."

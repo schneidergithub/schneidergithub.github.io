@@ -169,14 +169,34 @@ async function check() {
         const title = await page.locator('main h1').innerText();
         assert.ok(title && label.includes(title), 'Case-study link and headline disagree');
         const ending = page.locator('.study-ending');
-        const discuss = ending.getByRole('link', { name: 'Discuss this work' });
-        assert.equal(await discuss.getAttribute('href'), '/#connect');
-        assert.equal(await ending.locator('a[href="/work/#' + study.card + '"]').count(), 1);
+        const actions = ending.getByRole('link');
+        assert.equal(await actions.count(), 3);
+        assert.equal(await ending.getByRole('link', { name: /Aaron.*LinkedIn/i }).getAttribute('href'), 'https://www.linkedin.com/in/aarondrewschneider/');
+        assert.equal(await ending.getByRole('link', { name: /CommonDevOps.*LinkedIn/i }).getAttribute('href'), 'https://www.linkedin.com/company/commondevops/');
+        const projectReturn = ending.getByRole('link', { name: 'Return to project', exact: true });
+        assert.equal(await projectReturn.getAttribute('href'), '/work/#' + study.card);
         if (study.card === 'westinghouse') {
           assert.match(await page.locator('.case-study').innerText(), /Elasticsearch/i);
           if (width === 1280) await checkShareImage(page, 'westinghouse-performance.jpg');
         }
         if (study.card === 'commondevops') {
+          assert.equal(await page.locator('h1').innerText(), 'Can AI reproduce a meta-analysis?');
+          if (width === 375) {
+            const fits = await page.locator('h1').evaluate(el => {
+              const node = el.firstChild;
+              const phrase = 'meta-analysis';
+              const start = node.textContent.indexOf(phrase);
+              const range = document.createRange();
+              range.setStart(node, start);
+              range.setEnd(node, start + phrase.length);
+              return range.getClientRects().length === 1;
+            });
+            assert.ok(fits, 'Keep meta-analysis together on the phone');
+          }
+          const studyText = await page.locator('.case-study').innerText();
+          assert.match(studyText, /Dr\. Ian Miller and I co-authored/);
+          assert.match(studyText, /review DevOps and infrastructure/);
+          assert.match(studyText, /analysis team.*trial results/);
           if (width === 1280) await checkShareImage(page, 'tbs-meta-analysis.jpg');
           const dir = path.join(process.env.RUNNER_TEMP || os.tmpdir(), 'homepage-previews');
           fs.mkdirSync(dir, { recursive: true });
@@ -190,12 +210,11 @@ async function check() {
           await image.evaluate(img => img.decode());
         }
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Horizontal overflow on ' + page.url());
-        if (study.card === 'westinghouse' || study.card === 'propoint') {
-          await Promise.all([page.waitForURL(new URL('/#connect', workUrl).href), discuss.press('Enter')]);
-          assert.equal(await page.locator('#connect .actions a').count(), 2);
-          await page.goBack();
+        if (study.card === 'propoint' && width === 375) {
+          await ending.evaluate(el => el.scrollIntoView({ block: 'center' }));
+          await captureWork(page, 'super-salon-contact');
         }
-        await page.getByRole('link', { name: 'Back to Selected Work' }).click();
+        await projectReturn.press('Enter');
         assert.equal(page.url(), workUrl + '#' + study.card);
       }
       console.log(width + 'px: verified ' + studies.length + ' case studies, contact paths and project returns.');
