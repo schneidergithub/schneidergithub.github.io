@@ -19,6 +19,14 @@ async function check() {
       assert.ok(response.ok(), 'Experience page returned HTTP ' + response.status());
       const roles = page.locator('article.role');
       assert.equal(await roles.count(), 11);
+      const evidence = await page.locator('.role a.role-study').evaluateAll(links =>
+        Object.fromEntries(links.map(link => [link.closest('.role').querySelector('h2').textContent.trim(), link.pathname])));
+      assert.deepEqual(evidence, {
+        'Sogeti / Capgemini': '/work/westinghouse-performance/',
+        BCforward: '/work/indiana-case-archives/',
+        'ProPoint Global': '/work/super-salon-checkout/',
+        Ciber: '/work/bayer-aleve/'
+      }, 'Experience must link each engagement to its own case');
       if (width === 1280) {
         const signature = await roles.evaluateAll(articles => articles.map(article => ({
           text: article.innerText.trim(),

@@ -13,7 +13,13 @@ permalink: /experience/
     <h2>{{ role.organization | escape }}</h2>
     <h3>{{ role.title | escape }}</h3>
   </header>
-  <div class="role-details">{{ role.content }}</div>
+  <div class="role-details">
+    {{ role.content }}
+    {% if role.case_project %}
+      {% assign study = site.pages | where: 'layout', 'case-study' | where: 'project', role.case_project | first %}
+      {% if study %}<a class="role-study" href="{{ study.url | relative_url }}">{{ study.link_label | default: study.title | escape }}</a>{% endif %}
+    {% endif %}
+  </div>
 </article>
 {% endfor %}
 </div>

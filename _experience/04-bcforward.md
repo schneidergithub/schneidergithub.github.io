@@ -1,5 +1,6 @@
 ---
 order: 4
+case_project: indiana
 organization: "BCforward"
 title: "Software Engineering, DevOps & QA Consulting"
 period: "February 2022 – August 2023"

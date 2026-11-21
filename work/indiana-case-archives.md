@@ -1,6 +1,7 @@
 ---
 layout: case-study
 project: indiana
+link_label: "Archiving case files across 92 Indiana counties"
 permalink: /work/indiana-case-archives/
 title: "Archiving case files across Indiana’s 92 counties"
 context: "Indiana prosecutor case management · BCforward engagement"
