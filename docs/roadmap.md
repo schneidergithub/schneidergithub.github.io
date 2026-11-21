@@ -24,7 +24,21 @@ Serve employers and consulting clients through a portfolio of career experience,
 
 The release passed the nine-page build check and deployed through GitHub Pages. Production checks covered widths of 320, 375, 768, and 1280 pixels, including keyboard operation of the video players at phone and desktop widths. [Deployment](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44946994980) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44946995033)
 
-## Next sprint · From engineering result to contact
+## Sprint · Find and share publications
+
+**Goal.** A reader can go directly to a recording, monthly review or investigation, choose where to read or watch, and share that exact entry. Product and QA found that five of eight entries lacked a stable fragment and all formats appeared in one list.
+
+| Story | Points | Owner and acceptance |
+| --- | ---: | --- |
+| Browse by format | 3 | Editorial and frontend group the three recordings, four monthly articles and one research report. Native jump links show the counts and land on visible section headings. Each publication and local cover appears once. |
+| Open or share an entry | 3 | Frontend gives all eight rows permanent anchors and a visible entry link. Preserve the existing benchmark, October and node-ipc fragments. Make inline play and the external YouTube destination identifiable. With JavaScript off a reader can browse every group and reach each original recording. |
+| Follow the incident from two perspectives | 2 | Editorial links the node-ipc investigation and maintainer interview in both directions, identifying which is Aaron’s investigation and which is the interview. Keep the original report, DOI, interview and other companion sources reachable. |
+
+**Sprint demo.** Enter from the homepage benchmark link and from a directly shared publication fragment. Jump between groups, play and close a video, follow a related entry, and open the same row with JavaScript off. QA checks the preview and custom domain at phone and desktop widths.
+
+## Released sprint · From engineering result to contact
+
+**Review and retrospective.** Product and QA accepted all six stories. At 375px, both hero actions, the Westinghouse evidence link and the research play control fit on the first screen. Four case-study paths, both contact routes and the published sharing artwork passed verification. Frontend will continue checking the full first-screen layout after adding links. QA will exercise the next no-JavaScript story from the collection itself. [Release](https://github.com/schneidergithub/schneidergithub.github.io/pull/21) · [Pages](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44958313576) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44958313958)
 
 **Sprint goal.** A hiring manager or consulting buyer can discover a concrete engineering result from the homepage, Selected Work, or Experience, read what Aaron changed, and share the case or reach the right contact.
 
@@ -86,7 +100,7 @@ As a visitor using a phone, I want to read each specialization as a phrase and r
 | The same cover has different play controls in the collection and on the homepage. | Design and QA inspect both renditions with their actual controls before approving shared artwork. | Show the 150px collection thumbnail and the homepage cover with title and faces clear of the controls. |
 | The earlier phone layout already showed Play. Asking someone what they would be playing exposed the reading-order issue. | Product keeps an unaided first-screen prompt in the next homepage review. | Record which outcome a reviewer identifies and which link they choose on phone and desktop. |
 
-The next sprint commits the Westinghouse evidence link and homepage visual updates. Its release criteria retain the 375px research play control.
+The engineering results sprint delivered the Westinghouse link and homepage visual updates while retaining the 375px research play control.
 
 ## Experience thumbnails
 
@@ -203,7 +217,7 @@ The marketing and technical recruiting review found that the homepage repeated t
 
 **Second review.** The [first production check](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44946630400) verified five homepage images at four widths and keyboard operation for all three players on both media pages. In the live 375-pixel screenshot the benchmark poster and play control were visible on the first screen. The design review identified an isolated navigation link on phones, an isolated external-link arrow on tablets, and uneven card edges on desktop. The follow-up uses two balanced navigation rows on narrow phones, keeps the arrow with its video title, and aligns the closed cards and result figures.
 
-The next sprint includes a portfolio sharing image and a dedicated Westinghouse case cover.
+The engineering results sprint delivered the portfolio sharing image and dedicated Westinghouse case cover.
 
 ## Later portfolio work
 
