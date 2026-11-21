@@ -6,7 +6,7 @@ permalink: /
 <section class="hero">
   <div>
     <p class="eyebrow">Software Engineer · DevSecOps · AI Research</p>
-    <h1>Building software.<br>A systematic approach.</h1>
+    <h1>Building software. <span class="hero-signature">A systematic approach.</span></h1>
     <div class="actions"><a class="button" href="{{ '/work/' | relative_url }}">Explore selected work</a><a class="button secondary" href="{{ '/experience/' | relative_url }}">View experience</a></div>
   </div>
   <aside class="focus-panel" aria-labelledby="focus-title">
