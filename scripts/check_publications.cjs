@@ -52,6 +52,9 @@ async function check() {
     for (const width of [375, 1280]) {
       const page = await browser.newPage({ viewport: { width, height: 900 } });
       await page.goto(origin);
+      const heroLinks = page.locator('.hero h1 + .actions a');
+      assert.deepEqual(await heroLinks.allTextContents(), ['Explore selected work', 'View experience']);
+      assert.deepEqual(await heroLinks.evaluateAll(links => links.map(link => link.pathname)), ['/work/', '/experience/']);
       await page.locator('.focus-panel').getByRole('link', { name: /presentation and task/ }).click({ timeout: 5000 });
       assert.equal(page.url(), new URL(presentation, origin).href);
       const video = page.locator('#benchmark-presentation');

@@ -11,6 +11,11 @@ Serve employers and consulting clients through a portfolio of career experience,
 - MVP release: published through PR #1; the YouTube subscription button followed in PR #2. Live domains, pages, images, and the unchanged PGP key were verified.
 - The charcoal-and-blue design and manual edits through `4b3ad29` merged in [PR #3](https://github.com/schneidergithub/schneidergithub.github.io/pull/3), including removal of education and certifications from the Experience page. [PR #4](https://github.com/schneidergithub/schneidergithub.github.io/pull/4) added versioned stylesheet and favicon URLs.
 
+## Current MVP release
+
+- [Experience thumbnails, PR #7](https://github.com/schneidergithub/schneidergithub.github.io/pull/7) added images for all eleven roles. [Selected Work, PR #8](https://github.com/schneidergithub/schneidergithub.github.io/pull/8) added the three case studies.
+- [Articles & Demos, PR #9](https://github.com/schneidergithub/schneidergithub.github.io/pull/9) expanded the collection to eight entries. [PR #10](https://github.com/schneidergithub/schneidergithub.github.io/pull/10) completes the approved presentation changes with a thumbnail for each entry, inline players for all three videos, and the two homepage navigation buttons directly below the headline.
+
 ## Experience thumbnails
 
 Approved November 21, 2026. [Release PR #7](https://github.com/schneidergithub/schneidergithub.github.io/pull/7) implements one thumbnail per role. The source records retain their dates and use the existing `order` field for display.
