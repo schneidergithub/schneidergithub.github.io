@@ -127,9 +127,12 @@ async function checkResearchFeature(panel, width) {
 
 async function checkHomepage(page) {
   const width = page.viewportSize().width;
-  if (width <= 375) {
-    const rows = await page.locator('.site-header nav a').evaluateAll(links => links.map(link => link.offsetTop));
-    assert.ok(rows.length === 4 && rows[0] === rows[1] && rows[2] === rows[3] && rows[0] < rows[2], 'Expected two balanced navigation rows');
+  const nav = page.locator('.site-header nav');
+  if (width >= 768) {
+    assert.ok(await nav.isVisible(), 'Show the main links when there is room');
+    const brand = await page.locator('.site-header .brand').boundingBox();
+    const links = await nav.boundingBox();
+    assert.ok(Math.min(brand.y + brand.height, links.y + links.height) > Math.max(brand.y, links.y), 'Wide header should use one row');
   }
   const signature = page.locator('.hero h1 .hero-signature');
   assert.equal(await signature.textContent(), 'A systematic approach.');
@@ -147,13 +150,21 @@ async function checkHomepage(page) {
   if (width > 850) assert.equal(signatureLayout.lines, 1, 'Desktop signature wrapped at ' + width + 'px');
   const heroLinks = page.locator('.hero h1 + .actions a');
   const caseLink = page.locator('.hero a[href="/work/westinghouse-performance/"]');
-  assert.match(await caseLink.innerText(), /tripled Elasticsearch throughput at Westinghouse/i);
+  assert.match(await caseLink.innerText(), /^Westinghouse.*3\s*[×x].*Elasticsearch throughput/i);
   assert.deepEqual(await heroLinks.allTextContents(), ['Explore selected work', 'View experience']);
   assert.deepEqual(await heroLinks.evaluateAll(links => links.map(link => link.pathname)), ['/work/', '/experience/']);
   await checkActionTargets(heroLinks, width === 375);
   if (width === 320 || width === 375) {
     const largerText = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
     await checkActionTargets(heroLinks);
+    const menu = page.locator('.site-header').getByRole('button', { name: /menu/i });
+    await menu.press('Enter');
+    const controls = page.locator('.site-header a, .site-header button');
+    assert.ok(await controls.evaluateAll(items => items.every(el => {
+      const r = el.getBoundingClientRect();
+      return r.width > 0 && r.left >= -1 && r.right <= innerWidth + 1 && el.scrollWidth <= el.clientWidth + 1;
+    })), 'Menu controls must fit at enlarged text size');
+    await menu.press('Escape');
     assert.ok(await caseLink.evaluate(link => {
       const rect = link.getBoundingClientRect();
       return rect.left >= 0 && rect.right <= innerWidth + 1 && link.scrollWidth <= link.clientWidth + 1;
@@ -281,9 +292,82 @@ async function checkDiscovery(page) {
   }
 }
 
+async function checkPhoneEntry(browser) {
+  const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
+  await page.goto(new URL('/articles/', origin).href);
+  const header = page.locator('.site-header');
+  const menu = header.getByRole('button', { name: /menu/i });
+  const nav = header.locator('nav');
+  const headerBox = await header.boundingBox();
+  const menuBox = await menu.boundingBox();
+  assert.ok(headerBox.height <= 80 && menuBox.width >= 44 && menuBox.height >= 44, 'Compact header needs a 44px Menu target');
+  assert.equal(await menu.getAttribute('aria-expanded'), 'false');
+  assert.equal(await nav.isVisible(), false);
+
+  const featured = page.locator('#benchmark-presentation');
+  const title = await featured.locator('h3').boundingBox();
+  const poster = await featured.locator('.video-poster img').boundingBox();
+  const play = await featured.locator('summary .play-mark').boundingBox();
+  const row = await featured.boundingBox();
+  for (const control of [title, play]) {
+    assert.ok(control.y >= 0 && control.y + control.height <= 812 && control.x >= 0 && control.x + control.width <= 376,
+      'Show the full featured recording title and Play control on the first phone screen');
+  }
+  assert.ok(title.y + title.height <= poster.y + 1 && poster.width >= row.width * 0.9 &&
+    Math.abs(poster.width / poster.height - 16 / 9) < 0.04, 'Feature the recording title above a wide 16:9 poster');
+  const dir = path.join(process.env.RUNNER_TEMP || os.tmpdir(), 'homepage-previews');
+  fs.mkdirSync(dir, { recursive: true });
+  const version = new URL(origin).hostname === '127.0.0.1' ? 'preview' : 'live';
+  await page.screenshot({ path: path.join(dir, version + '-articles-375x812.jpg'), quality: 85, animations: 'disabled' });
+  await featured.locator('summary').press('Enter');
+  const frame = featured.locator('iframe');
+  await frame.waitFor({ state: 'visible' });
+  assert.ok((await frame.boundingBox()).width >= row.width - 4, 'The open phone player should span the available row');
+  await featured.locator('summary').press('Space');
+  await frame.waitFor({ state: 'detached' });
+  for (const entry of publicationGroups.recordings.slice(1)) {
+    const other = page.locator('#' + entry);
+    const art = await other.locator('.video-poster img').boundingBox();
+    const heading = await other.locator('h3').boundingBox();
+    assert.ok(art.width < poster.width / 2 && art.x + art.width <= heading.x + 1 &&
+      Math.min(art.y + art.height, heading.y + heading.height) > Math.max(art.y, heading.y),
+      'Compact recording should pair its cover with its title: ' + entry);
+  }
+
+  await menu.press('Enter');
+  assert.equal(await menu.getAttribute('aria-expanded'), 'true');
+  const links = nav.locator('a');
+  assert.deepEqual(await links.evaluateAll(items => items.map(a => a.pathname)), ['/', '/experience/', '/work/', '/articles/']);
+  assert.equal(await nav.locator('a[aria-current="page"]').getAttribute('href'), '/articles/');
+  for (const link of await links.all()) {
+    await page.keyboard.press('Tab');
+    assert.ok(await link.evaluate(el => {
+      const b = el.getBoundingClientRect();
+      return document.activeElement === el && el.matches(':focus-visible') && getComputedStyle(el).outlineStyle !== 'none' &&
+        b.width >= 44 && b.height >= 44;
+    }), 'Menu links need keyboard focus in document order and 44px targets');
+  }
+  await page.keyboard.press('Escape');
+  assert.equal(await nav.isVisible(), false);
+  assert.equal(await menu.getAttribute('aria-expanded'), 'false');
+  assert.ok(await menu.evaluate(el => document.activeElement === el), 'Escape should return focus to Menu');
+  await menu.press('Space');
+  const workUrl = new URL('/work/', origin).href;
+  await Promise.all([page.waitForURL(workUrl), nav.getByRole('link', { name: 'Selected Work' }).press('Enter')]);
+  await page.close();
+}
+
 async function checkNoScript(browser) {
   const page = await browser.newPage({ javaScriptEnabled: false, viewport: { width: 375, height: 900 } });
   await page.goto(origin);
+  const header = page.locator('.site-header');
+  const links = header.locator('nav a');
+  assert.deepEqual(await links.evaluateAll(items => items.map(a => a.pathname)), ['/', '/experience/', '/work/', '/articles/']);
+  await header.locator('.brand').focus();
+  for (const link of await links.all()) {
+    await page.keyboard.press('Tab');
+    assert.ok(await link.evaluate(el => el === document.activeElement && el.getBoundingClientRect().height > 0), 'No-script navigation must be visible and reachable by keyboard');
+  }
   await checkFallbacks(page);
   const deepLink = new URL('/articles/#node-ipc-interview', origin).href;
   await page.goto(deepLink);
@@ -316,9 +400,9 @@ async function checkCollection(page, width) {
   assert.equal(await page.locator('#node-ipc-report .publication-related').getAttribute('href'), 'https://doi.org/10.6084/m9.figshare.33865414');
   await checkDiscovery(page);
   const publications = page.locator('li.publication');
-  const articleCover = await page.locator('#october-review img').boundingBox();
+  assert.equal(await publications.count(), 8);
   for (const row of await publications.all()) {
-    const cover = row.locator('.meta img');
+    const cover = row.locator('img');
     assert.equal(await cover.count(), 1);
     await decodeCover(cover);
     if (!(await row.locator('.publication-video').count())) {
@@ -329,8 +413,7 @@ async function checkCollection(page, width) {
       assert.ok(await row.locator('summary .play-caption').isVisible(), 'Identify inline playback on the poster');
     }
     const box = await cover.boundingBox();
-    assert.equal(box.x, articleCover.x);
-    assert.equal(box.width, articleCover.width);
+    assert.ok(box.width > 0 && box.x >= -1 && box.x + box.width <= width + 1, 'Publication cover must fit its row');
   }
   await checkPlayers(page);
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Publication list overflows');
@@ -369,7 +452,10 @@ async function check() {
       }
       await page.close();
     }
-    if (!baseline) await checkNoScript(browser);
+    if (!baseline) {
+      await checkPhoneEntry(browser);
+      await checkNoScript(browser);
+    }
   } finally {
     await browser.close();
   }

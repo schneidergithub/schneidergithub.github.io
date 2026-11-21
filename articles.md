@@ -13,9 +13,9 @@ groups:
     label: Investigations
     type: Research report
 ---
-<header class="page-intro">
+<header class="page-intro publication-intro">
   <h1>Articles &amp; Demos</h1>
-  <p class="lead">Research presentations, incident investigations, and monthly reporting on AI and software delivery.</p>
+  <p class="lead">Talks and field reports on AI, cybersecurity, and software delivery.</p>
   <nav class="publication-jumps section-jumps" aria-label="Publication formats">
     {% for group in page.groups %}
       {% assign members = site.data.publications | where: 'type', group.type %}
@@ -29,15 +29,15 @@ groups:
 <h2 id="{{ group.id }}" tabindex="-1">{{ group.label }}</h2>
 <ul class="publication-list">
 {% for item in members %}
-  <li class="publication" id="{{ item.id | escape }}" tabindex="-1">
+  {% assign featured = false %}
+  {% if group.id == 'recordings' and forloop.first %}{% assign featured = true %}{% endif %}
+  <li class="publication{% if featured %} publication-featured{% endif %}" id="{{ item.id | escape }}" tabindex="-1">
+    <h3><a href="{{ item.url | escape }}">{{ item.title | escape }} {% if item.type == 'Video' %}<span class="publication-source-label">YouTube&nbsp;<span aria-hidden="true">↗</span></span>{% else %}<span aria-hidden="true">↗</span>{% endif %}</a></h3>
     <div class="meta">
-      {% include publication-media.html publication=item link_cover=true play_label="Play" %}
-      <span class="type">{{ item.type | escape }}</span>
-      {% if item.period %}<span>{{ item.period | escape }} issue</span>{% endif %}
-      {% if item.date %}<span>Published <time datetime="{{ item.date }}">{{ item.date | date: '%B %-d, %Y' }}</time></span>{% endif %}
+      {% include publication-media.html publication=item link_cover=true play_label="Play" eager=featured %}
     </div>
-    <article>
-      <h3><a href="{{ item.url | escape }}">{{ item.title | escape }} {% if item.type == 'Video' %}<span class="publication-source-label">YouTube&nbsp;<span aria-hidden="true">↗</span></span>{% else %}<span aria-hidden="true">↗</span>{% endif %}</a></h3>
+    <div class="publication-copy">
+      {% if item.period or item.date %}<p class="publication-date">{% if item.period %}{{ item.period | escape }} issue{% endif %}{% if item.period and item.date %} · {% endif %}{% if item.date %}Published <time datetime="{{ item.date }}">{{ item.date | date: '%B %-d, %Y' }}</time>{% endif %}</p>{% endif %}
       <p>{{ item.description | escape }}</p>
       <p class="attribution">{{ item.attribution | escape }}</p>
       <p class="publication-actions">
@@ -49,7 +49,7 @@ groups:
         {% if item.companion %}<a class="publication-context" href="#{{ item.companion.id | escape }}">{{ item.companion.label | escape }}</a>{% endif %}
         <a class="entry-permalink" href="#{{ item.id | escape }}">Link to entry<span class="visually-hidden"> — {{ item.title | escape }}</span></a>
       </p>
-    </article>
+    </div>
   </li>
 {% endfor %}
 </ul>
