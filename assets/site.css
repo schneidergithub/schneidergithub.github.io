@@ -274,7 +274,8 @@ a{color:inherit}
 .thumbnail-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
 .thumbnail-card{margin:0;padding:0;background:var(--panel);border:1px solid var(--line);border-radius:5px;overflow:visible}
 .thumbnail-card a{display:block;text-decoration:none;border-radius:5px}
-.thumbnail-card figcaption{padding:.75rem 1rem}
+.thumbnail-open{display:block;padding:.55rem 1rem 0;font-size:.875rem;text-decoration:underline;text-underline-offset:.22em}
+.thumbnail-card figcaption{padding:.3rem 1rem .85rem}
 .thumbnail-card a:hover{background:#1D2530}
 .thumbnail-frame{display:flex;align-items:center;justify-content:center;height:220px;padding:12px;background:#EEF2F7;border-radius:4px 4px 0 0}
 .thumbnail-frame img{width:auto;max-width:100%;height:auto;max-height:100%;object-fit:contain}
