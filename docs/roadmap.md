@@ -115,6 +115,22 @@ Bring the collection to eight entries and feature three ways to examine the work
 | As a reader, I want the original article or research report and a downloadable or citable edition. | The October entry links to the HTML and PDF. The NODE-IPC entry names Aaron’s contribution and links to the first-edition DOI. Both have locally hosted cover previews with alternative text. | Crop the masthead from the [published October PDF](https://www.aaronschneider.org/common-devops-reports/reports/2026-10/common-devops-october-2026.pdf), reuse the existing NODE-IPC cover, and add optional preview and companion-link fields to the publication records. |
 | As a maintainer, I want to catch broken links and covers before and after release. | The collection renders every publication record. At 375 and 1280 pixels the feature opens the intended entry, both images load, and the list fits. The separately hosted October links return the expected headline and a PDF. | Extend the existing site check and portfolio workflow. Run the browser checks against the build and the deployed site. |
 
+## Homepage media and project results sprint
+
+**Sprint goal.** An engineering manager can watch the benchmark presentation, inspect a project result, and find the right contact from the homepage.
+
+The marketing and technical recruiting review found that the homepage repeated the benchmark project and sent visitors through summaries to reach case studies. The UI/UX review found a separate, text-only publication list below the contact actions. On a 375-pixel phone, the last navigation link wrapped onto a row by itself and the four-line headline pushed the research below the buttons. The visual design review retained blue for links and gold for keyboard focus and selected a stronger border for the play controls. The engineering and QA review identified the separate homepage template as the reason the collection’s media checks missed this problem.
+
+| Priority | Visitor story | Implementation and acceptance |
+| --- | --- | --- |
+| 1 | As a visitor, I can recognize and play a video on the homepage. | Put the benchmark poster and player in the research panel. Show the October issue, NODE-IPC report, maintainer interview, and security livestream with their original covers above contact. Reuse the collection’s player. Open and close each video by keyboard, verify the direct YouTube links, and confirm all five images load. |
+| 2 | As an engineering manager, I can identify a result and inspect the supporting work. | Feature the Indiana rollout across 92 counties, Westinghouse’s threefold Elasticsearch throughput, and the one-cent Super Salon checkout discrepancy. Link directly to the two case studies and the Westinghouse QA project. |
+| 3 | As a visitor on a phone or using a keyboard, I can distinguish the actions and follow the page in order. | Give actionable media distinct controls, preserve cover proportions, and use the established blue links and gold focus treatment. Present project and publication evidence before contact. Check focus visibility and reflow through the phone, tablet, and desktop layouts. |
+
+**Release review.** Build the site and exercise the homepage and Articles & Demos through their public entry points. After deployment, repeat the recruiter and consulting visitor journeys on the custom domain. Recheck the image loads, inline players, evidence links, contact destinations, focus treatment, and narrow-screen layout. Record the production run and any follow-up findings with the release.
+
+A dedicated social-sharing image is a later enhancement.
+
 ## Later portfolio work
 
 Consider a small historical archive if a project has an owner-cleared artifact and enough context to explain Aaron’s contribution. Continue adding individual publications to the existing collection as they appear.

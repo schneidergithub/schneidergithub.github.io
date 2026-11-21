@@ -1,7 +1,12 @@
 ---
 order: 5
 slug: "propoint"
-featured: false
+featured: true
+home_highlight:
+  value: "1¢"
+  label: "checkout discrepancy"
+  description: "At Super Salon, an automated test caught a rounding error between online and desktop checkout before release."
+  link_label: "Read the checkout case study"
 title: "Point-of-sale products & test automation"
 category: "Product engineering"
 context: "ProPoint Global / Super Salon"

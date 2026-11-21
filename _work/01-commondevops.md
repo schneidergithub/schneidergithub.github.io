@@ -1,7 +1,7 @@
 ---
 order: 1
 slug: "commondevops"
-featured: true
+featured: false
 title: "AI-assisted software development"
 category: "AI research & DevSecOps"
 context: "CommonDevOps · Full Stack Engineer"

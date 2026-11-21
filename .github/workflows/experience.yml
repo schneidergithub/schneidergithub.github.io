@@ -12,6 +12,7 @@ on:
       - 'work/**'
       - '_work/**'
       - '_includes/project-card.html'
+      - '_includes/publication-media.html'
       - '_layouts/**'
       - 'sitemap.xml'
       - 'assets/portfolio/**'
@@ -36,6 +37,7 @@ on:
       - 'work/**'
       - '_work/**'
       - '_includes/project-card.html'
+      - '_includes/publication-media.html'
       - '_layouts/**'
       - 'sitemap.xml'
       - 'assets/portfolio/**'
@@ -73,6 +75,12 @@ jobs:
         with:
           name: experience-previews
           path: ${{ runner.temp }}/experience-previews/
+      - name: Capture production homepage for before-and-after review
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        env:
+          NODE_PATH: ${{ runner.temp }}/browser/node_modules
+        run: node scripts/check_publications.cjs https://www.aaronschneider.org --capture-baseline
       - name: Verify published page after deployment
         if: github.event_name == 'push'
         env:
@@ -85,3 +93,10 @@ jobs:
             sleep 10
           done
           exit 1
+      - name: Save homepage review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-previews
+          path: ${{ runner.temp }}/homepage-previews/
+          if-no-files-found: ignore
