@@ -97,6 +97,14 @@ Three project cards now open detailed case studies. Each explains Aaron’s cont
 | [Indiana case archives](../work/indiana-case-archives.md) | The pilot account documents the filename issue and correction. Aaron’s rollout account scopes the file counts and monthly storage savings per county across 92 counties. |
 | [Bayer’s Aleve website](../work/bayer-aleve.md) | Aaron’s role history establishes lead development through Ciber. The archived homepage and story page document the delivered site. |
 
+## Selected Work gallery highlights
+
+| Reader goal | MVP acceptance criteria | Implementation |
+| --- | --- | --- |
+| Understand Aaron’s contribution before opening an image. | Each of the five project groups opens with a short first-person highlight. The Westinghouse highlight identifies the release testing and the $20 million website. Bucky Ball Web identifies Aaron’s role as co-owner and the more than 100 business sites he built and hosted. | Update the group descriptions in the existing gallery inventory. Use Aaron’s account for those two figures and the published project and role records for ProPoint, Bayer, and Berkeley. Keep image captions and alternative text descriptive. |
+| Follow a highlight to the engineering details. | The checkout and Aleve highlights open their case studies. The Westinghouse link leads to the QA project card and its Elasticsearch throughput result. | Add a related link to those three gallery entries and render it just below the highlight. |
+| Browse the gallery on a phone or desktop. | At 375 and 1280 pixels, all five gallery jumps lead to the matching highlights, the three detail links resolve, and all 26 image pairs remain accessible. | Extend the existing Selected Work browser check and run it against the preview and deployed site. |
+
 ## Articles & Demos release
 
 Bring the collection to eight entries and feature three ways to examine the work on the homepage. The [benchmark presentation](https://www.youtube.com/watch?v=e26_SSPpOP0) explains a scientific task, the [October review](https://www.aaronschneider.org/common-devops-reports/reports/2026-10/) covers the month in AI and cybersecurity, and the [NODE-IPC report](https://doi.org/10.6084/m9.figshare.33865414) documents an investigation.
