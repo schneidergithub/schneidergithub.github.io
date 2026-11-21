@@ -1,3 +1,4 @@
+# Snapshot after the public homepage sprint
 name: Homepage visual review
 on:
   push:
@@ -32,6 +33,7 @@ jobs:
               const result=await page.goto('https://www.aaronschneider.org/', {waitUntil:'networkidle'});
               if(!result.ok()) throw Error('HTTP ' + result.status());
               const lazy=page.locator('main img');
+              if(await lazy.count()!==5 || await page.locator('.publication-video').count()!==3) throw Error('Previous homepage still served.');
               for(const img of await lazy.all()){
                 await img.scrollIntoViewIfNeeded(); await img.evaluate(el=>el.decode());
               }
