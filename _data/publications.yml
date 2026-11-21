@@ -1,3 +1,44 @@
+- title: "Reconstructing a meta-analysis with AI agents"
+  id: benchmark-presentation
+  type: "Video"
+  publisher: "YouTube"
+  url: "https://www.youtube.com/watch?v=e26_SSPpOP0"
+  description: "What does it take for an AI agent to reproduce a scientific result? This presentation introduces a Terminal-Bench-Science task in which agents select eligible comparisons from studies of executive function in major depressive disorder, extract the statistics, and calculate effect sizes."
+  attribution: "Benchmark task by Dr. Ian Miller and Aaron Schneider"
+  related:
+    label: "View the merged benchmark task"
+    url: "https://github.com/harbor-framework/terminal-bench-science/pull/1513"
+- title: "Cybersecurity Must Keep Pace with AI"
+  id: october-review
+  type: "Article"
+  period: "October 2026"
+  publisher: "Common DevOps Monthly Review"
+  url: "https://www.aaronschneider.org/common-devops-reports/reports/2026-10/"
+  description: "The October issue follows AI agents into software delivery. It looks at GitHub’s agent workflows, the integrity of release pipelines, and the cost of running and monitoring agents."
+  attribution: "Common DevOps Monthly Review"
+  preview:
+    src: "/assets/publications/october-review.png"
+    alt: "October issue masthead with the headline in white and red"
+    width: 480
+    height: 210
+  related:
+    label: "Read the PDF edition"
+    url: "https://www.aaronschneider.org/common-devops-reports/reports/2026-10/common-devops-october-2026.pdf"
+- title: "node-ipc Supply Chain Incident Report"
+  id: node-ipc-report
+  type: "Research report"
+  publisher: "CommonDevOps"
+  url: "https://commondevops.com/node-ipc-supply-chain-incident-report/"
+  description: "An investigation of the May 2026 node-ipc compromise, covering publishing authority, malicious releases, detection, and remediation, with evidence and confidence levels."
+  attribution: "Aaron Schneider led the domain, DNS, and registrar investigation for CommonDevOps."
+  preview:
+    src: "/assets/experience/commondevops.png"
+    alt: "Title page of the first-edition NODE-IPC incident report"
+    width: 640
+    height: 308
+  related:
+    label: "First edition on Figshare"
+    url: "https://doi.org/10.6084/m9.figshare.33865414"
 - title: "AI just got cheaper, hacking spree continues"
   type: "Article"
   publisher: "CommonDevOps on LinkedIn"
@@ -5,12 +46,6 @@
   url: "https://www.linkedin.com/pulse/ai-just-got-cheaper-control-harder-commondevops-uqksc/"
   description: "A September roundup examining model releases, agent behavior, cybersecurity disclosures, and lessons from CommonDevOps research."
   attribution: "CommonDevOps · Aaron S., Ian Miller, and Javier Bonilla"
-- title: "node-ipc Supply Chain Incident Report"
-  type: "Research report"
-  publisher: "CommonDevOps"
-  url: "https://commondevops.com/node-ipc-supply-chain-incident-report/"
-  description: "An investigation of the May 2026 node-ipc compromise, covering publishing authority, malicious releases, detection, and remediation, with evidence and confidence levels."
-  attribution: "Published by CommonDevOps · See the original report for full authorship and evidence."
 - title: "Node-IPC incident interview with creator Brandon Miller"
   type: "Video"
   publisher: "CommonDevOps on YouTube"

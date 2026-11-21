@@ -92,10 +92,19 @@ Three project cards now open detailed case studies. Each explains Aaron’s cont
 | [Indiana case archives](../work/indiana-case-archives.md) | The pilot account documents the filename issue and correction. Aaron’s rollout account scopes the file counts and monthly storage savings per county across 92 counties. |
 | [Bayer’s Aleve website](../work/bayer-aleve.md) | Aaron’s role history establishes lead development through Ciber. The archived homepage and story page document the delivered site. |
 
+## Articles & Demos release
+
+Bring the collection to eight entries and feature three ways to examine the work on the homepage. The [benchmark presentation](https://www.youtube.com/watch?v=e26_SSPpOP0) explains a scientific task, the [October review](https://www.aaronschneider.org/common-devops-reports/reports/2026-10/) covers the month in AI and cybersecurity, and the [NODE-IPC report](https://doi.org/10.6084/m9.figshare.33865414) documents an investigation.
+
+| User story | Acceptance criteria | Implementation |
+| --- | --- | --- |
+| As a hiring manager, I want to see how Aaron tests AI agents on scientific work. | The homepage and CommonDevOps project lead to the presentation. Its entry identifies the co-authors and links to the video and merged task. | Update the homepage focus and project summary. Add a permanent presentation anchor, verify the video against [Aaron’s public profile](https://github.com/schneidergithub), and use [PR #1513](https://github.com/harbor-framework/terminal-bench-science/pull/1513) for task status. |
+| As a reader, I want the original article or research report and a downloadable or citable edition. | The October entry links to the HTML and PDF. The NODE-IPC entry names Aaron’s contribution and links to the first-edition DOI. Both have locally hosted cover previews with alternative text. | Crop the masthead from the [published October PDF](https://www.aaronschneider.org/common-devops-reports/reports/2026-10/common-devops-october-2026.pdf), reuse the existing NODE-IPC cover, and add optional preview and companion-link fields to the publication records. |
+| As a maintainer, I want to catch broken links and covers before and after release. | The collection renders every publication record. At 375 and 1280 pixels the feature opens the intended entry, both images load, and the list fits. The separately hosted October links return the expected headline and a PDF. | Extend the existing site check and portfolio workflow. Run the browser checks against the build and the deployed site. |
+
 ## Later portfolio work
 
-1. Add approved screenshots, published videos, and original articles incrementally.
-2. Consider a wider historical archive only if useful.
+Consider a small historical archive if a project has an owner-cleared artifact and enough context to explain Aaron’s contribution. Continue adding individual publications to the existing collection as they appear.
 
 ## Approved career record
 
