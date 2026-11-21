@@ -157,9 +157,19 @@ for route, page in parsed.items():
             ids = Page(target).ids
             if unquote(resolved.fragment) not in ids: errors.append(f'{route}: missing anchor {link}')
 
-publication_count = int(subprocess.check_output([
-    'ruby', '-ryaml', '-e', 'puts YAML.load_file(ARGV.fetch(0)).length', ROOT / '_data/publications.yml'
+publications = json.loads(subprocess.check_output([
+    'ruby', '-ryaml', '-rjson', '-e', 'puts JSON.generate(YAML.load_file(ARGV.fetch(0)))', ROOT / '_data/publications.yml'
 ]))
+publication_count = len(publications)
+if '/articles/' in parsed:
+    collection = parsed['/articles/']
+    for item in publications:
+        entry = item.get('id', '')
+        if not entry or entry not in collection.ids or '#' + entry not in collection.links:
+            errors.append(f"/articles/: missing entry link for {item['title']}")
+        for source in (item, item.get('related', {})):
+            if source and source['url'] not in collection.links:
+                errors.append(f"/articles/: missing source {source['url']}")
 for route, name, count in [('/work/', 'project-card', 6), ('/articles/', 'publication', publication_count), ('/experience/', 'role', 11), ('/', 'feature', 3)]:
     if route in parsed and parsed[route].classes[name] != count: errors.append(f'{route}: expected {count} {name} entries')
 
