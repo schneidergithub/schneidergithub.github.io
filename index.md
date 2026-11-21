@@ -32,7 +32,7 @@ permalink: /
       <div class="media-art">{% include publication-media.html publication=item play_label="Play video" %}</div>
       <div class="media-copy">
         <p class="media-type">{{ item.type | escape }} · YouTube</p>
-        <h3><a href="{{ item.url | escape }}">{{ item.title | escape }} <span aria-hidden="true">↗</span><span class="visually-hidden"> on YouTube</span></a></h3>
+        <h3><a href="{{ item.url | escape }}">{{ item.title | escape }}&nbsp;<span aria-hidden="true">↗</span><span class="visually-hidden"> on YouTube</span></a></h3>
       </div>
       {% else %}
       <a class="media-story" href="{{ item.url | escape }}" aria-labelledby="home-{{ item.id | escape }}">
@@ -60,7 +60,7 @@ permalink: /
     {% assign highlight = project.home_highlight %}
     {% assign study = site.pages | where: 'layout', 'case-study' | where: 'project', project.slug | first %}
     <article class="feature">
-      <p class="eyebrow">{{ project.context | escape }}</p>
+      <p class="eyebrow">{{ highlight.organization | escape }}</p>
       <h3 class="feature-result"><span class="result-value">{{ highlight.value | escape }}</span> <span class="result-label">{{ highlight.label | escape }}</span></h3>
       <p>{{ highlight.description | escape }}</p>
       <a href="{% if study %}{{ study.url | relative_url }}{% else %}{{ '/work/' | relative_url }}#{{ project.slug | escape }}{% endif %}">{{ highlight.link_label | escape }}</a>

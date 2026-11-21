@@ -129,6 +129,8 @@ The marketing and technical recruiting review found that the homepage repeated t
 
 **Release review.** Build the site and exercise the homepage and Articles & Demos through their public entry points. After deployment, repeat the recruiter and consulting visitor journeys on the custom domain. Recheck the image loads, inline players, evidence links, contact destinations, focus treatment, and narrow-screen layout. Record the production run and any follow-up findings with the release.
 
+**Second review.** The [first production check](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44946630400) verified five homepage images at four widths and keyboard operation for all three players on both media pages. In the live 375-pixel screenshot the benchmark poster and play control were visible on the first screen. The design review identified an isolated navigation link on phones, an isolated external-link arrow on tablets, and uneven card edges on desktop. The follow-up uses two balanced navigation rows on narrow phones, keeps the arrow with its video title, and aligns the closed cards and result figures.
+
 A dedicated social-sharing image is a later enhancement.
 
 ## Later portfolio work
