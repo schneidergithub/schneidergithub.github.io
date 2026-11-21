@@ -78,6 +78,20 @@ async function checkHomepage(page) {
     const rows = await page.locator('.site-header nav a').evaluateAll(links => links.map(link => link.offsetTop));
     assert.ok(rows.length === 4 && rows[0] === rows[1] && rows[2] === rows[3] && rows[0] < rows[2], 'Expected two balanced navigation rows');
   }
+  const signature = page.locator('.hero h1 .hero-signature');
+  assert.equal(await signature.textContent(), 'A systematic approach.');
+  const signatureLayout = await signature.evaluate(element => {
+    const column = element.closest('h1').getBoundingClientRect();
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const lines = [...range.getClientRects()];
+    return {
+      lines: lines.length,
+      fits: lines.every(line => line.width > 0 && line.left >= column.left - 1 && line.right <= column.right + 1)
+    };
+  });
+  assert.ok(signatureLayout.lines > 0 && signatureLayout.fits, 'Headline must fit its column at ' + width + 'px');
+  if (width > 850) assert.equal(signatureLayout.lines, 1, 'Desktop signature wrapped at ' + width + 'px');
   const heroLinks = page.locator('.hero h1 + .actions a');
   assert.deepEqual(await heroLinks.allTextContents(), ['Explore selected work', 'View experience']);
   assert.deepEqual(await heroLinks.evaluateAll(links => links.map(link => link.pathname)), ['/work/', '/experience/']);
@@ -178,7 +192,7 @@ async function check() {
   const baseline = process.argv.includes('--capture-baseline');
   const browser = await chromium.launch({ channel: 'chrome' });
   try {
-    for (const width of baseline ? reviewWidths : [320, 375, 768, 1280]) {
+    for (const width of baseline ? reviewWidths : [320, 375, 768, 851, 1024, 1280, 1440]) {
       const page = await browser.newPage({ viewport: { width, height: 900 } });
       const home = await page.goto(origin);
       assert.ok(home.ok(), 'Homepage returned HTTP ' + home.status());
