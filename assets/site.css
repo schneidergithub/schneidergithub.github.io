@@ -173,7 +173,7 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 @media(max-width:960px){.media-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:850px){.publication:has(.publication-video[open]){grid-template-columns:1fr}
 .site-header{align-items:flex-start;flex-direction:column;gap:.7rem}
-.hero{grid-template-columns:1fr;gap:1.5rem;padding-block:1.75rem}
+.hero{grid-template-columns:minmax(0,1fr);gap:1.5rem;padding-block:1.75rem}
 .feature-grid{gap:1.25rem}
 .project-grid{grid-template-columns:1fr}
 .site-footer{flex-direction:column}
@@ -207,8 +207,9 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 .card-copy{padding:1.4rem}
 figure{padding-inline:1.4rem}
 .focus-panel{padding:1rem}
+.hero h1{overflow-wrap:anywhere}
 .hero .actions{margin-top:1.15rem;gap:.55rem}
-.hero .actions .button{font-size:.875rem;padding-inline:.65rem}
+.hero .actions .button{max-width:100%;font-size:.875rem;padding-inline:.65rem;text-align:center}
 .hero .actions .secondary{padding-inline:0;border:0;background:transparent;text-decoration:underline}
 #home-media .section-heading{gap:.1rem}
 .publication .type{display:inline;margin-right:.6rem}

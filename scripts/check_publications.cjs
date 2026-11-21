@@ -80,12 +80,13 @@ async function checkActionTargets(links, sameRow = false) {
     const text = range.getBoundingClientRect();
     return {
       top: box.top, bottom: box.bottom, left: box.left, right: box.right,
+      label: link.textContent, textBounds: text.toJSON(),
       fits: box.height >= 44 && box.left >= 0 && box.right <= innerWidth &&
         text.left >= box.left - 1 && text.right <= box.right + 1 &&
         text.top >= box.top - 1 && text.bottom <= box.bottom + 1
     };
   }));
-  assert.ok(boxes.every(box => box.fits), 'Hero action targets must fit with all text visible');
+  for (const box of boxes) assert.ok(box.fits, 'Clipped hero action: ' + JSON.stringify(box));
   const [work, experience] = boxes;
   assert.ok(work.right <= experience.left || work.bottom <= experience.top, 'Hero actions overlap');
   if (sameRow) assert.ok(Math.min(work.bottom, experience.bottom) > Math.max(work.top, experience.top), 'Hero actions must share a row at 375px');
