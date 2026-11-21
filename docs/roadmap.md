@@ -24,9 +24,9 @@ Serve employers and consulting clients through a portfolio of career experience,
 
 The release passed the nine-page build check and deployed through GitHub Pages. Production checks covered widths of 320, 375, 768, and 1280 pixels, including keyboard operation of the video players at phone and desktop widths. [Deployment](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44946994980) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44946995033)
 
-## Next sprint · Introduce the research before playback
+## Released sprint · Introduce the research before playback
 
-**Planned November 21, 2026.** A first-time visitor can identify what Terminal-Bench-Science investigates before pressing play, then watch the presentation or follow the work to the merged task. The baseline is the published champagne signature and two hero actions. [Headline release](https://github.com/schneidergithub/schneidergithub.github.io/pull/16) · [Production screenshots and checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44954781285)
+**Released and reviewed November 21, 2026.** The team accepted both stories (5 of 5 planned points). A first-time visitor can identify what Terminal-Bench-Science investigates before pressing play, then watch the presentation or follow the work to the merged task. The baseline was the published champagne signature and two hero actions. [Baseline](https://github.com/schneidergithub/schneidergithub.github.io/pull/16) · [Release PR](https://github.com/schneidergithub/schneidergithub.github.io/pull/18) · [Pages deployment](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44956892983)
 
 **Forecast.** Five relative points across two stories. Allow two to three focused person-days including artwork, implementation, review and release verification. The estimate assumes the team uses the poster fallback below if a clear source frame is unavailable.
 
@@ -45,13 +45,26 @@ As a visitor using a phone, I want to read each specialization as a phrase and r
 - **Implementation.** Keep “AI Research” together and balance the lines of the research question. At 375px, pair “Explore selected work” with an underlined “View experience” link in the same row. Allow wrapping as space or enlarged text requires.
 - **Acceptance.** At 375 × 900 the two actions fit on one row at default text size and the initial screen shows the research play control. Each action has a tap target at least 44px high, a visible keyboard focus state and its existing destination. At 320px and with 200% text, controls can reflow without overlap, clipping or horizontal scrolling. At desktop widths the champagne signature stays on one line.
 
-### Delivery and sprint review
+### Delivery plan
 
 1. **Design and frontend** select the cover and render it at both sizes. Frontend can develop the mobile controls while design sources the frame.
 2. **Frontend and QA** integrate both stories and extend the [homepage browser checks](../scripts/check_publications.cjs) for reading order, cover dimensions and action layout. Run the existing build and seven-width browser suite. Inspect the 768px tablet layout and compare the 375px and 1280px captures with the baseline.
 3. **Product and QA** open the preview with the player closed. Ask a reviewer to name the benchmark and describe its question before playback. Then use the keyboard to play and close it and follow the link to the task. After merge, verify the Pages deployment and the portfolio checks against the custom domain before marking the sprint complete.
 
-**Follow-up order.** Review the before-and-after captures first. Next, evaluate a single Westinghouse throughput link near the hero actions for visitors seeking engineering results. Then compare a neutral panel border and soft shadow against the existing blue edge. Consider a brief reduced-motion-aware transition on the play control and buttons after the static design review. Revisit section backgrounds and dividers only if readers still miss the project results.
+### Sprint review
+
+- **Research feature accepted.** A virtual recruiter reviewing the closed player at 375px and 1280px could name the benchmark, identify the meta-analysis question, and find Play. At 768px the question spans the tablet grid above the poster and credits. The homepage and collection use the same 1280 × 720 cover. The collection leads to the [merged task](https://github.com/harbor-framework/terminal-bench-science/pull/1513). [Production captures](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44956892598/artifacts/14728006786)
+- **Phone layout accepted.** At 375 × 900 both portfolio actions fit on one row, each at least 44px high. The research panel begins about 55px higher than in the baseline, and Play is visible on the first screen. Production browser checks passed at seven widths from 320px to 1440px, including keyboard operation and embed loading on both media pages, the homepage fallback with JavaScript disabled, and hero action bounds at 200% text on narrow screens. [Before-and-after captures](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44956448329/artifacts/14728220396) · [Custom-domain checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44956892598)
+
+### Sprint retrospective
+
+| What the team learned | Owner and next-sprint action | Evidence to bring to review |
+| --- | --- | --- |
+| The first preview caught a clipped action at 320px with 200% text. Adjusting the grid and button wrapping fixed it. | Frontend and QA run that case on the first layout change. | Record the result alongside the first preview. [Initial failure](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44956310690) · [Passing fix](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44956448329) |
+| The same cover has different play controls in the collection and on the homepage. | Design and QA inspect both renditions with their actual controls before approving shared artwork. | Show the 150px collection thumbnail and the homepage cover with title and faces clear of the controls. |
+| The earlier phone layout already showed Play. Asking someone what they would be playing exposed the reading-order issue. | Product keeps an unaided first-screen prompt in the next homepage review. | Record which outcome a reviewer identifies and which link they choose on phone and desktop. |
+
+**Next backlog experiment.** Evaluate one link near the hero actions to the Westinghouse project where Aaron tripled Elasticsearch throughput. Ask a reviewer to find the supporting project and recheck that the research play control stays visible at 375px. Then consider panel borders and shadows, control transitions, and section dividers in that order.
 
 ## Experience thumbnails
 
