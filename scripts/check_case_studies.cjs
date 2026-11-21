@@ -212,7 +212,19 @@ async function check() {
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Horizontal overflow on ' + page.url());
         if (study.card === 'propoint' && width === 375) {
           await ending.evaluate(el => el.scrollIntoView({ block: 'center' }));
-          await captureWork(page, 'super-salon-contact');
+          const personal = ending.getByRole('link', { name: /Aaron.*LinkedIn/i });
+          const team = ending.getByRole('link', { name: /CommonDevOps.*LinkedIn/i });
+          await team.focus();
+          await page.keyboard.press('Shift+Tab');
+          for (const link of [personal, team, projectReturn]) {
+            assert.ok(await link.evaluate(el => {
+              const style = getComputedStyle(el);
+              return document.activeElement === el && el.matches(':focus-visible') &&
+                style.outlineStyle !== 'none' && parseFloat(style.outlineWidth) > 0;
+            }), 'Tab should visibly focus the individual, team and return links in that order');
+            if (link === personal) await captureWork(page, 'super-salon-contact');
+            if (link !== projectReturn) await page.keyboard.press('Tab');
+          }
         }
         await projectReturn.press('Enter');
         assert.equal(page.url(), workUrl + '#' + study.card);
