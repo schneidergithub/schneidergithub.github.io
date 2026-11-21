@@ -220,7 +220,7 @@ async function check() {
         }
         if (study.path === 'node-ipc-investigation') {
           const copy = page.locator('.study-copy');
-          assert.equal(title, 'What the node-ipc domain records showed');
+          assert.equal(title, 'node-ipc and the evidence in the domain records');
           assert.ok(await copy.locator('a[href="https://commondevops.com/node-ipc-supply-chain-incident-report/"]').isVisible());
           assert.ok(await copy.locator('a[href="https://doi.org/10.6084/m9.figshare.33865414.v1"]').isVisible());
           assert.ok(await copy.locator('a[href="/articles/#node-ipc-report"]').isVisible());

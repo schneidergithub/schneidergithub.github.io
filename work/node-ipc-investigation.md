@@ -2,7 +2,7 @@
 layout: case-study
 project: commondevops
 permalink: /work/node-ipc-investigation/
-title: "What the node-ipc domain records showed"
+title: "node-ipc and the evidence in the domain records"
 link_label: "Investigating the node-ipc supply-chain compromise"
 context: "CommonDevOps · Software supply-chain investigation"
 description: "In May 2026, three malicious node-ipc releases appeared on npm. I led an independent investigation into the domain associated with a maintainer account and documented how far the public evidence could take us."
