@@ -8,7 +8,7 @@ permalink: /
     <p class="eyebrow">Software Engineer · DevSecOps · AI&nbsp;Research</p>
     <h1>Building software. <span class="hero-signature">A systematic approach.</span></h1>
     <div class="actions"><a class="button" href="{{ '/work/' | relative_url }}">Explore selected work</a><a class="button secondary" href="{{ '/experience/' | relative_url }}">View experience</a></div>
-    <a class="hero-case-link" href="{{ '/work/westinghouse-performance/' | relative_url }}">How I tripled Elasticsearch throughput at Westinghouse</a>
+    <a class="hero-case-link" href="{{ '/work/westinghouse-performance/' | relative_url }}">Westinghouse · 3× Elasticsearch throughput</a>
   </div>
   <aside class="focus-panel" aria-labelledby="focus-title">
     <p class="eyebrow">Terminal-Bench-Science</p>

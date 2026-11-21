@@ -23,12 +23,14 @@
   <meta name="theme-color" content="#14181F">
   <link rel="icon" href="{{ '/assets/favicon.svg' | relative_url }}?v={{ site.time | date: '%s' }}" type="image/svg+xml">
   <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+  <script src="{{ '/assets/navigation.js' | relative_url }}" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header wrap">
     <a class="brand" href="{{ '/' | relative_url }}" aria-label="Aaron Schneider, home"><span class="brand-mark" aria-hidden="true">AS</span><span>Aaron Schneider</span></a>
-    <nav aria-label="Main navigation">
+    <button class="site-menu-toggle" type="button" aria-controls="primary-navigation" aria-expanded="false" hidden>Menu</button>
+    <nav id="primary-navigation" aria-label="Main navigation">
       {% assign nav_labels = 'Home|Experience|Selected Work|Articles & Demos' | split: '|' %}
       {% assign nav_paths = '/|/experience/|/work/|/articles/' | split: '|' %}
       {% for label in nav_labels %}{% assign path = nav_paths[forloop.index0] %}

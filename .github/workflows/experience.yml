@@ -21,6 +21,7 @@ on:
       - '_experience/**'
       - 'assets/experience/**'
       - 'assets/site.css'
+      - 'assets/navigation.js'
       - 'scripts/check_experience_browser.cjs'
       - 'scripts/check_site.py'
       - '.github/workflows/experience.yml'
@@ -46,6 +47,7 @@ on:
       - '_experience/**'
       - 'assets/experience/**'
       - 'assets/site.css'
+      - 'assets/navigation.js'
 permissions:
   contents: read
 jobs:

@@ -52,7 +52,10 @@ class Page(HTMLParser):
             allowed = re.fullmatch(r'https://www\.youtube-nocookie\.com/embed/[A-Za-z0-9_-]{11}\?autoplay=1&playsinline=1', a.get('src', ''))
             if not media_page or not allowed or 'srcdoc' in a or not a.get('title'):
                 errors.append(f'{self.path}: unexpected video embed')
-        if tag == 'form' or (tag == 'script' and not (media_page and a.get('src') == '/assets/publications/video-player.js')):
+        allowed_scripts = {'/assets/navigation.js'}
+        if media_page:
+            allowed_scripts.add('/assets/publications/video-player.js')
+        if tag == 'form' or (tag == 'script' and a.get('src') not in allowed_scripts):
             errors.append(f'{self.path}: unexpected {tag}')
         if a.get('href', '').startswith(('mailto:', 'tel:')): errors.append(f'{self.path}: non-LinkedIn contact')
 
