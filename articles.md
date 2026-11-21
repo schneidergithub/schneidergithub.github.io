@@ -47,7 +47,7 @@ groups:
           {% if study %}<a class="publication-case" href="{{ study.url | relative_url }}">Read the case study<span class="visually-hidden"> — {{ study.title | escape }}</span></a>{% endif %}
         {% endif %}
         {% if item.companion %}<a class="publication-context" href="#{{ item.companion.id | escape }}">{{ item.companion.label | escape }}</a>{% endif %}
-        <a class="entry-permalink" href="#{{ item.id | escape }}">Link to entry<span class="visually-hidden"> — {{ item.title | escape }}</span></a>
+        <a class="entry-permalink" href="#{{ item.id | escape }}">Permalink<span class="visually-hidden"> — {{ item.title | escape }}</span></a>
       </p>
     </div>
   </li>

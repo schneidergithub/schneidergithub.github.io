@@ -62,7 +62,11 @@ permalink: /
     {% assign study = site.pages | where: 'layout', 'case-study' | where: 'project', project.slug | first %}
     <article class="feature">
       <p class="eyebrow">{{ highlight.organization | escape }}</p>
+      {% if highlight.value %}
       <h3 class="feature-result"><span class="result-value">{{ highlight.value | escape }}</span> <span class="result-label">{{ highlight.label | escape }}</span></h3>
+      {% else %}
+      <h3 class="feature-result result-statement">{{ highlight.label | escape }}</h3>
+      {% endif %}
       <p>{{ highlight.description | escape }}</p>
       <a href="{% if study %}{{ study.url | relative_url }}{% else %}{{ '/work/' | relative_url }}#{{ project.slug | escape }}{% endif %}">{{ highlight.link_label | escape }}</a>
     </article>

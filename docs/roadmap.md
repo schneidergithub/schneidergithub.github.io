@@ -53,6 +53,10 @@ Today the Projects jump skips the five case studies, and the phone gallery stack
 
 **Sequence and review.** Establish the navigation destinations first. Design selects the covers while frontend builds a disclosure using one multi-image group and one singleton. Then apply it to all groups. Demo from Explore selected work to a case, return to its matching project and open the Bayer group from a shared link. Confirm five image previews on initial phone load and all 26 distinct originals across the expanded archive. If capacity tightens, use the existing captions and carry the 3-point editorial and art refinement forward.
 
+**Released and reviewed.** Product and QA accepted all four stories (13 points). All five case-study outcomes fit on the initial 375 × 812 Work screen. The gallery starts with five representative images. Its three disclosures expose the remainder of the 26 originals, including all 12 Bayer images. QA followed legacy project and group links with JavaScript disabled and returned to an expanded group after opening a full-size image. The reviewer requested visible full-size image links and keyboard focus on the Gallery heading. Both changes shipped. [Release #27](https://github.com/schneidergithub/schneidergithub.github.io/pull/27) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44961868046) · [Production captures](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44961868046/artifacts/14730200964)
+
+**Retrospective.** Inspecting the page after keyboard navigation exposed a focus outline around the whole gallery that the initial screenshot missed. QA will inspect the shared publication destination and case-ending focus state in Sprint 3.
+
 ### Sprint 3 · Recognize the contribution and reach the right contact
 
 Use the approved career record and published case studies for copy. This release shortens the path from evidence to contact for hiring managers and consulting clients. The science case and publications retain their original public URLs.
