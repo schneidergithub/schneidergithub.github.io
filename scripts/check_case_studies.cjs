@@ -170,6 +170,8 @@ async function check() {
         assert.ok(title && label.includes(title), 'Case-study link and headline disagree');
         const ending = page.locator('.study-ending');
         const actions = ending.getByRole('link');
+        assert.equal(await page.locator('.site-footer a[href*="linkedin.com"]').count(), 0, 'Keep each contact choice in the case ending');
+        assert.equal(await page.locator('.site-footer a[href="/pgp/"]').count(), 1);
         assert.equal(await actions.count(), 3);
         assert.equal(await ending.getByRole('link', { name: /Aaron.*LinkedIn/i }).getAttribute('href'), 'https://www.linkedin.com/in/aarondrewschneider/');
         assert.equal(await ending.getByRole('link', { name: /CommonDevOps.*LinkedIn/i }).getAttribute('href'), 'https://www.linkedin.com/company/commondevops/');
