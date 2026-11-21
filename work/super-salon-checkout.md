@@ -1,6 +1,7 @@
 ---
 layout: case-study
 project: propoint
+link_label: "Catching a one-cent checkout error at Super Salon"
 permalink: /work/super-salon-checkout/
 title: "One sale, two totals"
 context: "ProPoint Global · Super Salon"

@@ -1,5 +1,6 @@
 ---
 order: 5
+case_project: westinghouse
 organization: "Sogeti / Capgemini"
 title: "QA Manager & SDET — Westinghouse Consultant"
 period: "September 2021 – February 2022"

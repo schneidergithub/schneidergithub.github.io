@@ -141,12 +141,18 @@ async function checkHomepage(page) {
   assert.ok(signatureLayout.lines > 0 && signatureLayout.fits, 'Headline must fit its column at ' + width + 'px');
   if (width > 850) assert.equal(signatureLayout.lines, 1, 'Desktop signature wrapped at ' + width + 'px');
   const heroLinks = page.locator('.hero h1 + .actions a');
+  const caseLink = page.locator('.hero a[href="/work/westinghouse-performance/"]');
+  assert.match(await caseLink.innerText(), /tripled Elasticsearch throughput at Westinghouse/i);
   assert.deepEqual(await heroLinks.allTextContents(), ['Explore selected work', 'View experience']);
   assert.deepEqual(await heroLinks.evaluateAll(links => links.map(link => link.pathname)), ['/work/', '/experience/']);
   await checkActionTargets(heroLinks, width === 375);
   if (width === 320 || width === 375) {
     const largerText = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
     await checkActionTargets(heroLinks);
+    assert.ok(await caseLink.evaluate(link => {
+      const rect = link.getBoundingClientRect();
+      return rect.left >= 0 && rect.right <= innerWidth + 1 && link.scrollWidth <= link.clientWidth + 1;
+    }), 'Enlarged Westinghouse link must fit on the phone');
     await largerText.evaluate(style => style.remove());
   }
   if (width === 375) {
@@ -195,7 +201,7 @@ async function checkHomepage(page) {
   const projects = [
     ['/work/indiana-case-archives/', /92.*counties|counties.*92/is],
     ['/work/super-salon-checkout/', /1¢|one.cent|1.cent|\$0\.01/i],
-    ['/work/#westinghouse', /3\s*[×x]|tripl|threefold/i]
+    ['/work/westinghouse-performance/', /3\s*[×x]|tripl|threefold/i]
   ];
   for (const [dest, result] of projects) {
     const project = page.locator('.feature').filter({ has: page.locator('a[href="' + dest + '"]') });
@@ -210,6 +216,13 @@ async function checkHomepage(page) {
     'https://www.youtube.com/@commondevops?sub_confirmation=1'
   ]);
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Homepage overflows');
+  if (width === 1280) {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const immediate = await page.locator('.hero .button, .hero .play-mark').evaluateAll(controls =>
+      controls.every(el => getComputedStyle(el).transitionDuration.split(',').every(value => parseFloat(value) === 0)));
+    assert.ok(immediate, 'Reduced motion must make hero controls respond without a transition');
+    await page.emulateMedia({ reducedMotion: null });
+  }
 }
 
 async function checkNoScript(browser) {

@@ -8,6 +8,7 @@ permalink: /
     <p class="eyebrow">Software Engineer · DevSecOps · AI&nbsp;Research</p>
     <h1>Building software. <span class="hero-signature">A systematic approach.</span></h1>
     <div class="actions"><a class="button" href="{{ '/work/' | relative_url }}">Explore selected work</a><a class="button secondary" href="{{ '/experience/' | relative_url }}">View experience</a></div>
+    <a class="hero-case-link" href="{{ '/work/westinghouse-performance/' | relative_url }}">How I tripled Elasticsearch throughput at Westinghouse</a>
   </div>
   <aside class="focus-panel" aria-labelledby="focus-title">
     <p class="eyebrow">Terminal-Bench-Science</p>
@@ -49,7 +50,7 @@ permalink: /
   </div>
 </section>
 
-<section class="section" aria-labelledby="selected-title">
+<section class="section selected-results" aria-labelledby="selected-title">
   <div class="section-heading">
     <h2 id="selected-title">Selected work</h2>
     <a href="{{ '/work/' | relative_url }}">View all projects</a>

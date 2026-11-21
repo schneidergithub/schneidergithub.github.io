@@ -1,5 +1,6 @@
 ---
 order: 6
+case_project: propoint
 organization: "ProPoint Global"
 title: "Hardware, Software, and QA Engineer"
 period: "June 2015 – June 2021"

@@ -4,6 +4,13 @@ description: Project summaries and a visual portfolio of Aaron Schneider's work 
 permalink: /work/
 ---
 <header class="page-intro"><p class="eyebrow">Projects & contributions</p><h1>Selected work</h1><p class="lead">A selection of work across software delivery, security, testing, and product engineering.</p><nav class="section-jumps" aria-label="Selected work sections"><a href="#project-summaries">Projects</a><a href="#portfolio-gallery">Portfolio Gallery <span class="count">26 images</span></a></nav></header>
+<nav class="study-directory" aria-labelledby="case-studies-title">
+  <h2 id="case-studies-title">Case studies</h2>
+  <ul>
+    {% assign studies = site.pages | where: 'layout', 'case-study' | sort: 'title' %}
+    {% for study in studies %}<li><a href="{{ study.url | relative_url }}">{{ study.link_label | default: study.title | escape }}</a></li>{% endfor %}
+  </ul>
+</nav>
 <section aria-label="Project summaries" id="project-summaries"><div class="project-grid">{% assign projects = site.work | sort: 'order' %}{% for project in projects %}{% include project-card.html %}{% endfor %}</div></section>
 
 <section class="section portfolio-gallery" id="portfolio-gallery" aria-labelledby="gallery-title">

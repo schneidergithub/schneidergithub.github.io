@@ -1,6 +1,7 @@
 ---
 layout: case-study
 project: bayer
+link_label: "Connecting customer stories to Bayer’s Aleve products"
 permalink: /work/bayer-aleve/
 title: "Building Bayer’s Aleve website"
 context: "Bayer · Ciber engagement"

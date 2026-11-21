@@ -12,7 +12,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / '_site'
 PAGES = ['/', '/experience/', '/work/', '/articles/', '/pgp/', '/404.html']
-STUDIES = ['/work/super-salon-checkout/', '/work/indiana-case-archives/', '/work/bayer-aleve/']
+STUDIES = ['/work/super-salon-checkout/', '/work/indiana-case-archives/', '/work/bayer-aleve/', '/work/westinghouse-performance/']
 errors = []
 
 class Page(HTMLParser):
@@ -22,6 +22,7 @@ class Page(HTMLParser):
         self.ids = []
         self.links = []
         self.canonical = []
+        self.metadata = {}
         self.h1 = 0
         self.active = []
         self.classes = Counter()
@@ -33,6 +34,8 @@ class Page(HTMLParser):
         self.classes.update(a.get('class', '').split())
         if 'id' in a: self.ids.append(a['id'])
         if tag == 'h1': self.h1 += 1
+        if tag == 'meta':
+            self.metadata[a.get('property') or a.get('name')] = a.get('content', '')
         if tag == 'link' and a.get('rel') == 'canonical': self.canonical.append(a.get('href'))
         if a.get('aria-current') == 'page': self.active.append(a.get('href'))
         if tag in ['a', 'link', 'img', 'script']:
@@ -122,6 +125,19 @@ for route in PAGES + STUDIES:
     if page.h1 != 1: errors.append(f'{route}: expected one h1')
     if len(set(page.ids)) != len(page.ids): errors.append(f'{route}: duplicate IDs')
     if page.canonical != ['https://www.aaronschneider.org' + route]: errors.append(f'{route}: canonical URL mismatch')
+    if route in PAGES[:4] + STUDIES:
+        card = 'westinghouse-performance' if route == '/work/westinghouse-performance/' else 'aaron-schneider'
+        image = f'/assets/portfolio/share/{card}.jpg'
+        expected_meta = {
+            'og:image': 'https://www.aaronschneider.org' + image,
+            'og:image:width': '1200', 'og:image:height': '630',
+            'twitter:card': 'summary_large_image'
+        }
+        for key, value in expected_meta.items():
+            if page.metadata.get(key) != value:
+                errors.append(f'{route}: expected {key} to be {value}')
+        if not page.metadata.get('og:image:alt', '').strip() or not file_for(image).is_file():
+            errors.append(f'{route}: missing sharing image or description')
     expected = [route] if route in PAGES[:4] else []
     if page.active != expected: errors.append(f'{route}: current navigation mismatch')
     if 'main' not in page.ids or '#main' not in page.links: errors.append(f'{route}: missing skip-link target')
