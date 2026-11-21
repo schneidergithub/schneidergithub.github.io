@@ -11,6 +11,11 @@ Serve employers and consulting clients through a portfolio of career experience,
 - MVP release: published through PR #1; the YouTube subscription button followed in PR #2. Live domains, pages, images, and the unchanged PGP key were verified.
 - The charcoal-and-blue design and manual edits through `4b3ad29` merged in [PR #3](https://github.com/schneidergithub/schneidergithub.github.io/pull/3), including removal of education and certifications from the Experience page. [PR #4](https://github.com/schneidergithub/schneidergithub.github.io/pull/4) added versioned stylesheet and favicon URLs.
 
+## Current MVP release
+
+- [Experience thumbnails, PR #7](https://github.com/schneidergithub/schneidergithub.github.io/pull/7) added images for all eleven roles. [Selected Work, PR #8](https://github.com/schneidergithub/schneidergithub.github.io/pull/8) added the three case studies.
+- [Articles & Demos, PR #9](https://github.com/schneidergithub/schneidergithub.github.io/pull/9) expanded the collection to eight entries. [PR #10](https://github.com/schneidergithub/schneidergithub.github.io/pull/10) completes the approved presentation changes with a thumbnail for each entry, inline players for all three videos, and the two homepage navigation buttons directly below the headline.
+
 ## Experience thumbnails
 
 Approved November 21, 2026. [Release PR #7](https://github.com/schneidergithub/schneidergithub.github.io/pull/7) implements one thumbnail per role. The source records retain their dates and use the existing `order` field for display.
@@ -128,7 +133,7 @@ Education is labeled Computer Science; no degree award is claimed. Selected cert
 
 The project cards use separately attributed Bayer Pest Management and ProPoint / Super Salon Guest Pass images. At Aaron's request, Selected Work also includes all 26 distinct images from the supplied `portfolio2` folder, grouped by project and linked to larger views. The folder's two exact duplicates appear only once. Images are optimized for the web, and the Westinghouse brand visual is labeled as such. The mixed collage, source PDFs, video files, and other archive media are excluded. Aaron subsequently requested that his résumé not be posted publicly: the MVP has no résumé PDF, download links, or résumé generator. The Experience page remains a portfolio career summary. Originals remain outside the repository.
 
-All four article/report URLs returned HTTP 200 on October 26, 2026 and their titles/publishers were inspected. The three LinkedIn publication dates were confirmed from the article pages. The report has inconsistent date references across sources, so its publication date is omitted. Both YouTube IDs returned title and CommonDevOps channel attribution through YouTube oEmbed. Video publication dates are omitted rather than inferred. Videos are linked, not embedded or uploaded.
+All four article/report URLs returned HTTP 200 on October 26, 2026 and their titles/publishers were inspected. The three LinkedIn publication dates were confirmed from the article pages. The report has inconsistent date references across sources, so its publication date is omitted. Both YouTube IDs returned title and CommonDevOps channel attribution through YouTube oEmbed. Video publication dates are omitted rather than inferred. The original MVP linked videos to YouTube. Articles & Demos now uses a local thumbnail for each publication. Selecting a video thumbnail opens the YouTube player in place, and closing it stops playback. The video titles still link directly to YouTube.
 
 ## Original MVP release sequence
 

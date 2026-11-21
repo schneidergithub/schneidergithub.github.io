@@ -97,6 +97,19 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 .publication h2{font-size:1.5rem;margin-bottom:.8rem}
 .publication .meta{font-size:.875rem;color:var(--muted)}
 .publication-preview{width:100%;max-width:150px;margin-bottom:.6rem;border:1px solid var(--line);border-radius:4px}
+.publication-video{margin-bottom:.6rem}
+.publication-video summary{display:table;max-width:100%;list-style:none;cursor:pointer;border-radius:4px}
+.publication-video summary::-webkit-details-marker{display:none}
+.video-poster{display:block;position:relative;width:150px;max-width:100%}
+.video-poster img{margin:0}
+.play-mark{position:absolute;inset:0;margin:auto;width:2.5rem;height:1.8rem;display:grid;place-items:center;background:#10151be6;border:1px solid #ffffffa8;border-radius:.45rem}
+.play-mark::after{content:"";border-block:.4rem solid transparent;border-left:.65rem solid white;margin-left:.12rem}
+.publication-video summary:hover .play-mark,.publication-video summary:focus-visible .play-mark{background:#10151b;border-color:white}
+.close-player{display:none;color:var(--accent);text-decoration:underline;text-underline-offset:.22em;padding:.4rem 0}
+.publication-video[open] .video-poster{display:none}
+.publication-video[open] .close-player{display:block}
+.publication:has(.publication-video[open]){grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.publication-video iframe{display:block;width:100%;height:auto;aspect-ratio:16/9;min-height:200px;border:0;border-radius:4px;background:#000}
 .publication-related{display:inline-block;padding-block:.55rem;font-size:.95rem}
 .publication p{color:var(--muted);max-width:70ch}
 .publication .attribution{font-size:.875rem;margin-bottom:0}
@@ -117,7 +130,8 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 .notice{color:var(--muted);font-size:.9rem}
 .page-intro .notice{max-width:65ch}
 
-@media(max-width:850px){.site-header{align-items:flex-start;flex-direction:column;gap:.7rem}
+@media(max-width:850px){.publication:has(.publication-video[open]){grid-template-columns:1fr}
+.site-header{align-items:flex-start;flex-direction:column;gap:.7rem}
 .hero{grid-template-columns:1fr;gap:2rem;padding-block:3rem}
 .focus-panel{max-width:none}
 .feature-grid{grid-template-columns:1fr}

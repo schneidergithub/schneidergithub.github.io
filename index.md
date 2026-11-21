@@ -7,7 +7,6 @@ permalink: /
   <div>
     <p class="eyebrow">Software Engineer · DevSecOps · AI Research</p>
     <h1>Building software.<br>A systematic approach.</h1>
-    <p class="lead">Hi, I'm Aaron Schneider. <br> I have over 25+ years of experience across full-stack development, DevSecOps, and engineering management.</p>
     <div class="actions"><a class="button" href="{{ '/work/' | relative_url }}">Explore selected work</a><a class="button secondary" href="{{ '/experience/' | relative_url }}">View experience</a></div>
   </div>
   <aside class="focus-panel" aria-labelledby="focus-title">

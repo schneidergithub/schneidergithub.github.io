@@ -35,11 +35,17 @@ class Page(HTMLParser):
         if tag == 'h1': self.h1 += 1
         if tag == 'link' and a.get('rel') == 'canonical': self.canonical.append(a.get('href'))
         if a.get('aria-current') == 'page': self.active.append(a.get('href'))
-        if tag in ['a', 'link', 'img']:
-            target = a.get('src' if tag == 'img' else 'href')
+        if tag in ['a', 'link', 'img', 'script']:
+            target = a.get('src' if tag in ['img', 'script'] else 'href')
             if target: self.links.append(target)
         if tag == 'img' and not a.get('alt', '').strip(): errors.append(f'{self.path}: missing image description')
-        if tag in ['iframe', 'script', 'form']: errors.append(f'{self.path}: unexpected {tag}')
+        articles = self.path == SITE / 'articles/index.html'
+        if tag == 'iframe':
+            allowed = re.fullmatch(r'https://www\.youtube-nocookie\.com/embed/[A-Za-z0-9_-]{11}\?autoplay=1&playsinline=1', a.get('src', ''))
+            if not articles or not allowed or 'srcdoc' in a or not a.get('title'):
+                errors.append(f'{self.path}: unexpected video embed')
+        if tag == 'form' or (tag == 'script' and not (articles and a.get('src') == '/assets/publications/video-player.js')):
+            errors.append(f'{self.path}: unexpected {tag}')
         if a.get('href', '').startswith(('mailto:', 'tel:')): errors.append(f'{self.path}: non-LinkedIn contact')
 
     def handle_data(self, data): self.text.append(data)
