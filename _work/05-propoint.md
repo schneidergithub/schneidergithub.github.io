@@ -3,6 +3,7 @@ order: 5
 slug: "propoint"
 featured: true
 home_highlight:
+  organization: "ProPoint · Super Salon"
   value: "1¢"
   label: "checkout discrepancy"
   description: "At Super Salon, an automated test caught a rounding error between online and desktop checkout before release."

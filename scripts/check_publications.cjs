@@ -73,6 +73,11 @@ async function captureHome(page, version) {
 }
 
 async function checkHomepage(page) {
+  const width = page.viewportSize().width;
+  if (width <= 375) {
+    const rows = await page.locator('.site-header nav a').evaluateAll(links => links.map(link => link.offsetTop));
+    assert.ok(rows.length === 4 && rows[0] === rows[1] && rows[2] === rows[3] && rows[0] < rows[2], 'Expected two balanced navigation rows');
+  }
   const heroLinks = page.locator('.hero h1 + .actions a');
   assert.deepEqual(await heroLinks.allTextContents(), ['Explore selected work', 'View experience']);
   assert.deepEqual(await heroLinks.evaluateAll(links => links.map(link => link.pathname)), ['/work/', '/experience/']);
@@ -84,6 +89,10 @@ async function checkHomepage(page) {
 
   const cards = page.locator('#home-media .media-card');
   assert.equal(await cards.count(), 4);
+  if (width === 1280) {
+    const heights = await cards.evaluateAll(items => items.map(item => item.clientHeight));
+    assert.equal(new Set(heights).size, 1, 'Closed desktop media cards should align');
+  }
   assert.equal(await cards.locator('.publication-video').count(), 2);
   const linkedCovers = cards.locator('a').filter({ has: page.locator('img') });
   assert.equal(await linkedCovers.count(), 2);

@@ -3,6 +3,7 @@ order: 4
 slug: "westinghouse"
 featured: true
 home_highlight:
+  organization: "Westinghouse"
   value: "3×"
   label: "Elasticsearch throughput"
   description: "At Westinghouse, I used load tests to find bottlenecks and tune the Elasticsearch configuration."

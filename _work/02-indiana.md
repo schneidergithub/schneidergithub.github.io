@@ -3,6 +3,7 @@ order: 2
 slug: "indiana"
 featured: true
 home_highlight:
+  organization: "Indiana prosecutors"
   value: "92"
   label: "Indiana counties"
   description: "I automated file archiving for closed cases. When a prosecutor reopened a case, its files were restored automatically."
