@@ -11,21 +11,21 @@ Serve employers and consulting clients through a portfolio of career experience,
 - MVP release: published through PR #1; the YouTube subscription button followed in PR #2. Live domains, pages, images, and the unchanged PGP key were verified.
 - The charcoal-and-blue design and manual edits through `4b3ad29` merged in [PR #3](https://github.com/schneidergithub/schneidergithub.github.io/pull/3), including removal of education and certifications from the Experience page. [PR #4](https://github.com/schneidergithub/schneidergithub.github.io/pull/4) added versioned stylesheet and favicon URLs.
 
-## Next three sprints · Mobile browsing, project evidence and contact
+## Released sprints · Mobile browsing, project evidence and contact
 
-**Kickoff, November 21, 2026.** Aaron approved the three-sprint plan following the post-MVP design review. The technical project manager and Scrum Master sequenced the releases with marketing, UX and graphic design, frontend and accessibility QA. Each sprint delivers a complete visitor journey and can ship independently. The published MVP and its acceptance record follow below.
+**Live and accepted, November 21, 2026.** The virtual scrum team delivered all 13 stories from the approved plan, totaling 41 planned points. Each release passed its production review before the next sprint began. Product, design, frontend and QA closed the series with all approved work accepted. [Approved plan #25](https://github.com/schneidergithub/schneidergithub.github.io/pull/25) · [Production portfolio](https://www.aaronschneider.org/)
 
-| Order | Sprint goal | Stories | Forecast | Review question |
+| Release | Sprint goal | Accepted stories | Planned points | Sprint review question |
 | --- | --- | ---: | ---: | --- |
-| 1 | Navigate and play a recording on a phone | 4 | 15 points | Can a visitor identify and start the featured recording from the first screen? |
-| 2 | Find a case study and browse the visual archive | 4 | 13 points | Can a hiring manager open a case directly and inspect an archive group on demand? |
-| 3 | Recognize Aaron’s contribution and reach the right contact | 5 | 13 points | Can a reader identify the outcome and reach Aaron or the consulting team directly from the case? |
+| [Sprint 1 · #26](https://github.com/schneidergithub/schneidergithub.github.io/pull/26) | Navigate and play a recording on a phone | 4 | 15 points | Can a visitor identify and start the featured recording from the first screen? |
+| [Sprint 2 · #27](https://github.com/schneidergithub/schneidergithub.github.io/pull/27) | Find a case study and browse the visual archive | 4 | 13 points | Can a hiring manager open a case directly and inspect an archive group on demand? |
+| [Sprint 3 · #28](https://github.com/schneidergithub/schneidergithub.github.io/pull/28) | Recognize Aaron’s contribution and reach the right contact | 5 | 13 points | Can a reader identify the outcome and reach Aaron or the consulting team directly from the case? |
 
-**Capacity.** Forecast 41 relative points across three two-week sprints, about six calendar weeks from kickoff. The last three releases delivered 15, 8 and 7 points. This forecast assumes overlapping editorial, design and frontend work with QA throughout. The TPM will use actual availability at kickoff and completed work at each review to revise the next forecast. Each sprint identifies the first story to move if capacity tightens.
+**Original forecast.** Planning allowed three two-week windows for 15, 13 and 13 relative points. The virtual team implemented and verified these releases sequentially on November 21. The story estimates describe the planned scope.
 
 ### Sprint 1 · Navigate and play a recording on a phone
 
-At 375px the production header takes 167px. On Articles & Demos the first 150 × 84px poster sits beside empty space, and the first recording title begins about 824px down. The sprint gives that space back to the visitor and preserves the homepage typography. [Production captures](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44959272962/artifacts/14729070992)
+At kickoff, the 375px production header took 167px. On Articles & Demos the first 150 × 84px poster sat beside empty space, and the first recording title began about 824px down. The sprint gives that space back to the visitor and preserves the homepage typography. [Production captures](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44959272962/artifacts/14729070992)
 
 | Visitor story | Owner | Points | Implementation and acceptance |
 | --- | --- | ---: | --- |
@@ -42,7 +42,7 @@ At 375px the production header takes 167px. On Articles & Demos the first 150 ×
 
 ### Sprint 2 · Find a case study and browse the visual archive
 
-Today the Projects jump skips the five case studies, and the phone gallery stacks 26 frames at 240px each. That costs 6,240px in frames before captions and spacing. The design target is five visible representative images with the complete archive available on demand.
+At kickoff, the Projects jump skipped the five case studies, and the phone gallery stacked 26 frames at 240px each. The frames alone occupied 6,240px before captions and spacing. The design target is five visible representative images with the complete archive available on demand.
 
 | Visitor story | Owner | Points | Implementation and acceptance |
 | --- | --- | ---: | --- |
@@ -71,13 +71,17 @@ Use the approved career record and published case studies for copy. This release
 
 **Sequence and review.** Editorial verifies the claims against the Nuix and Super Salon records while frontend updates the common case ending. Use the first review pass for a recruiter reading Experience, followed by a consulting buyer entering through a shared case. Verify both contact destinations on all five cases, each matching project return, and a shared article link. If capacity tightens, carry the 3-point publication permalink refinement into the backlog.
 
+**Released and reviewed.** Product and QA accepted all five stories (13 points). At 375px the Nuix opening bullet identified the 12-engineer team, the Super Salon headline explained the pre-release finding, and the scientific case title kept “meta-analysis” together. The reviewer followed a shared recording with JavaScript disabled and saw the destination cue on its heading. All five cases provided the correct individual and team contact destinations and a return to the matching project. The custom-domain check exercised visible keyboard focus through both destinations and the return link. The case footer retained the public PGP link and displayed each contact choice once. [Release #28](https://github.com/schneidergithub/schneidergithub.github.io/pull/28) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44962449608) · [Production captures](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44962449608/artifacts/14730585120)
+
+**Retrospective and carry-forward.** QA will pair a cold-entry screenshot with a keyboard-arrival screenshot when a shared navigation or case template changes. Product will continue reviewing the full path from a published result or shared URL to its source or contact destination. All 13 approved stories shipped across the three releases.
+
 ### Working agreement for these releases
 
 - **Kickoff and delivery.** Product confirms the sprint goal and cut line. The Scrum Master monitors blockers at the daily check-in. Frontend and QA update the affected regression check in the same implementation PR as each intentional behavior change, including the existing exact proof-link text and case contact destinations.
 - **Definition of done.** The Jekyll build, static checks and relevant browser journeys pass on preview. Exercise the changed controls with keyboard and JavaScript disabled where a fallback is specified. Check 320px with enlarged text for clipping or horizontal scrolling, inspect phone, tablet and desktop captures, and retain visible focus and the desktop signature.
 - **Review, release and retro.** A virtual reviewer outside implementation demonstrates the sprint’s visitor journey. After implementation approval and merge, verify GitHub Pages on the custom domain and attach the PR, checks and before/after captures to this roadmap. The TPM records accepted and carried stories. The Scrum Master assigns one retrospective action with an owner for the next planning session.
 
-## Current MVP release
+## Earlier MVP release · Project evidence and publications
 
 **Live on November 21, 2026.** The team delivered and accepted three consecutive sprints, with 12 stories and 30 planned points. The site now has five case studies, eight publications and eleven Experience entries. Each sprint passed its custom-domain checks before the next began. [Production portfolio](https://www.aaronschneider.org/)
 
