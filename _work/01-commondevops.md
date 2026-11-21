@@ -10,3 +10,5 @@ outcome: "Ongoing research and engineering work connecting AI-assisted developme
 technologies: ["Python","JavaScript","CI/CD","TDD","Docker","Terraform"]
 ---
 I work with a scrum team on software development and AI research, focusing on DevSecOps architecture, test-driven development, and CI/CD. The work combines GitHub Actions and cloud services with on-premises resources.
+
+Dr. Ian Miller and I co-authored a Terminal-Bench-Science task to test whether an AI agent can reproduce calculations from published research. [Explore the presentation and task]({{ '/articles/' | relative_url }}#benchmark-presentation).

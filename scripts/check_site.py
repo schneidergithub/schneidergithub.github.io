@@ -127,13 +127,18 @@ for route, page in parsed.items():
     for link in page.links:
         resolved = urlsplit(urljoin('https://www.aaronschneider.org' + route, link))
         if resolved.netloc != 'www.aaronschneider.org': continue
+        # The monthly reports are a separate Pages project mounted on the same domain.
+        if link.startswith('https://www.aaronschneider.org/common-devops-reports/'): continue
         target = file_for(resolved.path)
         if not target.exists(): errors.append(f'{route}: missing target {link}')
         elif resolved.fragment and target.suffix == '.html':
             ids = Page(target).ids
             if unquote(resolved.fragment) not in ids: errors.append(f'{route}: missing anchor {link}')
 
-for route, name, count in [('/work/', 'project-card', 6), ('/articles/', 'publication', 6), ('/experience/', 'role', 11), ('/', 'feature', 3)]:
+publication_count = int(subprocess.check_output([
+    'ruby', '-ryaml', '-e', 'puts YAML.load_file(ARGV.fetch(0)).length', ROOT / '_data/publications.yml'
+]))
+for route, name, count in [('/work/', 'project-card', 6), ('/articles/', 'publication', publication_count), ('/experience/', 'role', 11), ('/', 'feature', 3)]:
     if route in parsed and parsed[route].classes[name] != count: errors.append(f'{route}: expected {count} {name} entries')
 
 if '/experience/' in parsed:

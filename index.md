@@ -12,9 +12,9 @@ permalink: /
   </div>
   <aside class="focus-panel" aria-labelledby="focus-title">
     <p class="eyebrow">Current focus</p>
-    <h2 id="focus-title">AI Research.</h2>
-    <p>At CommonDevOps, we are submitting a <a href="https://github.com/harbor-framework/terminal-bench-science/pull/1513">benchmark task</a> to terminal-bench-science.  <a href="https://www.tbench.ai/news/terminal-bench-science-0-1">Terminal Bench Science</a> is a project from Stanford University and used for testing the latest AI models. </p>
-    <a href="{{ '/work/#commondevops' | relative_url }}">See the work <span aria-hidden="true">→</span></a>
+    <h2 id="focus-title">Can an AI agent reproduce a scientific result?</h2>
+    <p>Dr. Ian Miller and I co-authored a task for Terminal-Bench-Science that asks agents to reconstruct effect sizes from published studies of depression. The project has merged our task.</p>
+    <a href="{{ '/articles/' | relative_url }}#benchmark-presentation">Explore the presentation and task <span aria-hidden="true">→</span></a>
   </aside>
 </section>
 
