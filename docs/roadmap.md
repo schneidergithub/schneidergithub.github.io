@@ -13,8 +13,16 @@ Serve employers and consulting clients through a portfolio of career experience,
 
 ## Current MVP release
 
-- [Experience thumbnails, PR #7](https://github.com/schneidergithub/schneidergithub.github.io/pull/7) added images for all eleven roles. [Selected Work, PR #8](https://github.com/schneidergithub/schneidergithub.github.io/pull/8) added the three case studies.
-- [Articles & Demos, PR #9](https://github.com/schneidergithub/schneidergithub.github.io/pull/9) expanded the collection to eight entries. [PR #10](https://github.com/schneidergithub/schneidergithub.github.io/pull/10) completes the approved presentation changes with a thumbnail for each entry, inline players for all three videos, and the two homepage navigation buttons directly below the headline.
+**Complete and live on November 21, 2026.** All approved MVP acceptance criteria have been met. [Production portfolio](https://www.aaronschneider.org/)
+
+| Area | Delivered | Release |
+| --- | --- | --- |
+| Experience | All 11 roles display an organization or project thumbnail in place of employment dates. | [PR #7](https://github.com/schneidergithub/schneidergithub.github.io/pull/7) |
+| Selected Work | Six project cards, three case studies, and 26 gallery images across five groups. Each group highlights Aaron’s contribution. | [PR #8](https://github.com/schneidergithub/schneidergithub.github.io/pull/8) and [PR #12](https://github.com/schneidergithub/schneidergithub.github.io/pull/12) |
+| Articles & Demos | All eight publications have local covers. The three videos open in place and offer direct YouTube links. | [PR #9](https://github.com/schneidergithub/schneidergithub.github.io/pull/9) and [PR #10](https://github.com/schneidergithub/schneidergithub.github.io/pull/10) |
+| Homepage | Five covers, three inline players, the research co-author credit, and three project results with supporting links. Visitors can contact Aaron or the CommonDevOps team directly. | [PR #11](https://github.com/schneidergithub/schneidergithub.github.io/pull/11), [PR #13](https://github.com/schneidergithub/schneidergithub.github.io/pull/13), and [PR #14](https://github.com/schneidergithub/schneidergithub.github.io/pull/14) |
+
+The release passed the nine-page build check and deployed through GitHub Pages. Production checks covered widths of 320, 375, 768, and 1280 pixels, including keyboard operation of the video players at phone and desktop widths. [Deployment](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44946994980) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44946995033)
 
 ## Experience thumbnails
 
