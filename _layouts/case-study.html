@@ -1,0 +1,27 @@
+---
+layout: default
+---
+<article class="case-study">
+  <header class="study-header">
+    <a class="study-back" href="{{ '/work/' | relative_url }}#{{ page.project | escape }}">Back to Selected Work</a>
+    <p class="eyebrow">{{ page.context | escape }}</p>
+    <h1>{{ page.title | escape }}</h1>
+    <p class="lead">{{ page.description | escape }}</p>
+  </header>
+  <div class="study-copy">{{ content }}</div>
+  {% if page.figures %}
+  <section class="study-evidence" aria-labelledby="screens-title">
+    <h2 id="screens-title">{{ page.figure_heading | escape }}</h2>
+    <div class="study-figures">
+      {% for figure in page.figures %}
+      <figure>
+        <a class="study-image" href="{{ figure.image | relative_url }}" aria-label="Open full-size image: {{ figure.alt | escape }}">
+          <img src="{{ figure.image | relative_url }}" alt="{{ figure.alt | escape }}" width="{{ figure.width }}" height="{{ figure.height }}" loading="lazy" decoding="async">
+        </a>
+        <figcaption>{{ figure.caption | escape }}</figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+</article>

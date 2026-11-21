@@ -22,7 +22,7 @@
       {% assign nav_labels = 'Home|Experience|Selected Work|Articles & Demos' | split: '|' %}
       {% assign nav_paths = '/|/experience/|/work/|/articles/' | split: '|' %}
       {% for label in nav_labels %}{% assign path = nav_paths[forloop.index0] %}
-      <a href="{{ path | relative_url }}"{% if page.url == path %} aria-current="page"{% endif %}>{{ label }}</a>
+      <a href="{{ path | relative_url }}"{% if page.url == path %} aria-current="page"{% elsif page.layout == 'case-study' and path == '/work/' %} aria-current="location"{% endif %}>{{ label }}</a>
       {% endfor %}
     </nav>
   </header>
