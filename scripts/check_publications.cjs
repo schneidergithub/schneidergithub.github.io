@@ -245,6 +245,17 @@ async function checkFallbacks(page) {
 
 async function checkDiscovery(page) {
   const collection = new URL('/articles/', origin).href;
+  const caseUrl = new URL('/work/scientific-ai-benchmark/', origin).href;
+  const benchmark = page.locator('#benchmark-presentation');
+  const mergedTask = 'https://github.com/harbor-framework/terminal-bench-science/pull/1513';
+  assert.equal(await benchmark.locator('.publication-related').getAttribute('href'), mergedTask);
+  await Promise.all([page.waitForURL(caseUrl), benchmark.locator('.publication-case').press('Enter')]);
+  const study = page.locator('.case-study');
+  assert.ok(await study.locator('h1').isVisible());
+  assert.ok(await study.locator('a[href="' + mergedTask + '"]').isVisible());
+  const recording = study.locator('a[href="' + presentation + '"]');
+  await Promise.all([page.waitForURL(new URL(presentation, origin).href), recording.press('Enter')]);
+  assert.ok(await benchmark.locator('summary').isVisible());
   for (const [group, entries] of Object.entries(publicationGroups)) {
     const jump = page.locator('.publication-jumps a[href="#' + group + '"]');
     assert.match(await jump.innerText(), new RegExp('\\b' + entries.length + '\\b'));

@@ -22,6 +22,7 @@ async function check() {
       const evidence = await page.locator('.role a.role-study').evaluateAll(links =>
         Object.fromEntries(links.map(link => [link.closest('.role').querySelector('h2').textContent.trim(), link.pathname])));
       assert.deepEqual(evidence, {
+        CommonDevOps: '/work/scientific-ai-benchmark/',
         'Sogeti / Capgemini': '/work/westinghouse-performance/',
         BCforward: '/work/indiana-case-archives/',
         'ProPoint Global': '/work/super-salon-checkout/',

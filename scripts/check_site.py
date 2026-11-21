@@ -12,7 +12,12 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / '_site'
 PAGES = ['/', '/experience/', '/work/', '/articles/', '/pgp/', '/404.html']
-STUDIES = ['/work/super-salon-checkout/', '/work/indiana-case-archives/', '/work/bayer-aleve/', '/work/westinghouse-performance/']
+STUDIES = ['/work/super-salon-checkout/', '/work/indiana-case-archives/', '/work/bayer-aleve/',
+           '/work/westinghouse-performance/', '/work/scientific-ai-benchmark/']
+CASE_CARDS = {
+    '/work/westinghouse-performance/': 'westinghouse-performance',
+    '/work/scientific-ai-benchmark/': 'tbs-meta-analysis',
+}
 errors = []
 
 class Page(HTMLParser):
@@ -126,7 +131,7 @@ for route in PAGES + STUDIES:
     if len(set(page.ids)) != len(page.ids): errors.append(f'{route}: duplicate IDs')
     if page.canonical != ['https://www.aaronschneider.org' + route]: errors.append(f'{route}: canonical URL mismatch')
     if route in PAGES[:4] + STUDIES:
-        card = 'westinghouse-performance' if route == '/work/westinghouse-performance/' else 'aaron-schneider'
+        card = CASE_CARDS.get(route, 'aaron-schneider')
         image = f'/assets/portfolio/share/{card}.jpg'
         expected_meta = {
             'og:image': 'https://www.aaronschneider.org' + image,
