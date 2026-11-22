@@ -73,6 +73,7 @@
   align-content: start;
   align-items: start;
   grid-column: 1/-1;
+  scroll-margin-top: 1rem;
   padding: 1.4rem 0 1rem;
   border-top: 1px solid var(--line);
   border-radius: 0;

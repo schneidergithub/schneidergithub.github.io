@@ -1,13 +1,12 @@
 {% assign studies = all_studies | where: 'project', project.slug | sort: 'title' %}
 {% assign group = site.data.gallery | where: 'id', project.slug | first %}
-{% assign primary = studies | where: 'url', project.index_case | first %}
 <article class="project-card{% if project.index_feature %} work-support{% endif %}" id="{{ project.slug }}" tabindex="-1">
   <div class="project-copy">
     <p class="context work-kicker">{{ project.context | escape }}</p>
     <h3>
-      {% if primary %}<a href="{{ primary.url | relative_url }}">{% endif %}
+      {% if project.index_case %}<a href="{{ project.index_case | relative_url }}">{% endif %}
       {% if project.index_feature == 'metric' %}<span class="work-metric">{{ project.home_highlight.value | escape }}</span> {{ project.home_highlight.label | escape }}{% else %}{{ project.index_title | default: project.title | escape }}{% endif %}
-      {% if primary %}</a>{% endif %}
+      {% if project.index_case %}</a>{% endif %}
     </h3>
     <div class="project-detail">{{ project.content }}</div>
   </div>
@@ -21,13 +20,13 @@
   <div class="work-links">
     {% for study in studies %}
       {% unless study.url == page.lead_case or study.url == project.index_case %}
-        <a href="{{ study.url | relative_url }}">{{ study.index_label | default: study.title | escape }}</a>
+        <a href="{{ study.url | relative_url }}">{{ study.title | escape }}</a>
       {% endunless %}
     {% endfor %}
     {% if project.publication %}
       {% assign publication = site.data.publications | where: 'id', project.publication.id | first %}
-      {% assign publication_url = publication.url | slice: 0 %}
-      {% if publication_url == '/' %}
+      {% assign first_character = publication.url | slice: 0 %}
+      {% if first_character == '/' %}
         <a href="{{ publication.url | relative_url }}">{{ project.publication.label | escape }}</a>
       {% else %}
         <a href="{{ '/articles/' | relative_url }}#{{ project.publication.id }}">{{ project.publication.label | escape }}</a>

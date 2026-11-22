@@ -309,6 +309,10 @@ async function checkImageReturns(browser, workUrl) {
   const group = page.locator('#gallery-bayer');
   const details = group.locator(':scope > details');
   const summary = details.locator(':scope > summary');
+  // Rapid toggling must leave the next keyboard action on the disclosure.
+  await summary.press('Enter');
+  await summary.press('Enter');
+  assert.ok(await details.evaluate(el => !el.open && document.activeElement === el.querySelector('summary')));
   const restAngle = await summary.evaluate(el => getComputedStyle(el, '::before').transform);
   await summary.press('Enter');
   assert.ok(await summary.evaluate(el => el.getBoundingClientRect().height >= 44 && el.matches(':focus-visible') &&
@@ -326,6 +330,11 @@ async function checkImageReturns(browser, workUrl) {
   await openImageAndReturn(page, page.locator('.study-figures a').nth(1));
   await page.goto(workUrl + '#gallery-bayer');
   await page.emulateMedia({ reducedMotion: 'reduce' });
+  assert.equal(await page.locator('.grader-panel').evaluate(el => getComputedStyle(el, '::after').animationName), 'none');
+  assert.ok(await page.locator('#case-studies-title').evaluate(el => !CSS.supports('view-transition-name: none') ||
+    getComputedStyle(el).viewTransitionName === 'none'));
+  assert.ok(await details.evaluate(el => !CSS.supports('selector(::details-content)') ||
+    getComputedStyle(el, '::details-content').transitionDuration.split(',').every(t => parseFloat(t) === 0)));
   assert.ok(await summary.evaluate(el => getComputedStyle(el, '::before').transitionDuration.split(',').every(t => parseFloat(t) === 0)),
     'The disclosure indicator must change immediately with reduced motion');
   await page.setViewportSize({ width: 320, height: 812 });
