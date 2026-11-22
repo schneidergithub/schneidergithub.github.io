@@ -50,14 +50,14 @@
     height: 720
 - title: "node-ipc Supply Chain Incident Report"
   home_featured: true
-  home_summary: "I traced a maintainer domain’s registration and mail routing during the node-ipc investigation."
+  home_summary: "I led the investigation and wrote the post-incident report with help from Dr. Ian Miller and Javier Bonilla."
   id: node-ipc-report
   case_url: "/work/node-ipc-investigation/"
   type: "Research report"
   publisher: "CommonDevOps"
   url: "https://commondevops.com/node-ipc-supply-chain-incident-report/"
-  description: "The independent report compares registration records, DNS records, and email headers for the maintainer domain after the May 2026 node-ipc compromise. It also documents the registrar’s response."
-  attribution: "Aaron Schneider led the domain, DNS, and registrar investigation for CommonDevOps."
+  description: "The report traces the maintainer domain’s registration and mail routing after the May 2026 compromise. The operator’s identity remains unresolved."
+  attribution: "Aaron Schneider led the investigation and was the primary author, with help from Dr. Ian Miller and Javier Bonilla."
   preview:
     src: "/assets/experience/commondevops.png"
     alt: "Title page of the first-edition NODE-IPC incident report"
@@ -66,9 +66,11 @@
   related:
     label: "Report on Figshare"
     url: "https://doi.org/10.6084/m9.figshare.33865414"
-  companion:
-    id: node-ipc-interview
-    label: "Interview details on this page"
+  companions:
+    - id: node-ipc-interview
+      label: "Brandon Miller interview"
+    - id: node-ipc-follow-up
+      label: "Miller and Carta follow-up"
 - title: "AI just got cheaper, hacking spree continues"
   id: september-review
   issue_month: "2026-09"
@@ -102,9 +104,9 @@
 - title: "Node-IPC incident interview with creator Brandon Miller"
   id: node-ipc-interview
   case_url: "/work/node-ipc-investigation/"
-  companion:
-    id: node-ipc-report
-    label: "Report details on this page"
+  companions:
+    - id: node-ipc-report
+      label: "Report details on this page"
   preview:
     src: "/assets/publications/node-ipc-interview.jpg"
     alt: "Video artwork tracing an expired domain to the node-ipc package"
@@ -113,8 +115,24 @@
   type: "Video"
   publisher: "CommonDevOps on YouTube"
   url: "https://www.youtube.com/watch?v=TZ04u6cj1ls"
-  description: "Brandon Miller describes reading the incident brief, joining the public response thread, and comparing notes with community members who were already investigating node-ipc."
-  attribution: "CommonDevOps on YouTube · Featuring Brandon Miller"
+  description: "Brandon Miller recalls reading the incident brief and comparing findings with the community members investigating node-ipc."
+  attribution: "CommonDevOps · Brandon Miller, node-ipc creator"
+- title: "node-ipc follow-up with Brandon Miller and Roni Carta"
+  id: node-ipc-follow-up
+  type: "Video"
+  publisher: "CommonDevOps on YouTube"
+  url: "https://www.youtube.com/watch?v=eSvYhh7_Kyo"
+  description: "Miller joins security researcher Roni Carta to discuss the incident. Carta explains how his team decided which maintainers to contact first."
+  attribution: "CommonDevOps · Brandon Miller and Roni Carta"
+  case_url: "/work/node-ipc-investigation/"
+  companions:
+    - id: node-ipc-report
+      label: "Report details on this page"
+  preview:
+    src: "/assets/publications/node-ipc-follow-up.jpg"
+    alt: "Five panelists in the CommonDevOps follow-up, beneath the title “The Node-IPC Hack.”"
+    width: 320
+    height: 180
 - title: "AI & Cybersecurity: August 2026"
   id: august-review
   issue_month: "2026-08"

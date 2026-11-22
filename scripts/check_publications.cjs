@@ -8,7 +8,7 @@ const { chromium } = require('playwright-core');
 const origin = process.argv[2];
 const presentation = '/articles/#benchmark-presentation';
 const graderGuide = '/work/scientific-ai-benchmark/#checking-the-grader';
-const ids = ['e26_SSPpOP0', 'IXzLwNlLAI4', 'TZ04u6cj1ls', 'i0a7tXSLj3c'];
+const ids = ['e26_SSPpOP0', 'IXzLwNlLAI4', 'TZ04u6cj1ls', 'eSvYhh7_Kyo', 'i0a7tXSLj3c'];
 const homeVideoIds = ['e26_SSPpOP0', 'i0a7tXSLj3c'];
 const reviewWidths = [375, 768, 1280];
 const publications = JSON.parse(execFileSync('ruby', [
@@ -18,7 +18,7 @@ const publications = JSON.parse(execFileSync('ruby', [
 const monthlyIssues = publications.filter(item => item.issue_month)
   .sort((a, b) => b.issue_month.localeCompare(a.issue_month));
 const publicationGroups = {
-  recordings: ['benchmark-presentation', 'chess-benchmark-presentation', 'node-ipc-interview', 'security-livestream'],
+  recordings: ['benchmark-presentation', 'chess-benchmark-presentation', 'node-ipc-interview', 'node-ipc-follow-up', 'security-livestream'],
   'engineering-essays': ['fresh-sandbox-github'],
   'monthly-reviews': monthlyIssues.map(item => item.id),
   investigations: ['node-ipc-report']
@@ -33,13 +33,19 @@ async function decodeCover(image) {
   });
 }
 
+function recordingEntries(page) {
+  return page.locator('.focus-panel, .media-card, .publication').filter({ has: page.locator('details.publication-video') });
+}
+
 async function checkPlayers(page, expectedIds = ids) {
   const disclosures = page.locator('.publication-video');
   assert.equal(await disclosures.count(), expectedIds.length);
   assert.equal(await page.locator('iframe').count(), 0, 'Players should load on demand');
   const seen = [];
   const start = page.url();
-  for (const disclosure of await disclosures.all()) {
+  const home = new URL(start).pathname === '/';
+  for (const entry of await recordingEntries(page).all()) {
+    const disclosure = entry.locator('details.publication-video');
     const src = await disclosure.locator('template').evaluate(template => template.content.querySelector('iframe').src);
     const id = new URL(src).pathname.split('/').pop();
     assert.ok(ids.includes(id), 'Unknown YouTube video ' + id);
@@ -47,14 +53,28 @@ async function checkPlayers(page, expectedIds = ids) {
     const embed = 'https://www.youtube-nocookie.com/embed/' + id;
     const toggle = disclosure.locator('summary');
     assert.equal(await toggle.locator('.play-caption').innerText(), 'Play here');
-    const source = disclosure.locator('..').getByRole('link', { name: /watch on youtube/i });
-    const spotlight = new URL(start).pathname === '/' && id === ids[0];
+    const source = entry.locator('a.watch-source');
+    assert.equal(await source.count(), 1);
+    assert.equal(await source.getAttribute('href'), 'https://www.youtube.com/watch?v=' + id);
+    const spotlight = home && id === ids[0];
     if (spotlight) {
-      assert.equal(await source.count(), 0, 'Use the player as the single spotlight action');
+      assert.ok(await source.isHidden(), 'Use the poster as the single closed spotlight action');
     } else {
       assert.ok(await source.isVisible(), 'Expose the original recording before playback');
-      assert.equal(await source.getAttribute('href'), 'https://www.youtube.com/watch?v=' + id);
-      assert.equal(await disclosure.locator('..').locator('details + a.watch-source').count(), 1);
+      if (home) {
+        assert.ok(await entry.evaluate(card => {
+          const selectors = ['.video-poster', 'h3', '.media-description', 'a.watch-source'];
+          const items = selectors.map(selector => card.querySelector(selector));
+          return items.every((item, index) => {
+            if (index === 0) return true;
+            const previous = items[index - 1];
+            return (previous.compareDocumentPosition(item) & Node.DOCUMENT_POSITION_FOLLOWING) &&
+              previous.getBoundingClientRect().bottom <= item.getBoundingClientRect().top + 1;
+          });
+        }), 'Present the homepage poster, title and summary before the secondary source');
+      } else {
+        assert.equal(await entry.locator('details + a.watch-source').count(), 1);
+      }
     }
     await toggle.focus();
     await page.keyboard.press('Tab');
@@ -74,7 +94,7 @@ async function checkPlayers(page, expectedIds = ids) {
     assert.equal(await page.locator('.publication-video[open]').count(), 1);
     assert.equal(await page.locator('iframe').count(), 1);
     assert.ok(await frame.getAttribute('title'));
-    if (!spotlight) assert.ok(await source.isVisible(), 'Keep the source available while playing');
+    assert.ok(await source.isVisible(), 'Keep the source available while playing');
     assert.equal(page.url(), start);
     const box = await frame.boundingBox();
     assert.ok(box.width >= 200 && box.height >= 200 && box.x >= 0 && box.x + box.width <= page.viewportSize().width, 'Player does not fit ' + start);
@@ -83,6 +103,37 @@ async function checkPlayers(page, expectedIds = ids) {
   await disclosures.last().locator('summary').press('Space');
   await page.locator('iframe').waitFor({ state: 'detached' });
   assert.equal(page.url(), start, 'Playback should stay on the current page');
+}
+
+async function checkBlockedSpotlight(browser) {
+  const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
+  const embed = 'https://www.youtube-nocookie.com/embed/' + ids[0];
+  let requests = 0;
+  await page.route(embed + '?**', route => {
+    requests++;
+    return route.abort('blockedbyclient');
+  });
+  await page.goto(origin);
+  const panel = page.locator('.focus-panel');
+  const toggle = panel.locator('summary');
+  const source = panel.locator('.watch-source');
+  assert.equal(requests, 0);
+  assert.ok(await source.isHidden());
+  await Promise.all([
+    page.waitForEvent('requestfailed', { predicate: request => request.url().startsWith(embed + '?') }),
+    toggle.press('Enter')
+  ]);
+  assert.ok(requests > 0);
+  assert.equal(await source.getAttribute('href'), 'https://www.youtube.com/watch?v=' + ids[0]);
+  await toggle.focus();
+  await page.keyboard.press('Tab');
+  assert.ok(await source.evaluate(el => el === document.activeElement && el.matches(':focus-visible') &&
+    getComputedStyle(el).outlineStyle !== 'none'), 'Reach the direct source before entering the blocked frame');
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Space');
+  await panel.locator('iframe').waitFor({ state: 'detached' });
+  assert.ok(await source.isHidden());
+  await page.close();
 }
 
 async function captureHome(page, version) {
@@ -176,6 +227,8 @@ async function checkConsultingFooter(page, width) {
 
   const links = footer.getByRole('link');
   assert.equal(await links.count(), 3);
+  assert.deepEqual(await links.locator('span:first-of-type').allTextContents(),
+    ['Individual consulting', 'Team consulting', 'CommonDevOps']);
   const destinations = [
     ['Individual consulting with Aaron Schneider on LinkedIn', 'https://www.linkedin.com/in/aarondrewschneider/', 'linkedin'],
     ['Team consulting · CommonDevOps website', 'https://commondevops.com/', 'team'],
@@ -205,13 +258,25 @@ async function checkConsultingFooter(page, width) {
   assert.ok(specialtyBox.y >= frame.y + frame.height - 1 &&
     specialtyBox.y + specialtyBox.height <= Math.min(...contacts.map(a => a.top)) + 1,
     'Follow the portrait with specialties, then contact choices');
-  if (width <= 375) assert.ok(contacts[0].bottom <= contacts[1].top + 1, 'Stack the two phone contact routes');
+  const channel = layout.getByRole('link', { name: 'CommonDevOps on YouTube' });
+  const channelMark = await channel.locator('svg').boundingBox();
+  const channelLabel = await channel.getByText('CommonDevOps', { exact: true }).boundingBox();
+  const labelGap = channelLabel.x - (channelMark.x + channelMark.width);
+  assert.ok(labelGap >= 0 && labelGap <= 12 &&
+    Math.abs(channelMark.y + channelMark.height / 2 - channelLabel.y - channelLabel.height / 2) <= 1,
+    'Keep the YouTube logo directly beside its visible channel name');
+  if (width <= 375) {
+    assert.ok(contacts.slice(1).every((box, i) => box.top >= contacts[i].bottom - 1 && Math.abs(box.left - contacts[0].left) <= 1),
+      'Stack and left-align all three phone contact routes');
+  }
   if (width === 1280) {
     const centers = contacts.map(box => box.top + box.height / 2);
     assert.ok(Math.max(...centers) - Math.min(...centers) <= 1, 'Align all three desktop contact routes');
+    assert.ok(contacts.slice(1).every((box, i) => box.left >= contacts[i].right && box.left - contacts[i].right <= 30),
+      'Keep neighboring desktop actions together without a stretched gap before the channel');
     assert.ok(await layout.locator('.consulting-links a > span:first-of-type').evaluateAll(labels =>
       labels.every(el => el.offsetHeight <= parseFloat(getComputedStyle(el).lineHeight) + 1)),
-    'Give both desktop contact labels room for a single line');
+    'Give all three desktop contact labels room for a single line');
   }
 
   if (width === 320) {
@@ -395,10 +460,9 @@ async function checkHomepage(page) {
 }
 
 async function checkFallbacks(page, expectedIds = ids) {
-  const videos = page.locator('.publication-video');
   const urls = [];
-  for (const video of await videos.all()) {
-    const container = video.locator('..');
+  for (const container of await recordingEntries(page).all()) {
+    const video = container.locator('details.publication-video');
     const fallback = container.getByRole('link', { name: /on youtube/i });
     assert.ok(await fallback.isVisible(), 'Expose the original with JavaScript disabled');
     if (await container.locator('noscript > a.video-poster').count()) {
@@ -578,26 +642,30 @@ async function checkDiscovery(page) {
       assert.ok(await row.locator('h3').isVisible());
     }
   }
-  for (const [from, to, jumpLabel] of [
-    ['node-ipc-report', 'node-ipc-interview', 'Interview details on this page'],
-    ['node-ipc-interview', 'node-ipc-report', 'Report details on this page']
+  const report = page.locator('#node-ipc-report');
+  const incidentPath = '/work/node-ipc-investigation/';
+  const incident = report.getByRole('link', { name: 'node-ipc investigation', exact: true });
+  assert.equal(await incident.getAttribute('href'), incidentPath);
+  await Promise.all([page.waitForURL(new URL(incidentPath, origin).href), incident.press('Enter')]);
+  const reportEntry = page.locator('.study-copy a[href="/articles/#node-ipc-report"]');
+  const reportURL = collection + '#node-ipc-report';
+  await Promise.all([page.waitForURL(reportURL), reportEntry.press('Enter')]);
+  for (const [id, label, video] of [
+    ['node-ipc-interview', 'Brandon Miller interview', 'TZ04u6cj1ls'],
+    ['node-ipc-follow-up', 'Miller and Carta follow-up', 'eSvYhh7_Kyo']
   ]) {
-    const row = page.locator('#' + from);
-    const incident = row.locator('.publication-case');
-    const incidentPath = '/work/node-ipc-investigation/';
-    assert.equal(await incident.getAttribute('href'), incidentPath);
-    assert.ok(await row.getByRole('link', { name: 'node-ipc investigation', exact: true }).isVisible());
-    if (from === 'node-ipc-report') {
-      await Promise.all([page.waitForURL(new URL(incidentPath, origin).href), incident.press('Enter')]);
-      const reportEntry = page.locator('.study-copy a[href="/articles/#node-ipc-report"]');
-      await Promise.all([page.waitForURL(collection + '#' + from), reportEntry.press('Enter')]);
-      assert.ok(await page.locator('li.publication:target h3').isVisible());
-    }
-    const link = row.getByRole('link', { name: jumpLabel, exact: true });
-    assert.equal(await link.getAttribute('href'), '#' + to);
+    const link = report.getByRole('link', { name: label, exact: true });
+    assert.equal(await link.getAttribute('href'), '#' + id);
     await link.press('Enter');
-    assert.equal(page.url(), collection + '#' + to);
-    assert.ok(await page.locator('li.publication:target h3').isVisible());
+    const row = page.locator('li.publication:target');
+    assert.equal(await row.getAttribute('id'), id);
+    assert.ok(await row.getByRole('heading').isVisible());
+    assert.equal(await row.locator('.watch-source').getAttribute('href'), 'https://www.youtube.com/watch?v=' + video);
+    assert.equal(await row.getByRole('link', { name: 'node-ipc investigation', exact: true }).getAttribute('href'), incidentPath);
+    const back = row.getByRole('link', { name: 'Report details on this page', exact: true });
+    assert.equal(await back.getAttribute('href'), '#node-ipc-report');
+    await back.press('Enter');
+    assert.equal(page.url(), reportURL);
   }
 }
 
@@ -896,6 +964,7 @@ async function check() {
       await page.close();
     }
     if (!baseline) {
+      await checkBlockedSpotlight(browser);
       await checkPhoneEntry(browser);
       await checkNoScript(browser);
     }

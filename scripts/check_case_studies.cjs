@@ -414,9 +414,18 @@ async function check() {
         if (study.path === 'node-ipc-investigation') {
           const copy = page.locator('.study-copy');
           assert.equal(title, 'node-ipc and the evidence in the domain records');
+          const lead = await page.locator('.study-header .lead').innerText();
+          assert.match(lead, /I led the CommonDevOps investigation/);
+          assert.match(lead, /primary author of the post-incident report/);
+          assert.match(await copy.innerText(), /with help from Dr\. Ian Miller and Javier Bonilla/i);
           assert.match(await copy.innerText(), /identit[^.]*?(unresolved|unknown|open)|could not (identify|establish)[^.]*?(operator|writer)/i);
           assert.ok(await copy.locator('a[href="https://commondevops.com/node-ipc-supply-chain-incident-report/"]').isVisible());
-          assert.ok(await copy.locator('a[href="https://doi.org/10.6084/m9.figshare.33865414.v1"]').isVisible());
+          const outcomes = copy.locator('#report-and-recordings + ul a');
+          assert.deepEqual(await outcomes.evaluateAll(links => links.map(a => a.href)), [
+            'https://doi.org/10.6084/m9.figshare.33865414.v1',
+            'https://www.youtube.com/watch?v=TZ04u6cj1ls',
+            'https://www.youtube.com/watch?v=eSvYhh7_Kyo'
+          ]);
           assert.ok(await copy.locator('a[href="/articles/#node-ipc-report"]').isVisible());
           for (const [id, seconds, guest, timestamp] of [
             ['TZ04u6cj1ls', 414, /maintainer Brandon Miller/i, '6:54'], ['eSvYhh7_Kyo', 252, /researcher Roni Carta/i, '4:12']
