@@ -5,9 +5,8 @@ case_project: bayer
 organization: "Ciber"
 title: "Senior Software Engineer"
 period: "August 2012 – April 2014"
-thumbnail: "/assets/portfolio/thumbs/portfolio-aleve.webp"
-thumbnail_alt: "Aleve homepage developed for Bayer."
+thumbnail: "/assets/experience/aleve-homepage.png"
+thumbnail_alt: "Aleve homepage with its wordmark and a gardening scene."
 ---
-- Led web and mobile development for Bayer brands, including aleve.com and aspirin.com.
-- Developed two mobile applications for Bayer's sales team.
-- Automated marketing analytics, with work spanning PHP, .NET, Java, SQL, JavaScript, HTML, CSS, and PhoneGap.
+- Led development of Aleve.com and Aspirin.com for Bayer.
+- Built two mobile apps for Bayer’s sales team and automated marketing analytics.

@@ -36,7 +36,7 @@ permalink: /work/
   </div>
 </nav>
 
-<p class="work-leadership"><a href="{{ '/experience/' | relative_url }}#engineering-leadership">Engineering leadership</a></p>
+<p class="work-leadership"><a href="{{ '/experience/' | relative_url }}#nuix">DevSecOps leadership at Nuix</a></p>
 
 <section class="work-projects" aria-labelledby="project-summaries">
   <h2 id="project-summaries" tabindex="-1">Project summaries</h2>
