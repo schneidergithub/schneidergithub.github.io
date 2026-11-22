@@ -172,6 +172,23 @@ for route, page in parsed.items():
 publications = json.loads(subprocess.check_output([
     'ruby', '-ryaml', '-rjson', '-e', 'puts JSON.generate(YAML.load_file(ARGV.fetch(0)))', ROOT / '_data/publications.yml'
 ]))
+issues = [item for item in publications if 'issue_month' in item]
+months = [item['issue_month'] for item in issues]
+if not months or len(months) != len(set(months)):
+    errors.append('Newsletter archive needs distinct coverage months')
+for item in issues:
+    if not re.fullmatch(r'[0-9]{4}-(?:0[1-9]|1[0-2])', item['issue_month']):
+        errors.append(f"Invalid newsletter month for {item['id']}")
+    source = urlsplit(item['url'])
+    if source.scheme != 'https' or source.netloc != 'www.linkedin.com' or not re.fullmatch(r'/pulse/[^/]+/', source.path):
+        errors.append(f"Expected an individual LinkedIn article for {item['id']}")
+    if item.get('home_featured') or not item.get('description') or not item.get('preview', {}).get('alt'):
+        errors.append(f"Check newsletter metadata for {item['id']}")
+if issues and '/' in parsed:
+    latest = max(issues, key=lambda item: item['issue_month'])
+    for link in (latest['url'], '/articles/#monthly-reviews'):
+        if link not in parsed['/'].links:
+            errors.append(f'Homepage is missing the newsletter link {link}')
 publication_count = len(publications)
 if '/articles/' in parsed:
     collection = parsed['/articles/']

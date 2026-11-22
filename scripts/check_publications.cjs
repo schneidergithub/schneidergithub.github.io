@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const { execFileSync } = require('node:child_process');
 const { chromium } = require('playwright-core');
 
 const origin = process.argv[2];
@@ -9,10 +10,16 @@ const presentation = '/articles/#benchmark-presentation';
 const graderGuide = '/work/scientific-ai-benchmark/#checking-the-grader';
 const ids = ['e26_SSPpOP0', 'TZ04u6cj1ls', 'i0a7tXSLj3c'];
 const reviewWidths = [375, 768, 1280];
+const publications = JSON.parse(execFileSync('ruby', [
+  '-ryaml', '-rjson', '-e', 'puts JSON.generate(YAML.load_file(ARGV.fetch(0)))',
+  path.join(__dirname, '../_data/publications.yml')
+], { encoding: 'utf8' }));
+const monthlyIssues = publications.filter(item => item.issue_month)
+  .sort((a, b) => b.issue_month.localeCompare(a.issue_month));
 const publicationGroups = {
   recordings: ['benchmark-presentation', 'node-ipc-interview', 'security-livestream'],
   'engineering-essays': ['fresh-sandbox-github'],
-  'monthly-reviews': ['october-review', 'september-review', 'august-review', 'july-review'],
+  'monthly-reviews': monthlyIssues.map(item => item.id),
   investigations: ['node-ipc-report']
 };
 
@@ -293,15 +300,22 @@ async function checkHomepage(page) {
   assert.equal(await linkedCovers.count(), 2);
   assert.deepEqual((await linkedCovers.evaluateAll(links => links.map(a => a.href))).sort(), [
     'https://commondevops.com/node-ipc-supply-chain-incident-report/',
-    'https://www.aaronschneider.org/common-devops-reports/reports/2026-10/'
-  ]);
+    monthlyIssues[0].url
+  ].sort());
+  const newsletter = cards.first();
+  assert.equal(await newsletter.locator('.media-story').getAttribute('href'), monthlyIssues[0].url);
+  assert.equal(await newsletter.locator('h3').textContent(), monthlyIssues[0].title);
+  assert.equal(await newsletter.getByRole('link', { name: 'Newsletter archive' }).getAttribute('href'), '/articles/#monthly-reviews');
   for (const card of await cards.all()) {
     assert.equal(await card.locator('img').count(), 1);
     await decodeCover(card.locator('img'));
     const isWritten = (await card.locator('a.media-story').count()) === 1;
     const cue = await card.locator('h3').evaluate(el => getComputedStyle(el, '::after').content);
     assert.equal(cue.includes('↗'), isWritten, 'Give linked written headlines a cue distinct from recording headings');
-    if (isWritten) assert.equal(await card.getByRole('link').count(), 1);
+    if (isWritten) {
+      const isNewsletter = (await card.locator('.media-story').getAttribute('href')) === monthlyIssues[0].url;
+      assert.equal(await card.getByRole('link').count(), isNewsletter ? 2 : 1);
+    }
   }
   if (width === 375 || width === 1280) await captureSection(page, page.locator('#home-media'), 'home-media');
 
@@ -704,11 +718,19 @@ async function checkCollection(page, width) {
   }
   const issue = page.locator('#october-review');
   const issueUrl = 'https://www.aaronschneider.org/common-devops-reports/reports/2026-10/';
-  assert.equal(await issue.getByRole('link', { name: /Cybersecurity Must Keep Pace with AI Web edition/ }).getAttribute('href'), issueUrl);
-  assert.equal(await issue.getByRole('link', { name: 'PDF edition' }).getAttribute('href'), issueUrl + 'common-devops-october-2026.pdf');
-  assert.equal(await issue.getByRole('link', { name: 'LinkedIn edition' }).getAttribute('href'),
+  const archive = page.getByRole('region', { name: 'Monthly newsletter archive' });
+  assert.match(await archive.locator('.archive-source').textContent(), /CommonDevOps.*LinkedIn/);
+  assert.deepEqual(await archive.locator('time').evaluateAll(items => items.map(el => el.dateTime)),
+    monthlyIssues.map(item => item.issue_month));
+  assert.deepEqual(await archive.locator('.archive-year').allTextContents(),
+    [...new Set(monthlyIssues.map(item => item.issue_month.slice(0, 4)))]);
+  for (const item of monthlyIssues) {
+    assert.equal(await archive.locator('#' + item.id + ' h3 a').getAttribute('href'), item.url);
+  }
+  assert.equal(await issue.getByRole('link', { name: 'Are AI Security Controls Keeping Up?', exact: true }).getAttribute('href'),
     'https://www.linkedin.com/pulse/october-2026-ai-security-controls-keeping-up-commondevops-a632c/');
-  assert.match(await issue.locator('.attribution').innerText(), /Common\s?DevOps/i);
+  assert.equal(await issue.getByRole('link', { name: 'Web edition' }).getAttribute('href'), issueUrl);
+  assert.equal(await issue.getByRole('link', { name: 'PDF edition' }).getAttribute('href'), issueUrl + 'common-devops-october-2026.pdf');
   const issueLink = issue.locator('h3 a');
   assert.ok(await issueLink.evaluate(el => !getComputedStyle(el).textDecorationLine.includes('underline')),
     'The structured October title should be quiet at rest');
@@ -723,13 +745,14 @@ async function checkCollection(page, width) {
   await page.locator('#monthly-reviews').focus();
   assert.equal(await page.locator('#september-review').getByRole('link', { name: 'Web edition', exact: true }).getAttribute('href'),
     'https://www.aaronschneider.org/common-devops-reports/reports/2026-09/');
+  await captureSection(page, archive, 'newsletter-archive');
   for (const entry of ['october-review', 'node-ipc-report', 'node-ipc-interview']) {
     await captureSection(page, page.locator('#' + entry), 'articles-' + entry);
   }
   await checkPlayers(page);
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Publication list overflows');
   if (width === 1280) {
-    const html = await page.request.get(await issue.locator('h3 a').getAttribute('href'));
+    const html = await page.request.get(await issue.getByRole('link', { name: 'Web edition' }).getAttribute('href'));
     assert.ok(html.ok(), 'October HTML edition returned ' + html.status());
     assert.match(await html.text(), /<title>Cybersecurity Must Keep Pace with AI/);
     const pdf = await page.request.get(await issue.getByRole('link', { name: /PDF edition/ }).getAttribute('href'));

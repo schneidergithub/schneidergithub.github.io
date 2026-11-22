@@ -1,0 +1,26 @@
+{% assign issues = site.data.publications | where_exp: 'item', 'item.issue_month' | sort: 'issue_month' | reverse %}
+{% assign years = issues | group_by_exp: 'item', 'item.issue_month | slice: 0, 4' %}
+<section class="publication-group newsletter-archive" aria-labelledby="monthly-reviews">
+  <h2 id="monthly-reviews" tabindex="-1">Monthly newsletter archive</h2>
+  <p class="archive-source">Read the CommonDevOps monthly newsletter on LinkedIn.</p>
+  {% for year in years %}
+  <p class="archive-year" id="newsletter-year-{{ year.name }}">{{ year.name }}</p>
+  <ul class="publication-list newsletter-list" aria-labelledby="newsletter-year-{{ year.name }}">
+    {% for issue in year.items %}
+    <li class="publication newsletter-issue" id="{{ issue.id | escape }}" tabindex="-1">
+      <div class="meta">{% include publication-media.html publication=issue link_cover=true %}</div>
+      <div class="newsletter-detail">
+        <time class="issue-month" datetime="{{ issue.issue_month }}">{{ issue.issue_month | append: '-01' | date: '%B' }}</time>
+        <div class="publication-heading">
+          <h3><a href="{{ issue.url | escape }}"><span class="publication-title">{{ issue.title | escape }}</span></a></h3>
+          <a class="entry-permalink" href="#{{ issue.id | escape }}" aria-label="Link to {{ issue.title | escape }}" title="Link to this entry"></a>
+        </div>
+        {% if issue.editions %}
+        <p class="publication-actions">{% for edition in issue.editions %}<a class="publication-edition" href="{{ edition.url | escape }}">{{ edition.label | escape }}</a>{% endfor %}</p>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endfor %}
+</section>

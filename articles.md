@@ -10,7 +10,7 @@ groups:
     label: Engineering essays
     type: Engineering essay
   - id: monthly-reviews
-    label: Monthly reviews
+    label: Monthly archive
     type: Article
   - id: investigations
     label: Investigations
@@ -21,12 +21,13 @@ groups:
   <p class="lead">Talks and field reports on AI, cybersecurity, and software delivery.</p>
   <nav class="publication-jumps section-jumps" aria-label="Publication formats">
     {% for group in page.groups %}
-      {% assign members = site.data.publications | where: 'type', group.type %}
+      {% if group.id == 'monthly-reviews' %}{% assign members = site.data.publications | where_exp: 'item', 'item.issue_month' %}{% else %}{% assign members = site.data.publications | where: 'type', group.type %}{% endif %}
       <a href="#{{ group.id }}">{{ group.label }} <span class="count">{{ members.size }}</span></a>
     {% endfor %}
   </nav>
 </header>
 {% for group in page.groups %}
+{% if group.id == 'monthly-reviews' %}{% include newsletter-archive.html %}{% continue %}{% endif %}
 {% assign members = site.data.publications | where: 'type', group.type %}
 <section class="publication-group" aria-labelledby="{{ group.id }}">
 <h2 id="{{ group.id }}" tabindex="-1">{{ group.label }}</h2>
