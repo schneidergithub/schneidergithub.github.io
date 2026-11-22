@@ -20,7 +20,7 @@ contact_footer: true
 <section class="section selected-results" aria-labelledby="selected-title">
   <div class="section-heading">
     <h2 id="selected-title">Selected <em>work</em></h2>
-    <a href="{{ '/work/' | relative_url }}#project-summaries">Browse project summaries</a>
+    <a href="{{ '/work/' | relative_url }}">Explore selected work</a>
   </div>
   <div class="feature-grid">
     {% assign projects = site.work | where: 'featured', true | sort: 'order' %}

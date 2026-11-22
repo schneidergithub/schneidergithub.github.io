@@ -457,7 +457,7 @@ async function checkHomepage(page) {
     assert.match(await project.innerText(), result);
   }
   const results = page.locator('.selected-results');
-  assert.equal(await results.getByRole('link', { name: 'Browse project summaries' }).getAttribute('href'), '/work/#project-summaries');
+  assert.equal(await results.getByRole('link', { name: 'Explore selected work' }).getAttribute('href'), '/work/');
   const mediaHeading = page.locator('#home-media').getByRole('heading', { name: 'Articles & Demos', exact: true });
   const collectionLink = mediaHeading.getByRole('link', { name: 'Articles & Demos', exact: true });
   assert.equal(await collectionLink.getAttribute('href'), '/articles/');

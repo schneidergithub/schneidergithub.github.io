@@ -1,59 +1,41 @@
 {% assign studies = all_studies | where: 'project', project.slug | sort: 'title' %}
 {% assign group = site.data.gallery | where: 'id', project.slug | first %}
 {% assign heading = include.heading | default: 'h3' %}
-<article class="project-card{% if project.index_feature %} work-support{% endif %}" id="{{ project.slug }}" tabindex="-1">
+<article class="project-card{% if project.index_feature %} work-support{% endif %}{% if group %} has-evidence{% endif %}" id="{{ project.slug }}" tabindex="-1">
   <div class="project-copy">
     <p class="context work-kicker">{{ project.context | escape }}</p>
     <{{ heading }} class="project-heading">
-      {% if project.index_case %}<a href="{{ project.index_case | relative_url }}">{% endif %}
-      {{ project.index_title | default: project.title | escape }}
-      {% if project.index_case %}</a>{% endif %}
+      {% if project.index_case %}<a href="{{ project.index_case | relative_url }}">{% endif %}{{ project.index_title | default: project.title | escape }}{% if project.index_case %}</a>{% endif %}
     </{{ heading }}>
     <div class="project-detail">{{ project.content }}</div>
-  </div>
-  {% if project.index_feature == 'metric' %}
-    <div class="project-scale">
-      <p><strong class="work-metric">{{ project.home_highlight.value | escape }}</strong> {{ project.home_highlight.label | escape }}</p>
-      <p>{{ project.index_metric_note | escape }}</p>
-    </div>
-  {% endif %}
-  {% if project.index_screens %}
+    {% if project.index_screens %}
     <div class="project-scale">
       <p><strong class="work-metric">{{ project.index_scale | escape }}</strong> {{ project.index_scale_label | escape }}</p>
       <p>{{ project.index_volume | escape }}</p>
     </div>
-    <div class="product-screens">
-      {% for screen in project.index_screens %}
-        {% assign item = group.items | where: 'title', screen.title | first %}
-        <figure>
-          <a class="image-enlarge" id="project-original-{{ project.slug }}-{{ screen.title | slugify }}" href="{{ item.image | relative_url }}" aria-label="Open full-size image of {{ screen.label | escape }}">
-            <img src="{{ item.thumbnail | relative_url }}?v={{ item.thumbnail_version }}" alt="{{ item.alt | escape }}" width="{{ item.width }}" height="{{ item.height }}" loading="lazy" decoding="async">
-          </a>
-          <figcaption>{{ screen.label | escape }}</figcaption>
-        </figure>
-      {% endfor %}
-    </div>
-  {% elsif project.index_preview %}
-    {% assign item = group.items | where: 'title', project.index_preview | first %}
-    <a class="work-thumbnail image-enlarge" id="project-original-{{ project.slug }}" href="{{ item.image | relative_url }}" aria-label="Open full-size image of {{ item.title | escape }}">
-      <img src="{{ item.thumbnail | relative_url }}?v={{ item.thumbnail_version }}" alt="{{ item.alt | escape }}" width="{{ item.width }}" height="{{ item.height }}" loading="lazy" decoding="async">
-    </a>
-  {% endif %}
-  <div class="work-links">
-    {% for study in studies %}
-      {% unless study.url == page.lead_case or study.url == project.index_case %}
-        <a href="{{ study.url | relative_url }}">{{ study.title | escape }}</a>
-      {% endunless %}
-    {% endfor %}
-    {% if project.publication %}
-      {% assign publication = site.data.publications | where: 'id', project.publication.id | first %}
-      {% assign first_character = publication.url | slice: 0 %}
-      {% if first_character == '/' %}
+    {% elsif project.index_metric_note %}<p class="project-result-note">{{ project.index_metric_note | escape }}</p>{% endif %}
+    <div class="work-links">
+      {% if project.index_case %}<a class="work-case-link" href="{{ project.index_case | relative_url }}">Case study<span class="visually-hidden">: {{ project.index_title | default: project.title | escape }}</span></a>{% endif %}
+      {% for study in studies %}{% unless study.url == page.lead_case or study.url == project.index_case %}<a href="{{ study.url | relative_url }}">{{ study.title | escape }}</a>{% endunless %}{% endfor %}
+      {% if project.publication %}
+        {% assign publication = site.data.publications | where: 'id', project.publication.id | first %}
         <a href="{{ publication.url | relative_url }}">{{ project.publication.label | escape }}</a>
-      {% else %}
-        <a href="{{ '/articles/' | relative_url }}#{{ project.publication.id }}">{{ project.publication.label | escape }}</a>
       {% endif %}
-    {% endif %}
-    {% if group and project.index_gallery_label %}<a href="#gallery-{{ group.id }}">{{ project.index_gallery_label | escape }}</a>{% endif %}
+      {% if project.role_id %}<a href="{{ '/experience/' | relative_url }}#{{ project.role_id }}">My role at {{ project.context | escape }}</a>{% endif %}
+    </div>
   </div>
+  {% if group %}
+  <div class="project-evidence">
+    {% if project.slug == 'westinghouse' %}
+      {% include westinghouse-scope.html %}
+      {% include project-gallery.html group=group archive=true collapsed=true %}
+    {% elsif project.slug == 'propoint' %}
+      {% include project-gallery.html group=group cover='Book a service' %}
+    {% elsif project.role_id %}
+      {% include project-gallery.html group=group collapsed=true %}
+    {% else %}
+      {% include project-gallery.html group=group %}
+    {% endif %}
+  </div>
+  {% endif %}
 </article>
