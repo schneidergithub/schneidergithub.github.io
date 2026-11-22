@@ -42,10 +42,10 @@
   <footer class="site-footer wrap">
     <div><strong>Aaron Schneider</strong><p>Software engineering · DevSecOps · Automation</p></div>
     <nav aria-label="Footer navigation">
-      {% unless page.layout == 'case-study' %}
+      {% if page.url != '/' and page.layout != 'case-study' %}
       <a href="https://www.linkedin.com/in/aarondrewschneider/">Connect on LinkedIn <span aria-hidden="true">↗</span></a>
       <a href="https://www.linkedin.com/company/commondevops/">CommonDevOps <span aria-hidden="true">↗</span></a>
-      {% endunless %}
+      {% endif %}
       <a href="{{ '/pgp/' | relative_url }}">Public PGP key</a>
     </nav>
   </footer>
