@@ -17,7 +17,7 @@
   </div>
   {% if project.image %}
   <figure>
-    <a class="image-link" href="{{ project.image | relative_url }}" aria-label="View full-size screenshot: {{ project.image_alt | escape }}"><img src="{{ project.image | relative_url }}" alt="{{ project.image_alt | escape }}" width="{{ project.image_width }}" height="{{ project.image_height }}" loading="lazy" decoding="async"></a>
+    <a class="image-link image-enlarge" id="project-original-{{ project.slug }}" href="{{ project.image | relative_url }}" aria-label="View full-size screenshot: {{ project.image_alt | escape }}"><img src="{{ project.image | relative_url }}" alt="{{ project.image_alt | escape }}" width="{{ project.image_width }}" height="{{ project.image_height }}" loading="lazy" decoding="async"></a>
   </figure>
   {% endif %}
 </article>

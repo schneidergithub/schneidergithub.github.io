@@ -2,24 +2,23 @@
   {
     "id": "propoint",
     "title": "ProPoint / Super Salon",
-    "description": "I developed and tested Super Salon\u2019s checkout software. One automated test caught a one-cent difference between the online and desktop records of the same sale.",
+    "description": "At ProPoint, I developed and tested Super Salon\u2019s checkout software. An automated test caught a one-cent difference between the online and desktop records of the same sale.",
     "related": {
-      "label": "Read the checkout case study",
+      "label": "Super Salon checkout",
       "url": "/work/super-salon-checkout/"
     },
     "items": [
       {
-        "title": "Guest Pass \u2014 book a service",
+        "title": "Book a service in Guest Pass",
         "alt": "Guest Pass mobile screens for choosing a stylist, appointment time, and salon services.",
         "image": "/assets/portfolio/guestpass-mockups-02-orig.webp",
         "thumbnail": "/assets/portfolio/thumbs/guestpass-mockups-02-orig.webp",
         "width": 509,
         "height": 380,
-        "thumbnail_version": "0e312c2e7c46",
-        "caption": "The Guest Pass booking screens let salon customers choose a stylist, an appointment time, and services."
+        "thumbnail_version": "0e312c2e7c46"
       },
       {
-        "title": "Guest Pass \u2014 find a salon",
+        "title": "Find a salon in Guest Pass",
         "alt": "Guest Pass mobile screens showing nearby salon locations, estimated wait times, and store details.",
         "image": "/assets/portfolio/guestpass-mockups-01-orig.webp",
         "thumbnail": "/assets/portfolio/thumbs/guestpass-mockups-01-orig.webp",
@@ -50,14 +49,14 @@
   {
     "id": "bayer",
     "title": "Bayer / Ciber",
-    "description": "I led development of the Aleve and Bayer Aspirin websites and built two mobile apps for Bayer\u2019s sales team.",
+    "description": "At Ciber, I led development of the Aleve and Bayer Aspirin websites and built two mobile apps for Bayer\u2019s sales team.",
     "related": {
-      "label": "Read the Aleve case study",
+      "label": "Bayer\u2019s Aleve website",
       "url": "/work/bayer-aleve/"
     },
     "items": [
       {
-        "title": "Aleve \u2014 brand website",
+        "title": "Aleve homepage",
         "alt": "Aleve website with product navigation, a campaign feature, and pain-relief information.",
         "image": "/assets/portfolio/portfolio-aleve.webp",
         "thumbnail": "/assets/portfolio/thumbs/portfolio-aleve.webp",
@@ -66,7 +65,7 @@
         "thumbnail_version": "9edca1e9360f"
       },
       {
-        "title": "Aleve \u2014 story page",
+        "title": "Aleve story page",
         "alt": "Aleve website showing a customer story and product information.",
         "image": "/assets/portfolio/portfolio-aleve2.webp",
         "thumbnail": "/assets/portfolio/thumbs/portfolio-aleve2.webp",
@@ -102,8 +101,8 @@
         "thumbnail_version": "6e834d7e1770"
       },
       {
-        "title": "Human joint visualization",
-        "alt": "Interactive joint visualization interface with a three-dimensional knee illustration and navigation.",
+        "title": "Hemophilia Joint Visualizer",
+        "alt": "Hemophilia Joint Visualizer with a patient profile, a three-dimensional knee, and a slider for the stages of joint damage.",
         "image": "/assets/portfolio/portfolio-hjv.webp",
         "thumbnail": "/assets/portfolio/thumbs/portfolio-hjv.webp",
         "width": 490,
@@ -111,75 +110,80 @@
         "thumbnail_version": "2c26027a5c6c"
       },
       {
-        "title": "Pest Management \u2014 mobile overview",
-        "alt": "Bayer Pest Management mobile application showing a product menu and rate calculator.",
+        "title": "Pest Management app",
+        "alt": "Bayer Pest Management app with its product menu beside a rate calculator displaying a result above a photo of ants.",
         "image": "/assets/portfolio/portfolio-pest-management.webp",
         "thumbnail": "/assets/portfolio/thumbs/portfolio-pest-management.webp",
         "width": 490,
         "height": 350,
-        "thumbnail_version": "4061aa1003ae"
+        "thumbnail_version": "4061aa1003ae",
+        "id": "pest-management"
       },
       {
-        "title": "Backed by Bayer \u2014 mobile overview",
-        "alt": "Backed by Bayer mobile application showing a product menu and application-rate calculator.",
-        "image": "/assets/portfolio/portfolio-backedbybayer.webp",
-        "thumbnail": "/assets/portfolio/thumbs/portfolio-backedbybayer.webp",
-        "width": 490,
-        "height": 350,
-        "thumbnail_version": "4fda39b9f839"
-      },
-      {
-        "title": "Pest Management \u2014 product navigation",
-        "alt": "Bayer Pest Management mobile menu with products, pests, calculator, and distributor options.",
+        "title": "Pest Management menu",
+        "alt": "Pest Management menu with links to products, pests, the rate calculator, and Bayer distributors.",
         "image": "/assets/portfolio/portfolio-cellphone1.webp",
         "thumbnail": "/assets/portfolio/thumbs/portfolio-cellphone1.webp",
         "width": 214,
         "height": 380,
-        "thumbnail_version": "898126c8e0dc"
+        "thumbnail_version": "898126c8e0dc",
+        "detail_of": "pest-management"
       },
       {
-        "title": "Pest Management \u2014 rate calculation",
-        "alt": "Bayer Pest Management mobile calculator displaying an application rate above an ant photograph.",
+        "title": "Pest Management rate calculator",
+        "alt": "Pest Management calculator showing a product quantity, tank size, and a photo of ants.",
         "image": "/assets/portfolio/portfolio-cellphone2.webp",
         "thumbnail": "/assets/portfolio/thumbs/portfolio-cellphone2.webp",
         "width": 285,
         "height": 380,
-        "thumbnail_version": "f5b37d82f2c7"
+        "thumbnail_version": "f5b37d82f2c7",
+        "detail_of": "pest-management"
       },
       {
-        "title": "Backed by Bayer \u2014 product navigation",
-        "alt": "Backed by Bayer mobile menu with product, disease, promotion, and representative options.",
+        "title": "Lawn and Landscape Management app",
+        "alt": "Bayer Lawn and Landscape Management app with a product menu for turf care beside a calculator for treated area and spray volume.",
+        "image": "/assets/portfolio/portfolio-backedbybayer.webp",
+        "thumbnail": "/assets/portfolio/thumbs/portfolio-backedbybayer.webp",
+        "width": 490,
+        "height": 350,
+        "thumbnail_version": "4fda39b9f839",
+        "id": "lawn-and-landscape"
+      },
+      {
+        "title": "Lawn and Landscape menu",
+        "alt": "Lawn and Landscape Management menu with a turf-care introduction and links to products, pests, and the rate calculator.",
         "image": "/assets/portfolio/portfolio-cellphone3.webp",
         "thumbnail": "/assets/portfolio/thumbs/portfolio-cellphone3.webp",
         "width": 214,
         "height": 380,
-        "thumbnail_version": "6d2582cbaacc"
+        "thumbnail_version": "6d2582cbaacc",
+        "detail_of": "lawn-and-landscape"
       },
       {
-        "title": "Backed by Bayer \u2014 rate calculation",
-        "alt": "Backed by Bayer mobile calculator with product, area, and spray-volume fields.",
+        "title": "Lawn and Landscape rate calculator",
+        "alt": "Lawn and Landscape calculator with fields for the product, treated area, tank size, use rate, and spray volume.",
         "image": "/assets/portfolio/portfolio-cellphone4.webp",
         "thumbnail": "/assets/portfolio/thumbs/portfolio-cellphone4.webp",
         "width": 214,
         "height": 380,
-        "thumbnail_version": "e6358a70ae63"
+        "thumbnail_version": "e6358a70ae63",
+        "detail_of": "lawn-and-landscape"
       }
     ]
   },
   {
     "id": "berkeley",
     "title": "Berkeley Communications",
-    "description": "I built the company\u2019s inventory system, automated marketing workflows, and ran its web hosting on in-house servers.",
+    "description": "I built Berkeley\u2019s warehouse system for tracking parts, stock, and warranties. I also automated marketing workflows and ran the company\u2019s web hosting on in-house servers.",
     "items": [
       {
-        "title": "Inventory management",
-        "alt": "Internal inventory interface with product fields, search controls, and administrative options.",
+        "title": "Warehouse inventory",
+        "alt": "Berkeley warehouse form for entering a part number, quantity, warranty, and the sites where an item can be listed.",
         "image": "/assets/portfolio/berkcom-inventory.webp",
         "thumbnail": "/assets/portfolio/thumbs/berkcom-inventory.webp",
         "width": 490,
         "height": 354,
-        "thumbnail_version": "08a5df548f9a",
-        "caption": "The warehouse inventory system I built gave staff one form for part details, stock levels, and warranty information."
+        "thumbnail_version": "08a5df548f9a"
       },
       {
         "title": "Berkeley Communications website",
@@ -227,8 +231,8 @@
         "thumbnail_version": "84bfedb8d4e1"
       },
       {
-        "title": "Looklister \u2014 video builder",
-        "alt": "Looklister interface with listing fields and a drag-and-drop video area.",
+        "title": "Looklister video frame designer",
+        "alt": "Looklister Framemaker with a draggable video area inside a custom frame and fields for the frame name and description.",
         "image": "/assets/portfolio/looklister2.webp",
         "thumbnail": "/assets/portfolio/thumbs/looklister2.webp",
         "width": 490,
@@ -236,8 +240,8 @@
         "thumbnail_version": "1573ca6ba4c8"
       },
       {
-        "title": "Volo Labs",
-        "alt": "Volo Labs website with company information and product-development service content.",
+        "title": "VoloCare warranty plans",
+        "alt": "Volo Labs page listing VoloCare hardware warranty plans, prices, and Add to Cart buttons.",
         "image": "/assets/portfolio/vololabs.webp",
         "thumbnail": "/assets/portfolio/thumbs/vololabs.webp",
         "width": 400,
@@ -249,9 +253,9 @@
   {
     "id": "westinghouse",
     "title": "Westinghouse",
-    "description": "I tested the performance of Westinghouse\u2019s $20 million website ahead of a new release.",
+    "description": "Through Sogeti / Capgemini, I load-tested a new release of Westinghouse\u2019s $20 million website and tuned Elasticsearch to handle three times the throughput.",
     "related": {
-      "label": "See the performance-testing results",
+      "label": "Westinghouse search performance",
       "url": "/work/westinghouse-performance/"
     },
     "items": [
@@ -262,8 +266,7 @@
         "thumbnail": "/assets/portfolio/thumbs/westinghouse.webp",
         "width": 520,
         "height": 240,
-        "thumbnail_version": "f079706ddf6a",
-        "caption": "The client\u2019s heritage banner features George Westinghouse. My load tests guided changes that tripled Elasticsearch throughput."
+        "thumbnail_version": "f079706ddf6a"
       }
     ]
   },
@@ -279,8 +282,7 @@
         "thumbnail": "/assets/portfolio/thumbs/buckyball.webp",
         "width": 400,
         "height": 300,
-        "thumbnail_version": "ad391ded85af",
-        "caption": "Clients signed in through the homepage of the web design and hosting business I co-owned."
+        "thumbnail_version": "ad391ded85af"
       }
     ]
   }

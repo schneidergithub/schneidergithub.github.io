@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { chromium } = require('playwright-core');
+const { chromium, webkit } = require('playwright-core');
 const gallery = require('../_data/gallery.json');
 
 const studies = [
@@ -92,7 +92,9 @@ async function checkGallery(page, workUrl, width, directEntry) {
   const originals = gallery.flatMap(group => group.items.map(item => item.image));
   assert.equal(new Set(originals).size, 26);
   assert.deepEqual(await images.evaluateAll(links => links.map(a => a.pathname).sort()), [...originals].sort());
-  assert.equal(await page.locator('.gallery-group details').count(), 3);
+  assert.ok(await images.evaluateAll(links => links.every(a => a.classList.contains('image-enlarge') &&
+    (!a.target || a.target === '_self') && a.getAttribute('aria-label')?.trim())), 'Each original needs one named, same-tab enlargement control');
+  assert.equal(await page.locator('.gallery-group > details').count(), 3);
   if (width === 375) {
     assert.equal(await page.locator('.gallery-group .thumbnail-card a:visible').count(), 5);
   }
@@ -101,7 +103,7 @@ async function checkGallery(page, workUrl, width, directEntry) {
     if (directEntry) {
       await page.goto(workUrl + fragment);
     } else {
-      await page.locator('.gallery-jumps').getByRole('link', { name: group.title + ' ' + group.items.length, exact: true }).press('Enter');
+      await page.locator('.gallery-jumps a[href="' + fragment + '"]').press('Enter');
     }
     assert.equal(page.url(), workUrl + fragment);
     const section = page.locator('.gallery-group:target');
@@ -111,15 +113,18 @@ async function checkGallery(page, workUrl, width, directEntry) {
     assert.equal(await cover.locator('a').getAttribute('href'), group.items[0].image);
     const captions = await cover.locator('figcaption').allTextContents();
     assert.deepEqual(captions, group.items[0].caption ? [group.items[0].caption] : []);
-    if (group.id === 'bayer') {
-      assert.deepEqual(captions, [], 'Let the Aleve gallery preview stand on its own');
-      assert.ok((await cover.locator('a').innerText()).includes(group.items[0].title));
+    if (['bayer', 'propoint', 'westinghouse'].includes(group.id)) {
+      await cover.locator('img').scrollIntoViewIfNeeded();
+      await cover.locator('img').evaluate(img => img.decode());
+      await section.locator('h3').evaluate(el => el.scrollIntoView({ block: 'start' }));
+      await captureWork(page, group.id + '-cover');
     }
-    const details = section.locator('details');
-    const summary = details.locator('summary');
+    const details = section.locator(':scope > details');
+    const summary = details.locator(':scope > summary');
     if (group.items.length > 1) {
-      const toggleLabel = await summary.innerText();
-      assert.ok(toggleLabel.includes(String(group.items.length)), 'Identify the gallery size on the disclosure');
+      const label = await summary.innerText();
+      if (group.id === 'bayer') assert.match(label, /8 examples.*4 detail views/i);
+      else assert.ok(label.includes(String(group.items.length)));
       assert.equal(await details.getAttribute('open'), null);
       await summary.press('Enter');
       assert.ok(await details.evaluate(el => el.open), 'Keyboard should open the image group');
@@ -128,22 +133,27 @@ async function checkGallery(page, workUrl, width, directEntry) {
     }
     const photos = section.locator('.thumbnail-card a');
     assert.deepEqual(await photos.evaluateAll(links => links.map(a => a.pathname).sort()), group.items.map(item => item.image).sort());
+    const visible = section.locator('.thumbnail-card a:visible');
+    assert.equal(await visible.count(), group.id === 'bayer' ? 8 : group.items.length);
+    if (group.id === 'bayer') {
+      await summary.scrollIntoViewIfNeeded();
+      await captureWork(page, 'bayer-expanded');
+      const nested = details.locator('details');
+      assert.equal(await nested.count(), 2, 'Keep the four detail images with the two relevant mobile examples');
+      for (const item of group.items.filter(item => item.id)) {
+        const child = nested.filter({ has: page.locator('summary').filter({ hasText: item.title }) });
+        assert.equal(await child.count(), 1, 'Name the detail group after its composite example');
+        await child.locator(':scope > summary').press('Enter');
+        const children = group.items.filter(detail => detail.detail_of === item.id).map(detail => detail.image).sort();
+        assert.equal(children.length, 2);
+        assert.deepEqual(await child.locator('.thumbnail-card a:visible').evaluateAll(links => links.map(link => link.pathname).sort()), children);
+      }
+    }
     assert.equal(await section.locator('.thumbnail-card a:visible').count(), group.items.length);
     for (const photo of await photos.all()) {
       const image = photo.locator('img');
       await image.scrollIntoViewIfNeeded();
       await image.evaluate(img => img.decode());
-    }
-    if (directEntry && group.id === 'bayer') {
-      await summary.scrollIntoViewIfNeeded();
-      await captureWork(page, 'bayer-expanded');
-      const original = details.locator('.thumbnail-card a').first();
-      const url = new URL(await original.getAttribute('href'), workUrl).href;
-      const [imageTab] = await Promise.all([page.waitForEvent('popup'), original.press('Enter')]);
-      await imageTab.waitForURL(url);
-      await imageTab.close();
-      assert.equal(page.url(), workUrl + fragment);
-      assert.ok(await details.evaluate(el => el.open));
     }
     if (group.items.length > 1) {
       await summary.press('Space');
@@ -177,10 +187,64 @@ async function checkGallery(page, workUrl, width, directEntry) {
   console.log(width + 'px: verified the gallery highlights, image groups, and related project links.');
 }
 
+async function openImageAndReturn(page, control) {
+  const sourceUrl = page.url();
+  const imageUrl = new URL(await control.getAttribute('href'), sourceUrl).href;
+  const tabs = page.context().pages().length;
+  assert.ok([null, '', '_self'].includes(await control.getAttribute('target')), 'Image link must open in the current tab');
+  await Promise.all([page.waitForURL(imageUrl, { timeout: 7000 }), control.press('Enter')]);
+  assert.equal(page.context().pages().length, tabs);
+  await page.goBack({ waitUntil: 'domcontentloaded' });
+  assert.equal(page.url(), sourceUrl);
+  await page.waitForFunction(href => {
+    const current = document.activeElement;
+    if (current?.href !== href) return false;
+    const bounds = current.getBoundingClientRect();
+    return bounds.width > 0 && bounds.height > 0 && bounds.top < innerHeight && bounds.bottom > 0;
+  }, imageUrl, { timeout: 7000 });
+  assert.ok(await control.evaluate(el => el === document.activeElement), 'Return keyboard focus to the image that opened the original');
+}
+
+async function checkImageReturns(browser, workUrl) {
+  const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
+  await page.goto(workUrl + '#gallery-bayer');
+  const group = page.locator('#gallery-bayer');
+  const details = group.locator(':scope > details');
+  const summary = details.locator(':scope > summary');
+  const restAngle = await summary.evaluate(el => getComputedStyle(el, '::before').transform);
+  await summary.press('Enter');
+  assert.ok(await summary.evaluate(el => el.getBoundingClientRect().height >= 44 && el.matches(':focus-visible') &&
+    getComputedStyle(el).outlineStyle !== 'none'), 'Opening a gallery should preserve a visible keyboard focus');
+  await page.waitForFunction(before => getComputedStyle(document.querySelector('#gallery-bayer > details > summary'), '::before').transform !== before, restAngle, { timeout: 3000 });
+  await openImageAndReturn(page, group.locator('a[href="/assets/portfolio/portfolio-aleve2.webp"]'));
+  assert.ok(await details.evaluate(el => el.open), 'Keep the Bayer group expanded after Back');
+  const nested = details.locator('details').first();
+  await nested.locator(':scope > summary').press('Enter');
+  await openImageAndReturn(page, nested.locator('.thumbnail-card a').first());
+  assert.ok(await nested.evaluate(el => el.open), 'Keep the mobile detail group expanded after Back');
+  await page.goto(workUrl + '#gallery-westinghouse');
+  await openImageAndReturn(page, page.locator('#gallery-westinghouse .thumbnail-card a'));
+  await page.goto(new URL('bayer-aleve/', workUrl).href);
+  await openImageAndReturn(page, page.locator('.study-figures a').nth(1));
+  await page.goto(workUrl + '#gallery-bayer');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  assert.ok(await summary.evaluate(el => getComputedStyle(el, '::before').transitionDuration.split(',').every(t => parseFloat(t) === 0)),
+    'The disclosure indicator must change immediately with reduced motion');
+  await page.setViewportSize({ width: 320, height: 812 });
+  await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+  await summary.press('Enter');
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Expanded gallery must fit at enlarged text size');
+  await page.close();
+  console.log('Verified same-tab image return, nested disclosure state, keyboard focus and reduced-motion gallery behavior.');
+}
+
 async function check() {
   const workUrl = new URL('/work/', process.argv[2]).href;
-  const browser = await chromium.launch({ channel: 'chrome' });
+  const webkitOnly = process.argv.includes('--webkit-gallery');
+  const browser = webkitOnly ? await webkit.launch() : await chromium.launch({ channel: 'chrome' });
   try {
+    await checkImageReturns(browser, workUrl);
+    if (webkitOnly) return;
     for (const width of [375, 1280]) {
       const page = await browser.newPage({ viewport: { width, height: width === 375 ? 812 : 900 } });
       await page.goto(new URL('/', workUrl).href);
@@ -311,6 +375,10 @@ async function check() {
         }
         const images = page.locator('.study-evidence img');
         assert.equal(await images.count(), study.images);
+        const imageLinks = page.locator('.study-evidence figure a');
+        assert.equal(await imageLinks.count(), study.images);
+        assert.ok(await imageLinks.evaluateAll(links => links.every(a => a.classList.contains('image-enlarge') &&
+          (!a.target || a.target === '_self') && a.getAttribute('aria-label')?.trim())), 'Each case figure has one named enlargement link');
         for (const image of await images.all()) {
           await image.scrollIntoViewIfNeeded();
           await image.evaluate(img => img.decode());

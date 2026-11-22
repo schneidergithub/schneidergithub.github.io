@@ -13,17 +13,21 @@ The standing scrum team includes a UI/UX specialist, a graphic designer and prof
 - MVP release: published through PR #1; the YouTube subscription button followed in PR #2. Live domains, pages, images, and the unchanged PGP key were verified.
 - The charcoal-and-blue design and manual edits through `4b3ad29` merged in [PR #3](https://github.com/schneidergithub/schneidergithub.github.io/pull/3), including removal of education and certifications from the Experience page. [PR #4](https://github.com/schneidergithub/schneidergithub.github.io/pull/4) added versioned stylesheet and favicon URLs.
 
-## Next three sprints · Portfolio polish
+<a id="next-three-sprints--portfolio-polish"></a>
 
-**Planned, November 21, 2026.** Help a hiring manager or technical reader answer three questions quickly. What did Aaron do? What can I see for myself? Where will this link take me? This plan covers the existing portfolio. The team reviewed the four main pages, seven cases and PGP utility, the release captures, and the editorial and article-source material from *Get Video Transcripts*. The grader guide, chess case, and incident investigation are already live. [Production baseline at the start of planning](https://github.com/schneidergithub/schneidergithub.github.io/tree/82c6bcf589c0215a223186ab146aa96908b4c6a5)
+## Portfolio polish · Five-sprint release
+
+**Kicked off November 21, 2026.** Help a hiring manager or technical reader answer three questions quickly. What did Aaron do? What can I see for myself? Where will this link take me? This plan covers the existing portfolio. The team reviewed the four main pages, seven cases and PGP utility, the release captures, and the editorial and article-source material from *Get Video Transcripts*. The grader guide, chess case, and incident investigation are already live. [Production baseline at the start of planning](https://github.com/schneidergithub/schneidergithub.github.io/tree/82c6bcf589c0215a223186ab146aa96908b4c6a5)
 
 | Order | Milestone a visitor can demonstrate | Planned size | Lead |
 | --- | --- | ---: | --- |
 | 1 | Read the Bayer case once and explain Aaron’s contribution | 13 points | Professional writers and marketing editor |
 | 2 | Inspect an original image and return to the same place | 13 points | Graphic designer and UI/UX specialist |
 | 3 | Find an engineering result from Home and the right evidence from Articles | 13 points | Product, editorial and frontend |
+| 4 | Choose a personal or team contact from a single business card | 8 points | Marketing, visual design and frontend |
+| 5 | Read and share a sourced engineering essay | 8 points | Professional writer, technical editor and QA |
 
-The 39 points are the original relative estimates. The Bayer showcase is the first five-point story, delivered with this plan. The remaining eight stories total 34 points. Copy comes first so visitors can identify Aaron’s contribution before they inspect the work. Image behavior comes next because changing all 26 gallery links removes an actual navigation surprise. The final milestone uses the edited material to decide what earns space on Home and Articles. Product and QA review each release with the writers and designers before the next begins.
+At kickoff, the first three milestones had 34 points of open work after the five-point Bayer showcase. The contact card and essay added eight points each. Every sprint includes a marketing reviewer and an independent graphic designer. Marketing follows a named visitor journey. Design compares phone and desktop captures. The team records their decisions and adjusts the upcoming backlog after production verification.
 
 **Approved release scope.** The owner removed the node-ipc editorial clarification from this series. The remaining stories proceed. Keep inline source links easy to recognize. Give navigation a compact treatment and let a genuine project image stand in for redundant text. At review, compare the Work directory, the gallery and a publication entry on a phone.
 
@@ -36,6 +40,8 @@ The 39 points are the original relative estimates. The Bayer showcase is the fir
 | Skim project summaries and Experience without rereading the same claim (3) | Edit the six project summaries. Combine repeated summary, body and outcome fields where they tell the same story. For Eli Lilly, use the Python pipeline, data validation and internal security checks. Shorten the Nuix and Yo Pagos comparison to one distinguishing sentence each. | Each project card earns its space with a specific contribution. A second reviewer can distinguish leadership scope at both employers and open the detailed role. Retain the role thumbnails, eleven shareable headings and outcome links. |
 
 **Editorial decision.** The Aleve page demonstrates the website Aaron led. Its screenshots stand on their own. For other projects, add visible image text only when it explains a decision Aaron made, a constraint he handled, or a result the reader would otherwise miss. [Bayer showcase](https://www.aaronschneider.org/work/bayer-aleve/) · [Bayer release and roadmap](https://github.com/schneidergithub/schneidergithub.github.io/pull/34)
+
+**Sprint 1 review and retrospective.** Marketing accepted the seven short case names. At 375px all seven are visible together and their total length fell from 340 to 153 characters. The graphic designer could compare the Nuix and Yo Pagos team sizes in one phone viewport. Both reviewers prioritized the Bayer gallery for Sprint 2. The Aleve homepage used about 204px of a 343px gallery frame while the same original filled its case-study frame. Use the same screenshot in the next review to check that change. [Release #37](https://github.com/schneidergithub/schneidergithub.github.io/pull/37) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44967381424)
 
 ### Sprint 2 · Make graphic evidence easier to inspect
 
