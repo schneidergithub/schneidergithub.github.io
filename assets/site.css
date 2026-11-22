@@ -70,14 +70,40 @@ main{min-height:65vh}
   border: 1px solid var(--line);
   border-block-start-color: #666865;
   border-radius: 7px;
-  background: linear-gradient(115deg, #29313a, var(--panel) 62%);
+  background: radial-gradient(ellipse at top left, rgb(232 198 158 / 7%), transparent 62%),
+              linear-gradient(115deg, #252d36, var(--panel) 70%);
   box-shadow: 0 .85rem 1.8rem -.95rem rgb(0 0 0 / 40%);
   overflow-wrap: anywhere;
 }
+.contact-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .75rem clamp(.75rem, 2.3vw, 1.6rem);
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+}
+.contact-portrait {
+  display: block;
+  flex: none;
+  width: clamp(72px, 8vw, 96px);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid #aa9780;
+  border-radius: 22%;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 19%);
+}
+.contact-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.18);
+  transform-origin: 5% 86%;
+  filter: brightness(1.04) contrast(.97);
+}
 .contact-card h2 {
-  margin: 0 0 clamp(1rem, 2.6vw, 1.65rem);
+  margin: 0;
   color: #e8c69e;
-  font: italic 400 clamp(2.1rem, 4.5vw, 3.15rem)/1.1 Georgia, "Times New Roman", serif;
+  font: italic 400 clamp(1.95rem, 4.5vw, 3.15rem)/1.1 Georgia, "Times New Roman", serif;
   letter-spacing: -.035em;
 }
 .contact-routes {
@@ -102,6 +128,13 @@ main{min-height:65vh}
 }
 .contact-route a::after { content: "↗" / ""; flex: none; font-size: .8em; }
 .contact-route a:is(:hover, :focus-visible) { text-decoration: underline; }
+@media screen and (prefers-reduced-motion: no-preference) {
+  .contact-route a::after { transition: transform 140ms ease-out; }
+  .contact-route a:focus-visible::after { transform: translate(2px, -2px); }
+}
+@media screen and (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .contact-route a:hover::after { transform: translate(2px, -2px); }
+}
 #home-media > .channel-link {
   display: inline-flex;
   align-items: center;

@@ -156,8 +156,15 @@ async function checkResearchFeature(panel, width) {
 async function checkContactCard(page, width) {
   const card = page.locator('section#connect');
   assert.ok(await card.getByRole('heading', { name: 'Work with me', exact: true }).isVisible());
+  const portrait = card.getByRole('img', { name: 'Aaron Schneider', exact: true });
+  await decodeCover(portrait);
+  const frame = await portrait.locator('..').boundingBox();
+  const title = await card.locator('h2').boundingBox();
+  assert.ok(frame.width >= 72 && frame.width <= 96 && Math.abs(frame.width - frame.height) < 1, 'Keep the portrait square at its display size');
+  if (width >= 375) assert.ok(frame.x + frame.width <= title.x && frame.y < title.y + title.height && title.y < frame.y + frame.height,
+    'Place the portrait alongside the contact heading');
   const routes = [
-    ['Engineering roles & individual consulting', 'Aaron Schneider on LinkedIn', 'https://www.linkedin.com/in/aarondrewschneider/'],
+    ['Individual consulting', 'Aaron Schneider on LinkedIn', 'https://www.linkedin.com/in/aarondrewschneider/'],
     ['Team consulting', 'CommonDevOps on LinkedIn', 'https://www.linkedin.com/company/commondevops/']
   ];
   const originalViewport = page.viewportSize();
@@ -183,7 +190,7 @@ async function checkContactCard(page, width) {
 
   if (width === 320) {
     const larger = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
-    for (const item of await card.locator('dt, dd a').all()) {
+    for (const item of await card.locator('h2, .contact-portrait, dt, dd a').all()) {
       const fits = await item.evaluate(el => {
         const box = el.getBoundingClientRect();
         const text = document.createRange();
@@ -226,6 +233,14 @@ async function checkContactCard(page, width) {
       }
       if (await link.getAttribute('href') === routes[1][2]) await captureSection(page, card, 'home-contact-keyboard');
     }
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await links.first().focus();
+    const arrow = await links.first().evaluate(el => {
+      const style = getComputedStyle(el, '::after');
+      return [style.transform, style.transitionDuration];
+    });
+    assert.deepEqual(arrow, ['none', '0s'], 'Keep the focused contact arrow still with reduced motion');
+    await page.emulateMedia({ reducedMotion: null });
     if (width === 375) await page.setViewportSize(originalViewport);
   }
 }
