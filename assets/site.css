@@ -934,7 +934,11 @@ a{color:inherit}
     border-top: 1px solid var(--masthead-rule);
     padding-top: .25rem;
   }
-  .site-header nav a { min-width: 44px; min-height: 48px; }
+  .site-header nav a {
+    flex: 1 0 calc(50% - 1.1rem);
+    min-width: min(100%, 9em);
+    min-height: 48px;
+  }
 }
 
 /* Publication sections use spacing between entries and one rule at each new format. */

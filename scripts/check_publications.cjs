@@ -649,6 +649,9 @@ async function checkPhoneEntry(browser) {
   assert.equal(await menu.getAttribute('aria-expanded'), 'true');
   const links = nav.locator('a');
   assert.deepEqual(await links.evaluateAll(items => items.map(a => a.pathname)), ['/', '/experience/', '/work/', '/articles/']);
+  const rows = await links.evaluateAll(items => items.map(link => link.getBoundingClientRect().top));
+  assert.ok(rows[0] === rows[1] && rows[2] === rows[3] && rows[0] < rows[2],
+    'Use two balanced navigation rows at 375px');
   const currentPage = nav.locator('a[aria-current="page"]');
   assert.equal(await currentPage.getAttribute('href'), '/articles/');
   assert.ok(await currentPage.evaluate(el => {
