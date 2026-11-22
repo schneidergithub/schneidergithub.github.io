@@ -201,7 +201,12 @@ async function checkConsultingFooter(page, width) {
   assert.ok(name.x + name.width <= channel.x && channel.y < name.y + name.height && name.y < channel.y + channel.height,
     'Pair the signature and channel on the closing strip');
   if (width <= 375) assert.ok(contacts[0].bottom <= contacts[1].top + 1, 'Stack the two phone contact routes');
-  if (width === 1280) assert.ok(Math.abs(contacts[0].top - contacts[1].top) <= 1, 'Align desktop consulting routes');
+  if (width === 1280) {
+    assert.ok(Math.abs(contacts[0].top - contacts[1].top) <= 1, 'Align desktop consulting routes');
+    assert.ok(await layout.locator('.consulting-links a > span:first-of-type').evaluateAll(labels =>
+      labels.every(el => el.offsetHeight <= parseFloat(getComputedStyle(el).lineHeight) + 1)),
+    'Give both desktop contact labels room for a single line');
+  }
 
   if (width === 320) {
     const large = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
