@@ -19,7 +19,7 @@ const monthlyIssues = publications.filter(item => item.issue_month)
   .sort((a, b) => b.issue_month.localeCompare(a.issue_month));
 const publicationGroups = {
   recordings: ['benchmark-presentation', 'chess-benchmark-presentation', 'node-ipc-interview', 'node-ipc-follow-up', 'security-livestream'],
-  'engineering-essays': ['fresh-sandbox-github'],
+  'engineering-essays': ['why-chess-pros-sometimes-ignore-super-intelligent-ai', 'fresh-sandbox-github'],
   'monthly-reviews': monthlyIssues.map(item => item.id),
   investigations: ['node-ipc-report']
 };
@@ -389,7 +389,7 @@ async function checkHomepage(page) {
   assert.equal(await linkedCovers.count(), 3);
   assert.deepEqual((await linkedCovers.evaluateAll(links => links.map(a => a.href))).sort(), [
     'https://commondevops.com/node-ipc-supply-chain-incident-report/',
-    new URL('/articles/fresh-sandbox-github/', origin).href,
+    new URL('/articles/why-chess-pros-sometimes-ignore-super-intelligent-ai/', origin).href,
     monthlyIssues[0].url
   ].sort());
   const newsletter = cards.first();
@@ -879,6 +879,18 @@ async function checkCollection(page, width) {
   await checkGraderGuide(page);
   await checkDiscovery(page);
   await checkEssay(page, { capture: true });
+  const chessEssay = page.locator('#why-chess-pros-sometimes-ignore-super-intelligent-ai h3 a');
+  await chessEssay.press('Enter');
+  const figures = page.locator('.essay-copy figure');
+  assert.equal(await figures.count(), 2);
+  for (const figure of await figures.all()) {
+    const img = figure.locator('img');
+    await decodeCover(img);
+    assert.equal(await figure.locator('a').getAttribute('href'), await img.getAttribute('src'));
+    assert.ok((await figure.locator('figcaption').innerText()).length > 0);
+  }
+  await page.getByRole('link', { name: 'Watch the chess benchmark presentation', exact: true }).press('Enter');
+  assert.ok(await page.locator('#chess-benchmark-presentation:target summary').isVisible());
   const publications = page.locator('li.publication');
   assert.equal(await publications.count(), Object.values(publicationGroups).flat().length);
   for (const row of await publications.all()) {

@@ -35,9 +35,21 @@
       url: "https://www.aaronschneider.org/common-devops-reports/reports/2026-10/"
     - label: "PDF edition"
       url: "https://www.aaronschneider.org/common-devops-reports/reports/2026-10/common-devops-october-2026.pdf"
+- title: "Why Chess Pros Sometimes Ignore Super-Intelligent AI"
+  id: why-chess-pros-sometimes-ignore-super-intelligent-ai
+  home_featured: true
+  type: "Engineering essay"
+  publisher: "Aaron Schneider"
+  url: "/articles/why-chess-pros-sometimes-ignore-super-intelligent-ai/"
+  description: "The engine called my rook move a mistake. I wanted to trade into a pawn ending. Here’s why I trusted the simpler position."
+  attribution: "By Aaron Schneider"
+  preview:
+    src: "/assets/publications/chess-before-the-trades.png"
+    alt: "White’s rook move marked as a mistake beside the engine’s +1.4 evaluation."
+    width: 758
+    height: 475
 - title: "What a fresh sandbox inherits from GitHub"
   id: fresh-sandbox-github
-  home_featured: true
   type: "Engineering essay"
   publisher: "Aaron Schneider"
   url: "/articles/fresh-sandbox-github/"
@@ -96,6 +108,9 @@
   description: "In this presentation on our qualitative benchmark, I review the chess videos AI tools helped build. Board orientation and the timing of the solution reveal changed whether a viewer could solve the puzzle."
   attribution: "Presented by Aaron Schneider for CommonDevOps"
   case_url: "/work/chess-puzzle-qa/"
+  companions:
+    - id: why-chess-pros-sometimes-ignore-super-intelligent-ai
+      label: "Chess and human judgment essay"
   preview:
     src: "/assets/publications/chess-render.jpg"
     alt: "A chessboard from the local render shown in the benchmark presentation."

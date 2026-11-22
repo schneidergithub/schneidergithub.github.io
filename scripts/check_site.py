@@ -12,13 +12,14 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / '_site'
-ESSAY = '/articles/fresh-sandbox-github/'
-PAGES = ['/', '/experience/', '/work/', '/articles/', '/pgp/', '/404.html', ESSAY]
+CHESS_ESSAY = '/articles/why-chess-pros-sometimes-ignore-super-intelligent-ai/'
+ESSAYS = ['/articles/fresh-sandbox-github/', CHESS_ESSAY]
+PAGES = ['/', '/experience/', '/work/', '/articles/', '/pgp/', '/404.html'] + ESSAYS
 STUDIES = ['/work/super-salon-checkout/', '/work/indiana-case-archives/', '/work/bayer-aleve/',
            '/work/westinghouse-performance/', '/work/scientific-ai-benchmark/', '/work/node-ipc-investigation/',
            '/work/chess-puzzle-qa/']
 SHARE_CARDS = {
-    ESSAY: 'fresh-sandbox-github',
+    '/articles/fresh-sandbox-github/': 'fresh-sandbox-github',
     '/work/chess-puzzle-qa/': 'chess-puzzle-benchmark',
     '/work/bayer-aleve/': 'bayer-aleve',
     '/work/westinghouse-performance/': 'westinghouse-performance',
@@ -141,13 +142,17 @@ for route in PAGES + STUDIES:
     if page.h1 != 1: errors.append(f'{route}: expected one h1')
     if len(set(page.ids)) != len(page.ids): errors.append(f'{route}: duplicate IDs')
     if page.canonical != ['https://www.aaronschneider.org' + route]: errors.append(f'{route}: canonical URL mismatch')
-    if route in PAGES[:4] + STUDIES + [ESSAY]:
+    if route in PAGES[:4] + STUDIES + ESSAYS:
         card = SHARE_CARDS.get(route, 'aaron-schneider')
         image = f'/assets/portfolio/share/{card}.jpg'
+        image_type, width, height = 'image/jpeg', '1200', '630'
+        if route == CHESS_ESSAY:
+            image = '/assets/publications/chess-before-the-trades.png'
+            image_type, width, height = 'image/png', '758', '475'
         image_url = 'https://www.aaronschneider.org' + image
         expected_meta = {
-            'og:image': image_url, 'og:image:type': 'image/jpeg',
-            'og:image:width': '1200', 'og:image:height': '630',
+            'og:image': image_url, 'og:image:type': image_type,
+            'og:image:width': width, 'og:image:height': height,
             'twitter:card': 'summary_large_image', 'twitter:image': image_url,
             'twitter:image:alt': page.metadata.get('og:image:alt', '')
         }
@@ -212,8 +217,9 @@ if '/experience/' in parsed:
     check_experience(file_for('/experience/'))
 
 sitemap = file_for('/sitemap.xml').read_text()
-if ESSAY not in parsed['/articles/'].links or sitemap.count(f'<loc>https://www.aaronschneider.org{ESSAY}</loc>') != 1:
-    errors.append(f'{ESSAY}: expected a link in Articles & Demos and a unique sitemap entry')
+for route in ESSAYS:
+    if route not in parsed['/articles/'].links or sitemap.count(f'<loc>https://www.aaronschneider.org{route}</loc>') != 1:
+        errors.append(f'{route}: expected a link in Articles & Demos and a unique sitemap entry')
 for route in STUDIES:
     if route not in parsed['/work/'].links or f'<loc>https://www.aaronschneider.org{route}</loc>' not in sitemap:
         errors.append(f'{route}: missing from Selected Work or the sitemap')

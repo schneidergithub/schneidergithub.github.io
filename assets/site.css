@@ -293,6 +293,10 @@ main{min-height:65vh}
 .essay-meta { margin: 0 0 clamp(1.25rem, 3.5vw, 2.15rem); color: var(--muted); font-size: .96rem; }
 .essay-copy { font-size: 1.05rem; line-height: 1.7; }
 .essay-copy p { margin-block: 0 1.1em; }
+.essay-copy h2 { margin-block: 1.75em .5em; font-size: clamp(1.35rem, 3vw, 1.8rem); line-height: 1.2; }
+.essay-copy figure { margin: 1.5em 0; padding: 0; }
+.essay-copy figure a { display: block; }
+.essay-copy figure img { width: 100%; border-radius: 4px; }
 .essay-back {
   display: inline-flex;
   align-items: center;
