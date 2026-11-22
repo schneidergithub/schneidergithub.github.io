@@ -716,6 +716,7 @@ a{color:inherit}
 /* Shared interaction hierarchy and comfortable touch targets. */
 .site-header nav {
   justify-self: end;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 3px;
   max-width: 100%;
@@ -815,7 +816,12 @@ a{color:inherit}
 @media (prefers-reduced-motion: no-preference) {
   .menu-glyph::before, .menu-glyph::after { transition: transform 140ms ease-out; }
 }
-@media screen and (max-width: 42em) {
+@media screen and (min-width: 46em) and (max-width: 54em) {
+  .site-header { column-gap: .65rem; }
+  .site-header .brand { gap: .5rem; font-size: 1rem; }
+  .site-header nav a { padding-inline: .45rem; font-size: .9rem; }
+}
+@media screen and (max-width: 46em) {
   .site-header {
     grid-template-columns: minmax(0, 1fr) auto;
     gap: .55rem .5rem;

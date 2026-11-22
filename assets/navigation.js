@@ -1,7 +1,7 @@
 const menuButton = document.querySelector('.site-menu-toggle');
 const header = menuButton.closest('header');
 const navigation = document.getElementById(menuButton.getAttribute('aria-controls'));
-const compactMenu = window.matchMedia('(max-width: 42em)');
+const compactMenu = window.matchMedia('(max-width: 46em)');
 
 function setMenuOpen(open) {
   menuButton.setAttribute('aria-expanded', String(open));
