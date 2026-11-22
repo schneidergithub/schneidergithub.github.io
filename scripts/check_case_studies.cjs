@@ -80,12 +80,15 @@ async function checkDirectory(page, workUrl) {
   assert.equal(await page.locator('.project-card h3').count(), 5);
   const sections = page.locator('section.research-project');
   assert.deepEqual(await sections.locator('h2').allTextContents(), ['Node-IPC investigation', 'Chess benchmarks']);
-  for (const [sectionId, path, evidence] of [
-    ['node-ipc', '/work/node-ipc-investigation/', 'https://doi.org/10.6084/m9.figshare.33865414.v1'],
+  assert.equal(await page.locator('#node-ipc p:not(.work-kicker)').innerText(),
+    'I was the primary author of the official post-incident report.');
+  for (const [sectionId, ...destinations] of [
+    ['node-ipc', '/work/node-ipc-investigation/', 'https://doi.org/10.6084/m9.figshare.33865414.v1',
+      'https://www.youtube.com/watch?v=eSvYhh7_Kyo', 'https://www.youtube.com/watch?v=TZ04u6cj1ls'],
     ['chess-benchmarks', '/work/chess-puzzle-qa/', '/articles/#chess-benchmark-presentation']
   ]) {
     const section = page.locator('#' + sectionId);
-    assert.deepEqual(await section.getByRole('link').evaluateAll(links => links.map(a => a.getAttribute('href'))), [path, evidence]);
+    assert.deepEqual(await section.getByRole('link').evaluateAll(links => links.map(a => a.getAttribute('href'))), destinations);
   }
   const products = page.locator('#propoint .product-screens');
   assert.deepEqual(await products.locator('figcaption').allTextContents(), ['Guest Pass booking', 'Super Salon checkout']);

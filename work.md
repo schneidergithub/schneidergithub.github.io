@@ -57,6 +57,10 @@ lead_case: /work/scientific-ai-benchmark/
             <div class="work-links">
               <a href="{{ publication.case_url | relative_url }}">{{ project.case_label | escape }}</a>
               <a href="{{ project.source_url | relative_url }}">{{ project.source_label | escape }}</a>
+              {% for video in project.videos %}
+                {% assign recording = site.data.publications | where: 'id', video.id | first %}
+                <a href="{{ recording.url | escape }}">{{ video.label | escape }}</a>
+              {% endfor %}
             </div>
           </div>
           <img src="{{ publication.preview.src | relative_url }}" alt="{{ publication.preview.alt | escape }}" width="{{ publication.preview.width }}" height="{{ publication.preview.height }}" loading="lazy" decoding="async">
