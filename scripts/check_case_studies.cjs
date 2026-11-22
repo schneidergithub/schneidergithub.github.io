@@ -403,7 +403,7 @@ async function check() {
           }
           const studyText = await page.locator('.case-study').innerText();
           assert.match(studyText, /Dr\. Ian Miller and I co-authored/);
-          assert.match(studyText, /review DevOps and infrastructure/);
+          assert.match(studyText, /as a maintainer\. I review DevOps and infrastructure/);
           assert.match(studyText, /analysis team.*trial results/);
           if (width === 1280) await checkShareImage(page, 'tbs-meta-analysis.jpg');
           const dir = path.join(process.env.RUNNER_TEMP || os.tmpdir(), 'homepage-previews');

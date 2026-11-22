@@ -34,6 +34,6 @@ The merged grader reads two CSV tables derived from the key. Each required compa
 
 ## My contribution to the benchmark
 
-Terminal-Bench-Science merged our task. I also review DevOps and infrastructure changes for the benchmark and work with the analysis team to process trial results.
+After Terminal-Bench-Science merged our task, I continued working on the benchmark as a maintainer. I review DevOps and infrastructure changes and work with the analysis team to process trial results.
 
 [Case overview](#case-title) · [Benchmark recording]({{ '/articles/' | relative_url }}#benchmark-presentation).
