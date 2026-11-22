@@ -8,5 +8,5 @@ period: "September 2021 – February 2022"
 thumbnail: "/assets/portfolio/thumbs/westinghouse.webp"
 thumbnail_alt: "Brand banner for consulting client Westinghouse, with its historic logos and founder."
 ---
-- Load-tested a release of Westinghouse’s $20 million website and used the results to tune Elasticsearch, tripling its throughput.
-- Led QA automation and performance testing across 13 projects.
+- Two weeks before the release of Westinghouse’s $20 million website, I used load-test results to tune Elasticsearch and tripled its throughput.
+- Led U.S. QA delivery across 13 concurrent projects. Managed a 20-person offshore engineering and QA team through a vendor handover without interrupting operations.
