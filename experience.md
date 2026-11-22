@@ -3,7 +3,7 @@ title: Experience
 description: Aaron Schneider's career in software engineering, DevSecOps, cloud architecture, QA automation, and technical leadership.
 permalink: /experience/
 ---
-<header class="page-intro"><p class="eyebrow">Career</p><h1>Experience</h1><p class="lead">My work connects programming, automation, system reliability, and team leadership.</p><div class="actions"><a class="button secondary" href="https://www.linkedin.com/in/aarondrewschneider/">View LinkedIn <span aria-hidden="true">↗</span></a></div></header>
+<header class="page-intro experience-intro"><p class="eyebrow">Career</p><h1>Experience</h1><p class="lead">My work connects programming, automation, system reliability, and team leadership.</p><div class="actions"><a class="button secondary" href="https://www.linkedin.com/in/aarondrewschneider/">View LinkedIn <span aria-hidden="true">↗</span></a></div></header>
 {% assign roles = site.experience | sort: 'order' %}
 <section class="leadership" aria-labelledby="engineering-leadership">
   <h2 id="engineering-leadership" tabindex="-1">Engineering leadership</h2>

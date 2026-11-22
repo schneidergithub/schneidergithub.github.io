@@ -46,7 +46,11 @@ async function checkLeadership(page, url, reviewDir) {
     const text = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
     await panel.getByRole('link', { name: 'Nuix role details', exact: true }).press('Enter');
     await checkTarget(page, 'nuix');
-    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Experience must reflow at 200% text');
+    const overflow = await page.evaluate(() => [...document.querySelectorAll('body *')]
+      .filter(el => el.getBoundingClientRect().right > innerWidth + 1)
+      .map(el => el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + ' ' + el.className));
+    assert.deepEqual(overflow, [], 'Experience must reflow at 200% text');
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Keep all enlarged role text inside the viewport');
     await text.evaluate(style => style.remove());
   }
 }

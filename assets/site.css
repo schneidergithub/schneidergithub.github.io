@@ -167,7 +167,8 @@ figure{margin:auto 0 0;padding:0 1.8rem 1.5rem}
 .image-link{display:block;background:#fff;border-radius:3px;overflow:hidden}
 .image-link img{width:100%;max-height:340px;object-fit:contain}
 figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7rem}
-.timeline{padding-bottom:2rem}
+.experience-intro, .leadership, .timeline { overflow-wrap: anywhere; }
+.timeline { container-type: inline-size; padding-bottom: 2rem; }
 .leadership {
   margin-bottom: 1.5rem;
   padding: clamp(1rem, 3vw, 2rem);
@@ -343,6 +344,12 @@ figure{padding-inline:1.4rem}
 .publication .type{display:inline;margin-right:.6rem}
 .publication .meta{margin-bottom:.5rem}
 .site-footer nav{flex-direction:column;align-items:flex-start}
+}
+
+/* Give employer names the full row when enlarged type leaves too little space beside the logo. */
+@container (max-width: 17rem) {
+  .role { grid-template-columns: minmax(0, 1fr); grid-template-areas: "image" "heading" "details"; }
+  .role-thumbnail { width: min(100%, 95px); }
 }
 
 @media(prefers-reduced-motion:no-preference){
