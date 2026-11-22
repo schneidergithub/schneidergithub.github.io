@@ -37,4 +37,4 @@ layout: default
     <a class="study-return" href="{{ '/work/' | relative_url }}#{{ page.work_return_id | default: page.project | escape }}">{{ page.work_return_label | default: default_label | escape }}</a>
   </nav>
 </article>
-{% if figures %}{% include image-viewer.html %}<script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}" defer></script>{% endif %}
+{% if figures %}{% include image-viewer.html %}<script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}?v=2" defer></script>{% endif %}

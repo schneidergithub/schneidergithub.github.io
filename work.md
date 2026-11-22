@@ -73,6 +73,6 @@ lead_case: /work/scientific-ai-benchmark/
   <a class="work-contact" href="{{ '/#connect' | relative_url }}">Discuss a project</a>
 </div>
 
-<script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}?v=2" defer></script>
 
 {% include image-viewer.html %}
