@@ -2,6 +2,9 @@
 layout: case-study
 work_design: true
 project: commondevops
+work_return_id: case-studies-title
+work_return_label: Terminal-Bench-Science feature
+contribution_url: https://github.com/harbor-framework/terminal-bench-science/pull/1513
 permalink: /work/scientific-ai-benchmark/
 title: "Can AI reproduce a meta-analysis?"
 link_label: "Scientific benchmark QA"
@@ -11,7 +14,11 @@ share_image: /assets/portfolio/share/tbs-meta-analysis.jpg
 share_alt: "Terminal-Bench-Science case study. MDD Executive Function, a meta-analysis task co-authored by Aaron Schneider and Dr. Ian Miller."
 ---
 
-[How we checked the grader](#checking-the-grader).
+[View the merged research task on GitHub]({{ page.contribution_url }}).
+
+## My contribution to the benchmark
+
+After Terminal-Bench-Science merged our task, I continued working on the benchmark as a maintainer. I review DevOps and infrastructure changes and work with the analysis team to process trial results.
 
 ## What the agent has to reproduce
 
@@ -31,10 +38,6 @@ Dr. Miller and I worked through three questions in October. Was the reference nu
 2. **Trace a row to its rule.** We recorded why each comparison was required, optional, or excluded. A reviewer could take a disputed statistic from a paper and find the rule behind our decision. [Row audit, 13:26](https://www.youtube.com/watch?v=zPNJW0DI5PA&t=806s).
 3. **Read the participant instructions.** We checked where the instructions disclosed each grading rule. Citations to the original papers gave reviewers a way to check the evidence for a row. [Instructions and verifier, 13:11](https://www.youtube.com/watch?v=fN4p2HbGkog&t=791s).
 
-The merged grader reads two CSV tables derived from the key. Each required comparison needs its own submitted row. The second table defines additional admissible comparisons. A submitted row that matches neither table fails. The parser skips a completely blank line and flags a row with empty fields. [Merged verifier](https://github.com/harbor-framework/terminal-bench-science/blob/0c9b52723f35d39505b57e349c403dc9bdc66e46/tasks/life-sciences/neuroscience/mdd-executive-function/tests/test_outputs.py#L2-L103) · [Task and review on GitHub](https://github.com/harbor-framework/terminal-bench-science/pull/1513).
-
-## My contribution to the benchmark
-
-After Terminal-Bench-Science merged our task, I continued working on the benchmark as a maintainer. I review DevOps and infrastructure changes and work with the analysis team to process trial results.
+The merged grader reads two CSV tables derived from the key. Each required comparison needs its own submitted row. The second table defines additional admissible comparisons. A submitted row that matches neither table fails. The parser skips a completely blank line and flags a row with empty fields. [Merged verifier](https://github.com/harbor-framework/terminal-bench-science/blob/0c9b52723f35d39505b57e349c403dc9bdc66e46/tasks/life-sciences/neuroscience/mdd-executive-function/tests/test_outputs.py#L2-L103).
 
 [Case overview](#case-title) · [Benchmark recording]({{ '/articles/' | relative_url }}#benchmark-presentation).

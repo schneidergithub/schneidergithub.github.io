@@ -1,6 +1,8 @@
 ---
 layout: case-study
 project: commondevops
+work_return_id: node-ipc
+work_return_label: Node-IPC investigation section
 permalink: /work/node-ipc-investigation/
 title: "node-ipc and the evidence in the domain records"
 link_label: "node-ipc investigation"

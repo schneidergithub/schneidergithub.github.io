@@ -8,9 +8,11 @@ lead_case: /work/scientific-ai-benchmark/
 {% assign all_studies = site.pages | where: 'layout', 'case-study' %}
 {% assign benchmark = all_studies | where: 'url', page.lead_case | first %}
 <header class="work-mast">
-  <h1>Selected work</h1>
+  <h1 id="selected-work" tabindex="-1">Selected work</h1>
   <nav aria-label="Selected work sections">
     <a href="#project-summaries">Projects</a>
+    <a href="#node-ipc">Node-IPC</a>
+    <a href="#chess-benchmarks">Chess benchmarks</a>
     <a href="#portfolio-gallery">Gallery</a>
   </nav>
 </header>
@@ -19,34 +21,57 @@ lead_case: /work/scientific-ai-benchmark/
   <div>
     <p class="work-kicker">Terminal-Bench-Science</p>
     <h2 id="case-studies-title" tabindex="-1">{{ benchmark.title | escape }}</h2>
-    <p class="benchmark-byline">Dr. Ian Miller and I co-authored a task that asks AI agents to reconstruct results from published studies. Today I help maintain the benchmark, review infrastructure changes and analyze trial results.</p>
+    <p class="benchmark-byline">Dr. Ian Miller and I co-authored a task that asks AI agents to reconstruct findings from published studies of depression and executive function. Terminal-Bench-Science merged our task. I now help maintain the benchmark, review infrastructure changes and analyze trial results.</p>
     <div class="benchmark-actions">
-      <a class="work-primary" href="{{ benchmark.url | relative_url }}">Read the case study</a>
-      <a href="{{ benchmark.url | relative_url }}#checking-the-grader">How we checked the grader</a>
+      <a class="work-primary" href="{{ benchmark.url | relative_url }}">Explore the research task</a>
+      <a href="{{ benchmark.contribution_url | escape }}">View the merged task</a>
     </div>
   </div>
-  <aside class="grader-panel" aria-labelledby="grader-panel-title">
-    <p class="work-kicker">MDD Executive Function</p>
-    <h3 id="grader-panel-title">Inside the grader</h3>
-    <dl>
-      <dt><code>required.csv</code></dt>
-      <dd>One row per required comparison.</dd>
-      <dt><code>optional.csv</code></dt>
-      <dd>Additional comparisons the grader accepts.</dd>
-    </dl>
-  </aside>
+  <figure class="research-process" aria-labelledby="research-process-title">
+    <figcaption id="research-process-title">From papers to effect sizes</figcaption>
+    <ol>
+      <li><strong>Published studies</strong><span>Find comparisons that answer the research question.</span></li>
+      <li><strong>Study results</strong><span>Extract the numbers reported for each group.</span></li>
+      <li><strong>Comparable effects</strong><span>Calculate an effect size for each comparison.</span></li>
+    </ol>
+  </figure>
 </section>
 
-<section class="work-projects" aria-labelledby="project-summaries">
-  <h2 id="project-summaries" tabindex="-1">Project summaries</h2>
-  <div class="work-index">
-    {% assign projects = site.work | sort: 'index_order' %}
+{% assign projects = site.work | sort: 'index_order' %}
+<div class="work-projects">
+  <section aria-labelledby="project-summaries">
+    <h2 class="work-section-label" id="project-summaries" tabindex="-1">Project summaries</h2>
+    <div class="work-index">
+      {% for project in projects %}{% if project.index_feature %}{% include project-card.html %}{% endif %}{% endfor %}
+    </div>
+  </section>
+  <div class="work-research-list" id="commondevops" tabindex="-1">
     {% for project in projects %}
-      {% include project-card.html %}
+      {% if project.research_publication %}
+        {% assign publication = site.data.publications | where: 'id', project.research_publication | first %}
+        <section class="research-project" id="{{ project.slug }}" tabindex="-1" aria-labelledby="{{ project.slug }}-title">
+          <div>
+            <p class="work-kicker">{{ project.context | escape }}</p>
+            <h2 id="{{ project.slug }}-title">{{ project.title | escape }}</h2>
+            {{ project.content }}
+            <div class="work-links">
+              <a href="{{ publication.case_url | relative_url }}">{{ project.case_label | escape }}</a>
+              <a href="{{ project.source_url | relative_url }}">{{ project.source_label | escape }}</a>
+            </div>
+          </div>
+          <img src="{{ publication.preview.src | relative_url }}" alt="{{ publication.preview.alt | escape }}" width="{{ publication.preview.width }}" height="{{ publication.preview.height }}" loading="lazy" decoding="async">
+        </section>
+      {% endif %}
     {% endfor %}
   </div>
+  <section aria-labelledby="more-projects-title">
+    <h2 class="work-section-label" id="more-projects-title">More projects</h2>
+    <div class="work-index">
+      {% for project in projects %}{% unless project.index_feature or project.research_publication %}{% include project-card.html %}{% endunless %}{% endfor %}
+    </div>
+  </section>
   <a class="work-contact" href="{{ '/#connect' | relative_url }}">Discuss a project</a>
-</section>
+</div>
 
 <section class="section portfolio-gallery" aria-labelledby="portfolio-gallery">
   <h2 id="portfolio-gallery" tabindex="-1"><span id="gallery-title">Gallery</span></h2>

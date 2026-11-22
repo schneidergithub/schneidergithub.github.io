@@ -7,7 +7,11 @@ share_alt: "Aaron Schneider’s Westinghouse case study. 3× Elasticsearch throu
 permalink: /work/westinghouse-performance/
 title: "Tripling Elasticsearch throughput at Westinghouse"
 context: "Westinghouse · Sogeti / Capgemini engagement"
-description: "Before Westinghouse released a new version of its $20 million website, I load-tested the site and used the results to tune its Elasticsearch configuration."
+description: "Two weeks before the release of Westinghouse’s $20 million website, I load-tested the site to see how its search service handled concurrent requests."
 ---
 
-The website release was one of 13 projects where I led QA automation and performance testing through Sogeti / Capgemini. My role was QA Manager and Software Development Engineer in Test.
+## What changed under load
+
+The load-test results guided changes to the Elasticsearch configuration. After tuning, the service handled three times as many search requests in the same amount of time.
+
+I led QA automation and performance testing for this release through Sogeti / Capgemini. It was one of 13 concurrent projects I supported. [My role at Sogeti / Capgemini]({{ '/experience/' | relative_url }}#sogeti-capgemini).

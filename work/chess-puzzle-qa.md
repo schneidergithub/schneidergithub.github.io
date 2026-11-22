@@ -1,6 +1,8 @@
 ---
 layout: case-study
 project: commondevops
+work_return_id: chess-benchmarks
+work_return_label: Chess benchmarks section
 link_label: "Qualitative chess benchmark"
 permalink: /work/chess-puzzle-qa/
 share_image: /assets/portfolio/share/chess-puzzle-benchmark.jpg
