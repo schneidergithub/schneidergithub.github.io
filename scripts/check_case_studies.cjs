@@ -140,6 +140,7 @@ async function checkGallery(page, workUrl, width, directEntry) {
       assert.equal(await details.getAttribute('open'), null);
       await summary.press('Enter');
       assert.ok(await details.evaluate(el => el.open), 'Keyboard should open the image group');
+      await details.locator('.thumbnail-card a').first().waitFor({ state: 'visible', timeout: 3000 });
     } else {
       assert.equal(await details.count(), 0, 'A single image opens directly');
     }
