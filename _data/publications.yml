@@ -137,3 +137,15 @@
   url: "https://www.linkedin.com/pulse/july-summary-ai-tech-news-commondevops-tlg9e/"
   description: "A July roundup covering AI-related hacking incidents, frontier and open-weight model releases, and developments to watch."
   attribution: "Published by CommonDevOps on LinkedIn"
+- title: "What a fresh sandbox inherits from GitHub"
+  id: fresh-sandbox-github
+  type: "Engineering essay"
+  publisher: "Aaron Schneider"
+  url: "/articles/fresh-sandbox-github/"
+  description: "A pull-request comment can change what the next reviewer sees. A chess-video milestone shows how to keep publication a separate decision."
+  attribution: "By Aaron Schneider"
+  preview:
+    src: "/assets/publications/chess-render.jpg"
+    alt: "Chess puzzle from the local render, with highlighted squares and coordinates around the board."
+    width: 1280
+    height: 720

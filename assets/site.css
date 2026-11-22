@@ -169,6 +169,29 @@ main{min-height:65vh}
 .case-link{margin:.75rem 0}
 .case-link a,.study-back{display:inline-flex;align-items:center;min-height:44px}
 .case-study{max-width:62rem;margin-inline:auto;padding-block:2rem 4rem}
+.engineering-essay {
+  max-width: 66ch;
+  margin-inline: auto;
+  padding-block: clamp(1.75rem, 5vw, 3.75rem) clamp(2.5rem, 6vw, 4.5rem);
+  overflow-wrap: anywhere;
+}
+.engineering-essay h1 {
+  max-width: 24ch;
+  margin: 0 0 .65rem;
+  font: 400 clamp(2.15rem, 1.6rem + 2.65vw, 3.5rem)/1.07 Georgia, "Times New Roman", serif;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+.essay-meta { margin: 0 0 clamp(1.25rem, 3.5vw, 2.15rem); color: var(--muted); font-size: .96rem; }
+.essay-copy { font-size: 1.05rem; line-height: 1.7; }
+.essay-copy p { margin-block: 0 1.1em; }
+.essay-back {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-height: 44px;
+  font-size: .95rem;
+}
 .study-back{margin-bottom:1.5rem;font-size:.95rem}
 .study-header{padding-bottom:1.5rem;border-bottom:1px solid var(--line)}
 .study-header h1{font-size:clamp(2.4rem,5vw,3.8rem);max-width:24ch;margin-bottom:1rem}
@@ -483,6 +506,8 @@ figure{padding-inline:1.4rem}
 a{color:inherit}
 .role{break-inside:avoid}
 .role li,.lead,.context{color:#333}
+.engineering-essay { padding-block: 0; }
+.engineering-essay .essay-meta { color: #333; }
 .section.contact-card{margin:1rem 0;break-inside:avoid;border-color:#777;background:white;box-shadow:none}
 .contact-card h2,.contact-route dt,.contact-route a{color:#222}
 .contact-route a{display:block;min-height:0}
@@ -771,22 +796,30 @@ a{color:inherit}
   .focus-media .benchmark-cover .publication-preview { position: static; width: 100%; transform: none; }
   .focus-media .benchmark-cover::after { display: none; }
 }
-.collection-cover.report-masthead {
+.collection-cover.report-masthead, .collection-cover.essay-board {
   position: relative;
-  aspect-ratio: 16/7;
   overflow: hidden;
   border-radius: 4px;
   background: white;
 }
-/* Crop the printed NODE-IPC identifier from the original 640 × 308 title page. */
-.publication .report-masthead .publication-preview {
+.collection-cover.report-masthead { aspect-ratio: 16/7; }
+.publication .collection-cover.essay-board { aspect-ratio: 1; max-width: 150px; }
+.publication :is(.report-masthead, .essay-board) .publication-preview {
   position: absolute;
   inset: 0 auto auto 0;
-  width: 400%;
   max-width: none;
   height: auto;
   border: 0;
+}
+/* Crop the printed NODE-IPC identifier from the original 640 × 308 title page. */
+.publication .report-masthead .publication-preview {
+  width: 400%;
   transform: translate(-21.875%, -28.57%);
+}
+/* Keep all eight files and ranks in the 454px square around the chessboard in the source frame. */
+.publication .essay-board .publication-preview {
+  width: 281.94%;
+  transform: translate(-31.094%, -23.89%);
 }
 .publication-featured .play-mark {
   left: .65rem;

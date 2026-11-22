@@ -11,7 +11,8 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / '_site'
-PAGES = ['/', '/experience/', '/work/', '/articles/', '/pgp/', '/404.html']
+ESSAY = '/articles/fresh-sandbox-github/'
+PAGES = ['/', '/experience/', '/work/', '/articles/', '/pgp/', '/404.html', ESSAY]
 STUDIES = ['/work/super-salon-checkout/', '/work/indiana-case-archives/', '/work/bayer-aleve/',
            '/work/westinghouse-performance/', '/work/scientific-ai-benchmark/', '/work/node-ipc-investigation/',
            '/work/chess-puzzle-qa/']
@@ -136,7 +137,7 @@ for route in PAGES + STUDIES:
     if page.h1 != 1: errors.append(f'{route}: expected one h1')
     if len(set(page.ids)) != len(page.ids): errors.append(f'{route}: duplicate IDs')
     if page.canonical != ['https://www.aaronschneider.org' + route]: errors.append(f'{route}: canonical URL mismatch')
-    if route in PAGES[:4] + STUDIES:
+    if route in PAGES[:4] + STUDIES + [ESSAY]:
         card = CASE_CARDS.get(route, 'aaron-schneider')
         image = f'/assets/portfolio/share/{card}.jpg'
         expected_meta = {
@@ -188,6 +189,8 @@ if '/experience/' in parsed:
     check_experience(file_for('/experience/'))
 
 sitemap = file_for('/sitemap.xml').read_text()
+if ESSAY not in parsed['/articles/'].links or sitemap.count(f'<loc>https://www.aaronschneider.org{ESSAY}</loc>') != 1:
+    errors.append(f'{ESSAY}: expected a link in Articles & Demos and a unique sitemap entry')
 for route in STUDIES:
     if route not in parsed['/work/'].links or f'<loc>https://www.aaronschneider.org{route}</loc>' not in sitemap:
         errors.append(f'{route}: missing from Selected Work or the sitemap')
