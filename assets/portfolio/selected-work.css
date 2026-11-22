@@ -163,3 +163,13 @@
     .portfolio-gallery.restoring-image .gallery-disclosure::details-content { transition: none; }
   }
 }
+.work-media-link { display: block; color: var(--accent); text-decoration: none; }
+.work-media-frame { display: block; overflow: hidden; border: 1px solid var(--line); background: #fff; }
+.work-media-frame img { display: block; border: 0; }
+.work-media-label { display: flex; align-items: center; gap: .55rem; min-height: 44px; padding-block: .4rem; font-size: .95rem; text-decoration: underline; }
+.work-media-label svg { flex: none; }
+.chess-preview { width: min(100%, 21rem); justify-self: end; }
+.chess-preview .work-media-frame { position: relative; aspect-ratio: 26 / 25; }
+.chess-preview .work-media-frame img { position: absolute; width: 246.154%; max-width: none; height: auto; left: -71.154%; top: -30%; }
+.work-media-credit { display: block; color: var(--muted); font-size: .875rem; }
+@media (max-width: 48rem) { .chess-preview { justify-self: start; } }

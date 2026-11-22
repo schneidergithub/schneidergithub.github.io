@@ -229,71 +229,82 @@ async function checkRoleGalleries(browser, origin) {
 
 async function checkImageReturns(browser, workUrl) {
   const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
+  await page.goto(workUrl);
+  const control = page.locator('#gallery-propoint > .thumbnail-card a');
+  await control.scrollIntoViewIfNeeded();
+  const before = await page.evaluate(() => scrollY);
+  await control.press('Enter');
+  const viewer = page.getByRole('dialog');
+  await viewer.waitFor({state:'visible'});
+  assert.equal(page.url(), workUrl);
+  assert.match(await viewer.locator('.viewer-caption').innerText(), /^2 of 4/);
+  assert.ok(await viewer.getByRole('button', {name:'Close',exact:true}).evaluate(el => el === document.activeElement));
+  await page.keyboard.press('Shift+Tab');
+  assert.ok(await viewer.getByRole('button', {name:'Next',exact:true}).evaluate(el => el === document.activeElement));
+  await page.keyboard.press('Tab');
+  assert.ok(await viewer.getByRole('button', {name:'Close',exact:true}).evaluate(el => el === document.activeElement));
+  await page.keyboard.press('ArrowLeft');
+  assert.ok(await viewer.getByRole('button', {name:'Previous',exact:true}).isDisabled());
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('ArrowRight');
+  assert.match(await viewer.locator('.viewer-caption').innerText(), /^4 of 4/);
+  assert.ok(await viewer.getByRole('button', {name:'Next',exact:true}).isDisabled());
+  await viewer.locator('img').evaluate(img => img.decode());
+  await captureWork(page, 'image-viewer');
+  await page.keyboard.press('Escape');
+  await viewer.waitFor({state:'hidden'});
+  assert.ok(await control.evaluate(el => el === document.activeElement));
+  assert.ok(Math.abs((await page.evaluate(() => scrollY)) - before) <= 2);
+
+  // Loading failure leaves the original and Close available.
+  await page.route('**/assets/portfolio/supersalon.webp', route => route.abort());
+  await control.press('Enter');
+  await viewer.getByRole('button', {name:'Next',exact:true}).click();
+  await viewer.getByRole('button', {name:'Next',exact:true}).click();
+  await viewer.locator('.viewer-error').waitFor({state:'visible'});
+  assert.equal(await viewer.getByRole('link', {name:'Open original'}).getAttribute('href'), new URL('/assets/portfolio/supersalon.webp',workUrl).href);
+  await viewer.getByRole('button', {name:'Close',exact:true}).click();
+  await page.unroute('**/assets/portfolio/supersalon.webp');
+
   await page.goto(workUrl + '#gallery-bayer');
-  const group = page.locator('#gallery-bayer');
-  const details = group.locator(':scope > details');
-  const summary = details.locator(':scope > summary');
-  // Rapid toggling must leave the next keyboard action on the disclosure.
-  await summary.press('Enter');
-  await summary.press('Enter');
-  assert.ok(await details.evaluate(el => !el.open && document.activeElement === el.querySelector('summary')));
-  const restAngle = await summary.evaluate(el => getComputedStyle(el, '::before').transform);
-  await summary.press('Enter');
-  assert.ok(await summary.evaluate(el => el.getBoundingClientRect().height >= 44 && el.matches(':focus-visible') &&
-    getComputedStyle(el).outlineStyle !== 'none'), 'Opening a gallery should preserve a visible keyboard focus');
-  await page.waitForFunction(before => getComputedStyle(document.querySelector('#gallery-bayer > details > summary'), '::before').transform !== before, restAngle, { timeout: 3000 });
-  await openImageAndReturn(page, group.locator('a[href="/assets/portfolio/portfolio-aleve2.webp"]'));
-  assert.ok(await details.evaluate(el => el.open), 'Keep the Bayer group expanded after Back');
-  const nested = details.locator('details').first();
-  await nested.locator(':scope > summary').press('Enter');
-  await openImageAndReturn(page, nested.locator('.thumbnail-card a').first());
-  assert.ok(await nested.evaluate(el => el.open), 'Keep the mobile detail group expanded after Back');
-  await page.goto(workUrl + '#propoint');
-  for (const image of await page.locator('#propoint .project-gallery > .thumbnail-card a').all()) {
-    await openImageAndReturn(page, image);
+  assert.ok(await page.locator('#images-bayer').evaluate(el => el.open), 'Old gallery bookmarks reveal the relocated collection');
+  await page.locator('#gallery-bayer > .thumbnail-card a').press('Enter');
+  assert.match(await viewer.locator('.viewer-caption').innerText(), /^1 of 12/);
+  await page.keyboard.press('Escape');
+  await page.goto(workUrl + 'bayer-aleve/');
+  await page.locator('.study-image').nth(1).press('Enter');
+  assert.match(await viewer.locator('.viewer-caption').innerText(), /^2 of 2/);
+  await page.goBack();
+  assert.equal(page.url(), workUrl + '#gallery-bayer');
+  await page.goForward();
+  assert.equal(await page.locator('dialog[open]').count(), 0, 'Back/Forward does not revive the overlay');
+
+  await page.goto(workUrl);
+  await page.emulateMedia({reducedMotion:'reduce'});
+  assert.equal(await page.locator('.research-process').evaluate(el => getComputedStyle(el,'::after').animationName), 'none');
+  assert.ok(await page.locator('#case-studies-title').evaluate(el => !CSS.supports('view-transition-name: none') || getComputedStyle(el).viewTransitionName === 'none'));
+  await page.setViewportSize({width:320,height:812});
+  await page.addStyleTag({content:'html { font-size: 200% !important; }'});
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Directory reflows at 200% text');
+  await control.press('Enter');
+  for (const button of await viewer.getByRole('button').all()) {
+    const box = await button.boundingBox();
+    assert.ok(box.width >= 44 && box.height >= 44);
   }
-  await page.goto(workUrl + '#gallery-westinghouse');
-  await page.locator('#gallery-westinghouse summary').press('Enter');
-  await openImageAndReturn(page, page.locator('#gallery-westinghouse .thumbnail-card a'));
-  await page.goto(new URL('bayer-aleve/', workUrl).href);
-  await openImageAndReturn(page, page.locator('.study-figures a').nth(1));
-  await page.goto(workUrl + '#gallery-bayer');
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  assert.equal(await page.locator('.research-process').evaluate(el => getComputedStyle(el, '::after').animationName), 'none');
-  assert.ok(await page.locator('#case-studies-title').evaluate(el => !CSS.supports('view-transition-name: none') ||
-    getComputedStyle(el).viewTransitionName === 'none'));
-  assert.ok(await details.evaluate(el => !CSS.supports('selector(::details-content)') ||
-    getComputedStyle(el, '::details-content').transitionDuration.split(',').every(t => parseFloat(t) === 0)));
-  assert.ok(await summary.evaluate(el => getComputedStyle(el, '::before').transitionDuration.split(',').every(t => parseFloat(t) === 0)),
-    'The disclosure indicator must change immediately with reduced motion');
-  await page.setViewportSize({ width: 320, height: 812 });
-  await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
-  assert.ok(await page.locator('.benchmark-feature a, .benchmark-byline, .work-index a, .research-project a').evaluateAll(elements => elements.every(el => {
-    if (!el.getClientRects().length) return true;
-    const bounds = el.getBoundingClientRect();
-    return bounds.width > 0 && bounds.left >= 0 && bounds.right <= innerWidth;
-  })), 'The directory links and contribution should fit a 320px screen at doubled text size');
-  await summary.press('Enter');
-  const reflow = await page.evaluate(() => {
-    const pageWidth = document.documentElement.scrollWidth;
-    const offenders = [];
-    if (pageWidth > innerWidth) {
-      for (const el of document.body.querySelectorAll('*')) {
-        const box = el.getBoundingClientRect();
-        if (!box.width || (box.left >= -1 && box.right <= innerWidth + 1)) continue;
-        offenders.push({ tag: el.tagName, id: el.id, classes: el.className, left: Math.round(box.left),
-          right: Math.round(box.right), width: Math.round(box.width), text: (el.textContent || '').trim().slice(0, 65) });
-      }
-      offenders.sort((a, b) => b.right - a.right);
-    }
-    return { viewport: innerWidth, pageWidth, offenders: offenders.slice(0, 14) };
-  });
-  if (reflow.pageWidth > reflow.viewport) {
-    await captureWork(page, 'gallery-reflow-' + browser.browserType().name());
-    assert.fail('Expanded gallery overflows with 200% text in ' + browser.browserType().name() + ': ' + JSON.stringify(reflow));
-  }
+  const closeBounds = await viewer.getByRole('button',{name:'Close',exact:true}).boundingBox();
+  assert.ok(closeBounds.y >= 0 && closeBounds.y + closeBounds.height <= 812, 'Close stays visible');
+  await page.keyboard.press('Escape');
   await page.close();
-  console.log('Verified same-tab image return, nested disclosure state, keyboard focus and reduced-motion gallery behavior.');
+
+  // Native fallback retains the existing same-tab Back/focus behavior.
+  const fallback = await browser.newPage({viewport:{width:375,height:812}});
+  await fallback.addInitScript(() => { HTMLDialogElement.prototype.showModal = undefined; });
+  await fallback.goto(workUrl + '#gallery-bayer');
+  await openImageAndReturn(fallback, fallback.locator('#gallery-bayer > .thumbnail-card a'));
+  assert.ok(await fallback.locator('#images-bayer').evaluate(el => el.open));
+  await fallback.close();
+  console.log('Verified image viewer, keyboard/focus, errors, history, bookmarks, reduced motion and native fallback.');
 }
 
 async function check() {

@@ -1,5 +1,6 @@
+{% assign image_order = 0 %}{% for source_group in site.data.gallery %}{% for source_image in source_group.items %}{% if source_image.image == include.item.image %}{% assign image_order = forloop.index %}{% endif %}{% endfor %}{% endfor %}
 <figure class="thumbnail-card">
-  <a class="image-enlarge" id="original-{{ include.item.image | split: '/' | last | slugify }}" href="{{ include.item.image | relative_url }}" aria-label="Open full-size image of {{ include.item.title | escape }}">
+  <a class="image-enlarge" data-image-order="{{ image_order }}" data-image-caption="{{ include.item.caption | default: include.item.title | escape }}" id="original-{{ include.item.image | split: '/' | last | slugify }}" href="{{ include.item.image | relative_url }}" aria-label="Open full-size image of {{ include.item.title | escape }}">
     <span class="thumbnail-frame"><img src="{{ include.item.thumbnail | relative_url }}?v={{ include.item.thumbnail_version }}" alt="{{ include.item.alt | escape }}" width="{{ include.item.width }}" height="{{ include.item.height }}" loading="lazy" decoding="async"></span>
   </a>
   {% if include.item.caption %}<figcaption>{{ include.item.caption | escape }}</figcaption>{% elsif include.cover == nil %}<figcaption class="thumbnail-label">{{ include.item.title | escape }}</figcaption>{% endif %}

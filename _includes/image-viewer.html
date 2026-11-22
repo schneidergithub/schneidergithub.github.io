@@ -1,0 +1,17 @@
+<dialog class="image-viewer" aria-labelledby="image-viewer-title">
+  <header class="viewer-header">
+    <h2 id="image-viewer-title">Project images</h2>
+    <button type="button" class="viewer-close" autofocus>Close</button>
+  </header>
+  <figure class="viewer-figure">
+    <div class="viewer-stage"></div>
+    <figcaption class="viewer-caption" aria-live="polite" aria-atomic="true"></figcaption>
+  </figure>
+  <p class="viewer-error" role="status" hidden>The image could not be loaded. Try opening the original, or choose another image.</p>
+  <nav class="viewer-controls" aria-label="Image navigation">
+    <button type="button" class="viewer-previous">Previous</button>
+    <a class="viewer-original">Open original</a>
+    <button type="button" class="viewer-next">Next</button>
+  </nav>
+</dialog>
+<script src="{{ '/assets/portfolio/image-viewer.js' | relative_url }}" defer></script>

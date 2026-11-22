@@ -55,3 +55,24 @@ window.addEventListener('pageshow', (event) => {
     });
   });
 });
+
+// Old image bookmarks now lead to the collection within its project.
+function revealLinkedEvidence() {
+  let id;
+  try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+  const target = document.getElementById(id);
+  if (!target) return;
+  const collection = target.closest('.project-gallery');
+  if (!collection) return;
+  for (let parent = target; parent; parent = parent.parentElement) {
+    if (parent.tagName === 'DETAILS') parent.open = true;
+  }
+  const disclosure = collection.querySelector(':scope > details');
+  if (target === collection || target.classList.contains('legacy-anchor')) {
+    if (disclosure) disclosure.open = true;
+  }
+  requestAnimationFrame(() => target.scrollIntoView({ block: 'start', behavior: 'instant' }));
+}
+window.addEventListener('hashchange', revealLinkedEvidence);
+// Image-return restoration owns scroll position when returning from an original.
+if (!history.state?.imageReturn) revealLinkedEvidence();
