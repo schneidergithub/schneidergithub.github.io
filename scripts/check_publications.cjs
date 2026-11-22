@@ -182,6 +182,13 @@ async function checkContactCard(page, width) {
   assert.equal(await page.getByRole('link', { name: 'Subscribe on YouTube' }).count(), 0);
   const footer = page.getByRole('contentinfo');
   assert.equal((await footer.innerText()).trim(), 'Aaron Schneider');
+  const signature = footer.locator('.footer-signature');
+  const fontLoaded = await signature.evaluate(async el => {
+    const style = getComputedStyle(el);
+    const faces = await document.fonts.load(style.fontStyle + ' ' + style.fontSize + ' "Instrument Serif"', el.textContent);
+    return style.fontFamily.includes('Instrument Serif') && faces.some(face => face.status === 'loaded');
+  });
+  assert.ok(fontLoaded, 'Render the signature with its local italic font');
   const profiles = footer.getByRole('link');
   assert.equal(await profiles.count(), 2);
   for (const [label, url] of [
@@ -212,6 +219,10 @@ async function checkContactCard(page, width) {
       });
       assert.ok(fits, 'The contact row must fit at 320px with doubled text: ' + await item.innerText());
     }
+    assert.ok(await footer.evaluate(el => el.scrollWidth <= innerWidth && [...el.querySelectorAll('.footer-signature, a')].every(item => {
+      const box = item.getBoundingClientRect();
+      return box.left >= 0 && box.right <= innerWidth;
+    })), 'The footer name and social profiles must fit with doubled text');
     await larger.evaluate(el => el.remove());
   }
   if (width === 375 || width === 1280) {
@@ -227,12 +238,13 @@ async function checkContactCard(page, width) {
     for (const link of [...await links.all(), ...await profiles.all()]) {
       await page.keyboard.press('Tab');
       const isContact = await link.evaluate(el => Boolean(el.closest('#connect')));
-      assert.ok(await link.evaluate(el => {
+      const focusColor = isContact ? 'rgb(255, 213, 138)' : 'rgb(48, 37, 29)';
+      assert.ok(await link.evaluate((el, expectedOutline) => {
         const box = el.getBoundingClientRect();
         const style = getComputedStyle(el);
         return el === document.activeElement && el.matches(':focus-visible') && style.outlineStyle !== 'none' &&
-          parseFloat(style.outlineWidth) > 0 && box.width >= 44 && box.height >= 44 && style.outlineColor === 'rgb(255, 213, 138)';
-      }), 'Tab should reach the consulting contacts and then both social profiles in order');
+          parseFloat(style.outlineWidth) > 0 && box.width >= 44 && box.height >= 44 && style.outlineColor === expectedOutline;
+      }, focusColor), 'Tab should reach the consulting contacts and then both social profiles in order');
       if (isContact) {
         const clearance = await link.evaluate(el => {
           const text = document.createRange();

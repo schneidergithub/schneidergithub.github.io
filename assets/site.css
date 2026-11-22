@@ -475,16 +475,38 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
   text-decoration: underline;
   text-decoration-thickness: 1px;
 }
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("portfolio/fonts/instrument-serif-latin-italic.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+@media screen {
+  body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100svh; }
+}
 .site-footer {
+  --focus: #30251d;
+  margin-top: auto;
+  color: #191613;
+  background-color: #e6d6bf;
+  background-image: linear-gradient(112deg, #dbcaaf, #f2e6d5 41%, #e7d7c0 75%, #dcc8aa);
+  box-shadow: inset 0 1px rgb(255 255 255 / 40%);
+}
+.footer-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: .75rem 1.25rem;
-  padding-block: clamp(1rem, 3vw, 2rem);
-  border-top: 1px solid var(--line);
+  gap: .6rem clamp(.5rem, 2vw, 1.5rem);
+  padding-block: clamp(1.15rem, 2.5vw, 1.85rem);
 }
-.site-footer strong { font-size: 1.05rem; font-weight: 600; }
+.footer-signature {
+  max-width: 100%;
+  font: italic 400 clamp(2.05rem, 3.7vw, 3.3rem)/1.12 "Instrument Serif", Georgia, serif;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
 .social-links { align-items: center; gap: .375rem; }
 .social-links a {
   display: grid;
@@ -495,7 +517,7 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
   border-radius: 7px;
 }
 .social-links svg { display: block; }
-.social-links a:is(:hover, :focus-visible) { background-color: var(--panel); }
+.social-links a:is(:hover, :focus-visible) { background-color: rgb(48 37 29 / 9%); }
 .prose{max-width:780px;padding-bottom:4rem}
 .prose h2{margin-top:2rem}
 .prose pre{padding:1.2rem;background:#0F1319;border:1px solid var(--line);border-radius:4px;overflow-x:auto;font-size:.875rem;line-height:1.65}
