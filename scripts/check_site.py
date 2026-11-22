@@ -54,7 +54,7 @@ class Page(HTMLParser):
             target = a.get('src' if tag in ['img', 'script'] else 'href')
             if target: self.links.append(target)
         if tag == 'img' and not a.get('alt', '').strip(): errors.append(f'{self.path}: missing image description')
-        media_page = self.path in (SITE / 'index.html', SITE / 'articles/index.html')
+        media_page = self.path in (SITE / 'index.html', SITE / 'articles/index.html', file_for(CHESS_ESSAY))
         if tag == 'iframe':
             allowed = re.fullmatch(r'https://www\.youtube-nocookie\.com/embed/[A-Za-z0-9_-]{11}\?autoplay=1&playsinline=1', a.get('src', ''))
             if not media_page or not allowed or 'srcdoc' in a or not a.get('title'):

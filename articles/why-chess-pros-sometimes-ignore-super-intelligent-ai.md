@@ -64,6 +64,14 @@ The key takeaway isn’t just about chess. It’s about how people use technolog
 
 The best chess players know when to follow the machine, and when to go their own way. Regardless, just the analysis provides deeper insight and there's value in that alone.
 
+{% assign elo_recording = site.data.publications | where: 'id', 'elo-rating-system' | first %}
+<section class="essay-recording focus-media" aria-labelledby="elo-rating-system">
+  <h2 id="elo-rating-system">{{ elo_recording.title | escape }}</h2>
+  {% include publication-media.html publication=elo_recording %}
+</section>
+
 ## The chess benchmark presentation
 
 In our qualitative benchmark of AI-assisted software development, one generated puzzle video gave away the answer while the timer was still running. [Watch the chess benchmark presentation]({{ '/articles/' | relative_url }}#chess-benchmark-presentation).
+
+<script src="{{ '/assets/publications/video-player.js' | relative_url }}" defer></script>

@@ -116,6 +116,18 @@
     alt: "A chessboard from the local render shown in the benchmark presentation."
     width: 1280
     height: 720
+- title: "Elo rating system"
+  id: elo-rating-system
+  type: "Video"
+  publisher: "CommonDevOps on YouTube"
+  url: "https://www.youtube.com/watch?v=6ms5gkL8D9U&list=PLB4Bw8Cz9mfBLMPI9dwP9cfvF5wtfa4ks&index=13"
+  description: "Arpad Elo compared rating chess players to measuring a cork bobbing in rough water. This recording explores his chess rating system."
+  attribution: "Recorded by CommonDevOps"
+  preview:
+    src: "/assets/publications/elo-rating-system.jpg"
+    alt: "Arpad Elo’s analogy beside a floating cork and a yardstick in choppy water."
+    width: 1280
+    height: 720
 - title: "Node-IPC incident interview with creator Brandon Miller"
   id: node-ipc-interview
   case_url: "/work/node-ipc-investigation/"
