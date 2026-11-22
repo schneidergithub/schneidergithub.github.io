@@ -596,18 +596,20 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 }
 .site-footer {
   --focus: #ffe1a4;
+  container: maker-footer / inline-size;
   margin-top: auto;
   background: #242522;
   border-top: 1px solid #746650;
   color: #f1ece2;
 }
-.maker-plate, .maker-home, .maker-links {
+.maker-home, .maker-links {
   display: flex;
   align-items: center;
 }
 .maker-plate {
-  justify-content: space-between;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
   gap: 0 .5rem;
   min-height: 55px;
   padding-block: 5px;
@@ -619,7 +621,10 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
   text-decoration: none;
 }
 .maker-home {
-  gap: .6rem;
+  justify-self: start;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  gap: .5rem;
   color: inherit;
   font-size: 1rem;
   font-weight: 600;
@@ -653,12 +658,16 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
   padding: 0;
   color: #e5d8c2;
 }
-.maker-key { gap: .65rem; font-size: .9rem; }
+.maker-key { gap: .45rem; font-size: .9rem; }
 .maker-key::before { content: ""; height: 1em; border-inline-start: 1px solid #837660; }
 .maker-home:is(:hover, :focus-visible), .maker-key:is(:hover, :focus-visible) {
   color: #fff4dc; text-decoration: underline; text-underline-offset: .2em;
 }
 .maker-links a:not(.maker-key):is(:hover, :focus-visible) { background: #393a34; }
+@container maker-footer (max-width: 19rem) {
+  .maker-plate { grid-template-columns: minmax(0, 1fr); }
+  .maker-links { margin-inline-start: 0; }
+}
 .contact-card {
   --card-inset: clamp(1.25rem, 4vw, 2.75rem);
   container: contact-card / inline-size;
