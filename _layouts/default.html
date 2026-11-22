@@ -39,14 +39,15 @@
     </nav>
   </header>
   <main id="main" class="wrap" tabindex="-1">{{ content }}</main>
+  {% assign social_icons = '/assets/portfolio/social-icons.svg' | relative_url | append: '?v=2' %}
   <footer class="site-footer wrap">
     <strong>Aaron Schneider</strong>
     <nav class="social-links" aria-label="Social profiles">
       <a href="https://www.linkedin.com/in/aarondrewschneider/" aria-label="Aaron Schneider on LinkedIn">
-        <svg width="34" height="34" aria-hidden="true" focusable="false"><use href="{{ '/assets/portfolio/social-icons.svg' | relative_url }}#linkedin"></use></svg>
+        <svg width="34" height="34" aria-hidden="true" focusable="false"><use href="{{ social_icons }}#linkedin"></use></svg>
       </a>
       <a href="https://www.youtube.com/@commondevops" aria-label="CommonDevOps on YouTube">
-        <svg width="46" height="46" aria-hidden="true" focusable="false"><use href="{{ '/assets/portfolio/social-icons.svg' | relative_url }}#youtube"></use></svg>
+        <svg width="46" height="46" aria-hidden="true" focusable="false"><use href="{{ social_icons }}#youtube"></use></svg>
       </a>
     </nav>
   </footer>
