@@ -173,3 +173,11 @@
 .chess-preview .work-media-frame img { position: absolute; width: 246.154%; max-width: none; height: auto; left: -71.154%; top: -30%; }
 .work-media-credit { display: block; color: var(--muted); font-size: .875rem; }
 @media (max-width: 48rem) { .chess-preview { justify-self: start; } }
+
+/* Technical depth stays available without dominating the case introduction. */
+.technical-details { margin-block: 2rem; padding-block: .5rem; border-block: 1px solid var(--line); }
+.technical-details > summary { min-height: 44px; padding: .6rem .25rem; cursor: pointer; font-weight: 600; color: var(--accent); }
+.technical-details > summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.technical-details > div { padding-block: .5rem; }
+
+@keyframes work-draw-rule { from { transform: scaleX(.15); opacity: .35; } to { transform: scaleX(1); opacity: 1; } }

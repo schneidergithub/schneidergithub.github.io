@@ -630,3 +630,8 @@ The ProPoint entry and homepage feature lead with the software Aaron built and t
 Experience uses the Selected Work inventory. Three expandable sheets and two directly linked originals cover all 26 images. Bayer’s four mobile detail views remain grouped with their two app overviews.
 
 [Product showcase](../work/from-booking-to-checkout.md) · [Engineering essay](../articles/why-i-came-to-trust-automated-testing.md) · [Image inventory](../_data/gallery.json)
+
+
+## Selected Work usability implementation — November 22, 2026
+
+The three-sprint [implementation plan](selected-work-implementation-plan.md) is implemented: project evidence is integrated into a consistent page sequence; a project image viewer preserves reading context; and the TBS/chess cases explain the broader work before technical examples. All original image URLs and case routes remain available. The existing release workflow verifies desktop/phone journeys, keyboard and no-script behavior, and the deployed site.

@@ -5,7 +5,7 @@ link_label: "From Booking to Checkout"
 title: "From Booking to Checkout"
 context: "ProPoint Global · Guest Pass and Super Salon"
 permalink: /work/from-booking-to-checkout/
-description: "A salon visit starts on a customer’s phone and ends at the front desk. At ProPoint Global, I built software for both sides of that visit."
+description: "A salon visit starts on a customer’s phone and ends at the front desk. At ProPoint Global, I built software for both sides of that visit, from start to finish."
 gallery_group: propoint
 figure_heading: "A visit through four screens"
 ---
