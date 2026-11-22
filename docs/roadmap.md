@@ -13,7 +13,11 @@ The standing scrum team includes a UI/UX specialist, a graphic designer and prof
 - MVP release: published through PR #1; the YouTube subscription button followed in PR #2. Live domains, pages, images, and the unchanged PGP key were verified.
 - The charcoal-and-blue design and manual edits through `4b3ad29` merged in [PR #3](https://github.com/schneidergithub/schneidergithub.github.io/pull/3), including removal of education and certifications from the Experience page. [PR #4](https://github.com/schneidergithub/schneidergithub.github.io/pull/4) added versioned stylesheet and favicon URLs.
 
-## Sprint review and proposed next three sprints
+<a id="sprint-review-and-proposed-next-three-sprints"></a>
+
+## Released sprints · Contact, project evidence and publishing
+
+Three successive production releases delivered these goals. The homepage now uses Aaron’s name beside his portrait and sends team inquiries to CommonDevOps. The earlier signed-card comparison below records why the bounded card returned during the first sprint.
 
 The simulated review covered the 14 portfolio pages, including all seven case studies. Marketing and the writer followed hiring and consulting journeys. Graphic design compared release captures at 375px and 1280px. UX and engineering reviewed navigation, keyboard behavior, media and the templates that repeat across pages. The findings describe what the team could see and reproduce. Visitor conversion has not been measured.
 
@@ -52,6 +56,10 @@ The November 21 planning session committed to the following sequence. Marketing 
 **Newsletter readiness.** Four isolated Jekyll builds exercised seven actual issues plus successive test issues for November, December and January coverage. The new issue became the homepage lead, the archive count advanced on each build, and December coverage stayed with its original year after a January publication date. January coverage created the new year group. The October bookmark and its three editions stayed available. Use the actual public LinkedIn article and confirmed cover for the December release once published.
 
 At sprint review, the designer and marketing reviewer should inspect the resting page before seeing test results. QA should verify the same journey with a keyboard and enlarged text. This adds a human design decision to the existing production checks. Keep the source-dependent TDD follow-up in the editorial backlog and preserve the approved exclusion of node-ipc editorial revisions.
+
+**Sprint 3 review.** On the 375px Articles index the signed essay title fits in three lines. The bookmark is beside the byline. The essay is the second homepage publication, the incident report remains featured, and the full collection retains the maintainer interview. The essay and Bayer case both publish a distinct 1200×630 share image using their original artwork. In the final homepage card, the portrait and gold name lead into four specialties, individual consulting on LinkedIn, team consulting on the CommonDevOps website, and the YouTube channel. [Release 58](https://github.com/schneidergithub/schneidergithub.github.io/pull/58) · [Production verification](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44981816257)
+
+**Retrospective.** Review an actual phone capture alongside each user journey. It showed both how much of the Aleve screenshot a visitor could see before scrolling and how sharing the essay title’s row with a permalink cost it a line. Keep the graphic and destination reviews together for contact changes. During the series, Aaron gave the team route its own icon and website, and the release checks now verify those two details together.
 
 ## Monthly newsletter archive
 
