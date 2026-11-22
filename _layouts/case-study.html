@@ -26,8 +26,7 @@ layout: default
   </section>
   {% endif %}
   <nav class="study-ending" aria-label="After this case study">
-    <a class="button" href="https://www.linkedin.com/in/aarondrewschneider/">Aaron on LinkedIn</a>
-    <a href="https://www.linkedin.com/company/commondevops/">CommonDevOps on LinkedIn</a>
+    <a class="button" href="{{ '/' | relative_url }}#connect">Discuss a project</a>
     {% assign project = site.work | where: 'slug', page.project | first %}
     <a class="study-return" href="{{ '/work/' | relative_url }}#{{ page.project | escape }}">{{ project.organization | default: project.title | escape }} project summary</a>
   </nav>

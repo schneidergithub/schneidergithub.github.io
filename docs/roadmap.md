@@ -33,6 +33,8 @@ The recommendation concerns the homepage. Keep the compact interior footers, and
 
 ### Sprint goals
 
+The November 21 planning session committed to the following sequence. Marketing and design own the visual review. The writer checks each claim against the archive. Engineering and QA test the main visitor journey at phone and desktop widths. Release and verify each increment on the custom domain before starting the next. December newsletter readiness can be exercised with temporary issue data in a separate build. The published issue supplies the actual headline, cover and article link when available.
+
 | Order | Visitor outcome and scope | Review and acceptance |
 | --- | --- | --- |
 | 1 · Contact | Restore the signed homepage card using the layout above. On all seven case studies, the closing navigation offers Aaron’s LinkedIn and the adjacent footer immediately repeats it. Preserve a clear project-return link and provide one route to the individual and team choices on Home. | Starting from a shared case, reach the correct personal or company profile and return to that project summary. Inspect the card on desktop and phone, with keyboard focus and enlarged text. Capture the resting layout beside the signed-card baseline for visual acceptance. |
