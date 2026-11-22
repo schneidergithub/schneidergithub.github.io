@@ -4,7 +4,7 @@ layout: default
 <article class="engineering-essay" aria-labelledby="essay-title">
   <header>
     <h1 id="essay-title">{{ page.title | escape }}</h1>
-    <p class="essay-meta">By {{ page.author | escape }}</p>
+    <p class="essay-meta">By {{ page.author | escape }}{% if page.original_date %} · Originally published on LinkedIn, <time datetime="{{ page.original_date }}">{{ page.original_date | date: '%B %-d, %Y' }}</time>{% endif %}</p>
   </header>
   <div class="essay-copy">{{ content }}</div>
   <a class="essay-back" href="{{ '/articles/' | relative_url }}#engineering-essays">Engineering essays</a>
