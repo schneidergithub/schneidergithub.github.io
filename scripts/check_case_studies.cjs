@@ -257,6 +257,25 @@ async function checkImageReturns(browser, workUrl) {
   assert.ok(await control.evaluate(el => el === document.activeElement));
   assert.ok(Math.abs((await page.evaluate(() => scrollY)) - before) <= 2);
 
+  await control.press('Enter');
+  await page.setViewportSize({width:1280,height:900});
+  await page.waitForFunction(() => innerWidth === 1280 && innerHeight === 900);
+  await page.keyboard.press('Escape');
+  await viewer.waitFor({state:'hidden'});
+  // The native close event restores scroll after the dialog stops rendering.
+  try {
+    await page.waitForFunction(id => {
+      const el = document.getElementById(id);
+      const box = el.getBoundingClientRect();
+      const visibleHeight = Math.min(box.bottom, innerHeight) - Math.max(box.top, 0);
+      return document.activeElement === el && visibleHeight >= Math.min(box.height, innerHeight) - 2;
+    }, await control.getAttribute('id'), {timeout:5000});
+  } catch (error) {
+    const state = await control.evaluate(el => ({bounds:el.getBoundingClientRect().toJSON(), active:document.activeElement?.id, width:innerWidth, height:innerHeight, scrollY}));
+    throw new Error('Resize return: ' + JSON.stringify(state), {cause:error});
+  }
+  await page.setViewportSize({width:375,height:812});
+
   // Loading failure leaves the original and Close available.
   const broken = await browser.newPage({viewport:{width:375,height:812}});
   await broken.route('**/assets/portfolio/supersalon.webp', route => route.abort());
@@ -400,6 +419,13 @@ async function check() {
           assert.match(studyText, /Dr\. Ian Miller and I co-authored/);
           assert.match(studyText, /as a maintainer\. I review DevOps and infrastructure/);
           assert.match(studyText, /analysis team.*trial results/);
+          const appendix = page.locator('#checking-the-grader');
+          assert.equal(await appendix.getAttribute('open'), null, 'Grader mechanics are secondary');
+          await page.goto(workUrl + 'scientific-ai-benchmark/#checking-the-grader');
+          await page.waitForFunction(() => document.querySelector('#checking-the-grader').open);
+          assert.ok(await appendix.getByRole('link', {name:'Merged verifier',exact:true}).isVisible());
+          await appendix.locator('summary').press('Space');
+          assert.equal(await appendix.getAttribute('open'), null);
           if (width === 1280) await checkShareImage(page, 'tbs-meta-analysis.jpg');
           const dir = path.join(process.env.RUNNER_TEMP || os.tmpdir(), 'homepage-previews');
           fs.mkdirSync(dir, { recursive: true });
@@ -441,7 +467,7 @@ async function check() {
           }
         }
         if (study.path === 'chess-puzzle-qa') {
-          assert.equal(title, 'The chess puzzle that gave away the answer');
+          assert.equal(title, 'Evaluating AI-built chess puzzle videos');
           if (width === 1280) await checkShareImage(page, 'chess-puzzle-benchmark.jpg');
           assert.match(await page.locator('.case-study').innerText(), /qualitative benchmark/i);
           const copy = page.locator('.study-copy');
@@ -476,7 +502,7 @@ async function check() {
         assert.ok(await imageLinks.evaluateAll(links => links.every(a => a.classList.contains('image-enlarge') &&
           (!a.target || a.target === '_self') && a.getAttribute('aria-label')?.trim())), 'Each case figure has one named enlargement link');
         for (const image of await images.all()) {
-          await image.scrollIntoViewIfNeeded();
+          await image.evaluate(img => img.scrollIntoView({block: 'center', behavior: 'instant'}));
           await image.evaluate(img => img.decode());
         }
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Horizontal overflow on ' + page.url());

@@ -62,6 +62,12 @@ function revealLinkedEvidence() {
   try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
   const target = document.getElementById(id);
   if (!target) return;
+  const appendix = target.closest('details.technical-details');
+  if (appendix) {
+    appendix.open = true;
+    requestAnimationFrame(() => appendix.querySelector('summary').focus());
+    return;
+  }
   const collection = target.closest('.project-gallery');
   if (!collection) return;
   for (let parent = target; parent; parent = parent.parentElement) {

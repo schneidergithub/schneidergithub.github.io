@@ -1,6 +1,6 @@
 # Selected Work implementation plan
 
-**Status:** Approved for implementation; Sprint 1 in progress.  
+**Status:** All three sprints implemented. Release checks and visual review are recorded below.
 **Prepared:** November 22, 2026.  
 **Baseline:** Production release #80, commit `fc5c318d28fabb5371f0e45ed4c522cd96f23f6a`.  
 **Evidence:** A simulated walkthrough of the live page at 1280×720 and 375×812, followed by inspection of the current templates and checks. No real participant study or conversion measurement has been performed.
@@ -133,3 +133,22 @@ Use these tasks for a future small study with actual readers as well. Record com
 Release Sprint 1 before building the viewer against the new markup. Release Sprint 2 before the final combined journey review. Content drafting for Sprint 3 can begin after the Sprint 1 structure is settled. Keep each sprint in a separate pull request with its own preview, targeted validation and production verification; do not accumulate all three into a single unreviewable change.
 
 The MVP is complete when every finding above has a verified resolution, the approved content and all original assets remain available, desktop and phone visual reviews pass, and the deployed journeys match the reviewed implementation. A real participant study remains separate follow-up validation.
+
+
+## Implementation and release review — November 22, 2026
+
+- **Sprint 1 — PR #81:** independent project rows, integrated collections, consistent titles/actions, the Westinghouse engagement overview, corrected homepage entry, and localized focus. The standalone Gallery section and duplicate introductions are removed. Chromium/WebKit PR checks passed, GitHub Pages deployed, and the live page was inspected.
+- **Sprint 2 — PR #82:** a native image dialog for the directory and case images, project-scoped navigation, captions/counts, keyboard/focus handling, error recovery, native fallbacks, and relocated bookmarks. The report preview opens the published report; the chess preview opens the presentation and clearly labels its cropped board detail.
+- **Sprint 3:** the scientific case leads with the research task, co-authorship and ongoing contributions. Grader details move to a native disclosure that opens from the preserved bookmark. The chess case leads with the benchmark deliverable and review criteria. ProPoint explicitly states start-to-finish software delivery; Westinghouse’s broader QA scope is consistent across the changed content.
+
+### Verification record
+
+The release workflow builds Jekyll, checks 17 routes and their links/metadata/assets, exercises the directory and eight cases in Chromium, and checks gallery/viewer behavior in WebKit. It verifies all 26 original gallery images, Experience compatibility, no-script access, native image/Back fallback, modal focus, first/last images, failed image loading, Back/Forward, legacy bookmarks, reduced motion, and narrow 320px reflow with doubled text. Publication checks cover the affected homepage entry and shared destinations. The push workflow repeats the journeys against production.
+
+Visual review used 1280px desktop and 375px phone layouts, including the hero, primary project rows, media previews, image dialog, and revised case introductions. The booking preview now has usable phone width; the Westinghouse visual communicates project/team scale and disciplines; chess is framed around the board while its full original remains available. The compact footer and colored social icons remain intact.
+
+The first phone layout measured approximately 6,180px collapsed against the earlier approximately 5,850px baseline: readable previews and the engagement overview take space. Removing repetition improved the structure; a shorter total page was not treated as proof of usability. The final revision also removes a redundant Westinghouse performance paragraph.
+
+A repeated CI run exposed a thumbnail-scroll stability timeout in the no-script image-decoding check. That check now scrolls the image directly before decoding it; gallery controls and focus continue to use actual keyboard interactions. Versioned gallery scripts prevent returning visitors from retaining obsolete bookmark behavior. A manual resize check also found an offscreen return target; the viewer now brings its trigger into the resized viewport when closed, with a regression check in both browser suites.
+
+This is an implementation review and simulated reader walkthrough, not a participant study. Real-reader comprehension, hesitation, and conversion remain unmeasured. No new claims of benchmark performance or measured user success were introduced.

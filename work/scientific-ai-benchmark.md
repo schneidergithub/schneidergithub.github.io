@@ -7,7 +7,7 @@ work_return_label: Terminal-Bench-Science feature
 contribution_url: https://github.com/harbor-framework/terminal-bench-science/pull/1513
 permalink: /work/scientific-ai-benchmark/
 title: "Can AI reproduce a meta-analysis?"
-link_label: "Scientific benchmark QA"
+link_label: "Scientific AI benchmark"
 context: "CommonDevOps · Scientific AI benchmarking"
 description: "Dr. Ian Miller and I co-authored “MDD Executive Function” for Terminal-Bench-Science. The task asks an AI agent to reconstruct effect sizes from published studies of executive function in major depressive disorder."
 share_image: /assets/portfolio/share/tbs-meta-analysis.jpg
@@ -17,6 +17,8 @@ share_alt: "Terminal-Bench-Science case study. MDD Executive Function, a meta-an
 [View the merged research task on GitHub]({{ page.contribution_url }}).
 
 ## My contribution to the benchmark
+
+I co-authored the task with Dr. Ian Miller, working through the source studies, comparison rules, and expected results. Version 1 and its associated research paper will include “MDD Executive Function.”
 
 After Terminal-Bench-Science merged our task, I continued working on the benchmark as a maintainer. I review DevOps and infrastructure changes and work with the analysis team to process trial results.
 
@@ -28,9 +30,15 @@ A meta-analysis brings results from multiple studies onto a common scale. This t
 2. Extract the group statistics reported for each eligible comparison.
 3. Calculate the effect size using the Hedges correction for small samples.
 
-An agent can get the arithmetic right for a comparison that answers the wrong question.
+The challenge combines reading scientific literature, selecting comparable outcomes, and calculating reproducible results. Correct arithmetic alone does not establish that a comparison answers the research question.
 
-<h2 id="checking-the-grader" tabindex="-1">Who checks the benchmark grader?</h2>
+## Explore the task and working sessions
+
+The repository contains the task instructions and implementation. The [benchmark presentation]({{ '/articles/' | relative_url }}#benchmark-presentation) introduces the work; the recordings below show specific authoring decisions.
+
+<details class="technical-details" id="checking-the-grader">
+<summary>Technical appendix: checking the benchmark grader</summary>
+<div markdown="1">
 
 Dr. Miller and I worked through three questions in October. Was the reference number right? Did that comparison belong in the answer? Could the agent tell from the instructions?
 
@@ -40,4 +48,7 @@ Dr. Miller and I worked through three questions in October. Was the reference nu
 
 The merged grader reads two CSV tables derived from the key. Each required comparison needs its own submitted row. The second table defines additional admissible comparisons. A submitted row that matches neither table fails. The parser skips a completely blank line and flags a row with empty fields. [Merged verifier](https://github.com/harbor-framework/terminal-bench-science/blob/0c9b52723f35d39505b57e349c403dc9bdc66e46/tasks/life-sciences/neuroscience/mdd-executive-function/tests/test_outputs.py#L2-L103).
 
-[Case overview](#case-title) · [Benchmark recording]({{ '/articles/' | relative_url }}#benchmark-presentation).
+[Case overview](#case-title).
+
+</div>
+</details>

@@ -1,27 +1,37 @@
 ---
 layout: case-study
+work_design: true
 project: commondevops
 work_return_id: chess-benchmarks
 work_return_label: Chess benchmarks section
 link_label: "Qualitative chess benchmark"
 permalink: /work/chess-puzzle-qa/
 share_image: /assets/portfolio/share/chess-puzzle-benchmark.jpg
-share_alt: "A chess puzzle that reveals too much. Qualitative benchmark by Aaron Schneider, with a chessboard from the generated puzzle video."
-title: "The chess puzzle that gave away the answer"
+share_alt: "Qualitative chess video benchmark by Aaron Schneider, illustrated with a board frame from the generated puzzle video."
+title: "Evaluating AI-built chess puzzle videos"
 context: "CommonDevOps · QA automation"
-description: "We used a chess puzzle video project as a qualitative benchmark of AI-assisted software development. One of the videos I reviewed gave away the solution while the puzzle timer was still running."
+description: "We used a chess puzzle video project as a qualitative benchmark of AI-assisted software development. I reviewed the generated videos against the requested deliverable and the experience of someone trying to solve the puzzle."
 figures:
   - image: /assets/publications/chess-render.jpg
     width: 1280
     height: 720
     alt: "A position from the local chess puzzle video, with highlighted squares and coordinates around the board."
-    caption: "This frame preserves a board position from a local render. I watched the countdown to check when a viewer could see the answer."
+    caption: "A board frame from the Claude Opus 4.6 demonstration. The presentation reviews the complete video, including orientation, move cues, and the timing of the solution reveal."
 ---
 
-## What a playable video can miss
-{: #what-a-playable-video-can-miss tabindex="-1"}
+[Watch the benchmark presentation]({{ '/articles/' | relative_url }}#chess-benchmark-presentation).
 
-Our first milestone called for a local video of the daily Lichess puzzle. The [milestone checklist on GitHub](https://github.com/commondevops/llm-chess-experiment/blob/8d660666fc25a99a8846a2867089f8cfe6381f63/milestone1_local_recreation_instructions.md) covered the data, board frames, and playable MP4. It even specified that the pieces should sit in the middle of their squares. In a companion essay, I explain [why I’d separate rendering from publishing]({{ '/articles/fresh-sandbox-github/' | relative_url }}#publishing-the-video).
+## The benchmark deliverable
+
+AI coding tools were asked to turn a daily Lichess puzzle into a playable local video. This made the output directly inspectable: we could watch the result and compare it with the requested behavior.
+
+The [milestone checklist on GitHub](https://github.com/commondevops/llm-chess-experiment/blob/8d660666fc25a99a8846a2867089f8cfe6381f63/milestone1_local_recreation_instructions.md) covered the data, board frames, and playable MP4. It even specified that the pieces should sit in the middle of their squares. In a companion essay, I explain [why I’d separate rendering from publishing]({{ '/articles/fresh-sandbox-github/' | relative_url }}#publishing-the-video).
+
+## My review: from working software to a usable puzzle
+
+I reviewed whether the video communicated the puzzle clearly: the board perspective, the move highlights, and when the answer appeared. These are qualitative observations from the demonstrated outputs, not a numerical ranking of the tools.
+
+<h2 id="what-a-playable-video-can-miss" tabindex="-1">What a playable video can miss</h2>
 
 The [presentation on the benchmark]({{ '/articles/' | relative_url }}#chess-benchmark-presentation) shows one version with Black to move and White’s pieces at the bottom of the screen. The viewer had to solve the puzzle from the opponent’s seat. [Board orientation, 6:34](https://www.youtube.com/watch?v=IXzLwNlLAI4&t=394s).
 

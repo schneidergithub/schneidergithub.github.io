@@ -61,5 +61,5 @@ permalink: /experience/
 </article>
 {% endfor %}
 </div>
-<script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}?v=2" defer></script>
+<script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}?v=3" defer></script>
 <script src="{{ '/assets/publications/video-player.js' | relative_url }}" defer></script>

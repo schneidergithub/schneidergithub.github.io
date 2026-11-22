@@ -3,7 +3,6 @@ index_order: 2
 index_feature: metric
 index_case: /work/westinghouse-performance/
 index_title: Leading QA across 13 projects
-index_metric_note: Two weeks before launch, my load tests exposed internal server errors. I reconfigured the cloud services and tuned Elasticsearch to resolve the errors and improve search throughput.
 order: 4
 slug: "westinghouse"
 organization: "Westinghouse"

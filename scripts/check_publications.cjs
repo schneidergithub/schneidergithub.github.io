@@ -524,14 +524,22 @@ async function checkGraderGuide(page, directEntry = false) {
     assert.equal(await entry.getAttribute('href'), graderGuide);
     await Promise.all([page.waitForURL(url), entry.press('Enter')]);
   }
-  const heading = page.locator('.study-copy h2:target');
+  const appendix = page.locator('.study-copy details:target');
+  assert.equal(await appendix.getAttribute('id'), 'checking-the-grader');
+  const heading = appendix.locator('summary');
   await heading.waitFor({ state: 'visible', timeout: 5000 });
-  assert.equal(await heading.getAttribute('id'), 'checking-the-grader');
+  if (directEntry) {
+    assert.equal(await appendix.getAttribute('open'), null);
+    await heading.press('Enter');
+  } else {
+    await page.waitForFunction(() => document.querySelector('#checking-the-grader').open &&
+      document.activeElement === document.querySelector('#checking-the-grader > summary'));
+  }
   const target = await heading.evaluate(el => {
     const box = el.getBoundingClientRect();
     return { focused: document.activeElement === el, inViewport: box.top >= -1 && box.bottom <= innerHeight };
   });
-  assert.ok(target.focused && target.inViewport, 'The guide link must land on its visible, focused heading');
+  assert.ok(target.focused && target.inViewport, 'The guide link must reach the visible, focused disclosure control');
 
   const sources = page.locator('.study-copy a[href^="https://www.youtube.com/watch?"]');
   assert.equal(await sources.count(), 3);
@@ -543,7 +551,7 @@ async function checkGraderGuide(page, directEntry = false) {
     const sourceUrl = new URL(await link.getAttribute('href'));
     assert.equal(sourceUrl.searchParams.get('v'), id);
     assert.equal(sourceUrl.searchParams.get('t'), seconds + 's');
-    assert.ok(await link.evaluate(el => Boolean(document.querySelector('h2:target').compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)),
+    assert.ok(await link.evaluate(el => Boolean(document.querySelector('#checking-the-grader > summary').compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)),
       'Timestamp should appear in the guide after its heading');
   }
   const mergedTask = page.locator('.study-copy a[href="https://github.com/harbor-framework/terminal-bench-science/pull/1513"]');
@@ -558,7 +566,7 @@ async function checkGraderGuide(page, directEntry = false) {
   assert.equal(await overview.getAttribute('href'), '#case-title');
   await overview.press('Enter');
   assert.ok(await page.locator('h1#case-title:target').evaluate(el => el === document.activeElement));
-  const back = page.locator('.case-study').getByRole('link', { name: 'Benchmark recording', exact: true });
+  const back = page.locator('.case-study').getByRole('link', { name: 'benchmark presentation', exact: true });
   assert.equal(await back.getAttribute('href'), presentation);
   await Promise.all([page.waitForURL(new URL(presentation, origin).href), back.press('Enter')]);
   assert.ok(await page.locator('#benchmark-presentation:target summary').isVisible());

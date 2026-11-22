@@ -49,8 +49,23 @@
   function finish(restore = true) {
     document.documentElement.classList.remove('image-viewer-open');
     if (restore && trigger?.isConnected) {
-      trigger.focus({ preventScroll: true });
-      window.scrollTo({ left: pagePosition.x, top: pagePosition.y, behavior: 'instant' });
+      const opener = trigger;
+      const saved = pagePosition;
+      const restorePosition = () => {
+        if (dialog.open || trigger !== opener || !opener.isConnected) return;
+        opener.focus({ preventScroll: true });
+        if (innerWidth !== saved.width || innerHeight !== saved.height) {
+          opener.scrollIntoView({ block: 'center', behavior: 'instant' });
+        } else {
+          window.scrollTo({ left: saved.x, top: saved.y, behavior: 'instant' });
+        }
+      };
+      restorePosition();
+      // WebKit can finish viewport layout and native focus scrolling after close.
+      requestAnimationFrame(() => {
+        restorePosition();
+        requestAnimationFrame(restorePosition);
+      });
     }
   }
 
@@ -63,7 +78,7 @@
     // The real href remains available for unsupported browsers and modified clicks.
     event.preventDefault();
     trigger = link;
-    pagePosition = { x: scrollX, y: scrollY };
+    pagePosition = { x: scrollX, y: scrollY, width: innerWidth, height: innerHeight };
     images = [...group.querySelectorAll('a.image-enlarge')].sort((a, b) =>
       Number(a.dataset.imageOrder) - Number(b.dataset.imageOrder));
     title.textContent = group.dataset.imageTitle || 'Project images';
