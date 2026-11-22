@@ -20,24 +20,26 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="{{ share_image | absolute_url | escape }}">
   <meta name="twitter:image:alt" content="{{ share_alt | escape }}">
-  <meta name="theme-color" content="#14181F">
+  <meta name="theme-color" content="#f7f3e9">
   <link rel="icon" href="{{ '/assets/favicon.svg' | relative_url }}?v={{ site.time | date: '%s' }}" type="image/svg+xml">
   <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   <script src="{{ '/assets/navigation.js' | relative_url }}?v=2" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header wrap">
-    <a class="brand" href="{{ '/' | relative_url }}" aria-label="Aaron Schneider, home"><span class="brand-mark" aria-hidden="true">AS</span><span>Aaron Schneider</span></a>
-    <button class="site-menu-toggle" type="button" aria-controls="primary-navigation" aria-expanded="false" hidden>Menu<span class="menu-glyph" aria-hidden="true"></span></button>
-    <nav id="primary-navigation" aria-label="Main navigation">
-      {% assign nav_labels = 'Home|Experience|Selected Work|Articles & Demos' | split: '|' %}
-      {% assign nav_paths = '/|/experience/|/work/|/articles/' | split: '|' %}
-      {% for label in nav_labels %}{% assign path = nav_paths[forloop.index0] %}
-      <a href="{{ path | relative_url }}"{% if page.url == path %} aria-current="page"{% elsif page.layout == 'case-study' and path == '/work/' %} aria-current="location"{% elsif page.layout == 'essay' and path == '/articles/' %} aria-current="location"{% endif %}>{{ label }}</a>
-      {% endfor %}
-    </nav>
-  </header>
+  <div class="masthead-paper">
+    <header class="site-header wrap">
+      <a class="brand" href="{{ '/' | relative_url }}" aria-label="Aaron Schneider, home">Aaron Schneider<span aria-hidden="true">.</span></a>
+      <button class="site-menu-toggle" type="button" aria-controls="primary-navigation" aria-expanded="false" hidden>Menu<span class="menu-glyph" aria-hidden="true"></span></button>
+      <nav id="primary-navigation" aria-label="Main navigation">
+        {% assign nav_labels = 'Home|Experience|Selected Work|Articles & Demos' | split: '|' %}
+        {% assign nav_paths = '/|/experience/|/work/|/articles/' | split: '|' %}
+        {% for label in nav_labels %}{% assign path = nav_paths[forloop.index0] %}
+        <a href="{{ path | relative_url }}"{% if page.url == path %} aria-current="page"{% elsif page.layout == 'case-study' and path == '/work/' %} aria-current="location"{% elsif page.layout == 'essay' and path == '/articles/' %} aria-current="location"{% endif %}>{{ label }}</a>
+        {% endfor %}
+      </nav>
+    </header>
+  </div>
   <main id="main" class="wrap" tabindex="-1">{{ content }}</main>
   {% assign social_icons = '/assets/portfolio/social-icons.svg' | relative_url | append: '?v=2' %}
   <footer class="site-footer{% if page.contact_footer %} consulting-footer{% endif %}" id="footer">
