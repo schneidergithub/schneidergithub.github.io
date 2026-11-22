@@ -40,13 +40,14 @@
   </header>
   <main id="main" class="wrap" tabindex="-1">{{ content }}</main>
   <footer class="site-footer wrap">
-    <div><strong>Aaron Schneider</strong><p>Software engineering · DevSecOps · Automation</p></div>
-    <nav aria-label="Footer navigation">
-      {% if page.url != '/' and page.layout != 'case-study' %}
-      <a href="https://www.linkedin.com/in/aarondrewschneider/">Connect on LinkedIn <span aria-hidden="true">↗</span></a>
-      <a href="https://www.linkedin.com/company/commondevops/">CommonDevOps <span aria-hidden="true">↗</span></a>
-      {% endif %}
-      <a href="{{ '/pgp/' | relative_url }}">Public PGP key</a>
+    <strong>Aaron Schneider</strong>
+    <nav class="social-links" aria-label="Social profiles">
+      <a href="https://www.linkedin.com/in/aarondrewschneider/" aria-label="Aaron Schneider on LinkedIn">
+        <svg width="34" height="34" aria-hidden="true" focusable="false"><use href="{{ '/assets/portfolio/social-icons.svg' | relative_url }}#linkedin"></use></svg>
+      </a>
+      <a href="https://www.youtube.com/@commondevops" aria-label="CommonDevOps on YouTube">
+        <svg width="46" height="46" aria-hidden="true" focusable="false"><use href="{{ '/assets/portfolio/social-icons.svg' | relative_url }}#youtube"></use></svg>
+      </a>
     </nav>
   </footer>
 </body>
