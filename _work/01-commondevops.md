@@ -9,4 +9,4 @@ publication:
   id: benchmark-presentation
   label: Benchmark presentation
 ---
-I co-authored a scientific benchmark task with Dr. Ian Miller, examined domain registration and DNS records for the node-ipc investigation, and found a generated chess video that revealed its solution too soon.
+I co-authored a Terminal-Bench-Science task with Dr. Ian Miller. I reviewed chess puzzle videos for our qualitative benchmark of AI-assisted software development. I also led the node-ipc investigation and was the primary author of its post-incident report.

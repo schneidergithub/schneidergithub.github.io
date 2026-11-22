@@ -19,6 +19,7 @@ STUDIES = ['/work/super-salon-checkout/', '/work/indiana-case-archives/', '/work
            '/work/chess-puzzle-qa/']
 SHARE_CARDS = {
     ESSAY: 'fresh-sandbox-github',
+    '/work/chess-puzzle-qa/': 'chess-puzzle-benchmark',
     '/work/bayer-aleve/': 'bayer-aleve',
     '/work/westinghouse-performance/': 'westinghouse-performance',
     '/work/scientific-ai-benchmark/': 'tbs-meta-analysis',

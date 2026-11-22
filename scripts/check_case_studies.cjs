@@ -12,7 +12,7 @@ const studies = [
   { card: 'westinghouse', path: 'westinghouse-performance', label: 'Westinghouse search performance', images: 0 },
   { card: 'commondevops', path: 'scientific-ai-benchmark', label: 'Scientific benchmark QA', images: 0 },
   { card: 'commondevops', path: 'node-ipc-investigation', label: 'node-ipc investigation', images: 0 },
-  { card: 'commondevops', path: 'chess-puzzle-qa', label: 'Chess puzzle QA', images: 0 }
+  { card: 'commondevops', path: 'chess-puzzle-qa', label: 'Chess video benchmark', images: 1 }
 ];
 const projectNames = {
   propoint: 'ProPoint Global', indiana: 'Indiana State Department', bayer: 'Bayer',
@@ -438,6 +438,8 @@ async function check() {
         }
         if (study.path === 'chess-puzzle-qa') {
           assert.equal(title, 'The chess puzzle that gave away the answer');
+          if (width === 1280) await checkShareImage(page, 'chess-puzzle-benchmark.jpg');
+          assert.match(await page.locator('.case-study').innerText(), /qualitative benchmark/i);
           const copy = page.locator('.study-copy');
           const pinned = 'https://github.com/commondevops/llm-chess-experiment/blob/8d660666fc25a99a8846a2867089f8cfe6381f63/milestone1_local_recreation_instructions.md';
           assert.ok(await copy.locator('a[href="' + pinned + '"]').isVisible());
@@ -445,6 +447,12 @@ async function check() {
             const source = copy.locator('a[href="https://www.youtube.com/watch?v=IXzLwNlLAI4&t=' + seconds + 's"]');
             assert.ok((await source.innerText()).includes(timestamp), 'Expose the chess recording timestamp');
           }
+          const essayPassage = '/articles/fresh-sandbox-github/#publishing-the-video';
+          await copy.locator('a[href="' + essayPassage + '"]').press('Enter');
+          assert.equal(page.url(), new URL(essayPassage, workUrl).href);
+          assert.ok(await page.locator(':target').evaluate(el => el === document.activeElement), 'Land at the essay passage');
+          await page.locator('.essay-copy a[href="/work/chess-puzzle-qa/#what-a-playable-video-can-miss"]').press('Enter');
+          assert.ok(await copy.locator('h2:target').evaluate(el => el === document.activeElement), 'Return to the benchmark observations');
           const proposal = copy.getByRole('heading', { name: 'How I would test the reveal' });
           assert.ok(await proposal.isVisible(), 'Introduce the frame checks as proposed tests');
           assert.match(await copy.innerText(), /proposed regression tests/i);

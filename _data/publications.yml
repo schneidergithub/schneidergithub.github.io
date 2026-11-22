@@ -41,7 +41,7 @@
   type: "Engineering essay"
   publisher: "Aaron Schneider"
   url: "/articles/fresh-sandbox-github/"
-  description: "A pull-request comment can change what the next reviewer sees. A chess-video milestone shows how to keep publication a separate decision."
+  description: "A pull-request comment can change what the next reviewer sees. A qualitative chess-video benchmark shows why publishing the result needs a separate decision."
   attribution: "By Aaron Schneider"
   preview:
     src: "/assets/publications/chess-render.jpg"
@@ -86,6 +86,19 @@
       url: "https://www.aaronschneider.org/common-devops-reports/reports/2026-09/"
   description: "A September roundup examining model releases, agent behavior, cybersecurity disclosures, and lessons from CommonDevOps research."
   attribution: "CommonDevOps · Aaron S., Ian Miller, and Javier Bonilla"
+- title: "Building a chess puzzle video with AI"
+  id: chess-benchmark-presentation
+  type: "Video"
+  publisher: "CommonDevOps on YouTube"
+  url: "https://www.youtube.com/watch?v=IXzLwNlLAI4"
+  description: "In this presentation on our qualitative benchmark, I review the chess videos AI tools helped build. Board orientation and the timing of the solution reveal changed whether a viewer could solve the puzzle."
+  attribution: "Presented by Aaron Schneider for CommonDevOps"
+  case_url: "/work/chess-puzzle-qa/"
+  preview:
+    src: "/assets/publications/chess-render.jpg"
+    alt: "A chessboard from the local render shown in the benchmark presentation."
+    width: 1280
+    height: 720
 - title: "Node-IPC incident interview with creator Brandon Miller"
   id: node-ipc-interview
   case_url: "/work/node-ipc-investigation/"
