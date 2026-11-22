@@ -566,7 +566,7 @@ async function checkGraderGuide(page, directEntry = false) {
   assert.equal(await overview.getAttribute('href'), '#case-title');
   await overview.press('Enter');
   assert.ok(await page.locator('h1#case-title:target').evaluate(el => el === document.activeElement));
-  const back = page.locator('.case-study').getByRole('link', { name: 'Benchmark recording', exact: true });
+  const back = page.locator('.case-study').getByRole('link', { name: 'benchmark presentation', exact: true });
   assert.equal(await back.getAttribute('href'), presentation);
   await Promise.all([page.waitForURL(new URL(presentation, origin).href), back.press('Enter')]);
   assert.ok(await page.locator('#benchmark-presentation:target summary').isVisible());
