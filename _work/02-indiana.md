@@ -1,4 +1,7 @@
 ---
+index_order: 4
+index_case: /work/indiana-case-archives/
+index_title: Archiving case files across 92 Indiana counties
 order: 2
 slug: "indiana"
 organization: "Indiana State Department"

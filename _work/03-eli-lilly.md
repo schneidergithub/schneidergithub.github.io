@@ -1,4 +1,5 @@
 ---
+index_order: 6
 order: 3
 slug: "eli-lilly"
 featured: false

@@ -34,20 +34,24 @@ window.addEventListener('pageshow', (event) => {
     return;
   }
 
+  // Restore expanded content immediately so its thumbnail can receive focus.
+  const gallery = link.closest('.portfolio-gallery');
+  if (gallery) gallery.classList.add('restoring-image');
   for (const group of document.querySelectorAll(galleryDisclosures)) {
     group.open = saved.openGroups.includes(group.id);
   }
   // WebKit may still scroll to the URL fragment after the first layout.
   // Keep the image in its former position across that paint.
   requestAnimationFrame(() => {
-    link.focus({ preventScroll: true });
     const restorePosition = () => {
+      link.focus({ preventScroll: true });
       window.scrollBy({ top: link.getBoundingClientRect().top - saved.top, behavior: 'instant' });
     };
     restorePosition();
     requestAnimationFrame(() => {
       restorePosition();
       history.scrollRestoration = saved.scrollRestoration || 'auto';
+      if (gallery) gallery.classList.remove('restoring-image');
     });
   });
 });

@@ -8,7 +8,6 @@ share_alt: "Bayer’s Aleve website, a case study by Aaron Schneider, lead devel
 title: "Bayer’s Aleve website"
 context: "Bayer · Ciber engagement"
 description: "At Ciber, I was the lead software developer for Aleve.com."
-directory_feature: "At Ciber, I led development of Aleve.com."
 figures:
   - image: /assets/portfolio/portfolio-aleve.webp
     width: 400

@@ -1,4 +1,9 @@
 ---
+index_order: 1
+index_feature: product
+index_case: /work/from-booking-to-checkout/
+index_title: From booking to checkout
+index_gallery_label: Guest Pass and Super Salon screens
 order: 5
 slug: "propoint"
 organization: "ProPoint Global"

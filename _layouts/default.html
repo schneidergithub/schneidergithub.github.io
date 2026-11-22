@@ -23,6 +23,7 @@
   <meta name="theme-color" content="#f7f3e9">
   <link rel="icon" href="{{ '/assets/favicon.svg' | relative_url }}?v={{ site.time | date: '%s' }}" type="image/svg+xml">
   <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+  {% if page.work_design %}<link rel="stylesheet" href="{{ '/assets/portfolio/selected-work.css' | relative_url }}?v={{ site.time | date: '%s' }}">{% endif %}
   <script src="{{ '/assets/navigation.js' | relative_url }}?v=2" defer></script>
 </head>
 <body>
