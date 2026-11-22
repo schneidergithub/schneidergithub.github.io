@@ -1,0 +1,11 @@
+---
+layout: default
+---
+<article class="engineering-essay" aria-labelledby="essay-title">
+  <header>
+    <h1 id="essay-title">{{ page.title | escape }}</h1>
+    <p class="essay-meta">By {{ page.author | escape }}</p>
+  </header>
+  <div class="essay-copy">{{ content }}</div>
+  <a class="essay-back" href="{{ '/articles/' | relative_url }}#engineering-essays">Engineering essays</a>
+</article>

@@ -6,6 +6,9 @@ groups:
   - id: recordings
     label: Recordings
     type: Video
+  - id: engineering-essays
+    label: Engineering essays
+    type: Engineering essay
   - id: monthly-reviews
     label: Monthly reviews
     type: Article
@@ -31,14 +34,17 @@ groups:
 {% for item in members %}
   {% assign featured = false %}
   {% if group.id == 'recordings' and forloop.first %}{% assign featured = true %}{% endif %}
+  {% assign source_url = item.url %}
+  {% assign first_character = source_url | slice: 0, 1 %}
+  {% if first_character == '/' %}{% assign source_url = item.url | relative_url %}{% endif %}
   {% capture display_title %}<span class="publication-title">{{ item.title | escape | replace: 'meta-analysis', '<span class="keep-term">meta-analysis</span>' }}</span>{% endcapture %}
   <li class="publication{% if featured %} publication-featured{% endif %}" id="{{ item.id | escape }}" tabindex="-1">
     <div class="publication-heading">
-      <h3>{% if item.type == 'Video' %}{{ display_title }}{% else %}<a href="{{ item.url | escape }}">{{ display_title }} {% if item.primary_edition %}<span class="edition-source">{{ item.primary_edition | escape }}</span>{% else %}<span aria-hidden="true">↗</span>{% endif %}</a>{% endif %}</h3>
+      <h3>{% if item.type == 'Video' %}{{ display_title }}{% else %}<a href="{{ source_url | escape }}">{{ display_title }}{% if item.primary_edition %} <span class="edition-source">{{ item.primary_edition | escape }}</span>{% elsif first_character != '/' %} <span aria-hidden="true">↗</span>{% endif %}</a>{% endif %}</h3>
       <a class="entry-permalink" href="#{{ item.id | escape }}" aria-label="Link to {{ item.title | escape }}" title="Link to this entry"></a>
     </div>
     <div class="meta">
-      {% include publication-media.html publication=item link_cover=true eager=featured %}
+      {% include publication-media.html publication=item link_cover=true cover_url=source_url eager=featured %}
     </div>
     <div class="publication-copy">
       {% if item.period or item.date %}<p class="publication-date">{% if item.period %}{{ item.period | escape }} issue{% endif %}{% if item.period and item.date %} · {% endif %}{% if item.date %}Published <time datetime="{{ item.date }}">{{ item.date | date: '%B %-d, %Y' }}</time>{% endif %}</p>{% endif %}

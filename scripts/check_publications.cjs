@@ -11,6 +11,7 @@ const ids = ['e26_SSPpOP0', 'TZ04u6cj1ls', 'i0a7tXSLj3c'];
 const reviewWidths = [375, 768, 1280];
 const publicationGroups = {
   recordings: ['benchmark-presentation', 'node-ipc-interview', 'security-livestream'],
+  'engineering-essays': ['fresh-sandbox-github'],
   'monthly-reviews': ['october-review', 'september-review', 'august-review', 'july-review'],
   investigations: ['node-ipc-report']
 };
@@ -415,6 +416,60 @@ async function checkGraderGuide(page, directEntry = false) {
   assert.ok(await page.locator('#benchmark-presentation:target summary').isVisible());
 }
 
+async function checkEssay(page, { capture = false, directEntry = false } = {}) {
+  const title = 'What a fresh sandbox inherits from GitHub';
+  const essayPath = '/articles/fresh-sandbox-github/';
+  const directory = page.locator('.publication-group[aria-labelledby="engineering-essays"]');
+  const entry = directory.locator('#fresh-sandbox-github');
+  assert.equal((await entry.locator('.attribution').innerText()).trim(), 'By Aaron Schneider');
+  const coverLink = entry.locator('a.collection-cover');
+  const cover = coverLink.locator('img');
+  await decodeCover(cover);
+  assert.equal(await coverLink.getAttribute('href'), essayPath);
+  assert.ok(await cover.evaluate(img => new URL(img.currentSrc).pathname === '/assets/publications/chess-render.jpg' &&
+    img.naturalWidth === 1280 && img.naturalHeight === 720 && /chess|board/i.test(img.alt)));
+  const frame = await coverLink.boundingBox();
+  assert.ok(frame.width > 0 && Math.abs(frame.width - frame.height) <= 2, 'The chessboard thumbnail should have a square frame');
+  if (capture) await captureSection(page, directory, 'engineering-essays-entry');
+  const link = entry.locator('h3').getByRole('link', { name: title, exact: true });
+  assert.equal(await link.getAttribute('href'), essayPath);
+  await Promise.all([page.waitForURL(new URL(essayPath, origin).href), link.press('Enter')]);
+  if (directEntry) await page.reload();
+  const article = page.locator('.engineering-essay');
+  assert.equal(await article.getByRole('heading', { level: 1, name: title, exact: true }).count(), 1);
+  assert.equal(await article.locator('.essay-meta').count(), 1);
+  assert.equal((await article.locator('.essay-meta').innerText()).trim(), 'By Aaron Schneider');
+  assert.equal(await page.locator('.site-header [aria-current="location"]').getAttribute('href'), '/articles/');
+  const recording = article.locator('a[href="https://www.youtube.com/watch?v=i0a7tXSLj3c&t=3571s"]');
+  assert.ok(await recording.isVisible());
+  const milestone = 'https://github.com/commondevops/llm-chess-experiment/blob/8d660666fc25a99a8846a2867089f8cfe6381f63/milestone1_local_recreation_instructions.md#L16-L51';
+  assert.ok(await article.locator('a[href="' + milestone + '"]').isVisible(), 'Link the example to the pinned project instructions');
+  if (capture) {
+    await captureSection(page, article, 'engineering-essay');
+    if (page.viewportSize().width === 375) {
+      const normal = page.viewportSize();
+      await page.setViewportSize({ width: 320, height: 812 });
+      const larger = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+      assert.ok(await article.evaluate(el => {
+        return document.documentElement.scrollWidth <= innerWidth + 1 &&
+          [...el.querySelectorAll('h1, h2, p, a')].every(node => {
+            const range = document.createRange();
+            range.selectNodeContents(node);
+            return [...range.getClientRects()].every(rect => rect.left >= -1 && rect.right <= innerWidth + 1);
+          });
+      }), 'The engineering essay should reflow at 320px with doubled text');
+      await larger.evaluate(el => el.remove());
+      await page.setViewportSize(normal);
+    }
+  }
+  const returnLink = article.getByRole('link', { name: 'Engineering essays', exact: true });
+  const section = '/articles/#engineering-essays';
+  assert.equal(await returnLink.getAttribute('href'), section);
+  await Promise.all([page.waitForURL(new URL(section, origin).href), returnLink.press('Enter')]);
+  assert.ok(await page.locator('h2#engineering-essays:target').evaluate(el => el === document.activeElement),
+    'Return to the focused section heading using the native collection link');
+}
+
 async function checkDiscovery(page) {
   const collection = new URL('/articles/', origin).href;
   const benchmark = page.locator('#benchmark-presentation');
@@ -422,6 +477,8 @@ async function checkDiscovery(page) {
   assert.equal(await benchmark.getByRole('link', { name: 'Merged task on GitHub' }).getAttribute('href'), mergedTask);
   const caseLinks = benchmark.locator('a[href^="/work/scientific-ai-benchmark/"]');
   assert.deepEqual(await caseLinks.evaluateAll(links => links.map(a => a.pathname + a.hash)), [graderGuide]);
+  const headings = await page.locator('.publication-group > h2').evaluateAll(items => items.map(el => el.id));
+  assert.deepEqual(headings, Object.keys(publicationGroups), 'Keep all four publication sections in reading order');
   for (const [group, entries] of Object.entries(publicationGroups)) {
     const jump = page.locator('.publication-jumps a[href="#' + group + '"]');
     assert.match(await jump.innerText(), new RegExp('\\b' + entries.length + '\\b'));
@@ -613,6 +670,7 @@ async function checkNoScript(browser) {
   await page.screenshot({ path: path.join(reviewDir, version + '-shared-recording-375x812.jpg'), quality: 82 });
   await checkGraderGuide(page, true);
   await checkDiscovery(page);
+  await checkEssay(page, { directEntry: true });
   await checkFallbacks(page);
   await page.close();
 }
@@ -642,8 +700,9 @@ async function checkCollection(page, width) {
   assert.equal(await page.locator('#node-ipc-report').getByRole('link', { name: 'Report on Figshare' }).getAttribute('href'), 'https://doi.org/10.6084/m9.figshare.33865414');
   await checkGraderGuide(page);
   await checkDiscovery(page);
+  await checkEssay(page, { capture: true });
   const publications = page.locator('li.publication');
-  assert.equal(await publications.count(), 8);
+  assert.equal(await publications.count(), Object.values(publicationGroups).flat().length);
   for (const row of await publications.all()) {
     const cover = row.locator('img');
     assert.equal(await cover.count(), 1);

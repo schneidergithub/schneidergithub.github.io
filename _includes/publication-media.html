@@ -22,7 +22,7 @@
 </details>
 <a class="watch-source" href="{{ media.url | escape }}">Watch on YouTube<span class="visually-hidden"> · {{ media.title | escape }}</span></a>
 {% elsif include.link_cover %}
-<a class="collection-cover{% if media.id == 'node-ipc-report' %} report-masthead{% endif %}" href="{{ media.url | escape }}" tabindex="-1">{{ preview }}</a>
+<a class="collection-cover{% if media.id == 'node-ipc-report' %} report-masthead{% elsif media.id == 'fresh-sandbox-github' %} essay-board{% endif %}" href="{{ include.cover_url | default: media.url | escape }}" tabindex="-1">{{ preview }}</a>
 {% else %}
 {{ preview }}
 {% endif %}
