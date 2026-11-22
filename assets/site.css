@@ -65,10 +65,56 @@ main{min-height:65vh}
 .feature-result .result-link{display:block;min-height:44px;color:var(--accent);font:inherit;text-decoration:none}
 .result-link .result-label,.result-statement .result-link{text-decoration:underline;text-decoration-color:var(--control-border);text-decoration-thickness:1px}
 .result-link:is(:hover,:focus-visible) .result-label,.result-statement .result-link:is(:hover,:focus-visible){text-decoration-color:currentColor}
-#connect h2{margin-bottom:.6rem}
-#connect>p{max-width:63ch;color:var(--muted)}
-#connect .actions{align-items:center;margin-top:1rem}
-#connect .channel-link{display:inline-flex;align-items:center;min-height:44px;margin-top:.35rem;font-size:.94rem}
+.section.contact-card {
+  max-width: 50rem;
+  margin: 0 auto clamp(2.5rem, 6vw, 4.5rem);
+  padding: clamp(1.25rem, 4vw, 2.75rem);
+  border: 1px solid var(--line);
+  border-block-start-color: #666865;
+  border-radius: 7px;
+  background: linear-gradient(115deg, #29313a, var(--panel) 62%);
+  box-shadow: 0 .85rem 1.8rem -.95rem rgb(0 0 0 / 40%);
+  overflow-wrap: anywhere;
+}
+.contact-card h2 {
+  margin: 0 0 clamp(1rem, 2.6vw, 1.65rem);
+  color: #e8c69e;
+  font: italic 400 clamp(2.1rem, 4.5vw, 3.15rem)/1.1 Georgia, "Times New Roman", serif;
+  letter-spacing: -.035em;
+}
+.contact-routes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: .9rem clamp(1.2rem, 3.8vw, 3rem);
+  margin: 0;
+}
+.contact-route dt { color: var(--muted); font-size: .92rem; line-height: 1.45; }
+.contact-route dd { margin: 0; }
+.contact-route a {
+  display: inline-flex;
+  align-items: center;
+  gap: .4em;
+  min-height: 44px;
+  max-width: 100%;
+  color: var(--accent);
+  font-size: clamp(1rem, 1.6vw, 1.125rem);
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: none;
+}
+.contact-route a::after { content: "↗" / ""; flex: none; font-size: .8em; }
+.contact-route a:is(:hover, :focus-visible) { text-decoration: underline; }
+#home-media > .channel-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  max-width: 100%;
+  margin-top: .5rem;
+  color: var(--muted);
+  font-size: .9rem;
+  text-decoration-color: var(--control-border);
+}
+#home-media > .channel-link:is(:hover, :focus-visible) { color: var(--accent); }
 .page-intro{padding-block:4rem 2.5rem;max-width:850px}
 .page-intro h1{font-size:clamp(2.5rem,5vw,3.75rem);max-width:none}
 .study-directory{display:block;margin-bottom:1.35rem}
@@ -354,8 +400,9 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 .media-copy{padding:.9rem 1rem 0}
 .media-type{margin-bottom:.35rem;color:var(--muted);font-size:.875rem;line-height:1.4}
 .media-copy h3{font-size:clamp(1.1rem,1.5vw,1.25rem);line-height:1.28;margin-bottom:.55rem}
-.media-copy h3 a,.media-story h3{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em}
-.media-story:hover h3,.media-story:focus-visible h3{color:var(--text);text-decoration-thickness:2px}
+.media-copy h3 a,.media-story h3,.publication-heading h3 a{color:var(--accent);text-decoration:none}
+.media-copy h3 a:is(:hover,:focus-visible),.media-story:is(:hover,:focus-visible) h3,
+.publication-heading h3 a:is(:hover,:focus-visible){text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em}
 .media-description{margin:0;padding:0 1rem 1rem;color:var(--muted);font-size:.94rem;line-height:1.48}
 .media-copy .media-description{padding-inline:0}
 #home-media .section-heading>a{display:inline-flex;align-items:center;min-height:44px}
@@ -423,9 +470,9 @@ figure{padding-inline:1.4rem}
 }
 
 @media(prefers-reduced-motion:no-preference){
-  .hero .button,#connect .button,.play-mark{transition:background-color 140ms ease-out,border-color 140ms ease-out}
+  .hero .button,.play-mark{transition:background-color 140ms ease-out,border-color 140ms ease-out}
 }
-.hero .button:not(.secondary):hover,#connect .button:not(.secondary):hover{background:#a5ceff;border-color:#a5ceff;filter:none}
+.hero .button:not(.secondary):hover{background:#a5ceff;border-color:#a5ceff;filter:none}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}
 }
 
@@ -435,6 +482,10 @@ figure{padding-inline:1.4rem}
 a{color:inherit}
 .role{break-inside:avoid}
 .role li,.lead,.context{color:#333}
+.section.contact-card{margin:1rem 0;break-inside:avoid;border-color:#777;background:white;box-shadow:none}
+.contact-card h2,.contact-route dt,.contact-route a{color:#222}
+.contact-route a{display:block;min-height:0}
+.contact-route a::after{display:block;content:attr(href);margin-top:.15rem;font-size:.78em;font-weight:400}
 }
 
 

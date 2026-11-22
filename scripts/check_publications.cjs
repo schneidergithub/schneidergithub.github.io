@@ -146,6 +146,73 @@ async function checkResearchFeature(panel, width) {
   assert.equal(dimensions.declaredHeight, dimensions.height);
 }
 
+async function checkContactCard(page, width) {
+  const card = page.locator('section#connect');
+  assert.ok(await card.getByRole('heading', { name: 'Work with me', exact: true }).isVisible());
+  const routes = [
+    ['Engineering roles & individual consulting', 'Aaron Schneider on LinkedIn', 'https://www.linkedin.com/in/aarondrewschneider/'],
+    ['Team consulting', 'CommonDevOps on LinkedIn', 'https://www.linkedin.com/company/commondevops/']
+  ];
+  const originalViewport = page.viewportSize();
+  const rows = card.locator('dl > div');
+  const links = card.getByRole('link');
+  assert.equal(await rows.count(), routes.length);
+  assert.equal(await links.count(), routes.length);
+  for (const [index, [audience, recipient, url]] of routes.entries()) {
+    const row = rows.nth(index);
+    assert.equal(await row.locator('dt').innerText(), audience);
+    const contact = row.locator('dd').getByRole('link', { name: recipient, exact: true });
+    assert.equal(await contact.getAttribute('href'), url);
+    assert.equal(await page.locator('a[href="' + url + '"]').count(), 1, 'Offer each contact once on the homepage');
+  }
+  const subscription = page.locator('#home-media').getByRole('link', { name: 'Subscribe on YouTube', exact: true });
+  assert.equal(await subscription.getAttribute('href'), 'https://www.youtube.com/@commondevops?sub_confirmation=1');
+  assert.ok(await subscription.evaluate(link => Boolean(document.querySelector('#home-media .media-grid').compareDocumentPosition(link) & Node.DOCUMENT_POSITION_FOLLOWING)));
+  assert.equal(await page.locator('a[href="https://www.youtube.com/@commondevops?sub_confirmation=1"]').count(), 1);
+  assert.ok(await subscription.evaluate(el => el.getBoundingClientRect().height >= 44), 'Keep the subscription easy to activate');
+  assert.equal(await page.locator('footer a').count(), 1);
+  const pgp = page.locator('footer').getByRole('link', { name: 'Public PGP key', exact: true });
+  assert.equal(await pgp.getAttribute('href'), '/pgp/');
+
+  if (width === 320) {
+    const larger = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+    for (const item of await card.locator('dt, dd a').all()) {
+      const fits = await item.evaluate(el => {
+        const box = el.getBoundingClientRect();
+        const text = document.createRange();
+        text.selectNodeContents(el);
+        return box.left >= -1 && box.right <= innerWidth + 1 &&
+          [...text.getClientRects()].every(line => line.left >= -1 && line.right <= innerWidth + 1) &&
+          (el.tagName !== 'A' || (box.height >= 44 && box.width >= 44));
+      });
+      assert.ok(fits, 'The contact row must fit at 320px with doubled text: ' + await item.innerText());
+    }
+    await larger.evaluate(el => el.remove());
+  }
+  if (width === 375 || width === 1280) {
+    if (width === 375) await page.setViewportSize({ width, height: 812 });
+    await page.goto(new URL('/#connect', origin).href);
+    assert.equal(await page.locator(':target').getAttribute('id'), 'connect');
+    const rectangles = await links.evaluateAll(items => items.map(el => el.getBoundingClientRect().toJSON()));
+    assert.ok(rectangles.every(box => box.top >= -1 && box.bottom <= page.viewportSize().height + 1), 'Both contacts should be visible at #connect');
+    if (width === 375) assert.ok(rectangles[0].bottom <= rectangles[1].top, 'Stack the contact routes on phones');
+    await captureSection(page, card, 'home-contact-card');
+    await subscription.focus();
+    for (const link of [...await links.all(), pgp]) {
+      await page.keyboard.press('Tab');
+      const isContact = (await link.getAttribute('href')) !== '/pgp/';
+      assert.ok(await link.evaluate((el, contact) => {
+        const box = el.getBoundingClientRect();
+        const style = getComputedStyle(el);
+        return el === document.activeElement && el.matches(':focus-visible') && style.outlineStyle !== 'none' &&
+          parseFloat(style.outlineWidth) > 0 && (!contact || (box.width >= 44 && box.height >= 44 && style.outlineColor === 'rgb(255, 213, 138)'));
+      }, isContact), 'Keyboard navigation should go from the recording subscription through each contact to PGP: ' + await link.innerText());
+      if (await link.getAttribute('href') === routes[1][2]) await captureSection(page, card, 'home-contact-keyboard');
+    }
+    if (width === 375) await page.setViewportSize(originalViewport);
+  }
+}
+
 async function checkHomepage(page) {
   const width = page.viewportSize().width;
   const sequence = await page.locator('main > .hero, main > .selected-results, main > #home-media, main > #connect')
@@ -260,19 +327,13 @@ async function checkHomepage(page) {
   const checkout = page.locator('.feature').filter({ has: page.locator('a[href="/work/super-salon-checkout/"]') });
   assert.match(await checkout.locator('h3').innerText(), /caught.*checkout.*before release/i);
   assert.match(await checkout.locator('p').last().innerText(), /automated test.*one.cent.*online.*desktop/i);
-  const contacts = page.locator('#connect a');
-  const destinations = await contacts.evaluateAll(links => links.map(a => a.href));
-  assert.deepEqual(destinations.sort(), [
-    'https://www.linkedin.com/company/commondevops/',
-    'https://www.linkedin.com/in/aarondrewschneider/',
-    'https://www.youtube.com/@commondevops?sub_confirmation=1'
-  ]);
+  await checkContactCard(page, width);
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Homepage overflows');
   if (width === 1280) {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    const immediate = await page.locator('.hero .button, .hero .play-mark').evaluateAll(controls =>
+    const immediate = await page.locator('.hero .button, .hero .play-mark, #connect a, #home-media .channel-link').evaluateAll(controls =>
       controls.every(el => getComputedStyle(el).transitionDuration.split(',').every(value => parseFloat(value) === 0)));
-    assert.ok(immediate, 'Reduced motion must make hero controls respond without a transition');
+    assert.ok(immediate, 'Respect reduced motion for hero, contact and subscription controls');
     await page.emulateMedia({ reducedMotion: null });
   }
 }
@@ -591,6 +652,18 @@ async function checkCollection(page, width) {
   assert.equal(await issue.getByRole('link', { name: 'LinkedIn edition' }).getAttribute('href'),
     'https://www.linkedin.com/pulse/october-2026-ai-security-controls-keeping-up-commondevops-a632c/');
   assert.match(await issue.locator('.attribution').innerText(), /Common\s?DevOps/i);
+  const issueLink = issue.locator('h3 a');
+  assert.ok(await issueLink.evaluate(el => !getComputedStyle(el).textDecorationLine.includes('underline')),
+    'The structured October title should be quiet at rest');
+  await issueLink.focus();
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Shift+Tab');
+  assert.ok(await issueLink.evaluate(el => {
+    const style = getComputedStyle(el);
+    return el === document.activeElement && el.matches(':focus-visible') &&
+      style.textDecorationLine.includes('underline') && style.outlineStyle !== 'none';
+  }), 'Keyboard focus should visibly identify the October title as an action');
+  await page.locator('#monthly-reviews').focus();
   assert.equal(await page.locator('#september-review').getByRole('link', { name: 'Web edition', exact: true }).getAttribute('href'),
     'https://www.aaronschneider.org/common-devops-reports/reports/2026-09/');
   for (const entry of ['october-review', 'node-ipc-report', 'node-ipc-interview']) {

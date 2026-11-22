@@ -70,15 +70,20 @@ permalink: /
     </article>
     {% endfor %}
   </div>
+  <a class="channel-link" href="https://www.youtube.com/@commondevops?sub_confirmation=1">Subscribe on YouTube</a>
 </section>
 
-<section class="section" id="connect" aria-labelledby="connect-title">
+<section class="section contact-card" id="connect" aria-labelledby="connect-title">
   <h2 id="connect-title">Work with me</h2>
-  <p>For engineering roles or individual consulting, contact me directly. For team engagements, reach out to CommonDevOps.</p>
-  <div class="actions">
-    <a class="button" href="https://www.linkedin.com/in/aarondrewschneider/">Contact Aaron on LinkedIn</a>
-    <a class="button secondary" href="https://www.linkedin.com/company/commondevops/">Contact the CommonDevOps team</a>
-  </div>
-  <a class="channel-link" href="https://www.youtube.com/@commondevops?sub_confirmation=1">Follow CommonDevOps on YouTube</a>
+  <dl class="contact-routes">
+    <div class="contact-route">
+      <dt>Engineering roles &amp; individual consulting</dt>
+      <dd><a href="https://www.linkedin.com/in/aarondrewschneider/">Aaron Schneider on LinkedIn</a></dd>
+    </div>
+    <div class="contact-route">
+      <dt>Team consulting</dt>
+      <dd><a href="https://www.linkedin.com/company/commondevops/">CommonDevOps on LinkedIn</a></dd>
+    </div>
+  </dl>
 </section>
 <script src="{{ '/assets/publications/video-player.js' | relative_url }}" defer></script>
