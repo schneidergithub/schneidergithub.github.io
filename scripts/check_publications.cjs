@@ -182,19 +182,18 @@ async function checkActionTargets(links, sameRow = false) {
 }
 
 async function checkResearchFeature(panel, width) {
-  assert.equal(await panel.locator('h2').innerText(), 'Terminal-Bench-Science');
+  assert.equal(await panel.locator('h2').innerText(), 'Research spotlight');
   assert.equal(await panel.getByRole('link').count(), 0, 'Keep extra navigation out of the spotlight');
   const summary = panel.locator(':scope > p');
   const text = await summary.innerText();
-  assert.match(text, /frontier LLMs on scientific workflows/i);
-  assert.match(text, /Version 1 includes.*MDD Executive Function.*co-authored with Dr\. Ian Miller/);
-  assert.match(text, /review tasks, analyze results, and lead DevOps and infrastructure/);
-  assert.match(text, /targeting a late-2026 release.*research paper to follow/);
+  assert.match(text, /invited to join Terminal-Bench-Science as a reviewer/);
+  assert.match(text, /researchers at Stanford.*frontier AI agents on real scientific work/);
+  assert.match(text, /Version 1 will include “MDD Executive Function,” the task Dr\. Ian Miller and I co-authored/);
   const heading = await panel.locator('h2').boundingBox();
   const player = await panel.locator('summary').boundingBox();
   const copy = await summary.boundingBox();
   assert.ok(heading.y + heading.height <= player.y + 1 && player.y + player.height <= copy.y + 1,
-    'Present the project name, video and short summary in order');
+    'Present the spotlight heading, video and short summary in order');
   if (width === 375) assert.ok(player.y + player.height <= 812, 'The whole spotlight poster fits on the first phone screen');
   const cover = panel.locator('.publication-video img');
   await decodeCover(cover);
