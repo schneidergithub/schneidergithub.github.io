@@ -154,7 +154,8 @@ async function checkResearchFeature(panel, width) {
 }
 
 async function checkContactCard(page, width) {
-  const card = page.locator('section#connect');
+  const footer = page.getByRole('contentinfo');
+  const card = footer.locator('section#connect');
   assert.ok(await card.getByRole('heading', { name: 'Work with me', exact: true }).isVisible());
   const portrait = card.getByRole('img', { name: 'Aaron Schneider', exact: true });
   await decodeCover(portrait);
@@ -177,34 +178,34 @@ async function checkContactCard(page, width) {
     assert.equal(await row.locator('dt').innerText(), audience);
     const contact = row.locator('dd').getByRole('link', { name: recipient, exact: true });
     assert.equal(await contact.getAttribute('href'), url);
-    assert.equal(await card.locator('a[href="' + url + '"]').count(), 1, 'Offer each consulting contact once in the card');
+    assert.equal(await page.locator('a[href="' + url + '"]').count(), 1, 'Offer each consulting destination once on the homepage');
   }
   assert.equal(await page.getByRole('link', { name: 'Subscribe on YouTube' }).count(), 0);
-  const footer = page.getByRole('contentinfo');
-  assert.equal((await footer.innerText()).trim(), 'Aaron Schneider');
-  const signature = footer.locator('.footer-signature');
+  assert.equal(await footer.getByRole('link').count(), 3);
+  const strip = footer.locator('.footer-inner');
+  const signature = strip.locator('.footer-signature');
+  assert.equal(await signature.innerText(), 'Aaron Schneider');
+  const contactBox = await card.boundingBox();
+  const stripBox = await strip.boundingBox();
+  assert.ok(Math.abs(contactBox.y + contactBox.height - stripBox.y) <= 1 && Math.abs(contactBox.width - stripBox.width) <= 1,
+    'Join the champagne signature strip to the full width of the contact card');
   const fontLoaded = await signature.evaluate(async el => {
     const style = getComputedStyle(el);
     const faces = await document.fonts.load(style.fontStyle + ' ' + style.fontSize + ' "Instrument Serif"', el.textContent);
     return style.fontFamily.includes('Instrument Serif') && faces.some(face => face.status === 'loaded');
   });
   assert.ok(fontLoaded, 'Render the signature with its local italic font');
-  const profiles = footer.getByRole('link');
-  assert.equal(await profiles.count(), 2);
-  for (const [label, url] of [
-    ['Aaron Schneider on LinkedIn', 'https://www.linkedin.com/in/aarondrewschneider/'],
-    ['CommonDevOps on YouTube', 'https://www.youtube.com/@commondevops']
-  ]) {
-    const link = footer.getByRole('link', { name: label, exact: true });
-    assert.equal(await link.getAttribute('href'), url);
-    const box = await link.boundingBox();
-    assert.ok(box.width >= 48 && box.height >= 48, 'Give each icon a generous touch target');
-    const mark = await link.locator('svg use').evaluate(use => {
-      const { width, height } = use.getBBox();
-      return { width, height };
-    });
-    assert.ok(mark.width >= 30 && mark.height >= 30, 'Render a recognizable footer icon');
-  }
+  const channel = strip.getByRole('link', { name: 'CommonDevOps on YouTube', exact: true });
+  const channelUrl = 'https://www.youtube.com/@commondevops';
+  assert.equal(await channel.getAttribute('href'), channelUrl);
+  assert.equal(await page.locator('a[href="' + channelUrl + '"]').count(), 1);
+  const channelBox = await channel.boundingBox();
+  assert.ok(channelBox.width >= 48 && channelBox.height >= 48, 'Give the channel icon a generous touch target');
+  const mark = await channel.locator('svg use').evaluate(use => {
+    const { width, height } = use.getBBox();
+    return { width, height };
+  });
+  assert.ok(mark.width >= 30 && mark.height >= 30, 'Render a recognizable YouTube icon');
 
   if (width === 320) {
     const larger = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
@@ -232,10 +233,10 @@ async function checkContactCard(page, width) {
     const rectangles = await links.evaluateAll(items => items.map(el => el.getBoundingClientRect().toJSON()));
     assert.ok(rectangles.every(box => box.top >= -1 && box.bottom <= page.viewportSize().height + 1), 'Both contacts should be visible at #connect');
     if (width === 375) assert.ok(rectangles[0].bottom <= rectangles[1].top, 'Stack the contact routes on phones');
-    await captureSection(page, card, 'home-contact-card');
+    await captureSection(page, footer, 'home-contact-card');
     const precedingLink = page.locator('#home-media a:visible').last();
     await precedingLink.focus();
-    for (const link of [...await links.all(), ...await profiles.all()]) {
+    for (const link of [...await links.all(), channel]) {
       await page.keyboard.press('Tab');
       const isContact = await link.evaluate(el => Boolean(el.closest('#connect')));
       const focusColor = isContact ? 'rgb(255, 213, 138)' : 'rgb(48, 37, 29)';
@@ -244,7 +245,7 @@ async function checkContactCard(page, width) {
         const style = getComputedStyle(el);
         return el === document.activeElement && el.matches(':focus-visible') && style.outlineStyle !== 'none' &&
           parseFloat(style.outlineWidth) > 0 && box.width >= 44 && box.height >= 44 && style.outlineColor === expectedOutline;
-      }, focusColor), 'Tab should reach the consulting contacts and then both social profiles in order');
+      }, focusColor), 'Tab should reach individual consulting, team consulting and then the YouTube channel');
       if (isContact) {
         const clearance = await link.evaluate(el => {
           const text = document.createRange();
@@ -271,7 +272,7 @@ async function checkContactCard(page, width) {
 
 async function checkHomepage(page) {
   const width = page.viewportSize().width;
-  const sequence = await page.locator('main > .hero, main > .selected-results, main > #home-media, main > #connect')
+  const sequence = await page.locator('main > .hero, main > .selected-results, main > #home-media, footer > #connect')
     .evaluateAll(items => items.map(el => el.id || (el.classList.contains('hero') ? 'hero' : 'results')));
   assert.deepEqual(sequence, ['hero', 'results', 'home-media', 'connect'], 'Show engineering results before the media collection and contacts');
   const nav = page.locator('.site-header nav');

@@ -2,6 +2,7 @@
 title: Software engineering, DevSecOps & AI Research
 description: Aaron Schneider builds software, automates delivery, and improves system reliability. Explore 25+ years of engineering work and current AI research.
 permalink: /
+contact_footer: true
 ---
 <section class="hero">
   <div>
@@ -68,20 +69,4 @@ permalink: /
   </div>
 </section>
 
-<section class="section contact-card" id="connect" aria-labelledby="connect-title">
-  <div class="contact-heading">
-    <span class="contact-portrait"><img src="{{ '/assets/portfolio/aaron-schneider-portrait.jpg' | relative_url }}" alt="Aaron Schneider" width="200" height="200" loading="lazy" decoding="async"></span>
-    <h2 id="connect-title">Work with me</h2>
-  </div>
-  <dl class="contact-routes">
-    <div class="contact-route">
-      <dt>Individual consulting</dt>
-      <dd><a href="https://www.linkedin.com/in/aarondrewschneider/">Aaron Schneider on LinkedIn</a></dd>
-    </div>
-    <div class="contact-route">
-      <dt>Team consulting</dt>
-      <dd><a href="https://www.linkedin.com/company/commondevops/">CommonDevOps on LinkedIn</a></dd>
-    </div>
-  </dl>
-</section>
 <script src="{{ '/assets/publications/video-player.js' | relative_url }}" defer></script>

@@ -91,10 +91,10 @@ main{min-height:65vh}
 .feature-result .result-link{display:block;min-height:44px;color:var(--accent);font:inherit;text-decoration:none}
 .result-link .result-label,.result-statement .result-link{text-decoration:underline;text-decoration-color:var(--control-border);text-decoration-thickness:1px}
 .result-link:is(:hover,:focus-visible) .result-label,.result-statement .result-link:is(:hover,:focus-visible){text-decoration-color:currentColor}
-.section.contact-card {
+.contact-card {
+  --card-inset: clamp(1.25rem, 4vw, 2.75rem);
   max-width: 50rem;
-  margin: 0 auto clamp(2.5rem, 6vw, 4.5rem);
-  padding: clamp(1.25rem, 4vw, 2.75rem);
+  margin: 0 auto clamp(1.5rem, 4vw, 3rem);
   border: 1px solid var(--line);
   border-block-start-color: #666865;
   border-radius: 7px;
@@ -103,6 +103,7 @@ main{min-height:65vh}
   box-shadow: 0 .85rem 1.8rem -.95rem rgb(0 0 0 / 40%);
   overflow-wrap: anywhere;
 }
+.contact-body { padding: var(--card-inset) var(--card-inset) clamp(1rem, 2.5vw, 1.75rem); }
 .contact-heading {
   display: flex;
   align-items: center;
@@ -513,9 +514,9 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 @media screen {
   body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100svh; }
 }
-.site-footer {
+.site-footer { margin-top: auto; }
+.site-footer, .contact-card .footer-inner {
   --focus: #30251d;
-  margin-top: auto;
   color: #191613;
   background-color: #e6d6bf;
   background-image: linear-gradient(112deg, #dbcaaf, #f2e6d5 41%, #e7d7c0 75%, #dcc8aa);
@@ -529,6 +530,11 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
   gap: .6rem clamp(.5rem, 2vw, 1.5rem);
   padding-block: clamp(1.15rem, 2.5vw, 1.85rem);
 }
+.contact-card .footer-inner {
+  padding: .35rem var(--card-inset);
+  border-radius: 0 0 6px 6px;
+}
+.contact-card .footer-signature { font-size: clamp(2rem, 3.2vw, 2.65rem); }
 .footer-signature {
   max-width: 100%;
   font: italic 400 clamp(2.05rem, 3.7vw, 3.3rem)/1.12 "Instrument Serif", Georgia, serif;
@@ -613,7 +619,9 @@ a{color:inherit}
 .role li,.lead,.context{color:#333}
 .engineering-essay { padding-block: 0; }
 .engineering-essay .essay-meta { color: #333; }
-.section.contact-card{margin:1rem 0;break-inside:avoid;border-color:#777;background:white;box-shadow:none}
+.contact-card .footer-inner{background:white;box-shadow:none}
+.contact-card .social-links{display:none}
+.contact-card{margin:1rem 0;break-inside:avoid;border-color:#777;background:white;box-shadow:none}
 .contact-card h2,.contact-route dt,.contact-route a{color:#222}
 .contact-route a{display:block;min-height:0}
 .contact-route a::after{display:block;content:attr(href);margin-top:.15rem;font-size:.78em;font-weight:400}
