@@ -103,7 +103,7 @@ async function checkGallery(page, workUrl, width, directEntry) {
     }
     assert.deepEqual(await section.locator('.thumbnail-card a:visible').evaluateAll(links => links.map(a => a.pathname).sort()), group.items.map(item => item.image).sort());
     for (const image of await section.locator('img').all()) {
-      await image.scrollIntoViewIfNeeded();
+      await image.evaluate(img => img.scrollIntoView({block: 'center', behavior: 'instant'}));
       await image.evaluate(img => img.decode());
     }
     if (group.id === 'bayer') assert.equal(await section.locator('.gallery-detail-set').count(), 2);
