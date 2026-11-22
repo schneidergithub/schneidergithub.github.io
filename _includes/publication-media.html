@@ -11,7 +11,7 @@
   {% endif %}
 {% endcapture %}
 {% if media.type == 'Video' %}
-{% assign video_id = media.url | remove: 'https://www.youtube.com/watch?v=' %}
+{% assign video_id = media.url | remove: 'https://www.youtube.com/watch?v=' | split: '&' | first %}
 <details class="publication-video" name="publication-players">
   <summary>
     <span class="video-poster"><span aria-hidden="true">{{ preview }}<span class="play-mark"><span class="play-caption">Play here</span></span></span><span class="visually-hidden">Play here — {{ media.title | escape }}</span></span>

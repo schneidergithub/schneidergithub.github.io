@@ -8,7 +8,8 @@ const { chromium } = require('playwright-core');
 const origin = process.argv[2];
 const presentation = '/articles/#benchmark-presentation';
 const graderGuide = '/work/scientific-ai-benchmark/#checking-the-grader';
-const ids = ['e26_SSPpOP0', 'IXzLwNlLAI4', 'TZ04u6cj1ls', 'eSvYhh7_Kyo', 'i0a7tXSLj3c'];
+const eloId = '6ms5gkL8D9U';
+const ids = ['e26_SSPpOP0', 'IXzLwNlLAI4', eloId, 'TZ04u6cj1ls', 'eSvYhh7_Kyo', 'i0a7tXSLj3c'];
 const homeVideoIds = ['e26_SSPpOP0', 'i0a7tXSLj3c'];
 const reviewWidths = [375, 768, 1280];
 const publications = JSON.parse(execFileSync('ruby', [
@@ -18,7 +19,7 @@ const publications = JSON.parse(execFileSync('ruby', [
 const monthlyIssues = publications.filter(item => item.issue_month)
   .sort((a, b) => b.issue_month.localeCompare(a.issue_month));
 const publicationGroups = {
-  recordings: ['benchmark-presentation', 'chess-benchmark-presentation', 'node-ipc-interview', 'node-ipc-follow-up', 'security-livestream'],
+  recordings: ['benchmark-presentation', 'chess-benchmark-presentation', 'elo-rating-system', 'node-ipc-interview', 'node-ipc-follow-up', 'security-livestream'],
   'engineering-essays': ['why-chess-pros-sometimes-ignore-super-intelligent-ai', 'fresh-sandbox-github'],
   'monthly-reviews': monthlyIssues.map(item => item.id),
   investigations: ['node-ipc-report']
@@ -34,7 +35,12 @@ async function decodeCover(image) {
 }
 
 function recordingEntries(page) {
-  return page.locator('.focus-panel, .media-card, .publication').filter({ has: page.locator('details.publication-video') });
+  return page.locator('.focus-panel, .media-card, .publication, .essay-recording').filter({ has: page.locator('details.publication-video') });
+}
+
+function expectedWatchUrl(id) {
+  const url = 'https://www.youtube.com/watch?v=' + id;
+  return id === eloId ? url + '&list=PLB4Bw8Cz9mfBLMPI9dwP9cfvF5wtfa4ks&index=13' : url;
 }
 
 async function checkPlayers(page, expectedIds = ids) {
@@ -55,7 +61,7 @@ async function checkPlayers(page, expectedIds = ids) {
     assert.equal(await toggle.locator('.play-caption').innerText(), 'Play here');
     const source = entry.locator('a.watch-source');
     assert.equal(await source.count(), 1);
-    assert.equal(await source.getAttribute('href'), 'https://www.youtube.com/watch?v=' + id);
+    assert.equal(await source.getAttribute('href'), expectedWatchUrl(id));
     const spotlight = home && id === ids[0];
     if (spotlight) {
       assert.ok(await source.isHidden(), 'Use the poster as the single closed spotlight action');
@@ -474,7 +480,7 @@ async function checkFallbacks(page, expectedIds = ids) {
     }
     urls.push(await fallback.getAttribute('href'));
   }
-  assert.deepEqual(urls.sort(), expectedIds.map(id => 'https://www.youtube.com/watch?v=' + id).sort());
+  assert.deepEqual(urls.sort(), expectedIds.map(expectedWatchUrl).sort());
   assert.equal(await page.locator('iframe').count(), 0);
 }
 
@@ -853,6 +859,8 @@ async function checkNoScript(browser) {
   await checkDiscovery(page);
   await checkEssay(page, { directEntry: true });
   await checkFallbacks(page);
+  await page.locator('#why-chess-pros-sometimes-ignore-super-intelligent-ai h3 a').press('Enter');
+  await checkFallbacks(page, [eloId]);
   await page.close();
 }
 
@@ -881,6 +889,9 @@ async function checkCollection(page, width) {
   await checkEssay(page, { capture: true });
   const chessEssay = page.locator('#why-chess-pros-sometimes-ignore-super-intelligent-ai h3 a');
   await chessEssay.press('Enter');
+  await decodeCover(page.locator('.essay-recording img'));
+  if (width === 375 || width === 1280) await captureSection(page, page.locator('.essay-recording'), 'chess-essay-elo');
+  await checkPlayers(page, [eloId]);
   const figures = page.locator('.essay-copy figure');
   assert.equal(await figures.count(), 2);
   for (const figure of await figures.all()) {
