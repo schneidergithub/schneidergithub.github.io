@@ -61,9 +61,16 @@ async function checkDirectory(page, workUrl) {
   const supported = page.locator('.work-support');
   assert.deepEqual(await supported.evaluateAll(items => items.map(el => el.id)), ['propoint', 'westinghouse']);
   assert.match(await supported.first().innerText(), /Around 30,000\s+salons used Super Salon[\s\S]*hundreds of millions of dollars.*annually/i);
-  assert.match(await supported.last().locator('h3').innerText(), /3×\s*Elasticsearch throughput/i);
+  const westinghouse = page.locator('#westinghouse');
+  assert.equal(await westinghouse.getByRole('heading', { level: 2 }).innerText(), 'Leading QA across 13 projects');
+  assert.match(await westinghouse.locator('.project-scale').innerText(), /3×\s*Elasticsearch throughput/i);
+  assert.equal(await westinghouse.getByRole('link').count(), 1);
+  const scope = await westinghouse.locator('.project-detail').innerText();
+  for (const term of ['20-person', 'vendor handover', 'QTP/UFT', 'LoadRunner', 'JMeter', 'BlazeMeter', 'playbooks', 'documentation']) {
+    assert.ok(scope.includes(term), 'Missing Westinghouse contract detail: ' + term);
+  }
   if (width === 1280) {
-    for (const heading of await supported.locator('h3').all()) {
+    for (const heading of await supported.getByRole('heading', { level: 2 }).all()) {
       const bounds = await heading.boundingBox();
       assert.ok(bounds.y + bounds.height <= 800, 'Show the supporting results on the first desktop screen');
     }
@@ -79,7 +86,7 @@ async function checkDirectory(page, workUrl) {
   const index = page.locator('.benchmark-actions, .work-index, .work-research-list');
   const unique = await index.locator('a[href^="/work/"]:not([href*="#"])').evaluateAll(items => items.map(a => a.pathname).sort());
   assert.deepEqual(unique, studies.map(study => '/work/' + study.path + '/').sort());
-  assert.equal(await page.locator('.project-card h3').count(), 5);
+  assert.equal(await page.locator('.project-card .project-heading').count(), 5);
   const sections = page.locator('section.research-project');
   assert.deepEqual(await sections.locator('h2').allTextContents(), ['Node-IPC investigation', 'Chess benchmarks']);
   assert.equal(await page.locator('#node-ipc p:not(.work-kicker)').innerText(),
@@ -102,13 +109,11 @@ async function checkDirectory(page, workUrl) {
   assert.match(await aleve.locator('img').getAttribute('alt'), /Aleve website/);
   assert.match(await page.locator('#eli-lilly .project-detail').innerText(), /Python.*validated.*security/i);
   assert.equal(await page.locator('.work-contact').getAttribute('href'), '/#connect');
-  for (const [label, fragment] of [['Projects', 'project-summaries'], ['Node-IPC', 'node-ipc'], ['Chess benchmarks', 'chess-benchmarks'], ['Gallery', 'portfolio-gallery']]) {
-    await page.getByRole('navigation', { name: 'Selected work sections' }).getByRole('link', { name: label }).press('Enter');
-    assert.equal(await page.locator(':target').getAttribute('id'), fragment);
-    assert.ok(await page.locator(':target').evaluate(el => el === document.activeElement));
-  }
+  assert.equal(await page.locator('.work-mast a, .portfolio-gallery > nav').count(), 0);
+  assert.equal(await page.getByText('Project summaries', { exact: true }).count(), 0);
   if (width === 375) {
     assert.equal(await page.locator('.gallery-group .thumbnail-card a:visible').count(), 5);
+    await page.locator('#portfolio-gallery').scrollIntoViewIfNeeded();
     await captureWork(page, 'gallery');
   }
 }
@@ -127,11 +132,7 @@ async function checkGallery(page, workUrl, width, directEntry) {
   }
   for (const group of gallery) {
     const fragment = '#gallery-' + group.id;
-    if (directEntry) {
-      await page.goto(workUrl + fragment);
-    } else {
-      await page.locator('.gallery-jumps a[href="' + fragment + '"]').press('Enter');
-    }
+    await page.goto(workUrl + fragment);
     assert.equal(page.url(), workUrl + fragment);
     const section = page.locator('.gallery-group:target');
     assert.equal(await section.locator('h3').innerText(), group.title);
@@ -407,7 +408,8 @@ async function check() {
       assert.equal(await allProjects.getAttribute('href'), '/work/#project-summaries');
       await allProjects.press('Enter');
       assert.equal(page.url(), workUrl + '#project-summaries');
-      assert.equal(await page.locator('h2:target').innerText(), 'Project summaries');
+      assert.ok(await page.getByRole('region', { name: 'Featured projects' }).evaluate(el =>
+        el.matches(':target') && el === document.activeElement), 'The homepage link should focus the featured projects');
       await page.goBack();
       await page.getByRole('link', { name: 'Explore selected work' }).press('Enter');
       assert.equal(page.url(), workUrl);
@@ -445,9 +447,13 @@ async function check() {
         }
         if (study.card === 'westinghouse') {
           const lead = await page.locator('.study-header .lead').innerText();
-          for (const detail of [/\$20 million website/i, /load/i, /Two weeks/i]) assert.match(lead, detail);
-          assert.match(title, /Elasticsearch throughput/i);
-          assert.match(await page.locator('.study-copy').innerText(), /load-test results.*Elasticsearch configuration[\s\S]*three times as many search requests/i);
+          assert.match(lead, /13 projects.*20-person offshore.*vendor/i);
+          assert.match(title, /QA across 13 projects at Westinghouse/i);
+          const copy = await page.locator('.study-copy').innerText();
+          for (const detail of ['QTP/UFT', 'LoadRunner', 'JMeter', 'BlazeMeter', 'playbooks', 'documentation',
+            'Two weeks', '$20 million website', 'internal server errors', 'Elasticsearch', 'three times as many requests']) {
+            assert.ok(copy.includes(detail), 'Missing Westinghouse case detail: ' + detail);
+          }
           if (width === 1280) await checkShareImage(page, 'westinghouse-performance.jpg');
         }
         if (study.card === 'indiana') {

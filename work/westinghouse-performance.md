@@ -1,17 +1,21 @@
 ---
 layout: case-study
 project: westinghouse
-link_label: "Westinghouse search performance"
+link_label: "QA leadership at Westinghouse"
 share_image: /assets/portfolio/share/westinghouse-performance.jpg
 share_alt: "Aaron Schneider’s Westinghouse case study. 3× Elasticsearch throughput. Performance testing through Sogeti / Capgemini."
 permalink: /work/westinghouse-performance/
-title: "Tripling Elasticsearch throughput at Westinghouse"
+title: "Leading QA across 13 projects at Westinghouse"
 context: "Westinghouse · Sogeti / Capgemini engagement"
-description: "Two weeks before the release of Westinghouse’s $20 million website, I load-tested the site to see how its search service handled concurrent requests."
+description: "As QA manager on the Sogeti / Capgemini contract, I led testing across 13 projects and managed a 20-person offshore engineering and QA team as a new vendor took over."
 ---
 
-## What changed under load
+## Test automation and handover
 
-The load-test results guided changes to the Elasticsearch configuration. After tuning, the service handled three times as many search requests in the same amount of time.
+I automated functional tests with QTP/UFT and ran performance tests with LoadRunner, JMeter, and BlazeMeter. I wrote detailed QA playbooks and test documentation for the incoming team and reported on test results across the portfolio.
 
-I led QA automation and performance testing for this release through Sogeti / Capgemini. It was one of 13 concurrent projects I supported. [My role at Sogeti / Capgemini]({{ '/experience/' | relative_url }}#sogeti-capgemini).
+## What the load tests caught
+
+Two weeks before the public launch of Westinghouse’s $20 million website, my load tests exposed internal server errors. I reconfigured the cloud services and tuned Elasticsearch. The changes resolved the errors, and search handled three times as many requests in the same amount of time.
+
+[My role at Sogeti / Capgemini]({{ '/experience/' | relative_url }}#sogeti-capgemini).

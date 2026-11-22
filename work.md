@@ -9,12 +9,6 @@ lead_case: /work/scientific-ai-benchmark/
 {% assign benchmark = all_studies | where: 'url', page.lead_case | first %}
 <header class="work-mast">
   <h1 id="selected-work" tabindex="-1">Selected work</h1>
-  <nav aria-label="Selected work sections">
-    <a href="#project-summaries">Projects</a>
-    <a href="#node-ipc">Node-IPC</a>
-    <a href="#chess-benchmarks">Chess benchmarks</a>
-    <a href="#portfolio-gallery">Gallery</a>
-  </nav>
 </header>
 
 <section class="benchmark-feature" aria-labelledby="case-studies-title">
@@ -39,11 +33,8 @@ lead_case: /work/scientific-ai-benchmark/
 
 {% assign projects = site.work | sort: 'index_order' %}
 <div class="work-projects">
-  <section aria-labelledby="project-summaries">
-    <h2 class="work-section-label" id="project-summaries" tabindex="-1">Project summaries</h2>
-    <div class="work-index">
-      {% for project in projects %}{% if project.index_feature %}{% include project-card.html %}{% endif %}{% endfor %}
-    </div>
+  <section class="work-index" id="project-summaries" aria-label="Featured projects" tabindex="-1">
+    {% for project in projects %}{% if project.index_feature %}{% include project-card.html heading="h2" %}{% endif %}{% endfor %}
   </section>
   <div class="work-research-list" id="commondevops" tabindex="-1">
     {% for project in projects %}
@@ -79,13 +70,6 @@ lead_case: /work/scientific-ai-benchmark/
 
 <section class="section portfolio-gallery" aria-labelledby="portfolio-gallery">
   <h2 id="portfolio-gallery" tabindex="-1"><span id="gallery-title">Gallery</span></h2>
-  <nav class="gallery-jumps" aria-label="Portfolio image groups">
-    {% for group in site.data.gallery %}
-      {% assign examples = group.items | where_exp: 'image', 'image.detail_of == nil' %}
-      {% assign detail_count = group.items.size | minus: examples.size %}
-      <a href="#gallery-{{ group.id }}">{{ group.title | escape }} <span class="count">{% if detail_count > 0 %}{{ examples.size }} examples · {{ detail_count }} detail views{% else %}{{ examples.size }}{% endif %}</span></a>
-    {% endfor %}
-  </nav>
   {% for group in site.data.gallery %}
   <section class="gallery-group" id="gallery-{{ group.id }}" aria-labelledby="gallery-{{ group.id }}-title">
     <div class="gallery-heading">

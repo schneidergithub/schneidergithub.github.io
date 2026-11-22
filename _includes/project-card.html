@@ -1,17 +1,24 @@
 {% assign studies = all_studies | where: 'project', project.slug | sort: 'title' %}
 {% assign group = site.data.gallery | where: 'id', project.slug | first %}
+{% assign heading = include.heading | default: 'h3' %}
 <article class="project-card{% if project.index_feature %} work-support{% endif %}" id="{{ project.slug }}" tabindex="-1">
   <div class="project-copy">
     <p class="context work-kicker">{{ project.context | escape }}</p>
-    <h3>
+    <{{ heading }} class="project-heading">
       {% if project.index_case %}<a href="{{ project.index_case | relative_url }}">{% endif %}
-      {% if project.index_feature == 'metric' %}<span class="work-metric">{{ project.home_highlight.value | escape }}</span> {{ project.home_highlight.label | escape }}{% else %}{{ project.index_title | default: project.title | escape }}{% endif %}
+      {{ project.index_title | default: project.title | escape }}
       {% if project.index_case %}</a>{% endif %}
-    </h3>
+    </{{ heading }}>
     <div class="project-detail">{{ project.content }}</div>
   </div>
+  {% if project.index_feature == 'metric' %}
+    <div class="project-scale">
+      <p><strong class="work-metric">{{ project.home_highlight.value | escape }}</strong> {{ project.home_highlight.label | escape }}</p>
+      <p>{{ project.index_metric_note | escape }}</p>
+    </div>
+  {% endif %}
   {% if project.index_screens %}
-    <div class="product-scale">
+    <div class="project-scale">
       <p><strong class="work-metric">{{ project.index_scale | escape }}</strong> {{ project.index_scale_label | escape }}</p>
       <p>{{ project.index_volume | escape }}</p>
     </div>
@@ -47,6 +54,6 @@
         <a href="{{ '/articles/' | relative_url }}#{{ project.publication.id }}">{{ project.publication.label | escape }}</a>
       {% endif %}
     {% endif %}
-    {% if group %}<a href="#gallery-{{ group.id }}">{{ project.index_gallery_label | default: 'Project images' | escape }}</a>{% endif %}
+    {% if group and project.index_gallery_label %}<a href="#gallery-{{ group.id }}">{{ project.index_gallery_label | escape }}</a>{% endif %}
   </div>
 </article>
