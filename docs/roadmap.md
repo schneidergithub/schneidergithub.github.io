@@ -13,6 +13,14 @@ The standing scrum team includes a UI/UX specialist, a graphic designer and prof
 - MVP release: published through PR #1; the YouTube subscription button followed in PR #2. Live domains, pages, images, and the unchanged PGP key were verified.
 - The charcoal-and-blue design and manual edits through `4b3ad29` merged in [PR #3](https://github.com/schneidergithub/schneidergithub.github.io/pull/3), including removal of education and certifications from the Experience page. [PR #4](https://github.com/schneidergithub/schneidergithub.github.io/pull/4) added versioned stylesheet and favicon URLs.
 
+## Monthly newsletter archive
+
+| Reader story | Implementation and acceptance |
+| --- | --- |
+| Open the latest CommonDevOps newsletter from Home | Feature the newest published issue by coverage month. Its headline and cover open the individual LinkedIn article. A nearby archive link opens the monthly section of Articles & Demos. |
+| Find an earlier issue | Show one cover, month and linked headline per issue, newest first and grouped by year. Keep the existing issue bookmarks and alternate web and PDF editions. The initial archive covers April through October 2026. |
+| Find each new issue after publication | For the December publication and each month thereafter, add the published headline, LinkedIn article URL, local cover and alt text, and a short homepage description to a single entry in `_data/publications.yml`. Use `type: "Article"`, a unique year-and-month ID, `issue_month` for the month covered and `date` for the actual publication date. The same entry updates the homepage, archive order, year group and count on deployment. |
+
 <a id="next-three-sprints--portfolio-polish"></a>
 
 ## Portfolio polish · Five-sprint release

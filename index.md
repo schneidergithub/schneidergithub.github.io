@@ -45,7 +45,9 @@ permalink: /
     <a href="{{ '/articles/' | relative_url }}">Browse articles &amp; recordings</a>
   </div>
   <div class="media-grid">
-    {% assign featured_media = site.data.publications | where: 'home_featured', true %}
+    {% assign latest_issue = site.data.publications | where_exp: 'item', 'item.issue_month' | sort: 'issue_month' | reverse | slice: 0, 1 %}
+    {% assign selections = site.data.publications | where: 'home_featured', true %}
+    {% assign featured_media = latest_issue | concat: selections %}
     {% for item in featured_media %}
     <article class="media-card">
       {% if item.type == 'Video' %}
@@ -57,12 +59,13 @@ permalink: /
       <a class="media-story" href="{{ item.url | escape }}" aria-labelledby="home-{{ item.id | escape }}">
         <div class="media-art">{% include publication-media.html publication=item %}</div>
         <div class="media-copy">
-          <p class="media-type">{{ item.type | escape }}{% if item.period %} · {{ item.period | escape }}{% endif %}</p>
+          <p class="media-type">{% if item.issue_month %}{{ item.issue_month | append: '-01' | date: '%B %Y' }} · LinkedIn newsletter{% else %}{{ item.type | escape }}{% endif %}</p>
           <h3 id="home-{{ item.id | escape }}">{{ item.title | escape }}</h3>
         </div>
       </a>
       {% endif %}
-      <p class="media-description">{{ item.home_summary | escape }}</p>
+      <p class="media-description">{{ item.home_summary | default: item.description | escape }}</p>
+      {% if item.issue_month %}<a class="newsletter-archive-link" href="{{ '/articles/' | relative_url }}#monthly-reviews">Newsletter archive</a>{% endif %}
     </article>
     {% endfor %}
   </div>

@@ -17,27 +17,24 @@
   related:
     label: "Merged task on GitHub"
     url: "https://github.com/harbor-framework/terminal-bench-science/pull/1513"
-- title: "Cybersecurity Must Keep Pace with AI"
-  home_featured: true
-  home_summary: "The October review examines how teams supervise AI agents and protect the software they release."
+- title: "Are AI Security Controls Keeping Up?"
   id: october-review
   type: "Article"
-  period: "October 2026"
-  publisher: "Common DevOps Monthly Review"
-  url: "https://www.aaronschneider.org/common-devops-reports/reports/2026-10/"
-  primary_edition: "Web edition"
-  description: "The October issue follows AI agents into software delivery. It looks at GitHub’s agent workflows, the integrity of release pipelines, and the cost of running and monitoring agents."
-  attribution: "Common DevOps Monthly Review"
+  issue_month: "2026-10"
+  date: "2026-11-05"
+  publisher: "CommonDevOps on LinkedIn"
+  url: "https://www.linkedin.com/pulse/october-2026-ai-security-controls-keeping-up-commondevops-a632c/"
+  description: "CommonDevOps looks at October’s crypto heists and the security controls that teams need as AI agents take on more work."
   preview:
-    src: "/assets/publications/october-review.png"
-    alt: "October issue masthead with the headline in white and red"
-    width: 480
-    height: 210
+    src: "/assets/publications/october-2026-linkedin.jpg"
+    alt: "October news cover with a hooded Guy Fawkes mask beside the headlines"
+    width: 640
+    height: 359
   editions:
+    - label: "Web edition"
+      url: "https://www.aaronschneider.org/common-devops-reports/reports/2026-10/"
     - label: "PDF edition"
       url: "https://www.aaronschneider.org/common-devops-reports/reports/2026-10/common-devops-october-2026.pdf"
-    - label: "LinkedIn edition"
-      url: "https://www.linkedin.com/pulse/october-2026-ai-security-controls-keeping-up-commondevops-a632c/"
 - title: "node-ipc Supply Chain Incident Report"
   home_featured: true
   home_summary: "I traced a maintainer domain’s registration and mail routing during the node-ipc investigation."
@@ -61,7 +58,7 @@
     label: "Interview details on this page"
 - title: "AI just got cheaper, hacking spree continues"
   id: september-review
-  period: "September 2026"
+  issue_month: "2026-09"
   preview:
     src: "/assets/publications/september-review.jpg"
     alt: "September issue masthead reading “AI got cheaper. Control got harder.”"
@@ -71,7 +68,6 @@
   publisher: "CommonDevOps on LinkedIn"
   date: "2026-10-05"
   url: "https://www.linkedin.com/pulse/ai-just-got-cheaper-control-harder-commondevops-uqksc/"
-  primary_edition: "LinkedIn edition"
   editions:
     - label: "Web edition"
       url: "https://www.aaronschneider.org/common-devops-reports/reports/2026-09/"
@@ -97,7 +93,7 @@
   attribution: "CommonDevOps on YouTube · Featuring Brandon Miller"
 - title: "AI & Cybersecurity: August 2026"
   id: august-review
-  period: "August 2026"
+  issue_month: "2026-08"
   preview:
     src: "/assets/publications/august-review.jpg"
     alt: "August cover with a portrait and the headline “AI got more capable. Security got harder.”"
@@ -125,7 +121,7 @@
   attribution: "CommonDevOps on YouTube · Ian Miller and Aaron Schneider"
 - title: "July summary of A.I. tech news"
   id: july-review
-  period: "July 2026"
+  issue_month: "2026-07"
   preview:
     src: "/assets/publications/july-review.jpg"
     alt: "Blue and white July cover titled “Latest A.I. News”"
@@ -137,6 +133,45 @@
   url: "https://www.linkedin.com/pulse/july-summary-ai-tech-news-commondevops-tlg9e/"
   description: "A July roundup covering AI-related hacking incidents, frontier and open-weight model releases, and developments to watch."
   attribution: "Published by CommonDevOps on LinkedIn"
+- title: "Tech highlights from June 2026"
+  id: june-review
+  type: "Article"
+  issue_month: "2026-06"
+  date: "2026-07-02"
+  publisher: "CommonDevOps on LinkedIn"
+  url: "https://www.linkedin.com/pulse/tech-highlights-from-june-2026-commondevops-u0ejc/"
+  description: "CommonDevOps reviews the month’s AI news."
+  preview:
+    src: "/assets/publications/june-2026-linkedin.jpg"
+    alt: "Blue and white Latest A.I. News cover for June"
+    width: 640
+    height: 359
+- title: "Tech News - May 2026"
+  id: may-review
+  type: "Article"
+  issue_month: "2026-05"
+  date: "2026-06-01"
+  publisher: "CommonDevOps on LinkedIn"
+  url: "https://www.linkedin.com/pulse/tech-news-may-2026-commondevops-unepc/"
+  description: "CommonDevOps reviews the month’s technology news."
+  preview:
+    src: "/assets/publications/may-2026-linkedin.jpg"
+    alt: "Blue and white Latest A.I. News cover for May"
+    width: 640
+    height: 359
+- title: "New frontier & local LLMs, security incidents, and billing changes."
+  id: april-review
+  type: "Article"
+  issue_month: "2026-04"
+  date: "2026-05-02"
+  publisher: "CommonDevOps on LinkedIn"
+  url: "https://www.linkedin.com/pulse/april-2026-summary-latest-ai-news-commondevops-q15se/"
+  description: "Model releases, security incidents and billing changes from April."
+  preview:
+    src: "/assets/publications/april-2026-linkedin.jpg"
+    alt: "April summary cover with four small technology and security illustrations"
+    width: 640
+    height: 359
 - title: "What a fresh sandbox inherits from GitHub"
   id: fresh-sandbox-github
   type: "Engineering essay"
