@@ -50,7 +50,9 @@ async function checkDirectory(page, workUrl) {
   const width = page.viewportSize().width;
   assert.deepEqual(await feature.locator('.research-process strong').allTextContents(), ['Published studies', 'Study results', 'Comparable effects']);
   assert.equal(await contribution.getAttribute('href'), 'https://github.com/harbor-framework/terminal-bench-science/pull/1513');
-  assert.match(await feature.locator('.benchmark-byline').innerText(), /Dr\. Ian Miller.*co-authored.*merged our task.*maintain.*infrastructure.*trial results/);
+  assert.equal(await feature.locator('.benchmark-byline').innerText(),
+    'Terminal-Bench-Science is the latest benchmark project used to test frontier AI agents on real scientific work. ' +
+    'Version 1 and associated research paper will include “MDD Executive Function,” the task Dr. Ian Miller and I co-authored.');
   assert.equal(await feature.locator('.work-kicker').first().innerText().then(t => t.toLowerCase()), 'terminal-bench-science');
   for (const element of [title, read, feature.locator('.benchmark-byline')]) {
     const rect = await element.boundingBox();
@@ -80,12 +82,15 @@ async function checkDirectory(page, workUrl) {
   assert.equal(await page.locator('.project-card h3').count(), 5);
   const sections = page.locator('section.research-project');
   assert.deepEqual(await sections.locator('h2').allTextContents(), ['Node-IPC investigation', 'Chess benchmarks']);
-  for (const [sectionId, path, evidence] of [
-    ['node-ipc', '/work/node-ipc-investigation/', 'https://doi.org/10.6084/m9.figshare.33865414.v1'],
+  assert.equal(await page.locator('#node-ipc p:not(.work-kicker)').innerText(),
+    'I was the primary author of the official post-incident report.');
+  for (const [sectionId, ...destinations] of [
+    ['node-ipc', '/work/node-ipc-investigation/', 'https://doi.org/10.6084/m9.figshare.33865414.v1',
+      'https://www.youtube.com/watch?v=eSvYhh7_Kyo', 'https://www.youtube.com/watch?v=TZ04u6cj1ls'],
     ['chess-benchmarks', '/work/chess-puzzle-qa/', '/articles/#chess-benchmark-presentation']
   ]) {
     const section = page.locator('#' + sectionId);
-    assert.deepEqual(await section.getByRole('link').evaluateAll(links => links.map(a => a.getAttribute('href'))), [path, evidence]);
+    assert.deepEqual(await section.getByRole('link').evaluateAll(links => links.map(a => a.getAttribute('href'))), destinations);
   }
   const products = page.locator('#propoint .product-screens');
   assert.deepEqual(await products.locator('figcaption').allTextContents(), ['Guest Pass booking', 'Super Salon checkout']);
