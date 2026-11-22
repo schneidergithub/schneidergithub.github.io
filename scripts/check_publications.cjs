@@ -126,7 +126,7 @@ async function checkResearchFeature(panel, width) {
   assert.equal(await panel.locator('h2').innerText(), 'Terminal-Bench-Science');
   assert.equal(await panel.getByRole('link').count(), 0, 'Keep extra navigation out of the spotlight');
   const summary = panel.locator(':scope > p');
-  assert.match(await summary.innerText(), /AI agents on scientific workflows.*approved.*MDD Executive Function.*maintainer and reviewer.*preparing a paper/s);
+  assert.match(await summary.innerText(), /AI agents on scientific workflows.*approved.*MDD Executive Function.*maintainer and reviewer.*paper.*ongoing work.*coming soon/s);
   const heading = await panel.locator('h2').boundingBox();
   const player = await panel.locator('summary').boundingBox();
   const copy = await summary.boundingBox();

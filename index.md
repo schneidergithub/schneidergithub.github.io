@@ -12,7 +12,7 @@ permalink: /
     <h2 id="focus-title">Terminal-Bench-Science</h2>
     {% assign benchmark = site.data.publications | where: 'id', 'benchmark-presentation' | first %}
     <div class="focus-media">{% include publication-media.html publication=benchmark eager=true spotlight=true %}</div>
-    <p>The benchmark evaluates AI agents on scientific workflows. Dr. Ian Miller and I co-authored the approved “MDD Executive Function” task. I’m now a maintainer and reviewer for the project, and we’re preparing a paper.</p>
+    <p>The benchmark evaluates AI agents on scientific workflows. Dr. Ian Miller and I co-authored the approved “MDD Executive Function” task. I’m now a project maintainer and reviewer. A paper on our ongoing work is coming soon.</p>
   </aside>
 </section>
 
