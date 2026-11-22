@@ -19,10 +19,9 @@ img{display:block;max-width:100%;height:auto}
 .skip-link{position:absolute;left:1rem;top:-6rem;z-index:5;padding:.7rem 1rem;background:var(--text);color:var(--bg)}
 .skip-link:focus{top:1rem}
 .site-header {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
   gap: .65rem 1rem;
   padding-block: clamp(.85rem, 1.7vw, 1.3rem);
 }
@@ -716,6 +715,7 @@ a{color:inherit}
 
 /* Shared interaction hierarchy and comfortable touch targets. */
 .site-header nav {
+  justify-self: end;
   align-items: center;
   gap: 3px;
   max-width: 100%;
@@ -817,13 +817,12 @@ a{color:inherit}
 }
 @media screen and (max-width: 42em) {
   .site-header {
-    display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: .55rem .5rem;
     padding-block: .6rem;
   }
   .site-header .brand { width: fit-content; min-width: 0; overflow-wrap: anywhere; }
-  .site-header nav { grid-column: 1 / -1; display: grid; gap: 2px; }
+  .site-header nav { grid-column: 1 / -1; justify-self: stretch; display: grid; gap: 2px; }
   .site-header nav a { min-width: 0; min-height: 48px; padding-inline: 1rem; }
   .site-header nav a[aria-current]::after {
     inset: 0 auto 0 5px;

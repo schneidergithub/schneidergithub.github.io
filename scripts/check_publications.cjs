@@ -279,7 +279,9 @@ async function checkHomepage(page) {
     assert.ok(await nav.isVisible(), 'Show the main links when there is room');
     const brand = await page.locator('.site-header .brand').boundingBox();
     const links = await nav.boundingBox();
-    assert.ok(Math.min(brand.y + brand.height, links.y + links.height) > Math.max(brand.y, links.y), 'Wide header should use one row');
+    const navRows = await nav.locator('a').evaluateAll(items => items.map(a => Math.round(a.getBoundingClientRect().top)));
+    assert.ok(Math.min(brand.y + brand.height, links.y + links.height) > Math.max(brand.y, links.y) && new Set(navRows).size === 1,
+      'Keep the brand and all four links on one row at ' + width + 'px: ' + JSON.stringify({ brand, links, navRows }));
   }
   const signature = page.locator('.hero h1 .hero-signature');
   assert.equal(await signature.textContent(), 'A systematic approach.');
