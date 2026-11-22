@@ -15,7 +15,7 @@ The standing scrum team includes a UI/UX specialist, a graphic designer and prof
 
 ## Research, related work and recordings
 
-The prior release established the signed essay, the illustrated Work directory and the contact card. This series improves three journeys already available on the live site.
+All three sprints shipped. The releases connect Experience to current research, the signed essay to its chess benchmark, and the investigation to its report and recordings.
 
 | Sprint | Reader’s goal | Implementation and acceptance |
 | --- | --- | --- |
@@ -33,6 +33,9 @@ Use a pull request for each sprint, inspect its preview, and verify the released
 
 **Sprint 2 review.** The signed essay links to the case observation about the early answer reveal, and the case returns readers to the related passage. An original frame illustrates the qualitative chess-video benchmark. The presentation has its own playable entry. The custom-domain check confirmed both fragment destinations and the case image after deployment. [Release 61](https://github.com/schneidergithub/schneidergithub.github.io/pull/61) · [Production verification](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44983585175)
 
+**Sprint 3 review.** Visitors can read Aaron’s investigation and primary-author credit, cite the first edition on Figshare, or watch either CommonDevOps discussion from the node-ipc case. Articles & Demos gives each of the five recordings its own player and original source. Keyboard review covered a blocked research embed and closing the player. The screenshot review at 375px and 1280px confirmed that the red YouTube logo and CommonDevOps label form one channel link. The team consulting link opens the company website. [Release 62](https://github.com/schneidergithub/schneidergithub.github.io/pull/62) · [Production verification](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44984125377)
+
+**Retrospective.** For future investigations, record the author’s role, report edition and recording titles together at intake. For a benchmark, identify the project being evaluated and label its presentation separately. Reviewers can then follow the same paths a reader would use to see the work and check the evidence.
 
 <a id="sprint-review-and-proposed-next-three-sprints"></a>
 
