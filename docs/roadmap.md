@@ -25,6 +25,8 @@ The standing scrum team includes a UI/UX specialist, a graphic designer and prof
 
 The 39 points are the original relative estimates. The Bayer showcase is the first five-point story, delivered with this plan. The remaining eight stories total 34 points. Copy comes first so visitors can identify Aaron’s contribution before they inspect the work. Image behavior comes next because changing all 26 gallery links removes an actual navigation surprise. The final milestone uses the edited material to decide what earns space on Home and Articles. Product and QA review each release with the writers and designers before the next begins.
 
+**Approved release scope.** The owner removed the node-ipc editorial clarification from this series. The remaining stories proceed. Keep inline source links easy to recognize. Give navigation a compact treatment and let a genuine project image stand in for redundant text. At review, compare the Work directory, the gallery and a publication entry on a phone.
+
 ### Sprint 1 · Edit the work for a human reader
 
 | Visitor story | Implementation | Acceptance |
@@ -41,7 +43,7 @@ The 39 points are the original relative estimates. The Bayer showcase is the fir
 | --- | --- | --- |
 | Recognize an artifact on a phone (5) | Art-direct the five gallery covers using the real work. Size portrait app screens, landscape screenshots and wide brand marks for their aspect ratios. Let the Aleve preview use more of its frame at phone width. Use one clearly identifiable enlargement control per image. On the Aleve case, use the image link itself with a visual cue on the image and an accessible name. Keep the area below each screenshot free of labels and captions. | Review Bayer, Guest Pass and the Westinghouse banner at 375px and 1280px. Compare framing before and after. The relevant detail is recognizable, complete originals remain available, and logos retain their proportions. Label a detail crop if one is used. |
 | Go back to the image I was inspecting (5) | Gallery links currently force a new tab while case figures open in place. Use ordinary same-tab links throughout. Replace the browser test that expects a pop-up with the visitor’s actual return journey. | Expand Bayer, open the second Aleve screen with Enter, then use browser Back. The expanded group and original image control are in view, with a usable keyboard position. Repeat for a single-image group and a case figure. Check Back in Chromium and WebKit where available. All 26 originals remain reachable, including with JavaScript disabled. |
-| Tell what expanded and what is clickable (3) | Give the native gallery disclosure a short chevron transition on opening or closing, using the existing roughly 140ms timing. Keep the open/closed wording. Retain blue underlined links and the champagne heading. Use spacing and type to group project results and skills where borders currently make them resemble controls. | State and content update immediately. Keyboard focus remains visible and the page stays still. With reduced motion enabled the indicator switches instantly. Review touch, keyboard and 320px at 200% text. New motion must explain a state change. |
+| Tell what expanded and what is clickable (3) | Give the native gallery disclosure a short chevron transition on opening or closing, using the existing roughly 140ms timing. Keep the open/closed wording. Reserve underlining for links in prose and for interaction states. Keep keyboard focus and the champagne heading. Use spacing and type to group project results and skills where borders currently make them resemble controls. | State and content update immediately. Keyboard focus remains visible and the page stays still. With reduced motion enabled the indicator switches instantly. Review touch, keyboard and 320px at 200% text. New motion must explain a state change. |
 
 ### Sprint 3 · Put results and sources where readers expect them
 
@@ -55,11 +57,29 @@ The 39 points are the original relative estimates. The Bayer showcase is the fir
 
 **Refinement from the completed readability review.** The editorial team also inspected the 404 page, the same-domain report archive and its two web issues, bringing its coverage to 17 pages. Its photo editor inspected all 26 gallery images. Fold these findings into the open stories at their existing estimates.
 
-- **Sprint 1, accuracy first.** Before polishing case introductions, compare the September web issue with the versioned node-ipc report. The issue implies a link between the maintainer domain and the malicious publications that the investigation could not establish. Prepare a dated clarification for the separate reports repository and preserve the original edition. Acceptance is a visible distinction between the confirmed releases and the unknown route to publishing access. Defer cosmetic rewrites if needed. [September issue](https://www.aaronschneider.org/common-devops-reports/reports/2026-09/) · [First-edition report](https://doi.org/10.6084/m9.figshare.33865414.v1)
 - **Sprint 2, identify the actual work.** Review four labels beside their originals. Check Hemophilia Joint Visualizer, the distinction between the Pest Management and Lawn and Landscape apps, Looklister’s video frame designer, and the VoloCare warranty plans. Group the two mobile composites with their four detail views so visitors can browse eight distinct Bayer examples while retaining access to all twelve images. These edits concern gallery labels and alt text. The Aleve case remains caption-free. [Bayer gallery](https://www.aaronschneider.org/work/#gallery-bayer) · [Berkeley gallery](https://www.aaronschneider.org/work/#gallery-berkeley)
 - **Sprint 3, name the destination.** Use “Browse project summaries” for the homepage jump to the middle of Work. On the benchmark recording, give the grader guide priority and consolidate duplicate routes to the same case. Keep individual entries shareable. In the separate reports archive, plan a return path to Articles & Demos. Test the trip from the portfolio to an issue and back. [Project summaries](https://www.aaronschneider.org/work/#project-summaries) · [Report archive](https://www.aaronschneider.org/common-devops-reports/)
 
 **Release review.** The writer and marketing editor read the affected pages aloud. A second reviewer describes Aaron’s contribution and predicts each tested link’s destination before activating it. The designer compares phone and desktop captures, and QA checks the named journeys by keyboard, with JavaScript disabled where applicable, with enlarged text and with reduced motion. Record pass/fail and the production link beside each milestone in this roadmap.
+
+### Sprint 4 · Turn Work with me into a contact card
+
+Marketing, writing and design considered three ways to end the homepage. Two equal cards give each audience equal prominence but repeat the frame. A narrow contact band saves height but leaves little room for the audience labels on a phone. The team recommends one stationery-style card. It gives Aaron a personal signature and lets a recruiter or consulting buyer see both routes in one glance.
+
+| Visitor story | Implementation and acceptance |
+| --- | --- |
+| Reach the right person in one tap (3) | Keep **Work with me** and replace the routing paragraph with two labeled rows. Pair “Engineering roles & individual consulting” with “Aaron Schneider on LinkedIn” and “Team consulting” with “CommonDevOps on LinkedIn.” Give personal inquiries first position. Each row has one real link. |
+| Recognize the closing signature on a phone (3) | Use one slate panel, a restrained champagne serif accent drawn from the approved hero, and blue actions with a visible gold focus outline. Both routes stay visible. Stack the rows on a phone. Check 44px targets, 320px at enlarged text, reduced motion and natural keyboard order. |
+| Follow the channel after watching (2) | Move the existing CommonDevOps YouTube subscription link beside homepage recordings. Use “Subscribe on YouTube.” Preserve the shared contact anchor and the exact LinkedIn and YouTube destinations. Review the homepage footer for duplicate actions. |
+
+### Sprint 5 · Publish the first engineering essay
+
+The next signed writing candidate is *What a fresh sandbox inherits from GitHub*. The recording supplies the question and the chess project supplies a concrete example. Verify who said what, credit the speakers, and distinguish demonstrated behavior from design advice. If a source cannot support a claim, omit the claim.
+
+| Visitor story | Implementation and acceptance |
+| --- | --- |
+| Read the engineering reasoning behind a demo (5) | Publish one short, source-linked essay under Aaron’s portfolio with a concrete example and a link to the relevant moment of the recording. Verify every attribution. Credit the project documentation for each implementation detail. |
+| Find and share the essay (3) | Add a clearly labeled engineering essay to Articles & Demos with a locally hosted thumbnail, stable direct URL and return path. Preserve the eight existing entries, their fragment links and all recording players. Check phone, keyboard and links on the production site. |
 
 ## Released sprints · Scientific QA, incident investigation and engineering leadership
 

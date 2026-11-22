@@ -3,7 +3,10 @@ title: Experience
 description: Aaron Schneider's career in software engineering, DevSecOps, cloud architecture, QA automation, and technical leadership.
 permalink: /experience/
 ---
-<header class="page-intro experience-intro"><p class="eyebrow">Career</p><h1>Experience</h1><p class="lead">My work connects programming, automation, system reliability, and team leadership.</p><div class="actions"><a class="button secondary" href="https://www.linkedin.com/in/aarondrewschneider/">View LinkedIn <span aria-hidden="true">↗</span></a></div></header>
+<header class="page-intro experience-intro">
+  <h1>Experience</h1>
+  <div class="actions"><a class="button secondary" href="https://www.linkedin.com/in/aarondrewschneider/">View LinkedIn <span aria-hidden="true">↗</span></a></div>
+</header>
 {% assign roles = site.experience | sort: 'order' %}
 <section class="leadership" aria-labelledby="engineering-leadership">
   <h2 id="engineering-leadership" tabindex="-1">Engineering leadership</h2>
@@ -11,7 +14,7 @@ permalink: /experience/
     {% for role in roles %}
     {% if role.leadership_summary %}
     <div>
-      <h3><a href="#{{ role.role_id | escape }}">{{ role.organization | escape }} role details</a></h3>
+      <h3><a href="#{{ role.role_id | escape }}">{{ role.organization | escape }} role</a></h3>
       <p>{{ role.leadership_summary | escape }}</p>
     </div>
     {% endif %}
@@ -30,9 +33,13 @@ permalink: /experience/
     {{ role.content }}
     {% if role.case_project %}
       {% assign studies = site.pages | where: 'layout', 'case-study' | where: 'project', role.case_project | sort: 'title' %}
-      {% for study in studies %}
-      <div><a class="role-study" href="{{ study.url | relative_url }}">{{ study.link_label | default: study.title | escape }}</a></div>
-      {% endfor %}
+      {% if studies.size > 0 %}
+      <ul class="role-links">
+        {% for study in studies %}
+        <li><a class="role-study" href="{{ study.url | relative_url }}">{{ study.link_label | default: study.title | escape }}</a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
     {% endif %}
   </div>
 </article>
