@@ -124,5 +124,6 @@
       transition: opacity 140ms ease-out, content-visibility 140ms allow-discrete;
     }
     .portfolio-gallery .gallery-disclosure[open]::details-content { opacity: 1; }
+    .portfolio-gallery.restoring-image .gallery-disclosure::details-content { transition: none; }
   }
 }
