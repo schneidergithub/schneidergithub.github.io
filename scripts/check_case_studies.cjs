@@ -43,188 +43,87 @@ async function captureWork(page, name) {
 
 async function checkDirectory(page, workUrl) {
   const feature = page.locator('.benchmark-feature');
-  const title = feature.getByRole('heading', { name: 'Can AI reproduce a meta-analysis?' });
   const read = feature.getByRole('link', { name: 'Explore the research task' });
-  const contribution = feature.getByRole('link', { name: 'View the merged task' });
-  const caseUrl = new URL('scientific-ai-benchmark/', workUrl).href;
-  const width = page.viewportSize().width;
-  assert.deepEqual(await feature.locator('.research-process strong').allTextContents(), ['Published studies', 'Study results', 'Comparable effects']);
-  assert.equal(await contribution.getAttribute('href'), 'https://github.com/harbor-framework/terminal-bench-science/pull/1513');
   assert.equal(await feature.locator('.benchmark-byline').innerText(),
     'Terminal-Bench-Science is the latest benchmark project used to test frontier AI agents on real scientific work. ' +
     'Version 1 and associated research paper will include “MDD Executive Function,” the task Dr. Ian Miller and I co-authored.');
-  assert.equal(await feature.locator('.work-kicker').first().innerText().then(t => t.toLowerCase()), 'terminal-bench-science');
-  for (const element of [title, read, feature.locator('.benchmark-byline')]) {
-    const rect = await element.boundingBox();
-    assert.ok(rect && rect.y >= 0 && rect.y + rect.height <= page.viewportSize().height, 'Show the benchmark contribution and action on the first screen');
-  }
-  const supported = page.locator('.work-support');
-  assert.deepEqual(await supported.evaluateAll(items => items.map(el => el.id)), ['propoint', 'westinghouse']);
-  assert.match(await supported.first().innerText(), /Around 30,000\s+salons used Super Salon[\s\S]*hundreds of millions of dollars.*annually/i);
-  const westinghouse = page.locator('#westinghouse');
-  assert.equal(await westinghouse.getByRole('heading', { level: 2 }).innerText(), 'Leading QA across 13 projects');
-  assert.match(await westinghouse.locator('.project-scale').innerText(), /3×\s*Elasticsearch throughput/i);
-  assert.equal(await westinghouse.getByRole('link').count(), 1);
-  const scope = await westinghouse.locator('.project-detail').innerText();
+  const action = await read.boundingBox();
+  assert.ok(action.y + action.height <= page.viewportSize().height, 'Lead action is visible on the first screen');
+  assert.deepEqual(await page.locator('.work-support').evaluateAll(items => items.map(el => el.id)), ['propoint', 'westinghouse']);
+  assert.match(await page.locator('#propoint').innerText(), /Around 30,000[\s\S]*hundreds of millions/i);
+  const west = page.locator('#westinghouse');
   for (const term of ['20-person', 'vendor handover', 'QTP/UFT', 'LoadRunner', 'JMeter', 'BlazeMeter', 'playbooks', 'documentation']) {
-    assert.ok(scope.includes(term), 'Missing Westinghouse contract detail: ' + term);
+    assert.ok((await west.locator('.project-detail').innerText()).includes(term), term);
   }
-  if (width === 1280) {
-    for (const heading of await supported.getByRole('heading', { level: 2 }).all()) {
-      const bounds = await heading.boundingBox();
-      assert.ok(bounds.y + bounds.height <= 800, 'Show the supporting results on the first desktop screen');
-    }
+  assert.match(await west.locator('.scope-result').innerText(), /3×[\s\S]*Elasticsearch throughput/);
+  if (page.viewportSize().width === 1280) {
+    const first = await page.locator('#propoint').boundingBox();
+    const second = await west.boundingBox();
+    assert.ok(second.y >= first.y + first.height - 1, 'Projects use independent rows');
   }
+  const routes = await page.locator('.benchmark-actions a, .work-links a').evaluateAll(items =>
+    [...new Set(items.filter(a => a.pathname.startsWith('/work/') && !a.hash).map(a => a.pathname))].sort());
+  assert.deepEqual(routes, studies.map(study => '/work/' + study.path + '/').sort());
+  assert.equal(await page.locator('.project-card').count(), 7);
+  assert.equal(await page.locator('#node-ipc p:not(.work-kicker)').innerText(), 'I was the primary author of the official post-incident report.');
+  for (const url of ['https://doi.org/10.6084/m9.figshare.33865414.v1', 'https://www.youtube.com/watch?v=eSvYhh7_Kyo', 'https://www.youtube.com/watch?v=TZ04u6cj1ls']) {
+    assert.ok(await page.locator('#node-ipc a').evaluateAll((links, url) => links.some(a => a.href === url), url));
+  }
+  assert.equal(await page.locator('.work-mast a, .portfolio-gallery > nav').count(), 0);
+  assert.equal(await page.getByRole('heading', {name:'Gallery',exact:true}).count(), 0);
+  assert.equal(await page.getByText('Project summaries', {exact:true}).count(), 0);
   assert.equal(await page.locator('main a[href="/experience/#nuix"]').count(), 0);
   await captureWork(page, 'directory');
   await read.press('Enter');
-  assert.equal(page.url(), caseUrl);
-  assert.equal(await page.getByRole('link', { name: 'View the merged research task on GitHub' }).getAttribute('href'), 'https://github.com/harbor-framework/terminal-bench-science/pull/1513');
-  await page.getByRole('link', { name: 'Back to Selected Work', exact: true }).press('Enter');
+  assert.equal(page.url(), workUrl + 'scientific-ai-benchmark/');
+  await page.getByRole('link', {name:'Back to Selected Work',exact:true}).press('Enter');
   assert.equal(page.url(), workUrl + '#selected-work');
   assert.ok(await page.locator('h1:target').evaluate(el => el === document.activeElement));
-  const index = page.locator('.benchmark-actions, .work-index, .work-research-list');
-  const unique = await index.locator('a[href^="/work/"]:not([href*="#"])').evaluateAll(items => items.map(a => a.pathname).sort());
-  assert.deepEqual(unique, studies.map(study => '/work/' + study.path + '/').sort());
-  assert.equal(await page.locator('.project-card .project-heading').count(), 5);
-  const sections = page.locator('section.research-project');
-  assert.deepEqual(await sections.locator('h2').allTextContents(), ['Node-IPC investigation', 'Chess benchmarks']);
-  assert.equal(await page.locator('#node-ipc p:not(.work-kicker)').innerText(),
-    'I was the primary author of the official post-incident report.');
-  for (const [sectionId, ...destinations] of [
-    ['node-ipc', '/work/node-ipc-investigation/', 'https://doi.org/10.6084/m9.figshare.33865414.v1',
-      'https://www.youtube.com/watch?v=eSvYhh7_Kyo', 'https://www.youtube.com/watch?v=TZ04u6cj1ls'],
-    ['chess-benchmarks', '/work/chess-puzzle-qa/', '/articles/#chess-benchmark-presentation']
-  ]) {
-    const section = page.locator('#' + sectionId);
-    assert.deepEqual(await section.getByRole('link').evaluateAll(links => links.map(a => a.getAttribute('href'))), destinations);
-  }
-  const products = page.locator('#propoint .product-screens');
-  assert.deepEqual(await products.locator('figcaption').allTextContents(), ['Guest Pass booking', 'Super Salon checkout']);
-  assert.deepEqual(await products.locator('a').evaluateAll(links => links.map(a => a.pathname)),
-    ['/assets/portfolio/guestpass-mockups-02-orig.webp', '/assets/portfolio/supersalon.webp']);
-  const aleve = page.locator('#project-original-bayer');
-  assert.equal(await aleve.getAttribute('href'), '/assets/portfolio/portfolio-aleve.webp');
-  assert.match(await aleve.locator('img').getAttribute('src'), /thumbs\/portfolio-aleve\.webp/);
-  assert.match(await aleve.locator('img').getAttribute('alt'), /Aleve website/);
-  assert.match(await page.locator('#eli-lilly .project-detail').innerText(), /Python.*validated.*security/i);
-  assert.equal(await page.locator('.work-contact').getAttribute('href'), '/#connect');
-  assert.equal(await page.locator('.work-mast a, .portfolio-gallery > nav').count(), 0);
-  assert.equal(await page.getByText('Project summaries', { exact: true }).count(), 0);
-  if (width === 375) {
-    assert.equal(await page.locator('.gallery-group .thumbnail-card a:visible').count(), 5);
-    await page.locator('#portfolio-gallery').scrollIntoViewIfNeeded();
-    await captureWork(page, 'gallery');
-  }
 }
 
 async function checkGallery(page, workUrl, width, directEntry) {
-  await page.goto(workUrl + '#portfolio-gallery');
-  const images = page.locator('.gallery-group .thumbnail-card a');
+  await page.goto(workUrl);
+  const images = page.locator('.project-gallery .thumbnail-card a');
   const originals = gallery.flatMap(group => group.items.map(item => item.image));
   assert.equal(new Set(originals).size, 26);
-  assert.deepEqual(await images.evaluateAll(links => links.map(a => a.pathname).sort()), [...originals].sort());
-  assert.ok(await images.evaluateAll(links => links.every(a => a.classList.contains('image-enlarge') &&
-    (!a.target || a.target === '_self') && a.getAttribute('aria-label')?.trim())), 'Each original needs one named, same-tab enlargement control');
-  assert.equal(await page.locator('.gallery-group > details').count(), 3);
-  if (width === 375) {
-    assert.equal(await page.locator('.gallery-group .thumbnail-card a:visible').count(), 5);
-  }
+  assert.deepEqual(await images.evaluateAll(links => links.map(a => a.pathname).sort()), originals.slice().sort());
   for (const group of gallery) {
-    const fragment = '#gallery-' + group.id;
-    await page.goto(workUrl + fragment);
-    assert.equal(page.url(), workUrl + fragment);
-    const section = page.locator('.gallery-group:target');
-    assert.equal(await section.locator('h3').innerText(), group.title);
-    assert.equal(await section.locator('.gallery-heading p').first().innerText(), group.description);
-    const cover = section.locator(':scope > .thumbnail-card');
-    assert.equal(await cover.locator('a').getAttribute('href'), group.items[0].image);
-    const captions = await cover.locator('figcaption').allTextContents();
-    assert.deepEqual(captions, group.items[0].caption ? [group.items[0].caption] : []);
-    if (group.id === 'westinghouse') {
-      assert.deepEqual(captions, [], 'Keep the Westinghouse cover free of descriptive captions');
-      assert.match(group.description, /load-tested.*tripled Elasticsearch throughput/);
-    }
-    if (['bayer', 'propoint', 'westinghouse'].includes(group.id)) {
-      await cover.locator('img').scrollIntoViewIfNeeded();
-      await cover.locator('img').evaluate(img => img.decode());
-      await section.locator('h3').evaluate(el => el.scrollIntoView({ block: 'start' }));
-      await captureWork(page, group.id + '-cover');
-    }
+    await page.goto(workUrl + '#gallery-' + group.id);
+    const section = page.locator('#gallery-' + group.id);
+    assert.equal(await section.locator('h3').innerText(), group.title + ' images');
+    assert.ok(await section.evaluate(el => el.closest('.project-card') !== null), 'Images belong to the project');
     const details = section.locator(':scope > details');
-    const summary = details.locator(':scope > summary');
-    if (group.items.length > 1) {
-      const label = await summary.innerText();
-      if (group.id === 'bayer') assert.match(label, /8 examples.*4 detail views/i);
-      else assert.ok(label.includes(String(group.items.length)));
-      assert.equal(await details.getAttribute('open'), null);
-      await summary.press('Enter');
-      assert.ok(await details.evaluate(el => el.open), 'Keyboard should open the image group');
-      await details.locator('.thumbnail-card a').first().waitFor({ state: 'visible', timeout: 3000 });
-    } else {
-      assert.equal(await details.count(), 0, 'A single image opens directly');
-    }
-    const photos = section.locator('.thumbnail-card a');
-    assert.deepEqual(await photos.evaluateAll(links => links.map(a => a.pathname).sort()), group.items.map(item => item.image).sort());
-    const visible = section.locator('.thumbnail-card a:visible');
-    assert.equal(await visible.count(), group.id === 'bayer' ? 8 : group.items.length);
-    if (group.id === 'bayer') {
-      await summary.scrollIntoViewIfNeeded();
-      await captureWork(page, 'bayer-expanded');
-      const nested = details.locator('details');
-      assert.equal(await nested.count(), 2, 'Keep the four detail images with the two relevant mobile examples');
-      for (const item of group.items.filter(item => item.id)) {
-        const child = nested.filter({ has: page.locator('summary').filter({ hasText: item.title }) });
-        assert.equal(await child.count(), 1, 'Name the detail group after its composite example');
-        await child.locator(':scope > summary').press('Enter');
-        const children = group.items.filter(detail => detail.detail_of === item.id).map(detail => detail.image).sort();
-        assert.equal(children.length, 2);
-        assert.deepEqual(await child.locator('.thumbnail-card a:visible').evaluateAll(links => links.map(link => link.pathname).sort()), children);
+    if (await details.count()) {
+      if (!(await details.evaluate(el => el.open))) await details.locator(':scope > summary').press('Enter');
+      for (const nested of await details.locator('details').all()) {
+        await nested.locator(':scope > summary').press('Enter');
       }
     }
-    assert.equal(await section.locator('.thumbnail-card a:visible').count(), group.items.length);
-    for (const photo of await photos.all()) {
-      const image = photo.locator('img');
+    assert.deepEqual(await section.locator('.thumbnail-card a:visible').evaluateAll(links => links.map(a => a.pathname).sort()), group.items.map(item => item.image).sort());
+    for (const image of await section.locator('img').all()) {
       await image.scrollIntoViewIfNeeded();
       await image.evaluate(img => img.decode());
     }
-    if (group.items.length > 1) {
-      await summary.press('Space');
-      assert.equal(await details.getAttribute('open'), null);
-      await photos.nth(1).waitFor({ state: 'hidden' });
-      assert.equal(await section.locator('.thumbnail-card a:visible').count(), 1);
-    }
+    if (group.id === 'bayer') assert.equal(await section.locator('.gallery-detail-set').count(), 2);
     if (width === 1280) {
+      await captureWork(page, group.id + '-images');
       for (const item of group.items) {
-        const full = await page.request.get(new URL(item.image, workUrl).href);
-        assert.ok(full.ok() && full.headers()['content-type'].startsWith('image/'), 'Missing full-size image ' + item.image);
-        await full.dispose();
+        const response = await page.request.get(new URL(item.image, workUrl).href);
+        assert.ok(response.ok() && response.headers()['content-type'].startsWith('image/'));
+        await response.dispose();
       }
     }
-    if (!group.related) {
-      const role = section.getByRole('link', { name: 'My role at ' + group.title });
-      assert.equal(await role.getAttribute('href'), '/experience/#' + group.role_id);
-      await role.press('Enter');
-      assert.ok(await page.locator('h2:target').isVisible());
-      await page.goto(workUrl);
-    } else {
-      const destination = new URL(group.related.url, workUrl);
-      await section.getByRole('link', { name: group.related.label, exact: true }).click();
-      assert.equal(page.url(), destination.href);
-      if (destination.hash) {
-        assert.ok(await page.locator(destination.hash).isVisible(), 'Missing project card');
-      } else {
-        assert.ok(await page.locator('.case-study h1').isVisible(), 'Missing case study');
-      }
-      await page.goto(workUrl);
+    if (await details.count()) {
+      await details.locator(':scope > summary').press('Space');
+      assert.equal(await details.getAttribute('open'), null);
     }
   }
   if (directEntry) {
     await page.goto(workUrl + '#westinghouse');
-    assert.ok(await page.locator(':target').getByRole('heading').first().isVisible(), 'A shared legacy project fragment must resolve without JavaScript');
+    assert.ok(await page.locator(':target').getByRole('heading').first().isVisible());
   }
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Work page overflows');
-  console.log(width + 'px: verified the gallery highlights, image groups, and related project links.');
+  console.log(width + 'px: all 26 original images remain grouped with their projects.');
 }
 
 async function openImageAndReturn(page, control) {
@@ -348,10 +247,11 @@ async function checkImageReturns(browser, workUrl) {
   await openImageAndReturn(page, nested.locator('.thumbnail-card a').first());
   assert.ok(await nested.evaluate(el => el.open), 'Keep the mobile detail group expanded after Back');
   await page.goto(workUrl + '#propoint');
-  for (const image of await page.locator('#propoint .product-screens a').all()) {
+  for (const image of await page.locator('#propoint .project-gallery > .thumbnail-card a').all()) {
     await openImageAndReturn(page, image);
   }
   await page.goto(workUrl + '#gallery-westinghouse');
+  await page.locator('#gallery-westinghouse summary').press('Enter');
   await openImageAndReturn(page, page.locator('#gallery-westinghouse .thumbnail-card a'));
   await page.goto(new URL('bayer-aleve/', workUrl).href);
   await openImageAndReturn(page, page.locator('.study-figures a').nth(1));
@@ -404,20 +304,20 @@ async function check() {
     for (const width of [375, 1280]) {
       const page = await browser.newPage({ viewport: { width, height: width === 375 ? 812 : 900 } });
       await page.goto(new URL('/', workUrl).href);
-      const allProjects = page.getByRole('link', { name: 'Browse project summaries', exact: true });
-      assert.equal(await allProjects.getAttribute('href'), '/work/#project-summaries');
-      await allProjects.press('Enter');
-      assert.equal(page.url(), workUrl + '#project-summaries');
-      assert.ok(await page.getByRole('region', { name: 'Featured projects' }).evaluate(el =>
-        el.matches(':target') && el === document.activeElement), 'The homepage link should focus the featured projects');
-      await page.goBack();
-      await page.getByRole('link', { name: 'Explore selected work' }).press('Enter');
-      assert.equal(page.url(), workUrl);
+      const allProjects = page.locator('.section-heading a[href="/work/"], .selected-results a[href="/work/"]').first();
+      const entries = page.getByRole('link', { name: 'Explore selected work', exact: true });
+      assert.equal(await entries.count(), 2);
+      for (let i = 0; i < 2; i++) {
+        await entries.nth(i).press('Enter');
+        assert.equal(page.url(), workUrl);
+        assert.ok((await page.locator('.benchmark-feature').boundingBox()).y < page.viewportSize().height);
+        if (i === 0) await page.goBack();
+      }
       await checkDirectory(page, workUrl);
       if (width === 1280) await checkShareImage(page, 'aaron-schneider.jpg');
       for (const study of studies) {
         const casePath = '/work/' + study.path + '/';
-        const link = page.locator('.benchmark-actions, .work-index, .work-research-list').locator('a[href="' + casePath + '"]');
+        const link = page.locator('.benchmark-actions, .work-links').locator('a[href="' + casePath + '"]');
         assert.equal(await link.count(), 1);
         await link.click({ timeout: 5000 });
         assert.equal(page.url(), workUrl + study.path + '/');

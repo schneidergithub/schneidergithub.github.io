@@ -210,7 +210,7 @@ if '/articles/' in parsed:
         for source in (item, item.get('related', {}), *item.get('editions', [])):
             if source and source['url'] not in collection.links:
                 errors.append(f"/articles/: missing source {source['url']}")
-for route, name, count in [('/work/', 'project-card', 5), ('/work/', 'research-project', 2), ('/articles/', 'publication', publication_count), ('/experience/', 'role', 11), ('/', 'feature', 3)]:
+for route, name, count in [('/work/', 'project-card', 7), ('/work/', 'research-project', 2), ('/articles/', 'publication', publication_count), ('/experience/', 'role', 11), ('/', 'feature', 3)]:
     if route in parsed and parsed[route].classes[name] != count: errors.append(f'{route}: expected {count} {name} entries')
 
 if '/experience/' in parsed:

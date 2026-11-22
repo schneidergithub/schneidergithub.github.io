@@ -4,8 +4,8 @@ slug: node-ipc
 title: Node-IPC investigation
 context: CommonDevOps · Software supply-chain research
 research_publication: node-ipc-report
-case_label: Read the investigation
-source_label: Read the published report
+case_label: Case study
+source_label: Published report
 source_url: https://doi.org/10.6084/m9.figshare.33865414.v1
 videos:
   - id: node-ipc-follow-up

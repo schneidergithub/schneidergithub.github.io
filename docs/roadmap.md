@@ -1,5 +1,9 @@
 # Portfolio roadmap
 
+## In progress · Selected Work usability and visual consistency
+
+[Three-sprint implementation plan](selected-work-implementation-plan.md) covering the November 22 simulated reader review: integrate project galleries, unify the visual hierarchy, add accessible image browsing, repair entry links and focus/motion issues, and refocus supporting case content. Implementation is approved. The first increment consolidates the project sequence and its image collections.
+
 ## Released sprint · Experience from current work to career evidence
 
 **Sprint goal.** A visitor can identify Aaron’s current work on the first phone screen, find the people and projects he led under the right employer, and open evidence for a specific result. The product decision from planning is to remove the Engineering leadership section entirely. The homepage design is approved.
