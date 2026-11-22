@@ -220,7 +220,7 @@ async function check() {
             fit: getComputedStyle(img).objectFit
           };
         });
-        assert.equal(layout.fit, 'contain', layout.name);
+        assert.equal(layout.fit, layout.name === 'BCforward' ? 'cover' : 'contain', layout.name);
         assert.ok(layout.headingFits, 'Heading overflow: ' + layout.name);
         assert.ok(!layout.imageTakesFocus, 'Thumbnail creates a keyboard stop: ' + layout.name);
         assert.ok(layout.imageRight <= layout.headingLeft, layout.name);

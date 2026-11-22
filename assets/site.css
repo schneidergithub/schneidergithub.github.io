@@ -439,6 +439,7 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 .role-heading:focus-visible::before, .role-heading h2:focus-visible::before { display: none; }
 .role{display:grid;grid-template-columns:190px minmax(0,1fr);grid-template-areas:"image heading" "image details";gap:.8rem 2rem;align-content:start;align-items:start;padding-block:2rem;border-top:1px solid var(--line)}
 .role-thumbnail{grid-area:image;width:100%;height:auto;aspect-ratio:19/12;object-fit:contain;padding:6px;border:1px solid var(--line);border-radius:5px;background:#fff}
+.role:has(#bcforward) > .role-thumbnail { object-fit: cover; padding: 0; }
 .role:has(#commondevops) > .role-thumbnail { padding: 0; border: 0; background: transparent; }
 .role-recording { max-width: 25rem; margin-top: 1.25rem; }
 .role-recording:has(details[open]) { max-width: 40rem; }
