@@ -28,11 +28,10 @@ contact_footer: true
     {% assign highlight = project.home_highlight %}
     {% assign studies = site.pages | where: 'layout', 'case-study' | where: 'project', project.slug %}
     {% assign gallery = site.data.gallery | where: 'id', project.slug | first %}
+    {% assign cover_image = highlight.cover_image %}
+    {% if studies.size == 1 %}{% assign cover_image = cover_image | default: studies.first.figures.first.image %}{% endif %}
     {% assign cover = gallery.items.first %}
-    {% if cover and studies.size == 1 and studies.first.figures.first.image %}
-      {% assign primary_image = studies.first.figures.first.image %}
-      {% assign cover = gallery.items | where: 'image', primary_image | first | default: cover %}
-    {% endif %}
+    {% if cover_image %}{% assign cover = gallery.items | where: 'image', cover_image | first | default: cover %}{% endif %}
     {% assign heading = highlight.value | append: ' ' | append: highlight.label | strip %}
     {% if highlight.value and studies.size == 1 %}{% assign heading = studies.first.title %}{% endif %}
     <article class="feature">

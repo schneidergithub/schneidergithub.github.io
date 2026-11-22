@@ -363,6 +363,9 @@ async function checkHomepage(page) {
   }
   if (width === 375 || width === 1280) await captureSection(page, results, 'home-results');
   const checkout = page.locator('.feature').filter({ has: page.locator('a[href="/work/super-salon-checkout/"]') });
+  const guestPassCover = await checkout.locator('.feature-cover img').getAttribute('src');
+  assert.equal(new URL(guestPassCover, origin).pathname, '/assets/portfolio/thumbs/guestpass-mockups-01-orig.webp',
+    'Feature the Guest Pass salon finder on the homepage checkout card');
   assert.match(await checkout.locator('h3').innerText(), /caught.*checkout.*before release/i);
   assert.match(await checkout.locator('p').last().innerText(), /automated test.*one.cent.*online.*desktop/i);
   await checkConsultingFooter(page, width);

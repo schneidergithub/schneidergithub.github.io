@@ -5,6 +5,7 @@ organization: "ProPoint Global"
 featured: true
 home_highlight:
   organization: "ProPoint · Super Salon"
+  cover_image: "/assets/portfolio/guestpass-mockups-01-orig.webp"
   label: "Caught a checkout error before release"
   description: "An automated test found a one-cent rounding difference between the online and desktop totals for the same sale."
 title: "Super Salon checkout and hardware"
