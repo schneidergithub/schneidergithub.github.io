@@ -50,7 +50,9 @@ async function checkDirectory(page, workUrl) {
   const width = page.viewportSize().width;
   assert.deepEqual(await feature.locator('.research-process strong').allTextContents(), ['Published studies', 'Study results', 'Comparable effects']);
   assert.equal(await contribution.getAttribute('href'), 'https://github.com/harbor-framework/terminal-bench-science/pull/1513');
-  assert.match(await feature.locator('.benchmark-byline').innerText(), /Dr\. Ian Miller.*co-authored.*merged our task.*maintain.*infrastructure.*trial results/);
+  assert.equal(await feature.locator('.benchmark-byline').innerText(),
+    'Terminal-Bench-Science is the latest benchmark project used to test frontier AI agents on real scientific work. ' +
+    'Version 1 and associated research paper will include “MDD Executive Function,” the task Dr. Ian Miller and I co-authored.');
   assert.equal(await feature.locator('.work-kicker').first().innerText().then(t => t.toLowerCase()), 'terminal-bench-science');
   for (const element of [title, read, feature.locator('.benchmark-byline')]) {
     const rect = await element.boundingBox();

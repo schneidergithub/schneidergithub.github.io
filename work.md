@@ -21,7 +21,7 @@ lead_case: /work/scientific-ai-benchmark/
   <div>
     <p class="work-kicker">Terminal-Bench-Science</p>
     <h2 id="case-studies-title" tabindex="-1">{{ benchmark.title | escape }}</h2>
-    <p class="benchmark-byline">Dr. Ian Miller and I co-authored a task that asks AI agents to reconstruct findings from published studies of depression and executive function. Terminal-Bench-Science merged our task. I now help maintain the benchmark, review infrastructure changes and analyze trial results.</p>
+    <p class="benchmark-byline">Terminal-Bench-Science is the latest benchmark project used to test frontier AI agents on real scientific work. Version 1 and associated research paper will include “MDD Executive Function,” the task Dr. Ian Miller and I co-authored.</p>
     <div class="benchmark-actions">
       <a class="work-primary" href="{{ benchmark.url | relative_url }}">Explore the research task</a>
       <a href="{{ benchmark.contribution_url | escape }}">View the merged task</a>
