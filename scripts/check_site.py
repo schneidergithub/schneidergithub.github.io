@@ -3,6 +3,7 @@ from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit, urljoin, unquote
+from xml.etree import ElementTree
 import hashlib
 import json
 import re
@@ -211,6 +212,13 @@ if ESSAY not in parsed['/articles/'].links or sitemap.count(f'<loc>https://www.a
 for route in STUDIES:
     if route not in parsed['/work/'].links or f'<loc>https://www.aaronschneider.org{route}</loc>' not in sitemap:
         errors.append(f'{route}: missing from Selected Work or the sitemap')
+
+sprite = ElementTree.parse(SITE / 'assets/portfolio/social-icons.svg')
+for mark, color in {'linkedin': '#0A66C2', 'youtube': '#FF0033'}.items():
+    shapes = sprite.findall(f".//{{*}}symbol[@id='{mark}']//*[@fill]")
+    fills = {shape.get('fill').upper() for shape in shapes}
+    if not {color, '#FFFFFF'}.issubset(fills):
+        errors.append(f'Footer {mark} logo is missing its brand color or white foreground')
 
 for private in ['docs', 'scripts', 'Gemfile', 'Gemfile.lock', 'README.md', 'SECURITY.md', 'requirements-pdf.txt']:
     if (SITE / private).exists(): errors.append(f'Build exposed source-only file: {private}')
