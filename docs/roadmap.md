@@ -1,10 +1,10 @@
 # Portfolio roadmap
 
-## Planned sprint · Experience from current work to career evidence
+## Released sprint · Experience from current work to career evidence
 
 **Sprint goal.** A visitor can identify Aaron’s current work on the first phone screen, find the people and projects he led under the right employer, and open evidence for a specific result. The product decision from planning is to remove the Engineering leadership section entirely. The homepage design is approved.
 
-**Forecast.** One two-week sprint, six stories, 20 relative points. The points are planning estimates. The sprint review will use the 375px and 1280px captures from the [previous release](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44987563130) for comparison.
+**Delivery.** All six planned stories shipped in [PR #69](https://github.com/schneidergithub/schneidergithub.github.io/pull/69). The [approved plan](https://github.com/schneidergithub/schneidergithub.github.io/pull/68) forecast 20 relative points in a two-week timebox.
 
 | Story | Owner | Implementation and acceptance |
 | --- | --- | --- |
@@ -17,7 +17,11 @@
 
 **Delivery sequence.** Pair the panel removal, incoming link migration and replacement navigation tests in the first change. Editorial and design can proceed in parallel against the existing case studies and image sources. Integrate the revised copy and assets before reviewing the first screen and enlarged text.
 
-**Sprint review.** Marketing reads the first screen and identifies Aaron’s current contribution. A hiring reviewer opens a management role from Selected Work. A consulting reviewer follows both BCforward client entries. Design and QA compare the first viewport and all four thumbnails at phone and desktop sizes. Record results on the preview, repeat the journeys on the custom domain after release, and add the review and retrospective here.
+**Sprint review.** At 375×812 the CommonDevOps heading moved from about 660px to 280px down the page. The four current-role contributions and two complete project links fit on the opening screen. At 1280px, a reader also sees the Nuix team of 12 and its release-testing and rollback work. From BCforward, the Indiana link opens the 92-county case and Eli Lilly opens the internal security automation summary. Design reviewed the four revised thumbnails at phone and desktop sizes. [Before](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44987563130) · [Release preview](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44988881244)
+
+**Production verification.** The published role copy, the 11 employer entries, all 10 project links and the four updated image files matched the release. Browser checks covered actual doubled role text at 320px, keyboard navigation and Back, image fallback, and the old leadership bookmark with JavaScript disabled. [Published Experience](https://www.aaronschneider.org/experience/) · [Production browser review](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44989129154)
+
+**Retrospective.** For career pages, read one complete accomplishment on the opening phone screen and follow its evidence to the destination heading. For enlarged-text checks, measure the rendered text before and after resizing. Both checks are now part of the release workflow.
 
 ## Portfolio goal and release history
 
