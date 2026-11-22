@@ -15,9 +15,7 @@ const evidenceByRole = {
   bcforward: ['/work/indiana-case-archives/', '/work/#eli-lilly'],
   'sogeti-capgemini': ['/work/westinghouse-performance/'],
   'propoint-global': ['/work/from-booking-to-checkout/', '/articles/why-i-came-to-trust-automated-testing/'],
-  ciber: ['/work/bayer-aleve/'],
-  'berkeley-communications': ['/work/#gallery-berkeley'],
-  'bucky-ball-web': ['/work/#gallery-bucky-ball']
+  ciber: ['/work/bayer-aleve/']
 };
 
 function roleEntry(page, id) {
@@ -84,12 +82,7 @@ async function checkEvidence(page, url) {
         assert.equal(await role.locator('.role-links a[href="' + href + '"]').count(), 1);
       }
       await Promise.all([page.waitForURL(destination.href), link.press('Enter')]);
-      if (destination.hash.startsWith('#gallery-')) {
-        const image = page.locator('.gallery-group:target > .thumbnail-card a');
-        const original = id === 'berkeley-communications' ? 'berkcom-inventory.webp' : 'buckyball.webp';
-        assert.equal(await image.getAttribute('href'), '/assets/portfolio/' + original);
-        await image.locator('img').evaluate(img => img.decode());
-      } else if (destination.hash) {
+      if (destination.hash) {
         assert.equal(await page.locator('.project-card:target h2').innerText(), 'Automating internal security checks');
       } else if (href.startsWith('/articles/')) {
         assert.equal(await page.locator('.engineering-essay h1').innerText(), 'Why I Came to Trust Automated Testing');
@@ -218,13 +211,15 @@ async function check() {
             bodyLeft: rect('.role-details').left,
             bodyTop: rect('.role-details').top,
             headingFits: article.querySelector('.role-heading').scrollWidth <= article.querySelector('.role-heading').clientWidth,
-            imageTakesFocus: article.contains(img.closest('a[href], button, [tabindex]:not([tabindex="-1"])')),
+            imageControl: img.closest('a, summary')?.tagName || null,
             fit: getComputedStyle(img).objectFit
           };
         });
         assert.equal(layout.fit, layout.name === 'BCforward' ? 'cover' : 'contain', layout.name);
         assert.ok(layout.headingFits, 'Heading overflow: ' + layout.name);
-        assert.ok(!layout.imageTakesFocus, 'Thumbnail creates a keyboard stop: ' + layout.name);
+        const sheet = await role.locator('.role-gallery').count();
+        const single = await role.locator('.role-single').count();
+        assert.equal(layout.imageControl, sheet ? 'SUMMARY' : single ? 'A' : null, layout.name);
         assert.ok(layout.imageRight <= layout.headingLeft, layout.name);
         assert.ok(layout.headingBottom <= layout.bodyTop, layout.name);
         const expectedLeft = width === 375 ? layout.imageLeft : layout.headingLeft;

@@ -1,6 +1,8 @@
 [
   {
     "id": "propoint",
+    "role_id": "propoint-global",
+    "short_name": "ProPoint",
     "title": "Guest Pass and Super Salon",
     "description": "I built Guest Pass for mobile booking and developed Super Salon’s scheduling and checkout software. Around 30,000 salons used Super Salon.",
     "related": {
@@ -48,6 +50,8 @@
   },
   {
     "id": "bayer",
+    "role_id": "ciber",
+    "short_name": "Bayer",
     "title": "Bayer / Ciber",
     "description": "At Ciber, I led development of the Aleve and Bayer Aspirin websites and built two mobile apps for Bayer\u2019s sales team.",
     "related": {
@@ -173,6 +177,8 @@
   },
   {
     "id": "berkeley",
+    "role_id": "berkeley-communications",
+    "short_name": "Berkeley",
     "title": "Berkeley Communications",
     "description": "I built Berkeley\u2019s warehouse system for tracking parts, stock, and warranties. I also automated marketing workflows and ran the company\u2019s web hosting on in-house servers.",
     "items": [
@@ -252,6 +258,7 @@
   },
   {
     "id": "westinghouse",
+    "role_id": "sogeti-capgemini",
     "title": "Westinghouse",
     "description": "At Sogeti / Capgemini, I load-tested a release of Westinghouse\u2019s $20 million website. The results guided configuration changes that tripled Elasticsearch throughput.",
     "related": {
@@ -272,11 +279,13 @@
   },
   {
     "id": "bucky-ball",
+    "role_id": "bucky-ball-web",
     "title": "Bucky Ball Web",
     "description": "As co-owner, I built and hosted more than 100 websites for small and midsize businesses.",
     "items": [
       {
         "title": "Bucky Ball Web homepage",
+        "open_label": "Open archived Bucky Ball Web homepage image",
         "alt": "Bucky Ball Web website with a client-login area and web-services content.",
         "image": "/assets/portfolio/buckyball.webp",
         "thumbnail": "/assets/portfolio/thumbs/buckyball.webp",

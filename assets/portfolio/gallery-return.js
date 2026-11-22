@@ -1,3 +1,5 @@
+const galleryDisclosures = 'details.gallery-disclosure, details.gallery-detail-set';
+
 // Associate the return position with this browser history entry only.
 window.addEventListener('click', (event) => {
   const link = event.target.closest('a.image-enlarge');
@@ -5,7 +7,7 @@ window.addEventListener('click', (event) => {
       event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ||
       link.origin !== location.origin || (link.target && link.target !== '_self')) return;
 
-  const openGroups = Array.from(document.querySelectorAll('.portfolio-gallery details[open]'), group => group.id);
+  const openGroups = Array.from(document.querySelectorAll(galleryDisclosures)).filter(group => group.open).map(group => group.id);
   history.replaceState({
     ...history.state,
     imageReturn: {
@@ -32,7 +34,7 @@ window.addEventListener('pageshow', (event) => {
     return;
   }
 
-  for (const group of document.querySelectorAll('.portfolio-gallery details')) {
+  for (const group of document.querySelectorAll(galleryDisclosures)) {
     group.open = saved.openGroups.includes(group.id);
   }
   // WebKit may still scroll to the URL fragment after the first layout.

@@ -618,3 +618,11 @@ All four article/report URLs returned HTTP 200 on October 26, 2026 and their tit
 Pre-MVP revision: `accccc0362059e3baf3d1aac9ae521ef45661b2c`. Rollback uses a revert of the MVP merge through a pull request, preserving history, followed by deployment and domain checks.
 
 No CMS, backend, contact form, newsletter, search, or complete archive is included in the MVP.
+
+## ProPoint showcase and Experience galleries
+
+The ProPoint entry and homepage feature lead with the software Aaron built and the scale of Super Salon. The product showcase follows four screens from Guest Pass booking to Super Salon checkout. The engineering essay tells the team’s story of agreeing on acceptance criteria. The checkout case retains the technical explanation of the rounding discrepancy.
+
+Experience uses the Selected Work inventory. Three expandable sheets and two directly linked originals cover all 26 images. Bayer’s four mobile detail views remain grouped with their two app overviews.
+
+[Product showcase](../work/from-booking-to-checkout.md) · [Engineering essay](../articles/why-i-came-to-trust-automated-testing.md) · [Image inventory](../_data/gallery.json)

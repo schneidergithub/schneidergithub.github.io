@@ -69,24 +69,7 @@ permalink: /work/
     {% if examples.size > 1 %}
     <details class="gallery-disclosure" id="images-{{ group.id }}">
       <summary><span class="gallery-expand">{% if detail_count > 0 %}Browse all {{ examples.size }} examples and {{ detail_count }} detail views{% else %}View all {{ examples.size }} images{% endif %}</span><span class="gallery-collapse">Show fewer images</span><span class="visually-hidden"> from {{ group.title | escape }}</span></summary>
-      <div class="thumbnail-grid">
-        {% for item in examples offset:1 %}
-        <div class="gallery-example">
-          {% include gallery-image.html item=item %}
-          {% if item.id %}
-            {% assign views = group.items | where: 'detail_of', item.id %}
-            {% if views.size > 0 %}
-            <details class="gallery-detail-set" id="details-{{ group.id }}-{{ item.id }}">
-              <summary><span class="gallery-expand">Show {{ views.size }} detail views</span><span class="gallery-collapse">Hide detail views</span><span class="visually-hidden"> from {{ item.title | escape }}</span></summary>
-              <div class="gallery-detail-grid">
-                {% for view in views %}{% include gallery-image.html item=view %}{% endfor %}
-              </div>
-            </details>
-            {% endif %}
-          {% endif %}
-        </div>
-        {% endfor %}
-      </div>
+      {% include gallery-grid.html group=group items=examples offset=1 %}
     </details>
     {% endif %}
   </section>
