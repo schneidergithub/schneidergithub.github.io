@@ -31,24 +31,31 @@ groups:
 {% for item in members %}
   {% assign featured = false %}
   {% if group.id == 'recordings' and forloop.first %}{% assign featured = true %}{% endif %}
+  {% capture display_title %}<span class="publication-title">{{ item.title | escape | replace: 'meta-analysis', '<span class="keep-term">meta-analysis</span>' }}</span>{% endcapture %}
   <li class="publication{% if featured %} publication-featured{% endif %}" id="{{ item.id | escape }}" tabindex="-1">
-    <h3>{% if item.type == 'Video' %}{{ item.title | escape }}{% else %}<a href="{{ item.url | escape }}">{{ item.title | escape }} <span aria-hidden="true">↗</span></a>{% endif %}</h3>
+    <div class="publication-heading">
+      <h3>{% if item.type == 'Video' %}{{ display_title }}{% else %}<a href="{{ item.url | escape }}">{{ display_title }} {% if item.primary_edition %}<span class="edition-source">{{ item.primary_edition | escape }}</span>{% else %}<span aria-hidden="true">↗</span>{% endif %}</a>{% endif %}</h3>
+      <a class="entry-permalink" href="#{{ item.id | escape }}" aria-label="Link to {{ item.title | escape }}" title="Link to this entry"></a>
+    </div>
     <div class="meta">
       {% include publication-media.html publication=item link_cover=true eager=featured %}
     </div>
     <div class="publication-copy">
       {% if item.period or item.date %}<p class="publication-date">{% if item.period %}{{ item.period | escape }} issue{% endif %}{% if item.period and item.date %} · {% endif %}{% if item.date %}Published <time datetime="{{ item.date }}">{{ item.date | date: '%B %-d, %Y' }}</time>{% endif %}</p>{% endif %}
-      <p>{{ item.description | escape }}{% if item.guide %} <a href="{{ item.guide.url | relative_url | escape }}">{{ item.guide.label | escape }}</a>.{% endif %}</p>
+      <p>{{ item.description | escape }}</p>
+      {% if item.guide %}<p><a class="publication-guide" href="{{ item.guide.url | relative_url | escape }}">{{ item.guide.label | escape }}</a> {{ item.guide.context | escape }}.</p>{% endif %}
       <p class="attribution">{{ item.attribution | escape }}</p>
+      {% if item.editions or item.related or item.case_url or item.companion %}
       <p class="publication-actions">
+        {% for edition in item.editions %}<a class="publication-edition" href="{{ edition.url | escape }}">{{ edition.label | escape }}</a>{% endfor %}
         {% if item.related %}<a class="publication-related" href="{{ item.related.url | escape }}">{{ item.related.label | escape }}&nbsp;<span aria-hidden="true">↗</span></a>{% endif %}
         {% if item.case_url %}
           {% assign study = site.pages | where: 'url', item.case_url | first %}
-          {% if study %}<a class="publication-case" href="{{ study.url | relative_url }}">Read the case study<span class="visually-hidden"> — {{ study.title | escape }}</span></a>{% endif %}
+          {% if study %}<a class="publication-case" href="{{ study.url | relative_url }}">{{ study.link_label | default: study.title | escape }}</a>{% endif %}
         {% endif %}
         {% if item.companion %}<a class="publication-context" href="#{{ item.companion.id | escape }}">{{ item.companion.label | escape }}</a>{% endif %}
-        <a class="entry-permalink" href="#{{ item.id | escape }}">Permalink<span class="visually-hidden"> — {{ item.title | escape }}</span></a>
       </p>
+      {% endif %}
     </div>
   </li>
 {% endfor %}

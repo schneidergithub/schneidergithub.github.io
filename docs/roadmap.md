@@ -53,6 +53,8 @@ At kickoff, the first three milestones had 34 points of open work after the five
 
 **Gallery writing decision.** Aaron flagged the Westinghouse heritage-banner caption during the sprint. Lead with his release testing and the Elasticsearch result. Leave the cover free of a caption. Describe the person and historical logos in the image alternative for readers who need it. Apply the same test to future gallery copy: keep a caption only when it adds information about the engineering work.
 
+**Sprint 2 review and retrospective.** The marketing reviewer could distinguish eight Bayer examples from the four supporting views, and identified PDF and LinkedIn edition labels as the next opportunity to simplify navigation. The graphic designer measured the Aleve artwork at about 333px inside its 343px phone frame, up from about 204px. The same view retains all three Guest Pass screens and the proportions of the Westinghouse mark. QA found and corrected horizontal overflow at 320px with 200% text. Chromium and WebKit both restored the selected image, keyboard focus and disclosure state after Back. Carry an actual-size cover inspection into Sprint 3. [Gallery release #38](https://github.com/schneidergithub/schneidergithub.github.io/pull/38) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44968478254) · [Cross-browser checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44968195736)
+
 ### Sprint 3 · Put results and sources where readers expect them
 
 | Visitor story | Implementation | Acceptance |

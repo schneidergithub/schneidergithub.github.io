@@ -5,17 +5,17 @@
     width: 1280
     height: 720
   id: benchmark-presentation
-  case_url: "/work/scientific-ai-benchmark/"
   type: "Video"
   publisher: "YouTube"
   url: "https://www.youtube.com/watch?v=e26_SSPpOP0"
   description: "In this Terminal-Bench-Science task, AI agents select eligible comparisons from studies of executive function in major depressive disorder, extract the statistics, and calculate effect sizes."
   guide:
-    label: "See how the team checked the grader"
+    label: "Grader guide"
+    context: "in the scientific benchmark case"
     url: "/work/scientific-ai-benchmark/#checking-the-grader"
   attribution: "Benchmark task by Dr. Ian Miller and Aaron Schneider"
   related:
-    label: "View the merged benchmark task"
+    label: "Merged task on GitHub"
     url: "https://github.com/harbor-framework/terminal-bench-science/pull/1513"
 - title: "Cybersecurity Must Keep Pace with AI"
   home_featured: true
@@ -25,6 +25,7 @@
   period: "October 2026"
   publisher: "Common DevOps Monthly Review"
   url: "https://www.aaronschneider.org/common-devops-reports/reports/2026-10/"
+  primary_edition: "Web edition"
   description: "The October issue follows AI agents into software delivery. It looks at GitHub’s agent workflows, the integrity of release pipelines, and the cost of running and monitoring agents."
   attribution: "Common DevOps Monthly Review"
   preview:
@@ -32,9 +33,11 @@
     alt: "October issue masthead with the headline in white and red"
     width: 480
     height: 210
-  related:
-    label: "Read the PDF edition"
-    url: "https://www.aaronschneider.org/common-devops-reports/reports/2026-10/common-devops-october-2026.pdf"
+  editions:
+    - label: "PDF edition"
+      url: "https://www.aaronschneider.org/common-devops-reports/reports/2026-10/common-devops-october-2026.pdf"
+    - label: "LinkedIn edition"
+      url: "https://www.linkedin.com/pulse/october-2026-ai-security-controls-keeping-up-commondevops-a632c/"
 - title: "node-ipc Supply Chain Incident Report"
   home_featured: true
   home_summary: "I traced a maintainer domain’s registration and mail routing during the node-ipc investigation."
@@ -68,6 +71,10 @@
   publisher: "CommonDevOps on LinkedIn"
   date: "2026-10-05"
   url: "https://www.linkedin.com/pulse/ai-just-got-cheaper-control-harder-commondevops-uqksc/"
+  primary_edition: "LinkedIn edition"
+  editions:
+    - label: "Web edition"
+      url: "https://www.aaronschneider.org/common-devops-reports/reports/2026-09/"
   description: "A September roundup examining model releases, agent behavior, cybersecurity disclosures, and lessons from CommonDevOps research."
   attribution: "CommonDevOps · Aaron S., Ian Miller, and Javier Bonilla"
 - title: "Node-IPC incident interview with creator Brandon Miller"

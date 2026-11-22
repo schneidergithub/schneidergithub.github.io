@@ -7,8 +7,7 @@ home_highlight:
   organization: "Westinghouse"
   value: "3×"
   label: "Elasticsearch throughput"
-  description: "At Westinghouse, I used load tests to find bottlenecks and tune the Elasticsearch configuration."
-  link_label: "See the performance-testing results"
+  description: "I used load tests to find bottlenecks and tune the search configuration."
 title: "Load testing a website release"
 context: "Westinghouse · Sogeti / Capgemini engagement"
 ---

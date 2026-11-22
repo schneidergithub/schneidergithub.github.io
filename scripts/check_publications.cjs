@@ -85,6 +85,17 @@ async function captureHome(page, version) {
   await page.screenshot({ path: prefix + '-full.jpg', quality: 76, fullPage: true, animations: 'disabled' });
 }
 
+async function captureSection(page, section, name) {
+  const dir = path.join(process.env.RUNNER_TEMP || os.tmpdir(), 'homepage-previews');
+  fs.mkdirSync(dir, { recursive: true });
+  const version = new URL(origin).hostname === '127.0.0.1' ? 'preview' : 'live';
+  const viewport = page.viewportSize();
+  if (viewport.width === 375) await page.setViewportSize({ width: 375, height: 812 });
+  await section.evaluate(el => el.scrollIntoView({ block: 'start', behavior: 'instant' }));
+  await page.screenshot({ path: path.join(dir, version + '-' + name + '-' + viewport.width + '.jpg'), quality: 82, animations: 'disabled' });
+  if (viewport.width === 375) await page.setViewportSize(viewport);
+}
+
 async function checkActionTargets(links, sameRow = false) {
   const boxes = await links.evaluateAll(items => items.map(link => {
     const box = link.getBoundingClientRect();
@@ -124,6 +135,8 @@ async function checkResearchFeature(panel, width) {
   if (width === 375) assert.ok(byPosition.playBottom <= panel.page().viewportSize().height, 'Play control must fit on the first phone screen');
   const cover = panel.locator('.publication-video img');
   await decodeCover(cover);
+  const artPath = await cover.evaluate(img => new URL(img.currentSrc).pathname);
+  assert.equal(artPath, width <= 850 ? '/assets/publications/benchmark-session.jpg' : '/assets/publications/benchmark-meta-analysis.jpg');
   const dimensions = await cover.evaluate(img => ({
     width: img.naturalWidth, height: img.naturalHeight,
     declaredWidth: Number(img.getAttribute('width')), declaredHeight: Number(img.getAttribute('height'))
@@ -135,6 +148,9 @@ async function checkResearchFeature(panel, width) {
 
 async function checkHomepage(page) {
   const width = page.viewportSize().width;
+  const sequence = await page.locator('main > .hero, main > .selected-results, main > #home-media, main > #connect')
+    .evaluateAll(items => items.map(el => el.id || (el.classList.contains('hero') ? 'hero' : 'results')));
+  assert.deepEqual(sequence, ['hero', 'results', 'home-media', 'connect'], 'Show engineering results before the media collection and contacts');
   const nav = page.locator('.site-header nav');
   if (width >= 768) {
     assert.ok(await nav.isVisible(), 'Show the main links when there is room');
@@ -233,6 +249,14 @@ async function checkHomepage(page) {
     assert.equal(await project.count(), 1, 'Missing featured project ' + dest);
     assert.match(await project.innerText(), result);
   }
+  const results = page.locator('.selected-results');
+  assert.equal(await results.getByRole('link', { name: 'Browse project summaries' }).getAttribute('href'), '/work/#project-summaries');
+  assert.equal(await page.locator('#home-media').getByRole('link', { name: 'Browse articles & recordings' }).getAttribute('href'), '/articles/');
+  for (const card of await results.locator('.feature').all()) {
+    assert.equal(await card.getByRole('link').count(), 1, 'Give each result a single link');
+    assert.ok(await card.locator('h3 a').isVisible(), 'The result heading opens the evidence');
+  }
+  if (width === 375 || width === 1280) await captureSection(page, results, 'home-results');
   const checkout = page.locator('.feature').filter({ has: page.locator('a[href="/work/super-salon-checkout/"]') });
   assert.match(await checkout.locator('h3').innerText(), /caught.*checkout.*before release/i);
   assert.match(await checkout.locator('p').last().innerText(), /automated test.*one.cent.*online.*desktop/i);
@@ -271,7 +295,7 @@ async function checkGraderGuide(page, directEntry = false) {
   if (directEntry) {
     await page.goto(url);
   } else {
-    const entry = page.locator('#benchmark-presentation').getByRole('link', { name: /check.*grader/i });
+    const entry = page.locator('#benchmark-presentation').getByRole('link', { name: 'Grader guide' });
     assert.equal(await entry.getAttribute('href'), graderGuide);
     await Promise.all([page.waitForURL(url), entry.press('Enter')]);
   }
@@ -305,7 +329,11 @@ async function checkGraderGuide(page, directEntry = false) {
     const version = new URL(origin).hostname === '127.0.0.1' ? 'preview' : 'live';
     await page.screenshot({ path: path.join(dir, version + '-grader-guide-' + page.viewportSize().width + '.jpg'), quality: 82, animations: 'disabled' });
   }
-  const back = page.locator('.study-copy').getByRole('link', { name: /open the presentation details and player/i });
+  const overview = page.locator('.case-study').getByRole('link', { name: 'Case overview', exact: true });
+  assert.equal(await overview.getAttribute('href'), '#case-title');
+  await overview.press('Enter');
+  assert.ok(await page.locator('h1#case-title:target').evaluate(el => el === document.activeElement));
+  const back = page.locator('.case-study').getByRole('link', { name: 'Benchmark recording', exact: true });
   assert.equal(await back.getAttribute('href'), presentation);
   await Promise.all([page.waitForURL(new URL(presentation, origin).href), back.press('Enter')]);
   assert.ok(await page.locator('#benchmark-presentation:target summary').isVisible());
@@ -313,17 +341,11 @@ async function checkGraderGuide(page, directEntry = false) {
 
 async function checkDiscovery(page) {
   const collection = new URL('/articles/', origin).href;
-  const caseUrl = new URL('/work/scientific-ai-benchmark/', origin).href;
   const benchmark = page.locator('#benchmark-presentation');
   const mergedTask = 'https://github.com/harbor-framework/terminal-bench-science/pull/1513';
-  assert.equal(await benchmark.locator('.publication-related').getAttribute('href'), mergedTask);
-  await Promise.all([page.waitForURL(caseUrl), benchmark.locator('.publication-case').press('Enter')]);
-  const study = page.locator('.case-study');
-  assert.ok(await study.locator('h1').isVisible());
-  assert.ok(await study.locator('a[href="' + mergedTask + '"]').isVisible());
-  const recording = study.locator('a[href="' + presentation + '"]');
-  await Promise.all([page.waitForURL(new URL(presentation, origin).href), recording.press('Enter')]);
-  assert.ok(await benchmark.locator('summary').isVisible());
+  assert.equal(await benchmark.getByRole('link', { name: 'Merged task on GitHub' }).getAttribute('href'), mergedTask);
+  const caseLinks = benchmark.locator('a[href^="/work/scientific-ai-benchmark/"]');
+  assert.deepEqual(await caseLinks.evaluateAll(links => links.map(a => a.pathname + a.hash)), [graderGuide]);
   for (const [group, entries] of Object.entries(publicationGroups)) {
     const jump = page.locator('.publication-jumps a[href="#' + group + '"]');
     assert.match(await jump.innerText(), new RegExp('\\b' + entries.length + '\\b'));
@@ -336,9 +358,10 @@ async function checkDiscovery(page) {
     for (const entry of entries) {
       const row = page.locator('li#' + entry);
       const permalink = row.locator('.entry-permalink');
-      const title = await row.locator('h3').evaluate(heading => (heading.querySelector('a') || heading).firstChild.textContent.trim());
+      const title = (await row.locator('h3 .publication-title').textContent()).trim();
       assert.equal(await permalink.getAttribute('href'), '#' + entry);
-      assert.ok(await row.getByRole('link', { name: 'Permalink — ' + title, exact: true }).isVisible(), 'Missing descriptive permalink for ' + entry);
+      assert.ok(await row.getByRole('link', { name: 'Link to ' + title, exact: true }).isVisible(), 'Missing descriptive permalink for ' + entry);
+      assert.ok(await permalink.evaluate(el => { const box = el.getBoundingClientRect(); return box.width >= 44 && box.height >= 44; }));
       await permalink.press('Enter');
       assert.equal(page.url(), collection + '#' + entry);
       assert.ok(await row.locator('h3').isVisible());
@@ -352,7 +375,7 @@ async function checkDiscovery(page) {
     const incident = row.locator('.publication-case');
     const incidentPath = '/work/node-ipc-investigation/';
     assert.equal(await incident.getAttribute('href'), incidentPath);
-    assert.ok(await row.getByRole('link', { name: /case study.*node-ipc/i }).isVisible());
+    assert.ok(await row.getByRole('link', { name: 'node-ipc investigation', exact: true }).isVisible());
     if (from === 'node-ipc-report') {
       await Promise.all([page.waitForURL(new URL(incidentPath, origin).href), incident.press('Enter')]);
       const reportEntry = page.locator('.study-copy a[href="/articles/#node-ipc-report"]');
@@ -365,6 +388,53 @@ async function checkDiscovery(page) {
     assert.equal(page.url(), collection + '#' + to);
     assert.ok(await page.locator('li.publication:target h3').isVisible());
   }
+}
+
+async function checkEnlargedCollection(page) {
+  const original = page.viewportSize();
+  await page.setViewportSize({ width: 320, height: 812 });
+  const largerText = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+  const interview = page.locator('#node-ipc-interview');
+  const title = interview.locator('.publication-title');
+  assert.ok(await title.evaluate(el => {
+    const text = el.firstChild;
+    return ['Brandon', 'Miller'].every(word => {
+      const index = text.textContent.indexOf(word);
+      if (index === -1) return false;
+      const range = document.createRange();
+      range.setStart(text, index);
+      range.setEnd(text, index + word.length);
+      const rects = Array.from(range.getClientRects());
+      return rects.length === 1 && rects[0].width > 0 && rects[0].left >= -1 && rects[0].right <= innerWidth + 1;
+    });
+  }), 'Keep each word of the guest’s name legible at 320px with doubled text');
+  const report = page.locator('#node-ipc-report .report-masthead');
+  await decodeCover(report.locator('img'));
+  const crop = await report.evaluate(frame => {
+    const img = frame.querySelector('img');
+    const view = frame.getBoundingClientRect();
+    const art = img.getBoundingClientRect();
+    const scale = art.width / img.naturalWidth;
+    // The printed NODE-IPC heading occupies x=147–292 of the 640px original.
+    return {
+      source: new URL(img.currentSrc).pathname, aspect: view.width / view.height,
+      left: (view.left - art.left) / scale, right: (view.right - art.left) / scale,
+      clipped: getComputedStyle(frame).overflowX === 'hidden'
+    };
+  });
+  assert.equal(crop.source, '/assets/experience/commondevops.png');
+  assert.ok(crop.clipped && Math.abs(crop.aspect - 16 / 7) < 0.08 && crop.left <= 147 && crop.right >= 292,
+    'Keep the printed report name inside its compact masthead: ' + JSON.stringify(crop));
+  for (const item of [interview, page.locator('#node-ipc-report')]) {
+    for (const control of await item.locator('h3, .entry-permalink, .meta, .watch-source, .publication-actions a').all()) {
+      const box = await control.boundingBox();
+      assert.ok(box && box.width > 0 && box.x >= -1 && box.x + box.width <= 321,
+        'A compact publication control overflows at 320px with doubled text: ' + JSON.stringify(box));
+    }
+  }
+  await captureSection(page, interview, 'articles-interview-double-text');
+  await largerText.evaluate(style => style.remove());
+  await page.setViewportSize(original);
 }
 
 async function checkPhoneEntry(browser) {
@@ -381,12 +451,18 @@ async function checkPhoneEntry(browser) {
 
   const featured = page.locator('#benchmark-presentation');
   const title = await featured.locator('h3').boundingBox();
-  const poster = await featured.locator('.video-poster img').boundingBox();
+  const poster = await featured.locator('picture.benchmark-cover').boundingBox();
   const play = await featured.locator('summary .play-mark').boundingBox();
   const row = await featured.boundingBox();
-  for (const control of [title, play]) {
-    assert.ok(control.y >= 0 && control.y + control.height <= 812 && control.x >= 0 && control.x + control.width <= 376,
-      'Show the full featured recording title and Play control on the first phone screen');
+  const source = await featured.getByRole('link', { name: /watch on youtube/i }).boundingBox();
+  assert.ok(await featured.locator('h3 .keep-term').evaluate(el => {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    return el.textContent === 'meta-analysis' && range.getClientRects().length === 1;
+  }), 'Keep meta-analysis together in the phone recording title');
+  for (const [name, box] of Object.entries({ title, poster, play, source })) {
+    assert.ok(box.y >= 0 && box.y + box.height <= 812 && box.x >= 0 && box.x + box.width <= 376,
+      'First recording ' + name + ' must fit before scrolling at 375×812: ' + JSON.stringify(box));
   }
   assert.ok(title.y + title.height <= poster.y + 1 && poster.width >= row.width * 0.9 &&
     Math.abs(poster.width / poster.height - 16 / 9) < 0.04, 'Feature the recording title above a wide 16:9 poster');
@@ -409,6 +485,7 @@ async function checkPhoneEntry(browser) {
       'Compact recording should pair its cover with its title: ' + entry);
   }
 
+  await checkEnlargedCollection(page);
   await menu.press('Enter');
   assert.equal(await menu.getAttribute('aria-expanded'), 'true');
   const links = nav.locator('a');
@@ -475,7 +552,6 @@ async function captureCollection(page, version) {
 }
 
 async function checkCollection(page, width) {
-  const homePoster = await page.locator('.focus-panel .video-poster img').getAttribute('src');
   const guideLink = page.locator('.focus-panel').getByRole('link', { name: 'How we tested the benchmark grader' });
   await Promise.all([page.waitForURL(new URL(graderGuide, origin).href), guideLink.press('Enter')]);
   const guideHeading = page.locator('h2#checking-the-grader:target');
@@ -483,10 +559,11 @@ async function checkCollection(page, width) {
   const presentationLink = page.locator('.study-copy a[href="' + presentation + '"]');
   await Promise.all([page.waitForURL(new URL(presentation, origin).href), presentationLink.press('Enter')]);
   const benchmark = page.locator('#benchmark-presentation');
-  assert.equal(await benchmark.locator('.video-poster img').getAttribute('src'), homePoster, 'Both benchmark entries should use the shared cover');
+  const preview = benchmark.locator('picture.benchmark-cover img');
+  await decodeCover(preview);
+  assert.equal(await preview.evaluate(img => new URL(img.currentSrc).pathname), '/assets/publications/benchmark-session.jpg');
   assert.equal(await benchmark.getByRole('link', { name: /watch on youtube/i }).getAttribute('href'), 'https://www.youtube.com/watch?v=e26_SSPpOP0');
-  assert.equal(await benchmark.getByRole('link', { name: /merged benchmark/ }).getAttribute('href'), 'https://github.com/harbor-framework/terminal-bench-science/pull/1513');
-  assert.equal(await page.locator('#node-ipc-report .publication-related').getAttribute('href'), 'https://doi.org/10.6084/m9.figshare.33865414');
+  assert.equal(await page.locator('#node-ipc-report').getByRole('link', { name: 'Report on Figshare' }).getAttribute('href'), 'https://doi.org/10.6084/m9.figshare.33865414');
   await checkGraderGuide(page);
   await checkDiscovery(page);
   const publications = page.locator('li.publication');
@@ -503,13 +580,25 @@ async function checkCollection(page, width) {
       assert.ok(await row.getByRole('link', { name: /watch on youtube/i }).isVisible());
       assert.ok(await row.locator('summary .play-caption').isVisible(), 'Identify inline playback on the poster');
     }
-    const box = await cover.boundingBox();
+    const frame = row.locator('.video-poster, a.collection-cover');
+    const box = await frame.boundingBox();
     assert.ok(box.width > 0 && box.x >= -1 && box.x + box.width <= width + 1, 'Publication cover must fit its row');
+  }
+  const issue = page.locator('#october-review');
+  const issueUrl = 'https://www.aaronschneider.org/common-devops-reports/reports/2026-10/';
+  assert.equal(await issue.getByRole('link', { name: /Cybersecurity Must Keep Pace with AI Web edition/ }).getAttribute('href'), issueUrl);
+  assert.equal(await issue.getByRole('link', { name: 'PDF edition' }).getAttribute('href'), issueUrl + 'common-devops-october-2026.pdf');
+  assert.equal(await issue.getByRole('link', { name: 'LinkedIn edition' }).getAttribute('href'),
+    'https://www.linkedin.com/pulse/october-2026-ai-security-controls-keeping-up-commondevops-a632c/');
+  assert.match(await issue.locator('.attribution').innerText(), /Common\s?DevOps/i);
+  assert.equal(await page.locator('#september-review').getByRole('link', { name: 'Web edition', exact: true }).getAttribute('href'),
+    'https://www.aaronschneider.org/common-devops-reports/reports/2026-09/');
+  for (const entry of ['october-review', 'node-ipc-report', 'node-ipc-interview']) {
+    await captureSection(page, page.locator('#' + entry), 'articles-' + entry);
   }
   await checkPlayers(page);
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Publication list overflows');
   if (width === 1280) {
-    const issue = page.locator('#october-review');
     const html = await page.request.get(await issue.locator('h3 a').getAttribute('href'));
     assert.ok(html.ok(), 'October HTML edition returned ' + html.status());
     assert.match(await html.text(), /<title>Cybersecurity Must Keep Pace with AI/);

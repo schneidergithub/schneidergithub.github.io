@@ -20,10 +20,33 @@ permalink: /
   </aside>
 </section>
 
+<section class="section selected-results" aria-labelledby="selected-title">
+  <div class="section-heading">
+    <h2 id="selected-title">Selected work</h2>
+    <a href="{{ '/work/' | relative_url }}#project-summaries">Browse project summaries</a>
+  </div>
+  <div class="feature-grid">
+    {% assign projects = site.work | where: 'featured', true | sort: 'order' %}
+    {% for project in projects %}
+    {% assign highlight = project.home_highlight %}
+    {% assign studies = site.pages | where: 'layout', 'case-study' | where: 'project', project.slug %}
+    <article class="feature">
+      <p class="eyebrow">{{ highlight.organization | escape }}</p>
+      <h3 class="feature-result{% unless highlight.value %} result-statement{% endunless %}">
+        <a class="result-link" href="{% if studies.size == 1 %}{{ studies.first.url | relative_url }}{% else %}{{ '/work/' | relative_url }}#{{ project.slug | escape }}{% endif %}">
+          {% if highlight.value %}<span class="result-value">{{ highlight.value | escape }}</span> <span class="result-label">{{ highlight.label | escape }}</span>{% else %}{{ highlight.label | escape }}{% endif %}
+        </a>
+      </h3>
+      <p>{{ highlight.description | escape }}</p>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
 <section class="section" id="home-media" aria-labelledby="writing-title">
   <div class="section-heading">
     <h2 id="writing-title">Articles &amp; Demos</h2>
-    <a href="{{ '/articles/' | relative_url }}">View all {{ site.data.publications.size }} publications</a>
+    <a href="{{ '/articles/' | relative_url }}">Browse articles &amp; recordings</a>
   </div>
   <div class="media-grid">
     {% assign featured_media = site.data.publications | where: 'home_featured', true %}
@@ -44,30 +67,6 @@ permalink: /
       </a>
       {% endif %}
       <p class="media-description">{{ item.home_summary | escape }}</p>
-    </article>
-    {% endfor %}
-  </div>
-</section>
-
-<section class="section selected-results" aria-labelledby="selected-title">
-  <div class="section-heading">
-    <h2 id="selected-title">Selected work</h2>
-    <a href="{{ '/work/' | relative_url }}#project-summaries">View all projects</a>
-  </div>
-  <div class="feature-grid">
-    {% assign projects = site.work | where: 'featured', true | sort: 'order' %}
-    {% for project in projects %}
-    {% assign highlight = project.home_highlight %}
-    {% assign studies = site.pages | where: 'layout', 'case-study' | where: 'project', project.slug %}
-    <article class="feature">
-      <p class="eyebrow">{{ highlight.organization | escape }}</p>
-      {% if highlight.value %}
-      <h3 class="feature-result"><span class="result-value">{{ highlight.value | escape }}</span> <span class="result-label">{{ highlight.label | escape }}</span></h3>
-      {% else %}
-      <h3 class="feature-result result-statement">{{ highlight.label | escape }}</h3>
-      {% endif %}
-      <p>{{ highlight.description | escape }}</p>
-      <a href="{% if studies.size == 1 %}{{ studies.first.url | relative_url }}{% else %}{{ '/work/' | relative_url }}#{{ project.slug | escape }}{% endif %}">{{ highlight.link_label | escape }}</a>
     </article>
     {% endfor %}
   </div>
