@@ -1,7 +1,7 @@
 ---
 layout: case-study
 project: commondevops
-link_label: "Chess video benchmark"
+link_label: "Qualitative chess benchmark"
 permalink: /work/chess-puzzle-qa/
 share_image: /assets/portfolio/share/chess-puzzle-benchmark.jpg
 share_alt: "A chess puzzle that reveals too much. Qualitative benchmark by Aaron Schneider, with a chessboard from the generated puzzle video."

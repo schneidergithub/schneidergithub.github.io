@@ -12,7 +12,7 @@ const studies = [
   { card: 'westinghouse', path: 'westinghouse-performance', label: 'Westinghouse search performance', images: 0 },
   { card: 'commondevops', path: 'scientific-ai-benchmark', label: 'Scientific benchmark QA', images: 0 },
   { card: 'commondevops', path: 'node-ipc-investigation', label: 'node-ipc investigation', images: 0 },
-  { card: 'commondevops', path: 'chess-puzzle-qa', label: 'Chess video benchmark', images: 1 }
+  { card: 'commondevops', path: 'chess-puzzle-qa', label: 'Qualitative chess benchmark', images: 1 }
 ];
 const projectNames = {
   propoint: 'ProPoint Global', indiana: 'Indiana State Department', bayer: 'Bayer',
