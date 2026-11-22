@@ -2,6 +2,8 @@ name: Portfolio page checks
 on:
   pull_request:
     paths:
+      - 'Gemfile'
+      - 'Gemfile.lock'
       - 'index.md'
       - 'articles.md'
       - '_data/publications.yml'
@@ -27,6 +29,8 @@ on:
   push:
     branches: [main]
     paths:
+      - 'Gemfile'
+      - 'Gemfile.lock'
       - 'index.md'
       - 'articles.md'
       - '_data/publications.yml'
