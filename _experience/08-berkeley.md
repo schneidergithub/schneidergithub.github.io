@@ -1,5 +1,6 @@
 ---
 order: 8
+role_id: berkeley-communications
 organization: "Berkeley Communications"
 title: "Software Engineer & Tech Support"
 period: "December 2005 – February 2012"

@@ -5,12 +5,64 @@ const path = require('node:path');
 const { chromium } = require('playwright-core');
 const { isDeepStrictEqual } = require('node:util');
 
+const roleIds = ['commondevops', 'nuix', 'yo-pagos', 'bcforward', 'sogeti-capgemini', 'propoint-global',
+  'ciber', 'berkeley-communications', 'bucky-ball-web', 'hanscom-air-force-base', 'joslin-diabetes-center'];
+
+async function checkTarget(page, id) {
+  const target = page.locator('h2:target');
+  assert.equal(await target.getAttribute('id'), id);
+  assert.ok(await target.evaluate(el => {
+    const box = el.getBoundingClientRect();
+    const style = getComputedStyle(el);
+    const visibleCue = (style.outlineStyle === 'solid' && parseFloat(style.outlineWidth) > 0) ||
+      parseFloat(getComputedStyle(el, '::before').borderInlineStartWidth) > 0;
+    return visibleCue && el === document.activeElement && box.top >= -1 && box.bottom <= innerHeight &&
+      box.left >= -1 && box.right <= innerWidth + 1;
+  }), 'Shared role and leadership links should focus a visible heading: ' + id);
+}
+
+async function checkLeadership(page, url, reviewDir) {
+  await page.goto(new URL('/work/', url).href);
+  const link = page.getByRole('link', { name: 'Compare engineering leadership roles on Experience' });
+  assert.equal(await link.getAttribute('href'), '/experience/#engineering-leadership');
+  await link.press('Enter');
+  await checkTarget(page, 'engineering-leadership');
+  const panel = page.locator('section[aria-labelledby="engineering-leadership"]');
+  const summaries = panel.locator('h3');
+  assert.deepEqual(await summaries.allTextContents(), ['Nuix role details', 'Yo Pagos role details']);
+  assert.match(await panel.innerText(), /12 engineers[\s\S]*time zones/i);
+  assert.match(await panel.innerText(), /(?:five|5) developers/i);
+  const width = page.viewportSize().width;
+  const version = new URL(url).hostname === '127.0.0.1' ? 'preview' : 'live';
+  await page.screenshot({ path: path.join(reviewDir, version + '-leadership-' + width + '.jpg'), quality: 82 });
+  for (const [name, id] of [['Nuix', 'nuix'], ['Yo Pagos', 'yo-pagos']]) {
+    const roleLink = panel.getByRole('link', { name: name + ' role details', exact: true });
+    assert.equal(await roleLink.getAttribute('href'), '#' + id);
+    await roleLink.press('Enter');
+    await checkTarget(page, id);
+    assert.equal(await page.locator(':target').innerText(), name);
+  }
+  if (width === 375) {
+    const text = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+    await panel.getByRole('link', { name: 'Nuix role details', exact: true }).press('Enter');
+    await checkTarget(page, 'nuix');
+    const overflow = await page.evaluate(() => [...document.querySelectorAll('body *')]
+      .filter(el => el.getBoundingClientRect().right > innerWidth + 1)
+      .map(el => el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + ' ' + el.className));
+    assert.deepEqual(overflow, [], 'Experience must reflow at 200% text');
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Keep all enlarged role text inside the viewport');
+    await text.evaluate(style => style.remove());
+  }
+}
+
 async function check() {
   const url = process.argv[2];
   const temp = process.env.RUNNER_TEMP || os.tmpdir();
   const previews = path.join(temp, 'experience-previews');
+  const reviewDir = path.join(temp, 'homepage-previews');
   const signaturePath = path.join(temp, 'experience-roles.json');
   fs.mkdirSync(previews, { recursive: true });
+  fs.mkdirSync(reviewDir, { recursive: true });
   const browser = await chromium.launch({ channel: 'chrome' });
   try {
     for (const width of [1280, 375]) {
@@ -19,13 +71,15 @@ async function check() {
       assert.ok(response.ok(), 'Experience page returned HTTP ' + response.status());
       const roles = page.locator('article.role');
       assert.equal(await roles.count(), 11);
+      assert.deepEqual(await roles.locator('h2').evaluateAll(headings => headings.map(h => h.id)), roleIds);
+      const commonDevOps = roles.filter({ has: page.locator('h2#commondevops') }).locator('.role-details li');
+      assert.match((await commonDevOps.allTextContents()).join(' '), /co-authored[\s\S]*trial results/i);
+      await checkLeadership(page, url, reviewDir);
       const nuix = roles.filter({ has: page.getByRole('heading', { name: 'Nuix', exact: true }) });
       assert.match(await nuix.locator('.role-details li').first().innerText(), /led.*12 engineers.*multiple time zones/i);
       if (width === 375) {
         await nuix.evaluate(el => el.scrollIntoView({ block: 'start' }));
         await nuix.locator('img').evaluate(image => image.decode());
-        const reviewDir = path.join(temp, 'homepage-previews');
-        fs.mkdirSync(reviewDir, { recursive: true });
         const version = new URL(url).hostname === '127.0.0.1' ? 'preview' : 'live';
         await page.screenshot({ path: path.join(reviewDir, version + '-nuix-375x812.jpg'), quality: 82 });
       }
@@ -34,7 +88,7 @@ async function check() {
         [...role.querySelectorAll('a.role-study')].map(link => link.pathname).sort()
       ]).filter(([, links]) => links.length)));
       assert.deepEqual(evidence, {
-        CommonDevOps: ['/work/node-ipc-investigation/', '/work/scientific-ai-benchmark/'],
+        CommonDevOps: ['/work/chess-puzzle-qa/', '/work/node-ipc-investigation/', '/work/scientific-ai-benchmark/'],
         'Sogeti / Capgemini': ['/work/westinghouse-performance/'],
         BCforward: ['/work/indiana-case-archives/'],
         'ProPoint Global': ['/work/super-salon-checkout/'],
@@ -94,6 +148,12 @@ async function check() {
       console.log(width + 'px: 11 images decoded, role layouts and page width verified');
       await page.close();
     }
+    const plain = await browser.newPage({ viewport: { width: 375, height: 812 }, javaScriptEnabled: false });
+    for (const id of ['nuix', 'yo-pagos']) {
+      await plain.goto(new URL('#' + id, url).href);
+      await checkTarget(plain, id);
+    }
+    await plain.close();
   } finally {
     await browser.close();
   }

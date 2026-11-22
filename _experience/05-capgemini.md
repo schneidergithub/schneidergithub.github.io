@@ -1,5 +1,6 @@
 ---
 order: 5
+role_id: sogeti-capgemini
 case_project: westinghouse
 organization: "Sogeti / Capgemini"
 title: "QA Manager & SDET — Westinghouse Consultant"

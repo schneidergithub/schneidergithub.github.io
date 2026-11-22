@@ -11,7 +11,8 @@ const studies = [
   { card: 'bayer', path: 'bayer-aleve', images: 2 },
   { card: 'westinghouse', path: 'westinghouse-performance', images: 0 },
   { card: 'commondevops', path: 'scientific-ai-benchmark', label: 'Reconstructing scientific results in Terminal-Bench-Science', images: 0 },
-  { card: 'commondevops', path: 'node-ipc-investigation', label: 'Investigating the node-ipc supply-chain compromise', images: 0 }
+  { card: 'commondevops', path: 'node-ipc-investigation', label: 'Investigating the node-ipc supply-chain compromise', images: 0 },
+  { card: 'commondevops', path: 'chess-puzzle-qa', label: 'The chess puzzle that gave away the answer', images: 0 }
 ];
 const projectNames = {
   propoint: 'ProPoint Global', indiana: 'Indiana State Department', bayer: 'Bayer',
@@ -241,6 +242,27 @@ async function check() {
             await heading.evaluate(el => el.scrollIntoView({ block: 'start' }));
             await captureWork(page, 'node-ipc-evidence');
           }
+        }
+        if (study.path === 'chess-puzzle-qa') {
+          assert.equal(title, 'The chess puzzle that gave away the answer');
+          const copy = page.locator('.study-copy');
+          const pinned = 'https://github.com/commondevops/llm-chess-experiment/blob/8d660666fc25a99a8846a2867089f8cfe6381f63/milestone1_local_recreation_instructions.md';
+          assert.ok(await copy.locator('a[href="' + pinned + '"]').isVisible());
+          for (const [seconds, timestamp] of [[394, '6:34'], [600, '10:00'], [681, '11:21']]) {
+            const source = copy.locator('a[href="https://www.youtube.com/watch?v=IXzLwNlLAI4&t=' + seconds + 's"]');
+            assert.ok((await source.innerText()).includes(timestamp), 'Expose the chess recording timestamp');
+          }
+          const proposal = copy.getByRole('heading', { name: 'How I would test the reveal' });
+          assert.ok(await proposal.isVisible(), 'Introduce the frame checks as proposed tests');
+          assert.match(await copy.innerText(), /proposed regression tests/i);
+          const figure = copy.getByRole('figure', { name: 'Proposed frame checks' });
+          assert.deepEqual(await figure.locator('dt').allTextContents(), ['Thinking interval', 'Solution reveal']);
+          await figure.evaluate(el => el.scrollIntoView({ block: 'center' }));
+          await captureWork(page, 'chess-frame-checks');
+          await copy.locator('a[href="/work/super-salon-checkout/"]').press('Enter');
+          assert.equal(page.url(), workUrl + 'super-salon-checkout/');
+          await page.locator('.study-copy a[href="/work/chess-puzzle-qa/"]').press('Enter');
+          assert.equal(page.url(), workUrl + 'chess-puzzle-qa/');
         }
         const images = page.locator('.study-evidence img');
         assert.equal(await images.count(), study.images);
