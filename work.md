@@ -55,7 +55,11 @@ lead_case: /work/scientific-ai-benchmark/
               {% endfor %}
             </div>
           </div>
-          <img src="{{ publication.preview.src | relative_url }}" alt="{{ publication.preview.alt | escape }}" width="{{ publication.preview.width }}" height="{{ publication.preview.height }}" loading="lazy" decoding="async">
+          <a class="work-media-link{% if project.slug == 'chess-benchmarks' %} chess-preview{% endif %}" href="{{ project.source_url | relative_url }}" aria-label="{% if project.slug == 'node-ipc' %}Open the published Node-IPC report{% else %}Watch the chess benchmark presentation{% endif %}">
+            <span class="work-media-frame"><img src="{{ publication.preview.src | relative_url }}" alt="{{ publication.preview.alt | escape }}" width="{{ publication.preview.width }}" height="{{ publication.preview.height }}" loading="lazy" decoding="async"></span>
+            <span class="work-media-label">{% if project.slug == 'node-ipc' %}Read the published report{% else %}<svg width="22" height="16" aria-hidden="true"><use href="{{ '/assets/portfolio/social-icons.svg' | relative_url }}#youtube"></use></svg>Watch the presentation{% endif %}</span>
+            {% if project.slug == 'chess-benchmarks' %}<span class="work-media-credit">Claude Opus 4.6 · board detail from the presentation</span>{% endif %}
+          </a>
         </section>
       {% endif %}
     {% endfor %}
@@ -69,4 +73,6 @@ lead_case: /work/scientific-ai-benchmark/
   <a class="work-contact" href="{{ '/#connect' | relative_url }}">Discuss a project</a>
 </div>
 
-<script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}?v=2" defer></script>
+
+{% include image-viewer.html %}
