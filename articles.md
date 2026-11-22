@@ -39,10 +39,11 @@ groups:
   {% assign first_character = source_url | slice: 0, 1 %}
   {% if first_character == '/' %}{% assign source_url = item.url | relative_url %}{% endif %}
   {% capture display_title %}<span class="publication-title">{{ item.title | escape | replace: 'meta-analysis', '<span class="keep-term">meta-analysis</span>' }}</span>{% endcapture %}
+  {% capture permalink %}<a class="entry-permalink" href="#{{ item.id | escape }}" aria-label="Link to {{ item.title | escape }}" title="Link to this entry"></a>{% endcapture %}
   <li class="publication{% if featured %} publication-featured{% endif %}" id="{{ item.id | escape }}" tabindex="-1">
     <div class="publication-heading">
       <h3>{% if item.type == 'Video' %}{{ display_title }}{% else %}<a href="{{ source_url | escape }}">{{ display_title }}{% if item.primary_edition %} <span class="edition-source">{{ item.primary_edition | escape }}</span>{% elsif first_character != '/' %} <span aria-hidden="true">↗</span>{% endif %}</a>{% endif %}</h3>
-      <a class="entry-permalink" href="#{{ item.id | escape }}" aria-label="Link to {{ item.title | escape }}" title="Link to this entry"></a>
+      {% unless group.id == 'engineering-essays' %}{{ permalink }}{% endunless %}
     </div>
     <div class="meta">
       {% include publication-media.html publication=item link_cover=true cover_url=source_url eager=featured %}
@@ -51,7 +52,11 @@ groups:
       {% if item.period or item.date %}<p class="publication-date">{% if item.period %}{{ item.period | escape }} issue{% endif %}{% if item.period and item.date %} · {% endif %}{% if item.date %}Published <time datetime="{{ item.date }}">{{ item.date | date: '%B %-d, %Y' }}</time>{% endif %}</p>{% endif %}
       <p>{{ item.description | escape }}</p>
       {% if item.guide %}<p><a class="publication-guide" href="{{ item.guide.url | relative_url | escape }}">{{ item.guide.label | escape }}</a> {{ item.guide.context | escape }}.</p>{% endif %}
+      {% if group.id == 'engineering-essays' %}
+      <p class="attribution essay-byline"><span>{{ item.attribution | escape }}</span>{{ permalink }}</p>
+      {% else %}
       <p class="attribution">{{ item.attribution | escape }}</p>
+      {% endif %}
       {% if item.editions or item.related or item.case_url or item.companion %}
       <p class="publication-actions">
         {% for edition in item.editions %}<a class="publication-edition" href="{{ edition.url | escape }}">{{ edition.label | escape }}</a>{% endfor %}

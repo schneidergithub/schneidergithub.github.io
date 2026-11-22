@@ -4,6 +4,8 @@ title: "What a fresh sandbox inherits from GitHub"
 author: "Aaron Schneider"
 description: "A pull-request comment can change an AI review without changing the commit. A chess-video project shows how to set a separate boundary around publication."
 permalink: /articles/fresh-sandbox-github/
+share_image: /assets/portfolio/share/fresh-sandbox-github.jpg
+share_alt: "What a fresh sandbox inherits from GitHub, an engineering essay by Aaron Schneider. Beside the title is a chess position from the project’s rendered puzzle video."
 ---
 
 Imagine two review jobs starting from the same commit. Between runs, a teammate leaves a comment explaining why a test was skipped. The second reviewer opens the same pull request and finds an explanation the first reviewer never saw. Both checkouts are clean. The evidence has changed.

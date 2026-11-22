@@ -66,8 +66,11 @@ contact_footer: true
         <h3>{{ item.title | escape }}</h3>
       </div>
       {% else %}
-      <a class="media-story" href="{{ item.url | escape }}" aria-labelledby="home-{{ item.id | escape }}">
-        <div class="media-art">{% include publication-media.html publication=item %}</div>
+      {% assign story_url = item.url %}
+      {% assign first_character = story_url | slice: 0, 1 %}
+      {% if first_character == '/' %}{% assign story_url = item.url | relative_url %}{% endif %}
+      <a class="media-story" href="{{ story_url | escape }}" aria-labelledby="home-{{ item.id | escape }}">
+        <div class="media-art{% if item.id == 'fresh-sandbox-github' %} essay-board{% endif %}">{% include publication-media.html publication=item %}</div>
         <div class="media-copy">
           <p class="media-type">{% if item.issue_month %}{{ item.issue_month | append: '-01' | date: '%B %Y' }} · LinkedIn newsletter{% else %}{{ item.type | escape }}{% endif %}</p>
           <h3 id="home-{{ item.id | escape }}">{{ item.title | escape }}</h3>
