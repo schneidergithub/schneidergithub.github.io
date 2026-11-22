@@ -5,18 +5,14 @@ permalink: /
 ---
 <section class="hero">
   <div>
-    <p class="eyebrow">Software Engineer · DevSecOps · AI&nbsp;Research</p>
     <h1>Building software. <span class="hero-signature">A systematic approach.</span></h1>
     <div class="actions"><a class="button" href="{{ '/work/' | relative_url }}">Explore selected work</a><a class="button secondary" href="{{ '/experience/' | relative_url }}">View experience</a></div>
-    <a class="hero-case-link" href="{{ '/work/westinghouse-performance/' | relative_url }}">Westinghouse · 3× Elasticsearch throughput</a>
   </div>
   <aside class="focus-panel" aria-labelledby="focus-title">
-    <p class="eyebrow">Terminal-Bench-Science</p>
-    <h2 id="focus-title">Can an AI agent reproduce a scientific result?</h2>
+    <h2 id="focus-title">Terminal-Bench-Science</h2>
     {% assign benchmark = site.data.publications | where: 'id', 'benchmark-presentation' | first %}
-    <div class="focus-media">{% include publication-media.html publication=benchmark eager=true %}</div>
-    <p>Dr. Ian Miller and I co-authored “MDD Executive Function,” a task that asks AI agents to reconstruct a meta-analysis from published studies of depression. I also review DevOps and infrastructure changes and analyze trial results.</p>
-    <a href="{{ benchmark.guide.url | relative_url | escape }}">How we tested the benchmark grader</a>
+    <div class="focus-media">{% include publication-media.html publication=benchmark eager=true spotlight=true %}</div>
+    <p>The benchmark evaluates AI agents on scientific workflows. Dr. Ian Miller and I co-authored the approved “MDD Executive Function” task. I’m now a maintainer and reviewer for the project, and we’re preparing a paper.</p>
   </aside>
 </section>
 
