@@ -258,14 +258,17 @@ async function checkImageReturns(browser, workUrl) {
   assert.ok(Math.abs((await page.evaluate(() => scrollY)) - before) <= 2);
 
   // Loading failure leaves the original and Close available.
-  await page.route('**/assets/portfolio/supersalon.webp', route => route.abort());
-  await control.press('Enter');
-  await viewer.getByRole('button', {name:'Next',exact:true}).click();
-  await viewer.getByRole('button', {name:'Next',exact:true}).click();
-  await viewer.locator('.viewer-error').waitFor({state:'visible'});
-  assert.equal(await viewer.getByRole('link', {name:'Open original'}).getAttribute('href'), new URL('/assets/portfolio/supersalon.webp',workUrl).href);
-  await viewer.getByRole('button', {name:'Close',exact:true}).click();
-  await page.unroute('**/assets/portfolio/supersalon.webp');
+  const broken = await browser.newPage({viewport:{width:375,height:812}});
+  await broken.route('**/assets/portfolio/supersalon.webp', route => route.abort());
+  await broken.goto(workUrl);
+  await broken.locator('#gallery-propoint > .thumbnail-card a').press('Enter');
+  const failedViewer = broken.getByRole('dialog');
+  await failedViewer.getByRole('button', {name:'Next',exact:true}).click();
+  await failedViewer.getByRole('button', {name:'Next',exact:true}).click();
+  await failedViewer.locator('.viewer-error').waitFor({state:'visible'});
+  assert.equal(await failedViewer.getByRole('link', {name:'Open original'}).getAttribute('href'), new URL('/assets/portfolio/supersalon.webp',workUrl).href);
+  await failedViewer.getByRole('button', {name:'Close',exact:true}).click();
+  await broken.close();
 
   await page.goto(workUrl + '#gallery-bayer');
   assert.ok(await page.locator('#images-bayer').evaluate(el => el.open), 'Old gallery bookmarks reveal the relocated collection');
