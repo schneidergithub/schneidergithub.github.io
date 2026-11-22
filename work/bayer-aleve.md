@@ -6,6 +6,7 @@ permalink: /work/bayer-aleve/
 title: "Bayer’s Aleve website"
 context: "Bayer · Ciber engagement"
 description: "At Ciber, I was the lead software developer for Aleve.com."
+directory_feature: "At Ciber, I led development of Aleve.com."
 figures:
   - image: /assets/portfolio/portfolio-aleve.webp
     width: 400

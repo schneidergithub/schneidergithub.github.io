@@ -31,15 +31,19 @@ permalink: /experience/
   </header>
   <div class="role-details">
     {{ role.content }}
+    {% assign studies = nil %}
     {% if role.case_project %}
       {% assign studies = site.pages | where: 'layout', 'case-study' | where: 'project', role.case_project | sort: 'title' %}
-      {% if studies.size > 0 %}
+    {% endif %}
+    {% if studies.size > 0 or role.gallery_link %}
       <ul class="role-links">
         {% for study in studies %}
         <li><a class="role-study" href="{{ study.url | relative_url }}">{{ study.link_label | default: study.title | escape }}</a></li>
         {% endfor %}
+        {% if role.gallery_link %}
+        <li><a class="role-study" href="{{ '/work/' | relative_url }}#gallery-{{ role.gallery_link.group | escape }}">{{ role.gallery_link.label | escape }}</a></li>
+        {% endif %}
       </ul>
-      {% endif %}
     {% endif %}
   </div>
 </article>

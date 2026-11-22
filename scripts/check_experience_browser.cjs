@@ -56,6 +56,30 @@ async function checkLeadership(page, url, reviewDir) {
   }
 }
 
+async function checkRoleGalleries(page, url) {
+  for (const [roleId, groupId, label, imageFile, contribution] of [
+    ['berkeley-communications', 'berkeley', 'Warehouse inventory screen', 'berkcom-inventory.webp', /parts, stock, and warranties/i],
+    ['bucky-ball-web', 'bucky-ball', 'Archived Bucky Ball Web homepage', 'buckyball.webp', /built and hosted more than 100 websites/i]
+  ]) {
+    const roleUrl = new URL('#' + roleId, url).href;
+    await page.goto(roleUrl);
+    const role = page.locator('article.role').filter({ has: page.locator('h2#' + roleId) });
+    assert.match(await role.locator('.role-details').innerText(), contribution);
+    const link = role.getByRole('link', { name: label, exact: true });
+    const galleryUrl = new URL('/work/#gallery-' + groupId, url).href;
+    await link.press('Enter');
+    assert.equal(page.url(), galleryUrl);
+    const gallery = page.locator('.gallery-group:target');
+    const cover = gallery.locator(':scope > .thumbnail-card a');
+    assert.equal(await cover.getAttribute('href'), '/assets/portfolio/' + imageFile);
+    await cover.locator('img').evaluate(img => img.decode());
+    assert.ok(await cover.isVisible());
+    await page.goBack();
+    assert.equal(page.url(), roleUrl);
+    assert.equal(await role.locator('h2:target').getAttribute('id'), roleId);
+  }
+}
+
 async function check() {
   const url = process.argv[2];
   const temp = process.env.RUNNER_TEMP || os.tmpdir();
@@ -86,15 +110,18 @@ async function check() {
       }
       const evidence = await roles.evaluateAll(items => Object.fromEntries(items.map(role => [
         role.querySelector('h2').textContent.trim(),
-        [...role.querySelectorAll('a.role-study')].map(link => link.pathname).sort()
+        [...role.querySelectorAll('a.role-study')].map(link => link.pathname + link.hash).sort()
       ]).filter(([, links]) => links.length)));
       assert.deepEqual(evidence, {
         CommonDevOps: ['/work/chess-puzzle-qa/', '/work/node-ipc-investigation/', '/work/scientific-ai-benchmark/'],
         'Sogeti / Capgemini': ['/work/westinghouse-performance/'],
         BCforward: ['/work/indiana-case-archives/'],
         'ProPoint Global': ['/work/super-salon-checkout/'],
-        Ciber: ['/work/bayer-aleve/']
-      }, 'Experience must link each engagement to all its own case studies');
+        Ciber: ['/work/bayer-aleve/'],
+        'Berkeley Communications': ['/work/#gallery-berkeley'],
+        'Bucky Ball Web': ['/work/#gallery-bucky-ball']
+      }, 'Experience must link each engagement to its own case studies or gallery');
+      await checkRoleGalleries(page, url);
       if (width === 1280) {
         const signature = await roles.evaluateAll(articles => articles.map(article => ({
           text: article.innerText.trim(),

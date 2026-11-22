@@ -46,7 +46,28 @@ async function checkDirectory(page, workUrl) {
     ['#case-studies-title', 'Case studies'], ['#project-summaries', 'Project summaries'], ['#portfolio-gallery', 'Gallery']
   ];
   assert.deepEqual(await jumps.evaluateAll(links => links.map(a => a.hash)), sections.map(([fragment]) => fragment));
+  const featured = page.locator('.directory-feature');
+  const aleve = featured.getByRole('link', { name: 'Bayer’s Aleve website', exact: true });
+  assert.equal(await aleve.getAttribute('href'), '/work/bayer-aleve/');
+  assert.equal(await featured.locator('p').innerText(), 'At Ciber, I led development of Aleve.com.');
+  const cover = aleve.locator('img');
+  assert.equal(await cover.getAttribute('src'), '/assets/portfolio/portfolio-aleve.webp');
+  const crop = await cover.evaluate(async img => {
+    await img.decode();
+    return [img.naturalWidth, img.naturalHeight, getComputedStyle(img).objectPosition];
+  });
+  assert.deepEqual(crop, [400, 350, '50% 0%'], 'Keep the original Aleve wordmark and garden at the top of the crop');
+  if (page.viewportSize().width === 375) {
+    const inFirstScreen = await featured.evaluate(el => {
+      const bounds = el.getBoundingClientRect();
+      return scrollY === 0 && bounds.top >= 0 && bounds.bottom <= innerHeight;
+    });
+    assert.ok(inFirstScreen, 'Show the illustrated case and Aaron’s contribution together on the first phone screen');
+  }
   await captureWork(page, 'directory');
+  await aleve.press('Enter');
+  assert.equal(page.url(), workUrl + 'bayer-aleve/');
+  await page.goBack();
   for (const [index, [fragment, name]] of sections.entries()) {
     const jump = jumps.nth(index);
     assert.ok((await jump.innerText()).trim().startsWith(name), 'Work link should identify ' + name);
@@ -271,6 +292,10 @@ async function checkImageReturns(browser, workUrl) {
     'The disclosure indicator must change immediately with reduced motion');
   await page.setViewportSize({ width: 320, height: 812 });
   await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+  assert.ok(await page.locator('.study-directory a, .directory-feature p').evaluateAll(elements => elements.every(el => {
+    const bounds = el.getBoundingClientRect();
+    return bounds.width > 0 && bounds.left >= 0 && bounds.right <= innerWidth;
+  })), 'The directory links and contribution should fit a 320px screen at doubled text size');
   await summary.press('Enter');
   const reflow = await page.evaluate(() => {
     const pageWidth = document.documentElement.scrollWidth;

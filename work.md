@@ -15,10 +15,25 @@ permalink: /work/
 
 <nav class="study-directory" aria-labelledby="case-studies-title">
   <h2 id="case-studies-title" tabindex="-1">Case studies</h2>
-  <ul>
-    {% assign studies = site.pages | where: 'layout', 'case-study' | sort_natural: 'link_label' %}
-    {% for study in studies %}<li><a href="{{ study.url | relative_url }}">{{ study.link_label | default: study.title | escape }}</a></li>{% endfor %}
-  </ul>
+  {% assign studies = site.pages | where: 'layout', 'case-study' | sort_natural: 'link_label' %}
+  {% assign featured = studies | where_exp: 'study', 'study.directory_feature' | first %}
+  <div class="directory-layout">
+    {% if featured %}
+      {% assign cover = featured.figures.first %}
+      <div class="directory-feature">
+        <a href="{{ featured.url | relative_url }}" aria-labelledby="directory-feature-title">
+          <img src="{{ cover.image | relative_url }}" alt="{{ cover.alt | escape }}" width="{{ cover.width }}" height="{{ cover.height }}" decoding="async">
+          <span id="directory-feature-title">{{ featured.link_label | default: featured.title | escape }}</span>
+        </a>
+        <p>{{ featured.directory_feature | escape }}</p>
+      </div>
+    {% endif %}
+    <ul>
+      {% for study in studies %}
+        {% unless study.url == featured.url %}<li><a href="{{ study.url | relative_url }}">{{ study.link_label | default: study.title | escape }}</a></li>{% endunless %}
+      {% endfor %}
+    </ul>
+  </div>
 </nav>
 
 <p class="work-leadership"><a href="{{ '/experience/' | relative_url }}#engineering-leadership">Engineering leadership</a></p>
