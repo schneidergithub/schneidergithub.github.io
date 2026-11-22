@@ -266,6 +266,50 @@ async function openImageAndReturn(page, control) {
   assert.ok(await control.evaluate(el => el === document.activeElement), 'Return keyboard focus to the image that opened the original');
 }
 
+async function checkRoleGalleries(browser, origin) {
+  const url = new URL('/experience/', origin).href;
+  const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
+  await page.goto(url);
+  assert.equal(await page.locator('.role-gallery:not([open])').count(), 3);
+  assert.equal(await page.locator('a.role-single').count(), 2);
+  for (const group of gallery) {
+    const role = page.locator('.role').filter({ has: page.locator('h2#' + group.role_id) });
+    const links = role.locator('a.image-enlarge');
+    const destinations = await links.evaluateAll(items => items.map(link => link.pathname));
+    assert.deepEqual(destinations.sort(), group.items.map(item => item.image).sort(), group.role_id);
+  }
+
+  const propoint = page.locator('#images-propoint');
+  const toggle = propoint.getByText('View 4 ProPoint images', { exact: true }).locator('..');
+  await toggle.press('Enter');
+  assert.equal(await propoint.locator('.thumbnail-card a:visible').count(), 4);
+  assert.deepEqual(await propoint.locator('figcaption').allTextContents(),
+    ['Find a salon', 'Book a service', 'Appointment calendar', 'Desktop checkout']);
+  await toggle.press('Space');
+  await toggle.locator('img').click();
+  assert.equal(await propoint.locator('.thumbnail-card a:visible').count(), 4, 'The cover opens the same sheet');
+
+  const bayer = page.locator('#images-bayer');
+  await bayer.locator(':scope > summary').press('Enter');
+  assert.equal(await bayer.locator('.thumbnail-card a:visible').count(), 8);
+  const app = bayer.locator('.gallery-detail-set').first();
+  await app.locator('summary').press('Enter');
+  await openImageAndReturn(page, app.locator('a').last());
+  assert.ok(await app.evaluate(el => el.open && el.closest('.role-gallery').open));
+  await openImageAndReturn(page, page.locator('#image-bucky-ball'));
+  await page.setViewportSize({ width: 320, height: 812 });
+  await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+    'Expanded Experience sheets reflow with enlarged text');
+  await page.close();
+
+  const plain = await browser.newPage({ javaScriptEnabled: false });
+  await plain.goto(url + '#berkeley-communications');
+  await plain.locator('#images-berkeley > summary').press('Enter');
+  assert.equal(await plain.locator('#images-berkeley .thumbnail-card a:visible').count(), 8);
+  await plain.close();
+}
+
 async function checkImageReturns(browser, workUrl) {
   const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
   await page.goto(workUrl + '#gallery-bayer');
@@ -325,6 +369,7 @@ async function check() {
   const webkitOnly = process.argv.includes('--webkit-gallery');
   const browser = webkitOnly ? await webkit.launch() : await chromium.launch({ channel: 'chrome' });
   try {
+    await checkRoleGalleries(browser, workUrl);
     await checkImageReturns(browser, workUrl);
     if (webkitOnly) return;
     for (const width of [375, 1280]) {

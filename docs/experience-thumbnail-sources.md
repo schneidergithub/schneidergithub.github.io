@@ -10,3 +10,7 @@ The role list displays these thumbnails at approximately 70 × 44 pixels on phon
 | [ProPoint Global](../assets/portfolio/thumbs/guestpass-mockups-01-orig.webp) | [Guest Pass salon finder mockup](../assets/portfolio/guestpass-mockups-01-orig.webp) | Two phones show salon discovery and store details. |
 | [Ciber](../assets/experience/aleve-homepage.png) | [Aleve homepage](../assets/portfolio/portfolio-aleve.webp) | Aleve wordmark and gardening scene. Crop at (31, 6), 228 × 144. |
 | [Berkeley Communications](../assets/experience/berkeley-inventory.png) | [Warehouse inventory screen](../assets/portfolio/berkcom-inventory.webp) | Item-entry controls and the part number, title and manufacturer fields. Crop at (5, 47), 152 × 87. |
+
+## Experience gallery covers
+
+The five project groups in `_data/gallery.json` name their owning Experience role. The Guest Pass phones, Aleve homepage and Berkeley inventory form open contact sheets. The Westinghouse heritage banner and Bucky Ball Web homepage link directly to their originals. The other six employers use their existing identity artwork. The Yo.cr advertising poster belongs to its separate video player.

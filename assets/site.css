@@ -437,7 +437,7 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
   outline-offset: 4px;
 }
 .role-heading:focus-visible::before, .role-heading h2:focus-visible::before { display: none; }
-.role{display:grid;grid-template-columns:190px minmax(0,1fr);grid-template-areas:"image heading" "image details";gap:.8rem 2rem;align-content:start;align-items:start;padding-block:2rem;border-top:1px solid var(--line)}
+.role{--cover-width:190px;--role-gap:2rem;--role-padding:2rem;position:relative;display:grid;grid-template-columns:var(--cover-width) minmax(0,1fr);grid-template-areas:"image heading" "image details";gap:.8rem var(--role-gap);align-content:start;align-items:start;padding-block:var(--role-padding);border-top:1px solid var(--line)}
 .role-thumbnail{grid-area:image;width:100%;height:auto;aspect-ratio:19/12;object-fit:contain;padding:6px;border:1px solid var(--line);border-radius:5px;background:#fff}
 .role:has(#bcforward) > .role-thumbnail { object-fit: cover; padding: 0; }
 .role:has(#commondevops) > .role-thumbnail { padding: 0; border: 0; background: transparent; }
@@ -735,7 +735,7 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 @media(max-width:850px){.publication:has(.publication-video[open]){grid-template-columns:1fr}
 .hero{grid-template-columns:minmax(0,1fr);gap:1.5rem;padding-block:1.75rem}
 .project-grid{grid-template-columns:minmax(0,1fr)}
-.role{grid-template-columns:145px minmax(0,1fr);column-gap:1rem}
+.role{--cover-width:145px;--role-gap:1rem}
 }
 
 @media(min-width:641px) and (max-width:850px){
@@ -753,7 +753,7 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 .page-intro{padding-top:2.5rem}
 .section{padding-block:2.5rem}
 .section-heading{align-items:flex-start;flex-direction:column;gap:.6rem}
-.role{grid-template-columns:clamp(4.25rem,19vw,6rem) minmax(0,1fr);grid-template-areas:"image heading" "details details";gap:1rem;align-items:center;padding-block:1.5rem}
+.role{--cover-width:clamp(4.25rem,19vw,6rem);--role-padding:1.5rem;grid-template-areas:"image heading" "details details";gap:1rem;align-items:center}
 .role-thumbnail{padding:3px}
 .timeline { font-size: 1rem; }
 .publication{grid-template-columns:minmax(0,1fr);gap:.5rem}
@@ -769,7 +769,7 @@ figure{padding-inline:1.4rem}
 
 /* Give employer names the full row when enlarged type leaves too little space beside the logo. */
 @container (max-width: 17rem) {
-  .role { grid-template-columns: minmax(0, 1fr); grid-template-areas: "image" "heading" "details"; }
+  .role { --cover-width:min(100%, 95px); grid-template-columns: minmax(0, 1fr); grid-template-areas: "image" "heading" "details"; }
   .role-thumbnail { width: min(100%, 95px); }
 }
 
@@ -890,6 +890,37 @@ a{color:inherit}
 .gallery-jumps a{font-size:.875rem}
 }
 
+
+
+/* The native summary owns both the cover and the text control. Reserve its
+   cover's grid cell so enlarged text and the expanded sheet stay in flow. */
+.role:has(.role-gallery)::before {
+  content: "";
+  grid-area: image;
+  align-self: start;
+  width: var(--cover-width);
+  aspect-ratio: 19 / 12;
+}
+.role-single { grid-area: image; width: var(--cover-width); align-self: start; border-radius: 5px; }
+.role-gallery { grid-column: 1 / -1; min-width: 0; }
+.role-gallery > summary { margin-inline-start: calc(var(--cover-width) + var(--role-gap)); }
+.role-gallery > summary .role-thumbnail {
+  position: absolute;
+  inset-block-start: var(--role-padding);
+  inset-inline-start: 0;
+  width: var(--cover-width);
+  box-shadow: 2px -2px var(--bg), 4px -4px var(--line), 6px -6px var(--panel);
+}
+.role-gallery > summary:focus-visible .role-thumbnail { outline: 3px solid var(--focus); outline-offset: 3px; }
+.role-gallery .thumbnail-grid {
+  margin-block-start: .75rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+}
+.role-gallery .thumbnail-frame { aspect-ratio: 16 / 10; background: var(--panel); }
+.role-gallery .thumbnail-frame img { max-height: 100%; min-height: 0; }
+@media (max-width: 540px) {
+  .role-gallery > summary { margin-inline-start: 0; }
+}
 
 /* Shared interaction hierarchy and comfortable touch targets. */
 .site-header nav {
