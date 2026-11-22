@@ -95,8 +95,10 @@ async function checkGallery(page, workUrl, width, directEntry) {
     const details = section.locator(':scope > details');
     if (await details.count()) {
       if (!(await details.evaluate(el => el.open))) await details.locator(':scope > summary').press('Enter');
+      await details.locator('.thumbnail-card a').first().waitFor({state: 'visible'});
       for (const nested of await details.locator('details').all()) {
         await nested.locator(':scope > summary').press('Enter');
+        await nested.locator('.thumbnail-card a').first().waitFor({state: 'visible'});
       }
     }
     assert.deepEqual(await section.locator('.thumbnail-card a:visible').evaluateAll(links => links.map(a => a.pathname).sort()), group.items.map(item => item.image).sort());
