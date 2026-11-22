@@ -54,7 +54,7 @@ permissions:
   contents: read
 jobs:
   check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -67,6 +67,8 @@ jobs:
       - run: bundle exec jekyll build && python3 scripts/check_site.py
       - name: Install browser test driver
         run: npm install --prefix "$RUNNER_TEMP/browser" --no-save playwright-core@1.55.0
+      - name: Install WebKit for gallery navigation
+        run: '"$RUNNER_TEMP/browser/node_modules/.bin/playwright-core" install --with-deps webkit'
       - name: Check layout and capture previews
         env:
           NODE_PATH: ${{ runner.temp }}/browser/node_modules
@@ -74,6 +76,7 @@ jobs:
           python3 -m http.server 8765 --directory _site --bind 127.0.0.1 &
           node scripts/check_experience_browser.cjs http://127.0.0.1:8765/experience/
           node scripts/check_case_studies.cjs http://127.0.0.1:8765
+          node scripts/check_case_studies.cjs http://127.0.0.1:8765 --webkit-gallery
           node scripts/check_publications.cjs http://127.0.0.1:8765
       - uses: actions/upload-artifact@v4
         with:

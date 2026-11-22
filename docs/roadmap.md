@@ -13,17 +13,21 @@ The standing scrum team includes a UI/UX specialist, a graphic designer and prof
 - MVP release: published through PR #1; the YouTube subscription button followed in PR #2. Live domains, pages, images, and the unchanged PGP key were verified.
 - The charcoal-and-blue design and manual edits through `4b3ad29` merged in [PR #3](https://github.com/schneidergithub/schneidergithub.github.io/pull/3), including removal of education and certifications from the Experience page. [PR #4](https://github.com/schneidergithub/schneidergithub.github.io/pull/4) added versioned stylesheet and favicon URLs.
 
-## Next three sprints · Portfolio polish
+<a id="next-three-sprints--portfolio-polish"></a>
 
-**Planned, November 21, 2026.** Help a hiring manager or technical reader answer three questions quickly. What did Aaron do? What can I see for myself? Where will this link take me? This plan covers the existing portfolio. The team reviewed the four main pages, seven cases and PGP utility, the release captures, and the editorial and article-source material from *Get Video Transcripts*. The grader guide, chess case, and incident investigation are already live. [Production baseline at the start of planning](https://github.com/schneidergithub/schneidergithub.github.io/tree/82c6bcf589c0215a223186ab146aa96908b4c6a5)
+## Portfolio polish · Five-sprint release
+
+**Kicked off November 21, 2026.** Help a hiring manager or technical reader answer three questions quickly. What did Aaron do? What can I see for myself? Where will this link take me? This plan covers the existing portfolio. The team reviewed the four main pages, seven cases and PGP utility, the release captures, and the editorial and article-source material from *Get Video Transcripts*. The grader guide, chess case, and incident investigation are already live. [Production baseline at the start of planning](https://github.com/schneidergithub/schneidergithub.github.io/tree/82c6bcf589c0215a223186ab146aa96908b4c6a5)
 
 | Order | Milestone a visitor can demonstrate | Planned size | Lead |
 | --- | --- | ---: | --- |
 | 1 | Read the Bayer case once and explain Aaron’s contribution | 13 points | Professional writers and marketing editor |
 | 2 | Inspect an original image and return to the same place | 13 points | Graphic designer and UI/UX specialist |
 | 3 | Find an engineering result from Home and the right evidence from Articles | 13 points | Product, editorial and frontend |
+| 4 | Choose a personal or team contact from a single business card | 8 points | Marketing, visual design and frontend |
+| 5 | Read and share a sourced engineering essay | 8 points | Professional writer, technical editor and QA |
 
-The 39 points are the original relative estimates. The Bayer showcase is the first five-point story, delivered with this plan. The remaining eight stories total 34 points. Copy comes first so visitors can identify Aaron’s contribution before they inspect the work. Image behavior comes next because changing all 26 gallery links removes an actual navigation surprise. The final milestone uses the edited material to decide what earns space on Home and Articles. Product and QA review each release with the writers and designers before the next begins.
+At kickoff, the first three milestones had 34 points of open work after the five-point Bayer showcase. The contact card and essay added eight points each. Every sprint includes a marketing reviewer and an independent graphic designer. Marketing follows a named visitor journey. Design compares phone and desktop captures. The team records their decisions and adjusts the upcoming backlog after production verification.
 
 **Approved release scope.** The owner removed the node-ipc editorial clarification from this series. The remaining stories proceed. Keep inline source links easy to recognize. Give navigation a compact treatment and let a genuine project image stand in for redundant text. At review, compare the Work directory, the gallery and a publication entry on a phone.
 
@@ -37,6 +41,8 @@ The 39 points are the original relative estimates. The Bayer showcase is the fir
 
 **Editorial decision.** The Aleve page demonstrates the website Aaron led. Its screenshots stand on their own. For other projects, add visible image text only when it explains a decision Aaron made, a constraint he handled, or a result the reader would otherwise miss. [Bayer showcase](https://www.aaronschneider.org/work/bayer-aleve/) · [Bayer release and roadmap](https://github.com/schneidergithub/schneidergithub.github.io/pull/34)
 
+**Sprint 1 review and retrospective.** Marketing accepted the seven short case names. At 375px all seven are visible together and their total length fell from 340 to 153 characters. The graphic designer could compare the Nuix and Yo Pagos team sizes in one phone viewport. Both reviewers prioritized the Bayer gallery for Sprint 2. The Aleve homepage used about 204px of a 343px gallery frame while the same original filled its case-study frame. Use the same screenshot in the next review to check that change. [Release #37](https://github.com/schneidergithub/schneidergithub.github.io/pull/37) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44967381424)
+
 ### Sprint 2 · Make graphic evidence easier to inspect
 
 | Visitor story | Implementation | Acceptance |
@@ -44,6 +50,8 @@ The 39 points are the original relative estimates. The Bayer showcase is the fir
 | Recognize an artifact on a phone (5) | Art-direct the five gallery covers using the real work. Size portrait app screens, landscape screenshots and wide brand marks for their aspect ratios. Let the Aleve preview use more of its frame at phone width. Use one clearly identifiable enlargement control per image. On the Aleve case, use the image link itself with a visual cue on the image and an accessible name. Keep the area below each screenshot free of labels and captions. | Review Bayer, Guest Pass and the Westinghouse banner at 375px and 1280px. Compare framing before and after. The relevant detail is recognizable, complete originals remain available, and logos retain their proportions. Label a detail crop if one is used. |
 | Go back to the image I was inspecting (5) | Gallery links currently force a new tab while case figures open in place. Use ordinary same-tab links throughout. Replace the browser test that expects a pop-up with the visitor’s actual return journey. | Expand Bayer, open the second Aleve screen with Enter, then use browser Back. The expanded group and original image control are in view, with a usable keyboard position. Repeat for a single-image group and a case figure. Check Back in Chromium and WebKit where available. All 26 originals remain reachable, including with JavaScript disabled. |
 | Tell what expanded and what is clickable (3) | Give the native gallery disclosure a short chevron transition on opening or closing, using the existing roughly 140ms timing. Keep the open/closed wording. Reserve underlining for links in prose and for interaction states. Keep keyboard focus and the champagne heading. Use spacing and type to group project results and skills where borders currently make them resemble controls. | State and content update immediately. Keyboard focus remains visible and the page stays still. With reduced motion enabled the indicator switches instantly. Review touch, keyboard and 320px at 200% text. New motion must explain a state change. |
+
+**Gallery writing decision.** Aaron flagged the Westinghouse heritage-banner caption during the sprint. Lead with his release testing and the Elasticsearch result. Leave the cover free of a caption. Describe the person and historical logos in the image alternative for readers who need it. Apply the same test to future gallery copy: keep a caption only when it adds information about the engineering work.
 
 ### Sprint 3 · Put results and sources where readers expect them
 

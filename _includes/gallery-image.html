@@ -1,7 +1,6 @@
 <figure class="thumbnail-card">
-  <a href="{{ include.item.image | relative_url }}" target="_blank" rel="noopener" aria-label="Open full-size image of {{ include.item.title | escape }} in a new tab">
+  <a class="image-enlarge" id="original-{{ include.item.image | split: '/' | last | slugify }}" href="{{ include.item.image | relative_url }}" aria-label="Open full-size image of {{ include.item.title | escape }}">
     <span class="thumbnail-frame"><img src="{{ include.item.thumbnail | relative_url }}?v={{ include.item.thumbnail_version }}" alt="{{ include.item.alt | escape }}" width="{{ include.item.width }}" height="{{ include.item.height }}" loading="lazy" decoding="async"></span>
-    {% if include.item.caption %}<span class="thumbnail-open">Open full-size image</span>{% else %}<span class="thumbnail-label">{{ include.item.title | escape }} <span aria-hidden="true">↗</span></span>{% endif %}
   </a>
-  {% if include.item.caption %}<figcaption>{{ include.item.caption | escape }}</figcaption>{% endif %}
+  {% if include.item.caption %}<figcaption>{{ include.item.caption | escape }}</figcaption>{% elsif include.cover == nil %}<figcaption class="thumbnail-label">{{ include.item.title | escape }}</figcaption>{% endif %}
 </figure>

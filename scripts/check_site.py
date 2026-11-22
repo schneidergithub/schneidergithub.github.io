@@ -54,6 +54,8 @@ class Page(HTMLParser):
             if not media_page or not allowed or 'srcdoc' in a or not a.get('title'):
                 errors.append(f'{self.path}: unexpected video embed')
         allowed_scripts = {'/assets/navigation.js'}
+        if self.path.is_relative_to(SITE / 'work'):
+            allowed_scripts.add('/assets/portfolio/gallery-return.js')
         if media_page:
             allowed_scripts.add('/assets/publications/video-player.js')
         if tag == 'form' or (tag == 'script' and a.get('src') not in allowed_scripts):
