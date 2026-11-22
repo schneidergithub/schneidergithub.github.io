@@ -214,11 +214,22 @@ async function openImageAndReturn(page, control) {
   await page.goBack({ waitUntil: 'load' });
   assert.equal(page.url(), sourceUrl);
   try {
-    await page.waitForFunction(href => {
-      const current = document.activeElement;
-      if (current?.href !== href) return false;
-      const bounds = current.getBoundingClientRect();
-      return bounds.width > 0 && bounds.height > 0 && bounds.top < innerHeight && bounds.bottom > 0;
+    await page.waitForFunction(async href => {
+      const activeTop = () => {
+        const current = document.activeElement;
+        if (current?.href !== href) return null;
+        const bounds = current.getBoundingClientRect();
+        return bounds.width && bounds.height && bounds.top < innerHeight && bounds.bottom > 0 ? bounds.top : null;
+      };
+      const firstTop = activeTop();
+      if (firstTop === null) return false;
+      // A transient focus position can precede the browser's native Back scroll.
+      for (let frame = 0; frame < 3; frame++) {
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        const top = activeTop();
+        if (top === null || Math.abs(top - firstTop) > 1) return false;
+      }
+      return true;
     }, imageUrl, { timeout: 7000 });
   } catch (error) {
     const after = await control.evaluate(el => ({

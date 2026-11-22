@@ -8,8 +8,13 @@ window.addEventListener('click', (event) => {
   const openGroups = Array.from(document.querySelectorAll('.portfolio-gallery details[open]'), group => group.id);
   history.replaceState({
     ...history.state,
-    imageReturn: { id: link.id, href: link.href, top: link.getBoundingClientRect().top, openGroups }
+    imageReturn: {
+      id: link.id, href: link.href, top: link.getBoundingClientRect().top,
+      openGroups, scrollRestoration: history.scrollRestoration
+    }
   }, '');
+  // This entry reopens disclosures before it can restore the saved position.
+  history.scrollRestoration = 'manual';
 });
 
 window.addEventListener('pageshow', (event) => {
@@ -22,15 +27,25 @@ window.addEventListener('pageshow', (event) => {
   delete state.imageReturn;
   history.replaceState(state, '');
   const link = document.getElementById(saved.id);
-  if (!link || !link.matches('a.image-enlarge') || link.href !== saved.href) return;
+  if (!link || !link.matches('a.image-enlarge') || link.href !== saved.href) {
+    history.scrollRestoration = saved.scrollRestoration || 'auto';
+    return;
+  }
 
   for (const group of document.querySelectorAll('.portfolio-gallery details')) {
     group.open = saved.openGroups.includes(group.id);
   }
-  // Native scroll restoration runs after pageshow. Account for the space
-  // taken by the re-opened groups before returning focus to the exact image.
+  // WebKit may still scroll to the URL fragment after the first layout.
+  // Keep the image in its former position across that paint.
   requestAnimationFrame(() => {
     link.focus({ preventScroll: true });
-    window.scrollBy({ top: link.getBoundingClientRect().top - saved.top, behavior: 'instant' });
+    const restorePosition = () => {
+      window.scrollBy({ top: link.getBoundingClientRect().top - saved.top, behavior: 'instant' });
+    };
+    restorePosition();
+    requestAnimationFrame(() => {
+      restorePosition();
+      history.scrollRestoration = saved.scrollRestoration || 'auto';
+    });
   });
 });
