@@ -1,25 +1,16 @@
 [
   {
     "id": "propoint",
-    "title": "ProPoint / Super Salon",
-    "description": "At ProPoint, I developed and tested Super Salon\u2019s checkout software. An automated test caught a one-cent difference between the online and desktop records of the same sale.",
+    "title": "Guest Pass and Super Salon",
+    "description": "I built Guest Pass for mobile booking and developed Super Salon’s scheduling and checkout software. Around 30,000 salons used Super Salon.",
     "related": {
-      "label": "Super Salon checkout",
-      "url": "/work/super-salon-checkout/"
+      "label": "From Booking to Checkout",
+      "url": "/work/from-booking-to-checkout/"
     },
     "items": [
       {
-        "title": "Book a service in Guest Pass",
-        "alt": "Guest Pass mobile screens for choosing a stylist, appointment time, and salon services.",
-        "image": "/assets/portfolio/guestpass-mockups-02-orig.webp",
-        "thumbnail": "/assets/portfolio/thumbs/guestpass-mockups-02-orig.webp",
-        "width": 509,
-        "height": 380,
-        "thumbnail_version": "0e312c2e7c46"
-      },
-      {
-        "title": "Find a salon in Guest Pass",
-        "alt": "Guest Pass mobile screens showing nearby salon locations, estimated wait times, and store details.",
+        "title": "Find a salon",
+        "alt": "Guest Pass mobile mockups showing nearby salon locations, estimated wait times, and store details.",
         "image": "/assets/portfolio/guestpass-mockups-01-orig.webp",
         "thumbnail": "/assets/portfolio/thumbs/guestpass-mockups-01-orig.webp",
         "width": 509,
@@ -27,7 +18,16 @@
         "thumbnail_version": "3acb0788044d"
       },
       {
-        "title": "Salon appointment calendar",
+        "title": "Book a service",
+        "alt": "Guest Pass mobile mockups for choosing a stylist, appointment time, and salon services.",
+        "image": "/assets/portfolio/guestpass-mockups-02-orig.webp",
+        "thumbnail": "/assets/portfolio/thumbs/guestpass-mockups-02-orig.webp",
+        "width": 509,
+        "height": 380,
+        "thumbnail_version": "0e312c2e7c46"
+      },
+      {
+        "title": "Appointment calendar",
         "alt": "Salon scheduling interface with appointment columns organized by stylist.",
         "image": "/assets/portfolio/a03-calendar-large-orig.webp",
         "thumbnail": "/assets/portfolio/thumbs/a03-calendar-large-orig.webp",
@@ -36,7 +36,7 @@
         "thumbnail_version": "78ef3e81714e"
       },
       {
-        "title": "Super Salon point of sale",
+        "title": "Desktop checkout",
         "alt": "Super Salon desktop point-of-sale interface with product, service, and transaction controls.",
         "image": "/assets/portfolio/supersalon.webp",
         "thumbnail": "/assets/portfolio/thumbs/supersalon.webp",

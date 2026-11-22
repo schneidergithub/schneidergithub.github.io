@@ -29,10 +29,13 @@ permalink: /experience/
     {% if role.case_project %}
       {% assign studies = site.pages | where: 'layout', 'case-study' | where: 'project', role.case_project | sort: 'title' %}
     {% endif %}
-    {% if studies.size > 0 or role.gallery_link %}
+    {% if studies.size > 0 or role.gallery_link or role.related_work %}
       <ul class="role-links" role="list" aria-label="Related work at {{ role.organization | escape }}">
         {% for study in studies %}
         <li><a class="role-study" href="{{ study.url | relative_url }}">{{ study.link_label | default: study.title | escape }}</a></li>
+        {% endfor %}
+        {% for link in role.related_work %}
+        <li><a class="role-study" href="{{ link.url | relative_url }}">{{ link.label | escape }}</a></li>
         {% endfor %}
         {% if role.gallery_link %}
         <li><a class="role-study" href="{{ '/work/' | relative_url }}#gallery-{{ role.gallery_link.group | escape }}">{{ role.gallery_link.label | escape }}</a></li>

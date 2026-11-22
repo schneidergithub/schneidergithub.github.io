@@ -10,16 +10,21 @@ layout: default
   </header>
   {% assign study_body = content | strip %}
   {% unless study_body == empty %}<div class="study-copy">{{ content }}</div>{% endunless %}
-  {% if page.figures %}
+  {% assign figures = page.figures %}
+  {% if page.gallery_group %}
+    {% assign group = site.data.gallery | where: 'id', page.gallery_group | first %}
+    {% assign figures = group.items %}
+  {% endif %}
+  {% if figures %}
   <section class="study-evidence" aria-labelledby="screens-title">
     <h2 id="screens-title"{% unless page.figure_heading %} class="visually-hidden"{% endunless %}>{{ page.figure_heading | default: "Project screenshots" | escape }}</h2>
     <div class="study-figures">
-      {% for figure in page.figures %}
+      {% for figure in figures %}
       <figure>
         <a class="study-image image-enlarge" id="case-original-{{ forloop.index }}" href="{{ figure.image | relative_url }}" aria-label="Open full-size image: {{ figure.alt | escape }}">
-          <img src="{{ figure.image | relative_url }}" alt="{{ figure.alt | escape }}" width="{{ figure.width }}" height="{{ figure.height }}" loading="lazy" decoding="async">
+          <img src="{{ figure.thumbnail | default: figure.image | relative_url }}" alt="{{ figure.alt | escape }}" width="{{ figure.width }}" height="{{ figure.height }}" loading="lazy" decoding="async">
         </a>
-        {% if figure.caption %}<figcaption>{{ figure.caption | escape }}</figcaption>{% endif %}
+        {% if page.gallery_group %}<figcaption>{{ figure.title | escape }}</figcaption>{% elsif figure.caption %}<figcaption>{{ figure.caption | escape }}</figcaption>{% endif %}
       </figure>
       {% endfor %}
     </div>
@@ -31,4 +36,4 @@ layout: default
     <a class="study-return" href="{{ '/work/' | relative_url }}#{{ page.project | escape }}">{{ project.organization | default: project.title | escape }} project summary</a>
   </nav>
 </article>
-{% if page.figures %}<script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}" defer></script>{% endif %}
+{% if figures %}<script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}" defer></script>{% endif %}

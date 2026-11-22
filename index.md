@@ -42,7 +42,7 @@ contact_footer: true
       {% endif %}
       <p class="eyebrow">{{ highlight.organization | escape }}</p>
       <h3 class="feature-result">
-        <a href="{% if studies.size == 1 %}{{ studies.first.url | relative_url }}{% else %}{{ '/work/' | relative_url }}#{{ project.slug | escape }}{% endif %}">
+        <a href="{% if highlight.url %}{{ highlight.url | relative_url }}{% elsif studies.size == 1 %}{{ studies.first.url | relative_url }}{% else %}{{ '/work/' | relative_url }}#{{ project.slug | escape }}{% endif %}">
           {{ heading | escape }}
         </a>
       </h3>
