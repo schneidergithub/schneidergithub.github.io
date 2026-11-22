@@ -98,7 +98,9 @@ async function check() {
       assert.equal(await roles.count(), 11);
       assert.deepEqual(await roles.locator('h2').evaluateAll(headings => headings.map(h => h.id)), roleIds);
       const commonDevOps = roles.filter({ has: page.locator('h2#commondevops') }).locator('.role-details li');
-      assert.match((await commonDevOps.allTextContents()).join(' '), /co-authored[\s\S]*trial results/i);
+      assert.match(await commonDevOps.first().innerText(), /co-authored.*MDD Executive Function.*maintainer.*review DevOps and infrastructure.*trial results/i);
+      const mark = page.locator('article.role').filter({ has: page.locator('h2#commondevops') }).locator('img');
+      assert.equal(await mark.getAttribute('src'), '/assets/experience/commondevops-mark.png');
       await checkLeadership(page, url, reviewDir);
       const nuix = roles.filter({ has: page.getByRole('heading', { name: 'Nuix', exact: true }) });
       assert.match(await nuix.locator('.role-details li').first().innerText(), /led.*12 engineers.*multiple time zones/i);

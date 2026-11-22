@@ -13,6 +13,18 @@ The standing scrum team includes a UI/UX specialist, a graphic designer and prof
 - MVP release: published through PR #1; the YouTube subscription button followed in PR #2. Live domains, pages, images, and the unchanged PGP key were verified.
 - The charcoal-and-blue design and manual edits through `4b3ad29` merged in [PR #3](https://github.com/schneidergithub/schneidergithub.github.io/pull/3), including removal of education and certifications from the Experience page. [PR #4](https://github.com/schneidergithub/schneidergithub.github.io/pull/4) added versioned stylesheet and favicon URLs.
 
+## Research, related work and recordings
+
+The prior release established the signed essay, the illustrated Work directory and the contact card. This series improves three journeys already available on the live site.
+
+| Sprint | Reader’s goal | Implementation and acceptance |
+| --- | --- | --- |
+| 1 · Current research | Understand Aaron’s role in Terminal-Bench-Science from Experience or the benchmark case. | Name the approved task and co-author, distinguish maintaining and reviewing the project from analyzing trial results, and lead the role entry with this work. Use the organization’s recognizable CD mark for the Experience thumbnail. Keep the incident report’s original publication artwork. |
+| 2 · Essay to evidence | Follow the chess example from the signed essay to what Aaron saw in the video. | Link the essay to the relevant observation in the chess QA case and make the return lead to the related passage. Show an authentic frame with accurate credit or description and preserve timestamped source links. Check the two-way journey by keyboard and on a phone. |
+| 3 · Recording playback | Identify a recording and reach the original when inline playback is unavailable. | Put the title ahead of the secondary platform link on homepage media cards. Keep the closed benchmark spotlight compact and offer a direct YouTube alternative when the player is open. Check blocked embeds, no-script links, closing playback, keyboard focus, and desktop and phone layout. |
+
+Use a pull request for each sprint, inspect its preview, and verify the released journey on the custom domain before advancing.
+
 <a id="sprint-review-and-proposed-next-three-sprints"></a>
 
 ## Released sprints · Contact, project evidence and publishing
@@ -430,7 +442,7 @@ Approved November 21, 2026. [Release PR #7](https://github.com/schneidergithub/s
 
 | Role, in display order | Image to use | Asset status |
 | --- | --- | --- |
-| CommonDevOps | [NODE-IPC report title page](https://doi.org/10.6084/m9.figshare.33865414) | Cropped the title area of the published first edition. |
+| CommonDevOps | [Organization profile mark](https://github.com/commondevops) | Centered the official blue CD mark in the role thumbnail. The original report title page still illustrates the publication. |
 | Nuix | Nuix logo | Wordmark from the Nuix Log Reviewer repository. |
 | Yo Pagos | Yo Pagos logo | Historical Yo.cr Pagos wordmark from the owner’s portfolio. |
 | BCforward | BCforward logo | Historical employer mark from the owner’s portfolio. Indiana and Eli Lilly are its client engagements. |
