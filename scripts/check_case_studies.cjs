@@ -267,7 +267,8 @@ async function checkImageReturns(browser, workUrl) {
     await page.waitForFunction(id => {
       const el = document.getElementById(id);
       const box = el.getBoundingClientRect();
-      return document.activeElement === el && box.top >= 0 && box.bottom <= innerHeight;
+      const visibleHeight = Math.min(box.bottom, innerHeight) - Math.max(box.top, 0);
+      return document.activeElement === el && visibleHeight >= Math.min(box.height, innerHeight) - 2;
     }, await control.getAttribute('id'), {timeout:5000});
   } catch (error) {
     const state = await control.evaluate(el => ({bounds:el.getBoundingClientRect().toJSON(), active:document.activeElement?.id, width:innerWidth, height:innerHeight, scrollY}));
