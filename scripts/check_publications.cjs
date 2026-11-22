@@ -385,6 +385,15 @@ async function checkHomepage(page) {
   for (const card of await results.locator('.feature').all()) {
     assert.equal(await card.getByRole('link').count(), 1, 'Give each result a single link');
     assert.ok(await card.locator('h3 a').isVisible(), 'The result heading opens the evidence');
+    const cover = card.locator('.feature-cover');
+    const box = await cover.boundingBox();
+    assert.ok(box && box.width > 0 && box.height > 0 && box.x >= 0 && box.x + box.width <= width + 1,
+      'Each contact-sheet cover must be visible and fit the viewport at ' + width + 'px');
+    if (await cover.getAttribute('aria-hidden') !== 'true') {
+      const image = cover.locator('img');
+      assert.equal(await image.count(), 1, 'Use a gallery thumbnail for the project cover');
+      await decodeCover(image);
+    }
   }
   if (width === 375 || width === 1280) await captureSection(page, results, 'home-results');
   const checkout = page.locator('.feature').filter({ has: page.locator('a[href="/work/super-salon-checkout/"]') });
@@ -676,8 +685,11 @@ async function checkPhoneEntry(browser) {
   assert.deepEqual(await links.evaluateAll(items => items.map(a => a.pathname)), ['/', '/experience/', '/work/', '/articles/']);
   const currentPage = nav.locator('a[aria-current="page"]');
   assert.equal(await currentPage.getAttribute('href'), '/articles/');
-  assert.ok(await currentPage.evaluate(el => parseFloat(getComputedStyle(el, '::after').height) >= 2),
-    'Mark the current section visually in the expanded menu');
+  assert.ok(await currentPage.evaluate(el => {
+    const style = getComputedStyle(el);
+    return style.textDecorationLine.includes('underline') && parseFloat(style.textDecorationThickness) >= 2 &&
+      style.textDecorationColor === style.color;
+  }), 'Underline the current section in the expanded menu');
   await captureSection(page, header, 'mobile-menu-open');
   for (const link of await links.all()) {
     await page.keyboard.press('Tab');

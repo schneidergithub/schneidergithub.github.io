@@ -19,7 +19,7 @@ contact_footer: true
 
 <section class="section selected-results" aria-labelledby="selected-title">
   <div class="section-heading">
-    <h2 id="selected-title">Selected work</h2>
+    <h2 id="selected-title">Selected <em>work</em></h2>
     <a href="{{ '/work/' | relative_url }}#project-summaries">Browse project summaries</a>
   </div>
   <div class="feature-grid">
@@ -27,14 +27,27 @@ contact_footer: true
     {% for project in projects %}
     {% assign highlight = project.home_highlight %}
     {% assign studies = site.pages | where: 'layout', 'case-study' | where: 'project', project.slug %}
+    {% assign gallery = site.data.gallery | where: 'id', project.slug | first %}
+    {% assign cover = gallery.items.first %}
+    {% if cover and studies.size == 1 and studies.first.figures.first.image %}
+      {% assign primary_image = studies.first.figures.first.image %}
+      {% assign cover = gallery.items | where: 'image', primary_image | first | default: cover %}
+    {% endif %}
+    {% assign heading = highlight.value | append: ' ' | append: highlight.label | strip %}
+    {% if highlight.value and studies.size == 1 %}{% assign heading = studies.first.title %}{% endif %}
     <article class="feature">
+      {% if cover.thumbnail %}
+        <div class="feature-cover"><img src="{{ cover.thumbnail | relative_url }}?v={{ cover.thumbnail_version | escape }}" alt="{{ cover.alt | escape }}" width="{{ cover.width }}" height="{{ cover.height }}" loading="lazy" decoding="async"></div>
+      {% else %}
+        <div class="feature-cover feature-cover-archive" aria-hidden="true"><span class="archive-folder"></span></div>
+      {% endif %}
       <p class="eyebrow">{{ highlight.organization | escape }}</p>
-      <h3 class="feature-result{% unless highlight.value %} result-statement{% endunless %}">
-        <a class="result-link" href="{% if studies.size == 1 %}{{ studies.first.url | relative_url }}{% else %}{{ '/work/' | relative_url }}#{{ project.slug | escape }}{% endif %}">
-          {% if highlight.value %}<span class="result-value">{{ highlight.value | escape }}</span> <span class="result-label">{{ highlight.label | escape }}</span>{% else %}{{ highlight.label | escape }}{% endif %}
+      <h3 class="feature-result">
+        <a href="{% if studies.size == 1 %}{{ studies.first.url | relative_url }}{% else %}{{ '/work/' | relative_url }}#{{ project.slug | escape }}{% endif %}">
+          {{ heading | escape }}
         </a>
       </h3>
-      <p>{{ highlight.description | escape }}</p>
+      <p class="feature-summary">{{ highlight.description | escape }}</p>
     </article>
     {% endfor %}
   </div>
