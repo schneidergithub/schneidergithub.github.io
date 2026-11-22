@@ -13,6 +13,34 @@ The standing scrum team includes a UI/UX specialist, a graphic designer and prof
 - MVP release: published through PR #1; the YouTube subscription button followed in PR #2. Live domains, pages, images, and the unchanged PGP key were verified.
 - The charcoal-and-blue design and manual edits through `4b3ad29` merged in [PR #3](https://github.com/schneidergithub/schneidergithub.github.io/pull/3), including removal of education and certifications from the Experience page. [PR #4](https://github.com/schneidergithub/schneidergithub.github.io/pull/4) added versioned stylesheet and favicon URLs.
 
+## Sprint review and proposed next three sprints
+
+The simulated review covered the 14 portfolio pages, including all seven case studies. Marketing and the writer followed hiring and consulting journeys. Graphic design compared release captures at 375px and 1280px. UX and engineering reviewed navigation, keyboard behavior, media and the templates that repeat across pages. The findings describe what the team could see and reproduce. Visitor conversion has not been measured.
+
+### Restore the personal invitation
+
+![Desktop and phone captures of the earlier signed contact card above the full-width footer. The earlier card groups the portrait with the invitation and places the signature and YouTube on a narrow strip.](reviews/home-footer-comparison.jpg)
+
+[Open the comparison at full size](reviews/home-footer-comparison.jpg) · [Signed card, release 51](https://github.com/schneidergithub/schneidergithub.github.io/pull/51) · [Full-width footer, release 53](https://github.com/schneidergithub/schneidergithub.github.io/pull/53)
+
+| Perspective | What changed | Design decision to preview |
+| --- | --- | --- |
+| Graphic design | Both releases use Instrument Serif Italic and the same near-black ink, `#191613`. In the card, the name signs a narrow champagne strip. In the band, it sits beside the face. The desktop portrait shrank from 96px to 72px and “Work with me” became a small, bold utility heading. | Return to the centered charcoal card, larger portrait and champagne italic invitation. Put the name back on a shallow strip. Compare the original ink with a warm dark brown in that setting before changing the typeface. |
+| Marketing and writing | The former card asks one clear question of the visitor. On a phone, the new band places the red channel icon beside the portrait before either consulting route. On desktop, a wide gap separates that icon from the invitation. | Keep “Individual consulting” and “Team consulting · CommonDevOps” as the two actions below the invitation. Use the official LinkedIn marks with each link. Pair the YouTube mark with the signature at the end. |
+| UX and QA | Both releases passed functional checks. The checks verify destinations and focus, but link count and word count do not say whether visitors see the invitation first. | Compare both screen sizes at their actual display size. A fresh reviewer should identify the two recipients and point to the channel from the closed page. Tab through individual, team, then channel. Preserve both existing bookmarks, three unique destinations, 44px targets and reflow at 320px with enlarged text. |
+
+The recommendation concerns the homepage. Keep the compact interior footers, and resolve adjacent duplicate contacts in the case-study template. The editorial masthead and project contact sheet are reviewed separately in [PR 52](https://github.com/schneidergithub/schneidergithub.github.io/pull/52). During that review, a 375px capture showed “Articles & Demos” alone on the last menu row. The reviewed revision gives four links two balanced rows and checks them in the browser.
+
+### Sprint goals
+
+| Order | Visitor outcome and scope | Review and acceptance |
+| --- | --- | --- |
+| 1 · Contact | Restore the signed homepage card using the layout above. On all seven case studies, the closing navigation offers Aaron’s LinkedIn and the adjacent footer immediately repeats it. Preserve a clear project-return link and provide one route to the individual and team choices on Home. | Starting from a shared case, reach the correct personal or company profile and return to that project summary. Inspect the card on desktop and phone, with keyboard focus and enlarged text. Capture the resting layout beside the signed-card baseline for visual acceptance. |
+| 2 · Project evidence | The illustrated homepage leads to a text-heavy Work index. At 375px the captured first viewport shows section links and seven case titles before a project image. Bring one recognizable artifact and outcome into that view. Test a tighter Super Salon register crop. Connect the Bucky Ball and Berkeley experience entries to the matching site and inventory galleries. | From the Work landing page, identify one contribution before scrolling at 375×812 and open the associated case. Retain the seven direct case links and gallery bookmarks. A second reviewer must recognize the checkout artifact at phone thumbnail size. For Westinghouse, add a test decision only if an existing source supports it. |
+| 3 · Reading, viewing and sharing | In Articles & Demos, the essay title wraps to four lines beside its permalink on a 375px phone. Give the title more width. Feature the signed essay in one of the two homepage slots covering the same node-ipc incident. Five cases and the essay use the generic social image. Start with a distinctive, cleared share image for the essay and one case. | Keep the essay’s title within three lines at default 375px, with a keyboard-accessible permalink. Check the two social cards at feed size. Preserve the report and interview in the collection. For the December issue, verify the published LinkedIn headline and cover, latest-issue placement by coverage month, and access to October’s LinkedIn, web and PDF editions. |
+
+At sprint review, the designer and marketing reviewer should inspect the resting page before seeing test results. QA should verify the same journey with a keyboard and enlarged text. This adds a human design decision to the existing production checks. Keep the source-dependent TDD follow-up in the editorial backlog and preserve the approved exclusion of node-ipc editorial revisions.
+
 ## Monthly newsletter archive
 
 | Reader story | Implementation and acceptance |
