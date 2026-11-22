@@ -153,120 +153,86 @@ async function checkResearchFeature(panel, width) {
   assert.equal(dimensions.declaredHeight, dimensions.height);
 }
 
-async function checkContactCard(page, width) {
+async function checkConsultingFooter(page, width) {
   const footer = page.getByRole('contentinfo');
-  const card = footer.locator('section#connect');
-  assert.ok(await card.getByRole('heading', { name: 'Work with me', exact: true }).isVisible());
-  const portrait = card.getByRole('img', { name: 'Aaron Schneider', exact: true });
-  await decodeCover(portrait);
-  const frame = await portrait.locator('..').boundingBox();
-  const title = await card.locator('h2').boundingBox();
-  assert.ok(frame.width >= 72 && frame.width <= 96 && Math.abs(frame.width - frame.height) < 1, 'Keep the portrait square at its display size');
-  if (width >= 375) assert.ok(frame.x + frame.width <= title.x && frame.y < title.y + title.height && title.y < frame.y + frame.height,
-    'Place the portrait alongside the contact heading');
-  const routes = [
-    ['Individual consulting', 'Aaron Schneider on LinkedIn', 'https://www.linkedin.com/in/aarondrewschneider/'],
-    ['Team consulting', 'CommonDevOps on LinkedIn', 'https://www.linkedin.com/company/commondevops/']
-  ];
-  const originalViewport = page.viewportSize();
-  const rows = card.locator('dl > div');
-  const links = card.getByRole('link');
-  assert.equal(await rows.count(), routes.length);
-  assert.equal(await links.count(), routes.length);
-  for (const [index, [audience, recipient, url]] of routes.entries()) {
-    const row = rows.nth(index);
-    assert.equal(await row.locator('dt').innerText(), audience);
-    const contact = row.locator('dd').getByRole('link', { name: recipient, exact: true });
-    assert.equal(await contact.getAttribute('href'), url);
-    assert.equal(await page.locator('a[href="' + url + '"]').count(), 1, 'Offer each consulting destination once on the homepage');
-  }
-  assert.equal(await page.getByRole('link', { name: 'Subscribe on YouTube' }).count(), 0);
-  assert.equal(await footer.getByRole('link').count(), 3);
-  const strip = footer.locator('.footer-inner');
-  const signature = strip.locator('.footer-signature');
+  const layout = footer.locator('#connect');
+  assert.equal(await footer.getAttribute('id'), 'footer');
+  const heading = layout.getByRole('heading', { name: 'Work with me', exact: true });
+  const signature = layout.locator('.footer-signature');
   assert.equal(await signature.innerText(), 'Aaron Schneider');
-  const contactBox = await card.boundingBox();
-  const stripBox = await strip.boundingBox();
-  assert.ok(Math.abs(contactBox.y + contactBox.height - stripBox.y) <= 1 && Math.abs(contactBox.width - stripBox.width) <= 1,
-    'Join the champagne signature strip to the full width of the contact card');
-  const fontLoaded = await signature.evaluate(async el => {
+  assert.ok(await signature.evaluate(async el => {
     const style = getComputedStyle(el);
     const faces = await document.fonts.load(style.fontStyle + ' ' + style.fontSize + ' "Instrument Serif"', el.textContent);
     return style.fontFamily.includes('Instrument Serif') && faces.some(face => face.status === 'loaded');
-  });
-  assert.ok(fontLoaded, 'Render the signature with its local italic font');
-  const channel = strip.getByRole('link', { name: 'CommonDevOps on YouTube', exact: true });
-  const channelUrl = 'https://www.youtube.com/@commondevops';
-  assert.equal(await channel.getAttribute('href'), channelUrl);
-  assert.equal(await page.locator('a[href="' + channelUrl + '"]').count(), 1);
+  }), 'Use the local signature typeface');
+  const photo = layout.getByRole('img', { name: 'Aaron beside a waterfall' });
+  await decodeCover(photo);
+  const frame = await photo.locator('..').boundingBox();
+  assert.ok(frame.width >= 56 && frame.width <= 72 && Math.abs(frame.width - frame.height) < 1);
+  const name = await signature.boundingBox();
+  assert.ok(frame.x + frame.width <= name.x && name.y < frame.y + frame.height && frame.y < name.y + name.height,
+    'Keep the portrait beside the signature');
+
+  const links = layout.getByRole('link');
+  assert.equal(await links.count(), 3);
+  const destinations = [
+    ['Individual consulting with Aaron Schneider on LinkedIn', 'https://www.linkedin.com/in/aarondrewschneider/', 'linkedin'],
+    ['Team consulting · CommonDevOps on LinkedIn', 'https://www.linkedin.com/company/commondevops/', 'linkedin'],
+    ['CommonDevOps on YouTube', 'https://www.youtube.com/@commondevops', 'youtube']
+  ];
+  for (const [label, url, icon] of destinations) {
+    const link = layout.getByRole('link', { name: label, exact: true });
+    assert.equal(await link.getAttribute('href'), url);
+    assert.equal(await page.locator('a[href="' + url + '"]').count(), 1, 'Offer each destination once');
+    const shape = link.locator('svg use');
+    assert.ok((await shape.getAttribute('href')).endsWith('#' + icon));
+    assert.ok(await shape.evaluate(el => el.getBBox().width > 0));
+    const box = await link.boundingBox();
+    assert.ok(box.width >= 44 && box.height >= 44, 'Keep each contact easy to activate');
+  }
+  const channel = layout.getByRole('link', { name: 'CommonDevOps on YouTube' });
+  const band = await footer.boundingBox();
+  const inner = await layout.boundingBox();
+  const header = await page.locator('.site-header').boundingBox();
+  assert.ok(Math.abs(band.x) <= 1 && Math.abs(band.width - width) <= 1 &&
+    Math.abs(inner.x - header.x) <= 1 && Math.abs(inner.width - header.width) <= 1,
+    'Use a full-width footer with its content aligned to the header');
+  const options = await heading.boundingBox();
   const channelBox = await channel.boundingBox();
-  assert.ok(channelBox.width >= 48 && channelBox.height >= 48, 'Give the channel icon a generous touch target');
-  const mark = await channel.locator('svg use').evaluate(use => {
-    const { width, height } = use.getBBox();
-    return { width, height };
-  });
-  assert.ok(mark.width >= 30 && mark.height >= 30, 'Render a recognizable YouTube icon');
+  const compact = await page.evaluate(() => matchMedia('(max-width: 52em)').matches);
+  if (compact) {
+    assert.ok(channelBox.x >= name.x + name.width - 1 && channelBox.y < frame.y + frame.height &&
+      options.y >= Math.max(frame.y + frame.height, channelBox.y + channelBox.height),
+      'Group the portrait, name and channel above the consulting options');
+    const contacts = await layout.locator('.consulting-links a').evaluateAll(items => items.map(a => a.getBoundingClientRect().toJSON()));
+    assert.ok(contacts[0].bottom <= contacts[1].top + 1);
+  } else {
+    assert.ok(options.x >= name.x + name.width && channelBox.x >= options.x + options.width - 1,
+      'Arrange identity, consulting and the channel across the desktop footer');
+  }
 
   if (width === 320) {
-    const larger = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
-    for (const item of await card.locator('h2, .contact-portrait, dt, dd a').all()) {
-      const fits = await item.evaluate(el => {
-        const box = el.getBoundingClientRect();
-        const text = document.createRange();
-        text.selectNodeContents(el);
-        return box.left >= -1 && box.right <= innerWidth + 1 &&
-          [...text.getClientRects()].every(line => line.left >= -1 && line.right <= innerWidth + 1) &&
-          (el.tagName !== 'A' || (box.height >= 44 && box.width >= 44));
-      });
-      assert.ok(fits, 'The contact row must fit at 320px with doubled text: ' + await item.innerText());
-    }
-    assert.ok(await footer.evaluate(el => el.scrollWidth <= innerWidth && [...el.querySelectorAll('.footer-signature, a')].every(item => {
+    const large = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+    assert.ok(await footer.evaluate(el => el.scrollWidth <= innerWidth && [...el.querySelectorAll('.footer-signature, h2, a')].every(item => {
       const box = item.getBoundingClientRect();
-      return box.left >= 0 && box.right <= innerWidth;
-    })), 'The footer name and social profiles must fit with doubled text');
-    await larger.evaluate(el => el.remove());
+      return box.left >= 0 && box.right <= innerWidth && item.scrollWidth <= item.clientWidth + 1;
+    })), 'Reflow the footer at 320px with doubled text');
+    await large.evaluate(el => el.remove());
   }
   if (width === 375 || width === 1280) {
-    if (width === 375) await page.setViewportSize({ width, height: 812 });
     await page.goto(new URL('/#connect', origin).href);
     assert.equal(await page.locator(':target').getAttribute('id'), 'connect');
-    const rectangles = await links.evaluateAll(items => items.map(el => el.getBoundingClientRect().toJSON()));
-    assert.ok(rectangles.every(box => box.top >= -1 && box.bottom <= page.viewportSize().height + 1), 'Both contacts should be visible at #connect');
-    if (width === 375) assert.ok(rectangles[0].bottom <= rectangles[1].top, 'Stack the contact routes on phones');
-    await captureSection(page, footer, 'home-contact-card');
-    const precedingLink = page.locator('#home-media a:visible').last();
-    await precedingLink.focus();
-    for (const link of [...await links.all(), channel]) {
+    await captureSection(page, footer, 'home-consulting-footer');
+    await page.locator('#home-media a:visible').last().focus();
+    const order = compact && await layout.evaluate(el => getComputedStyle(el).getPropertyValue('reading-flow') === 'grid-rows')
+      ? [destinations[2], destinations[0], destinations[1]] : destinations;
+    for (const [label] of order) {
       await page.keyboard.press('Tab');
-      const isContact = await link.evaluate(el => Boolean(el.closest('#connect')));
-      const focusColor = isContact ? 'rgb(255, 213, 138)' : 'rgb(48, 37, 29)';
-      assert.ok(await link.evaluate((el, expectedOutline) => {
-        const box = el.getBoundingClientRect();
-        const style = getComputedStyle(el);
-        return el === document.activeElement && el.matches(':focus-visible') && style.outlineStyle !== 'none' &&
-          parseFloat(style.outlineWidth) > 0 && box.width >= 44 && box.height >= 44 && style.outlineColor === expectedOutline;
-      }, focusColor), 'Tab should reach individual consulting, team consulting and then the YouTube channel');
-      if (isContact) {
-        const clearance = await link.evaluate(el => {
-          const text = document.createRange();
-          text.selectNodeContents(el.closest('dl > div').querySelector('dt'));
-          const style = getComputedStyle(el);
-          return el.getBoundingClientRect().top - parseFloat(style.outlineOffset) -
-            parseFloat(style.outlineWidth) - text.getBoundingClientRect().bottom;
-        });
-        assert.ok(clearance >= 1, 'Keep the focus ring below the audience label at ' + width + 'px; clearance ' + clearance + 'px');
-      }
-      if (await link.getAttribute('href') === routes[1][2]) await captureSection(page, card, 'home-contact-keyboard');
+      const link = layout.getByRole('link', { name: label, exact: true });
+      assert.ok(await link.evaluate(el => el === document.activeElement && el.matches(':focus-visible') &&
+        getComputedStyle(el).outlineColor === 'rgb(48, 37, 29)' && getComputedStyle(el).outlineStyle !== 'none'),
+        'Show dark keyboard focus on ' + label);
     }
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-    await links.first().focus();
-    const arrow = await links.first().evaluate(el => {
-      const style = getComputedStyle(el, '::after');
-      return [style.transform, style.transitionDuration];
-    });
-    assert.deepEqual(arrow, ['none', '0s'], 'Keep the focused contact arrow still with reduced motion');
-    await page.emulateMedia({ reducedMotion: null });
-    if (width === 375) await page.setViewportSize(originalViewport);
   }
 }
 
@@ -390,7 +356,7 @@ async function checkHomepage(page) {
   const checkout = page.locator('.feature').filter({ has: page.locator('a[href="/work/super-salon-checkout/"]') });
   assert.match(await checkout.locator('h3').innerText(), /caught.*checkout.*before release/i);
   assert.match(await checkout.locator('p').last().innerText(), /automated test.*one.cent.*online.*desktop/i);
-  await checkContactCard(page, width);
+  await checkConsultingFooter(page, width);
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Homepage overflows');
   if (width === 1280) {
     await page.emulateMedia({ reducedMotion: 'reduce' });
