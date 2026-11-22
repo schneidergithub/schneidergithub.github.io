@@ -69,7 +69,6 @@ permalink: /
     </article>
     {% endfor %}
   </div>
-  <a class="channel-link" href="https://www.youtube.com/@commondevops?sub_confirmation=1">Subscribe on YouTube</a>
 </section>
 
 <section class="section contact-card" id="connect" aria-labelledby="connect-title">

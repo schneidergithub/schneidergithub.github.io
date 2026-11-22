@@ -329,8 +329,10 @@ async function check() {
         const directory = page.locator('.study-header').getByRole('link', { name: 'All case studies', exact: true });
         assert.equal(await directory.getAttribute('href'), '/work/#case-studies-title');
         const actions = ending.getByRole('link');
-        assert.equal(await page.locator('.site-footer a[href*="linkedin.com"]').count(), 0, 'Keep each contact choice in the case ending');
-        assert.equal(await page.locator('.site-footer a[href="/pgp/"]').count(), 1);
+        const footerLinks = page.getByRole('contentinfo').getByRole('link');
+        assert.deepEqual(await footerLinks.evaluateAll(items => items.map(a => a.href)), [
+          'https://www.linkedin.com/in/aarondrewschneider/', 'https://www.youtube.com/@commondevops'
+        ]);
         assert.equal(await actions.count(), 3);
         assert.equal(await ending.getByRole('link', { name: 'Aaron on LinkedIn', exact: true }).getAttribute('href'), 'https://www.linkedin.com/in/aarondrewschneider/');
         assert.equal(await ending.getByRole('link', { name: 'CommonDevOps on LinkedIn', exact: true }).getAttribute('href'), 'https://www.linkedin.com/company/commondevops/');

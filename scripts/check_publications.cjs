@@ -177,16 +177,27 @@ async function checkContactCard(page, width) {
     assert.equal(await row.locator('dt').innerText(), audience);
     const contact = row.locator('dd').getByRole('link', { name: recipient, exact: true });
     assert.equal(await contact.getAttribute('href'), url);
-    assert.equal(await page.locator('a[href="' + url + '"]').count(), 1, 'Offer each contact once on the homepage');
+    assert.equal(await card.locator('a[href="' + url + '"]').count(), 1, 'Offer each consulting contact once in the card');
   }
-  const subscription = page.locator('#home-media').getByRole('link', { name: 'Subscribe on YouTube', exact: true });
-  assert.equal(await subscription.getAttribute('href'), 'https://www.youtube.com/@commondevops?sub_confirmation=1');
-  assert.ok(await subscription.evaluate(link => Boolean(document.querySelector('#home-media .media-grid').compareDocumentPosition(link) & Node.DOCUMENT_POSITION_FOLLOWING)));
-  assert.equal(await page.locator('a[href="https://www.youtube.com/@commondevops?sub_confirmation=1"]').count(), 1);
-  assert.ok(await subscription.evaluate(el => el.getBoundingClientRect().height >= 44), 'Keep the subscription easy to activate');
-  assert.equal(await page.locator('footer a').count(), 1);
-  const pgp = page.locator('footer').getByRole('link', { name: 'Public PGP key', exact: true });
-  assert.equal(await pgp.getAttribute('href'), '/pgp/');
+  assert.equal(await page.getByRole('link', { name: 'Subscribe on YouTube' }).count(), 0);
+  const footer = page.getByRole('contentinfo');
+  assert.equal((await footer.innerText()).trim(), 'Aaron Schneider');
+  const profiles = footer.getByRole('link');
+  assert.equal(await profiles.count(), 2);
+  for (const [label, url] of [
+    ['Aaron Schneider on LinkedIn', 'https://www.linkedin.com/in/aarondrewschneider/'],
+    ['CommonDevOps on YouTube', 'https://www.youtube.com/@commondevops']
+  ]) {
+    const link = footer.getByRole('link', { name: label, exact: true });
+    assert.equal(await link.getAttribute('href'), url);
+    const box = await link.boundingBox();
+    assert.ok(box.width >= 48 && box.height >= 48, 'Give each icon a generous touch target');
+    const mark = await link.locator('svg use').evaluate(use => {
+      const { width, height } = use.getBBox();
+      return { width, height };
+    });
+    assert.ok(mark.width >= 30 && mark.height >= 30, 'Render a recognizable footer icon');
+  }
 
   if (width === 320) {
     const larger = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
@@ -211,16 +222,17 @@ async function checkContactCard(page, width) {
     assert.ok(rectangles.every(box => box.top >= -1 && box.bottom <= page.viewportSize().height + 1), 'Both contacts should be visible at #connect');
     if (width === 375) assert.ok(rectangles[0].bottom <= rectangles[1].top, 'Stack the contact routes on phones');
     await captureSection(page, card, 'home-contact-card');
-    await subscription.focus();
-    for (const link of [...await links.all(), pgp]) {
+    const precedingLink = page.locator('#home-media a:visible').last();
+    await precedingLink.focus();
+    for (const link of [...await links.all(), ...await profiles.all()]) {
       await page.keyboard.press('Tab');
-      const isContact = (await link.getAttribute('href')) !== '/pgp/';
-      assert.ok(await link.evaluate((el, contact) => {
+      const isContact = await link.evaluate(el => Boolean(el.closest('#connect')));
+      assert.ok(await link.evaluate(el => {
         const box = el.getBoundingClientRect();
         const style = getComputedStyle(el);
         return el === document.activeElement && el.matches(':focus-visible') && style.outlineStyle !== 'none' &&
-          parseFloat(style.outlineWidth) > 0 && (!contact || (box.width >= 44 && box.height >= 44 && style.outlineColor === 'rgb(255, 213, 138)'));
-      }, isContact), 'Keyboard navigation should go from the recording subscription through each contact to PGP: ' + await link.innerText());
+          parseFloat(style.outlineWidth) > 0 && box.width >= 44 && box.height >= 44 && style.outlineColor === 'rgb(255, 213, 138)';
+      }), 'Tab should reach the consulting contacts and then both social profiles in order');
       if (isContact) {
         const clearance = await link.evaluate(el => {
           const text = document.createRange();
@@ -358,9 +370,9 @@ async function checkHomepage(page) {
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Homepage overflows');
   if (width === 1280) {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    const immediate = await page.locator('.hero .button, .hero .play-mark, #connect a, #home-media .channel-link').evaluateAll(controls =>
+    const immediate = await page.locator('.hero .button, .hero .play-mark, #connect a, .social-links a').evaluateAll(controls =>
       controls.every(el => getComputedStyle(el).transitionDuration.split(',').every(value => parseFloat(value) === 0)));
-    assert.ok(immediate, 'Respect reduced motion for hero, contact and subscription controls');
+    assert.ok(immediate, 'Respect reduced motion for hero, contact and footer controls');
     await page.emulateMedia({ reducedMotion: null });
   }
 }
