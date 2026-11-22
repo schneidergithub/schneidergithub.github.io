@@ -1,5 +1,7 @@
 ---
 order: 3
+role_id: yo-pagos
+leadership_summary: "I led a scrum team of five developers and built the DevSecOps framework for a fintech platform. I developed internal tools and documented delivery practices in playbooks."
 organization: "Yo Pagos"
 title: "DevSecOps Architect & Manager"
 period: "August 2023 – September 2024"

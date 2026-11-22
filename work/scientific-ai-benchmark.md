@@ -36,4 +36,4 @@ The merged grader reads two CSV tables derived from the key. Each required compa
 
 Terminal-Bench-Science merged the task Dr. Miller and I developed. Beyond co-authoring the task, I review DevOps and infrastructure changes for the benchmark and work with the analysis team to process trial results.
 
-In the presentation we walk through how the published studies became a task an agent could attempt. [Watch the research presentation]({{ '/articles/' | relative_url }}#benchmark-presentation).
+In the presentation we walk through how the published studies became a task an agent could attempt. [Open the presentation details and player]({{ '/articles/' | relative_url }}#benchmark-presentation).

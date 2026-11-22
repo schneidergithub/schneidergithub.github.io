@@ -4,6 +4,8 @@
 
 Serve employers and consulting clients through a portfolio of career experience, project stories, and publications.
 
+The standing scrum team includes a UI/UX specialist, a graphic designer and professional writers alongside product, project management, engineering and QA. At planning, UX traces the visitor’s task, design defines the visual hierarchy and the writers identify the evidence for each claim. At sprint review they walk the released journey together on phone and desktop.
+
 - Career reconciliation and separate image attribution: approved by Aaron on October 26, 2026.
 - Four main pages, PGP utility, six project cards, and six publication links: implemented locally.
 - Local build and validation: passed, including navigation, assets, contact restrictions, and unchanged PGP key.
@@ -23,11 +25,14 @@ Serve employers and consulting clients through a portfolio of career experience,
 | 2 · Incident investigation | Distinguish the investigator’s evidence from participant recollections | Editorial | 5 | Publish a sixth case covering Aaron’s domain, DNS and registrar investigation and the limits of public attribution. Link the report, first-edition DOI, and labeled passages from the maintainer and researcher interviews. |
 | 2 | Choose the correct CommonDevOps case | Frontend | 5 | Connect the new case to Work and the incident report/interview. Give publication, project and role entry points unambiguous destinations for the incident and the benchmark. Keep existing case URLs and project returns. |
 | 2 | Verify both research paths | QA + product | 3 | Exercise both cases from Work and the collection. Inspect the evidence links, sitemap, contact routes and the preexisting benchmark round trip. |
+| 2 | Predict where case and collection links will land | UI/UX + editorial | 3 | Give the directory and parent project distinct return links, send the homepage project link to the summaries, and label the incident’s in-page companion links as entry details. Demonstrate the two destinations from a shared case and trace both companion links. |
 | 3 · Engineering leadership | Compare leadership scope at two employers | Editorial + UX | 5 | Create a concise Experience section covering the Nuix team of 12 across time zones and the Yo Pagos scrum team of five. Tie each scope to its documented engineering responsibilities. |
 | 3 | Share the actual role with a hiring team | Frontend | 3 | Give all eleven roles stable readable fragment IDs, with usable direct role links on the two featured leadership examples. Link from Selected Work to the leadership section and preserve the date-free role list, thumbnails and individual contact. |
 | 3 | Follow an employer link on a phone or by keyboard | QA + design | 2 | Demonstrate the Work-to-Experience journey, both employer jumps and a direct no-JavaScript role visit. Check visible focus and layout with enlarged text. |
+| 3 | Understand how an output can pass a file check and still spoil a puzzle | Professional writer + graphic designer | 5 | Publish the chess case, cite the milestone and three recording passages, and illustrate the proposed thinking and reveal checks. Connect it to the checkout QA case in both directions. |
+| 3 | Choose whether to play here, open YouTube or read the benchmark guide | UI/UX + frontend | 3 | Give each recording a plain heading, a visibly labeled inline Play control and a separate YouTube link. The home research link opens the grader heading by keyboard. Verify playback and the direct source on phones and with scripts disabled as applicable. |
 
-**Delivery.** Nine stories, 33 planned points. Each sprint has its own implementation PR, independent reader review, GitHub Pages release and check on the custom domain. The scrum master records decisions and one action from each retrospective here. Source notes stay outside the public repository. The portfolio publishes original prose and links readers to public recordings and primary records.
+**Delivery.** The original forecast covered nine stories and 33 points. The editorial and navigation review added three stories, bringing the series to 12 stories and 44 planned points. Each sprint has its own implementation PR, an independent reader review, a GitHub Pages release and a check on the custom domain. The scrum master records decisions and one action from each retrospective here. Source notes stay outside the public repository. The portfolio publishes original prose and links readers to public recordings and primary records.
 
 ### Editorial and navigation refinement during Sprint 2
 
@@ -50,6 +55,12 @@ Product and the technical project manager reviewed the November 21 transcript ed
 **Accepted and live.** All three stories shipped (10 planned points). The editor checked the claims against the three timestamped recording passages. QA entered from the benchmark presentation, followed the grader guide, verified the three recording destinations and returned to the presentation. Mobile and desktop captures showed focus on the guide heading. Direct entry also worked with JavaScript disabled. [Release #30](https://github.com/schneidergithub/schneidergithub.github.io/pull/30) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44963286032)
 
 **Retrospective.** Keeping each technical example beside its timestamp made the guide easy to verify during editorial review. For the incident case, editorial will give each participant account its own attribution and nearby source link.
+
+### Sprint 2 review · Incident investigation and navigation
+
+**Accepted and live.** Four stories shipped (16 planned points). The writers and independent reviewer checked the two interview passages, Aaron’s investigation, the registrar’s response and the first-edition DOI. Phone review caught the package name breaking across lines, so the revised headline opens with *node-ipc*. QA followed the directory and named project links, the homepage project jump, both in-page companion links and the two CommonDevOps cases. [Release #31](https://github.com/schneidergithub/schneidergithub.github.io/pull/31) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44964202846)
+
+**Retrospective.** Following a link from a shared case revealed a problem that checking the URL alone missed. In Sprint 3, the reviewer will compare the visible action with what happens next, especially when choosing between inline playback, the source video and the written guide.
 
 ## Released sprints · Mobile browsing, project evidence and contact
 

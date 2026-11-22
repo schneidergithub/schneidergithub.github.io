@@ -13,7 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / '_site'
 PAGES = ['/', '/experience/', '/work/', '/articles/', '/pgp/', '/404.html']
 STUDIES = ['/work/super-salon-checkout/', '/work/indiana-case-archives/', '/work/bayer-aleve/',
-           '/work/westinghouse-performance/', '/work/scientific-ai-benchmark/', '/work/node-ipc-investigation/']
+           '/work/westinghouse-performance/', '/work/scientific-ai-benchmark/', '/work/node-ipc-investigation/',
+           '/work/chess-puzzle-qa/']
 CASE_CARDS = {
     '/work/westinghouse-performance/': 'westinghouse-performance',
     '/work/scientific-ai-benchmark/': 'tbs-meta-analysis',

@@ -1,5 +1,6 @@
 ---
 order: 1
+role_id: commondevops
 case_project: commondevops
 organization: "CommonDevOps"
 title: "Full Stack Engineer"
@@ -8,5 +9,5 @@ thumbnail: "/assets/experience/commondevops.png"
 thumbnail_alt: "Title page of the Common DevOps Official NODE-IPC Post Incident Report."
 ---
 - DevSecOps architecture focused on CI/CD and test-driven development.
-- Work with a scrum team researching and developing software using frontier cloud models and local LLMs.
+- Dr. Ian Miller and I co-authored “MDD Executive Function” for Terminal-Bench-Science. I review DevOps and infrastructure changes and analyze benchmark trial results.
 - Build with Python, JavaScript, shell scripts, APIs, GraphQL, Docker, Terraform, and GitHub Actions, combining cloud workflows with on-premises resources.

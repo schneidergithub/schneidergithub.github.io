@@ -1,5 +1,7 @@
 ---
 order: 2
+role_id: nuix
+leadership_summary: "I led 12 engineers across time zones. I designed hybrid cloud and on-premises systems and improved release pipelines with automated testing, monitoring, and rollback."
 organization: "Nuix"
 title: "U.S. DevSecOps Manager"
 period: "September 2024 – March 2025"

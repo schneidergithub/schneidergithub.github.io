@@ -14,9 +14,9 @@ permalink: /
     <p class="eyebrow">Terminal-Bench-Science</p>
     <h2 id="focus-title">Can an AI agent reproduce a scientific result?</h2>
     {% assign benchmark = site.data.publications | where: 'id', 'benchmark-presentation' | first %}
-    <div class="focus-media">{% include publication-media.html publication=benchmark play_label="Play presentation" eager=true %}</div>
+    <div class="focus-media">{% include publication-media.html publication=benchmark eager=true %}</div>
     <p>Dr. Ian Miller and I co-authored “MDD Executive Function,” a task that asks AI agents to reconstruct a meta-analysis from published studies of depression. I also review DevOps and infrastructure changes and analyze trial results.</p>
-    <a href="{{ '/articles/' | relative_url }}#benchmark-presentation">Explore the presentation and task <span aria-hidden="true">→</span></a>
+    <a href="{{ benchmark.guide.url | relative_url | escape }}">How we tested the benchmark grader</a>
   </aside>
 </section>
 
@@ -30,10 +30,9 @@ permalink: /
     {% for item in featured_media %}
     <article class="media-card">
       {% if item.type == 'Video' %}
-      <div class="media-art">{% include publication-media.html publication=item play_label="Play video" %}</div>
+      <div class="media-art">{% include publication-media.html publication=item %}</div>
       <div class="media-copy">
-        <p class="media-type">{{ item.type | escape }} · YouTube</p>
-        <h3><a href="{{ item.url | escape }}">{{ item.title | escape }}&nbsp;<span aria-hidden="true">↗</span><span class="visually-hidden"> on YouTube</span></a></h3>
+        <h3>{{ item.title | escape }}</h3>
       </div>
       {% else %}
       <a class="media-story" href="{{ item.url | escape }}" aria-labelledby="home-{{ item.id | escape }}">

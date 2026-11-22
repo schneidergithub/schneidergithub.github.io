@@ -6,6 +6,7 @@ const { chromium } = require('playwright-core');
 
 const origin = process.argv[2];
 const presentation = '/articles/#benchmark-presentation';
+const graderGuide = '/work/scientific-ai-benchmark/#checking-the-grader';
 const ids = ['e26_SSPpOP0', 'TZ04u6cj1ls', 'i0a7tXSLj3c'];
 const reviewWidths = [375, 768, 1280];
 const publicationGroups = {
@@ -36,6 +37,11 @@ async function checkPlayers(page) {
     seen.push(id);
     const embed = 'https://www.youtube-nocookie.com/embed/' + id;
     const toggle = disclosure.locator('summary');
+    assert.equal(await toggle.locator('.play-caption').innerText(), 'Play here');
+    const source = disclosure.locator('..').getByRole('link', { name: /watch on youtube/i });
+    assert.ok(await source.isVisible(), 'Expose the original recording before playback');
+    assert.equal(await source.getAttribute('href'), 'https://www.youtube.com/watch?v=' + id);
+    assert.equal(await disclosure.locator('..').locator('details + a.watch-source').count(), 1);
     await toggle.focus();
     await page.keyboard.press('Tab');
     await page.keyboard.press('Shift+Tab');
@@ -54,6 +60,8 @@ async function checkPlayers(page) {
     assert.equal(await page.locator('.publication-video[open]').count(), 1);
     assert.equal(await page.locator('iframe').count(), 1);
     assert.ok(await frame.getAttribute('title'));
+    assert.ok(await source.isVisible(), 'Keep the source available while playing');
+    assert.equal(page.url(), start);
     const box = await frame.boundingBox();
     assert.ok(box.width >= 200 && box.height >= 200 && box.x >= 0 && box.x + box.width <= page.viewportSize().width, 'Player does not fit ' + start);
   }
@@ -192,8 +200,8 @@ async function checkHomepage(page) {
   }
   const hero = page.locator('.focus-panel');
   assert.equal(await hero.locator('.publication-video').count(), 1);
-  const benchmark = hero.getByRole('link', { name: /presentation and task/i });
-  assert.equal(await benchmark.getAttribute('href'), presentation);
+  const guide = hero.getByRole('link', { name: 'How we tested the benchmark grader' });
+  assert.equal(await guide.getAttribute('href'), graderGuide);
   await checkResearchFeature(hero, width);
 
   const cards = page.locator('#home-media .media-card');
@@ -202,7 +210,9 @@ async function checkHomepage(page) {
     const heights = await cards.evaluateAll(items => items.map(item => item.clientHeight));
     assert.equal(new Set(heights).size, 1, 'Closed desktop media cards should align');
   }
-  assert.equal(await cards.locator('.publication-video').count(), 2);
+  const recordings = cards.filter({ has: page.locator('details.publication-video') });
+  assert.equal(await recordings.count(), 2);
+  assert.equal(await recordings.locator('h3 a').count(), 0, 'Recording headings should not take the visitor off site');
   const linkedCovers = cards.locator('a').filter({ has: page.locator('img') });
   assert.equal(await linkedCovers.count(), 2);
   assert.deepEqual((await linkedCovers.evaluateAll(links => links.map(a => a.href))).sort(), [
@@ -247,8 +257,8 @@ async function checkFallbacks(page) {
   const videos = page.locator('.publication-video');
   const urls = [];
   for (const video of await videos.all()) {
-    await video.locator('summary').press('Enter');
-    const fallback = video.getByRole('link', { name: /watch on youtube/i });
+    const fallback = video.locator('..').getByRole('link', { name: /watch on youtube/i });
+    assert.ok(await fallback.isVisible(), 'Expose the original without JavaScript or an extra disclosure');
     assert.ok(await fallback.isVisible(), 'Missing visible no-JavaScript fallback');
     urls.push(await fallback.getAttribute('href'));
   }
@@ -257,13 +267,12 @@ async function checkFallbacks(page) {
 }
 
 async function checkGraderGuide(page, directEntry = false) {
-  const route = '/work/scientific-ai-benchmark/#checking-the-grader';
-  const url = new URL(route, origin).href;
+  const url = new URL(graderGuide, origin).href;
   if (directEntry) {
     await page.goto(url);
   } else {
     const entry = page.locator('#benchmark-presentation').getByRole('link', { name: /check.*grader/i });
-    assert.equal(await entry.getAttribute('href'), route);
+    assert.equal(await entry.getAttribute('href'), graderGuide);
     await Promise.all([page.waitForURL(url), entry.press('Enter')]);
   }
   const heading = page.locator('.study-copy h2:target');
@@ -296,7 +305,7 @@ async function checkGraderGuide(page, directEntry = false) {
     const version = new URL(origin).hostname === '127.0.0.1' ? 'preview' : 'live';
     await page.screenshot({ path: path.join(dir, version + '-grader-guide-' + page.viewportSize().width + '.jpg'), quality: 82, animations: 'disabled' });
   }
-  const back = page.locator('.study-copy').getByRole('link', { name: /watch.*research presentation/i });
+  const back = page.locator('.study-copy').getByRole('link', { name: /open the presentation details and player/i });
   assert.equal(await back.getAttribute('href'), presentation);
   await Promise.all([page.waitForURL(new URL(presentation, origin).href), back.press('Enter')]);
   assert.ok(await page.locator('#benchmark-presentation:target summary').isVisible());
@@ -327,12 +336,12 @@ async function checkDiscovery(page) {
     for (const entry of entries) {
       const row = page.locator('li#' + entry);
       const permalink = row.locator('.entry-permalink');
-      const title = await row.locator('h3 a').evaluate(a => a.firstChild.textContent.trim());
+      const title = await row.locator('h3').evaluate(heading => (heading.querySelector('a') || heading).firstChild.textContent.trim());
       assert.equal(await permalink.getAttribute('href'), '#' + entry);
       assert.ok(await row.getByRole('link', { name: 'Permalink — ' + title, exact: true }).isVisible(), 'Missing descriptive permalink for ' + entry);
       await permalink.press('Enter');
       assert.equal(page.url(), collection + '#' + entry);
-      assert.ok(await row.locator('h3 a').isVisible());
+      assert.ok(await row.locator('h3').isVisible());
     }
   }
   for (const [from, to, jumpLabel] of [
@@ -467,11 +476,15 @@ async function captureCollection(page, version) {
 
 async function checkCollection(page, width) {
   const homePoster = await page.locator('.focus-panel .video-poster img').getAttribute('src');
-  await page.locator('.focus-panel').getByRole('link', { name: /presentation and task/i }).click();
-  assert.equal(page.url(), new URL(presentation, origin).href);
+  const guideLink = page.locator('.focus-panel').getByRole('link', { name: 'How we tested the benchmark grader' });
+  await Promise.all([page.waitForURL(new URL(graderGuide, origin).href), guideLink.press('Enter')]);
+  const guideHeading = page.locator('h2#checking-the-grader:target');
+  assert.ok(await guideHeading.evaluate(el => el === document.activeElement && el.getBoundingClientRect().top >= -1));
+  const presentationLink = page.locator('.study-copy a[href="' + presentation + '"]');
+  await Promise.all([page.waitForURL(new URL(presentation, origin).href), presentationLink.press('Enter')]);
   const benchmark = page.locator('#benchmark-presentation');
   assert.equal(await benchmark.locator('.video-poster img').getAttribute('src'), homePoster, 'Both benchmark entries should use the shared cover');
-  assert.equal(await benchmark.locator('h3 a').getAttribute('href'), 'https://www.youtube.com/watch?v=e26_SSPpOP0');
+  assert.equal(await benchmark.getByRole('link', { name: /watch on youtube/i }).getAttribute('href'), 'https://www.youtube.com/watch?v=e26_SSPpOP0');
   assert.equal(await benchmark.getByRole('link', { name: /merged benchmark/ }).getAttribute('href'), 'https://github.com/harbor-framework/terminal-bench-science/pull/1513');
   assert.equal(await page.locator('#node-ipc-report .publication-related').getAttribute('href'), 'https://doi.org/10.6084/m9.figshare.33865414');
   await checkGraderGuide(page);
@@ -486,7 +499,8 @@ async function checkCollection(page, width) {
       const imageLink = row.locator('a.collection-cover').filter({ has: page.locator('img') });
       assert.equal(await imageLink.getAttribute('href'), await row.locator('h3 a').getAttribute('href'), 'Cover and title should open the same publication');
     } else {
-      assert.match(await row.locator('h3 a').innerText(), /YouTube/i, 'Identify the outbound video destination');
+      assert.equal(await row.locator('h3 a').count(), 0, 'Keep the title distinct from playback and source links');
+      assert.ok(await row.getByRole('link', { name: /watch on youtube/i }).isVisible());
       assert.ok(await row.locator('summary .play-caption').isVisible(), 'Identify inline playback on the poster');
     }
     const box = await cover.boundingBox();

@@ -32,9 +32,9 @@ groups:
   {% assign featured = false %}
   {% if group.id == 'recordings' and forloop.first %}{% assign featured = true %}{% endif %}
   <li class="publication{% if featured %} publication-featured{% endif %}" id="{{ item.id | escape }}" tabindex="-1">
-    <h3><a href="{{ item.url | escape }}">{{ item.title | escape }} {% if item.type == 'Video' %}<span class="publication-source-label">YouTube&nbsp;<span aria-hidden="true">↗</span></span>{% else %}<span aria-hidden="true">↗</span>{% endif %}</a></h3>
+    <h3>{% if item.type == 'Video' %}{{ item.title | escape }}{% else %}<a href="{{ item.url | escape }}">{{ item.title | escape }} <span aria-hidden="true">↗</span></a>{% endif %}</h3>
     <div class="meta">
-      {% include publication-media.html publication=item link_cover=true play_label="Play" eager=featured %}
+      {% include publication-media.html publication=item link_cover=true eager=featured %}
     </div>
     <div class="publication-copy">
       {% if item.period or item.date %}<p class="publication-date">{% if item.period %}{{ item.period | escape }} issue{% endif %}{% if item.period and item.date %} · {% endif %}{% if item.date %}Published <time datetime="{{ item.date }}">{{ item.date | date: '%B %-d, %Y' }}</time>{% endif %}</p>{% endif %}
