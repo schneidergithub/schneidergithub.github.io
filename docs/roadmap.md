@@ -1,5 +1,24 @@
 # Portfolio roadmap
 
+## Planned sprint · Experience from current work to career evidence
+
+**Sprint goal.** A visitor can identify Aaron’s current work on the first phone screen, find the people and projects he led under the right employer, and open evidence for a specific result. The product decision from planning is to remove the Engineering leadership section entirely. The homepage design is approved.
+
+**Forecast.** One two-week sprint, six stories, 20 relative points. The points are planning estimates. The sprint review will use the 375px and 1280px captures from the [previous release](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44987563130) for comparison.
+
+| Story | Owner | Implementation and acceptance |
+| --- | --- | --- |
+| 1. Reach current work immediately · 3 points | UX and frontend | Remove the leadership panel and its duplicate summaries. Place CommonDevOps first under Experience, identify it as current, and give LinkedIn a secondary text link. Keep all 11 date-free roles and their heading IDs. Replace the Selected Work link with “DevSecOps leadership at Nuix” pointing to `/experience/#nuix`. An existing `#engineering-leadership` bookmark must still land visibly on Nuix with JavaScript disabled. |
+| 2. Understand what Aaron contributed · 3 points | Professional writer and marketing | Open CommonDevOps with the approved Terminal-Bench-Science task co-authored with Dr. Ian Miller. Retain the maintainer, DevOps review and trial-analysis responsibilities. State that Aaron led the node-ipc investigation and was primary author of its report. Label the chess case “Qualitative chess benchmark” and use “presentation” for the recording. At Nuix, connect 12 engineers with release testing and rollback. At Yo Pagos, connect the five-developer team with the fintech DevSecOps framework. Each leadership example appears once. |
+| 3. Find the result and the matching project · 5 points | Writer and frontend | Give BCforward two named client entries. Indiana covers archiving for 92 counties and automatic restoration when a case reopens. Eli Lilly covers internal security automation. Link each from its own entry to its [Indiana case](https://www.aaronschneider.org/work/indiana-case-archives/) or [Eli Lilly summary](https://www.aaronschneider.org/work/#eli-lilly). Lead Sogeti with the Westinghouse load tests and 3× Elasticsearch throughput, and ProPoint with the one-cent checkout discrepancy caught before release. Review all 11 entries for repeated duties and tool lists, retaining details that explain a contribution. |
+| 4. Scan each employer and its evidence · 3 points | UX and frontend | Align employer thumbnails and headings on desktop. Give role prose a maximum measure of roughly 68–75 characters per line. Visually distinguish project links from responsibility bullets, with descriptive text and visible keyboard focus. At 375×812, the CommonDevOps name, title and one complete accomplishment fit before scrolling. |
+| 5. Recognize the four weakest thumbnails · 3 points | Graphic design and marketing | Use an authentic, legible BCforward mark, a ProPoint transaction detail, recognizable Aleve branding for Ciber, and a warehouse-form detail for Berkeley. Use the original BCforward mark with tighter framing if a better approved asset is unavailable. Inspect the finished images at about 70×44 and 190×120 pixels. Preserve logo proportions and full-size gallery originals. |
+| 6. Verify the reader’s journey · 3 points | QA and scrum team | Replace browser assertions tied to the removed panel. At 320px, verify that the computed size of role copy actually doubles and that text and focus indicators remain readable without clipping or horizontal scrolling. Exercise the new Work link, the legacy bookmark, all 11 role anchors, and both BCforward destinations by keyboard, including Back. Verify the existing case and gallery links and that job titles and accomplishments are readable with images disabled. |
+
+**Delivery sequence.** Pair the panel removal, incoming link migration and replacement navigation tests in the first change. Editorial and design can proceed in parallel against the existing case studies and image sources. Integrate the revised copy and assets before reviewing the first screen and enlarged text.
+
+**Sprint review.** Marketing reads the first screen and identifies Aaron’s current contribution. A hiring reviewer opens a management role from Selected Work. A consulting reviewer follows both BCforward client entries. Design and QA compare the first viewport and all four thumbnails at phone and desktop sizes. Record results on the preview, repeat the journeys on the custom domain after release, and add the review and retrospective here.
+
 ## Portfolio goal and release history
 
 Serve employers and consulting clients through a portfolio of career experience, project stories, and publications.
