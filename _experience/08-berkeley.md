@@ -10,6 +10,5 @@ gallery_link:
   group: berkeley
   label: "Warehouse inventory screen"
 ---
-- Built a warehouse system to track parts, stock, and warranties.
-- Automated marketing workflows on a LAMP stack.
-- Ran the company’s web hosting and managed technical support.
+- Built Berkeley’s warehouse inventory system from scratch with three other developers. It tracked parts, stock and warranties.
+- Oversaw websites for subsidiary companies and automated online marketing. After helping launch ADrive.com, I managed its technical support.

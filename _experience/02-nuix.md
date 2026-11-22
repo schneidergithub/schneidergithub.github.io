@@ -7,5 +7,5 @@ period: "September 2024 – March 2025"
 thumbnail: "/assets/experience/nuix.png"
 thumbnail_alt: "Nuix logo."
 ---
-- Led 12 engineers across time zones and improved release pipelines with automated tests and rollback procedures.
-- Designed DevOps systems for cloud and on-premises environments using AWS, Azure, Kubernetes, and Terraform.
+- Led the U.S. DevOps team of 12 engineers. We supported more than 200 engineers across the Western Hemisphere with automated release tests and rollback procedures.
+- Designed cloud and on-premises delivery pipelines for Nuix’s investigative search software, using GitLab, Terraform and Kubernetes.

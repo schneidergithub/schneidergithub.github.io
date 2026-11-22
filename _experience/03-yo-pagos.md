@@ -16,5 +16,5 @@ recording:
     width: 640
     height: 360
 ---
-- Led a scrum team of five developers and built the DevSecOps framework for a fintech SaaS platform.
-- Built internal tools and integrations in Python, shell, and JavaScript. Wrote playbooks and documented the architecture.
+- As CTO, I led a team of five developers, built the DevSecOps framework and brought our fintech platform to market in Costa Rica in under 12 months.
+- Designed the AWS infrastructure for bill payments and wrote the playbooks the team used to operate it. Worked directly with investors, banking executives and government officials on funding milestones and regulatory requirements.

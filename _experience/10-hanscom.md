@@ -7,5 +7,5 @@ period: "June 2001 – December 2001"
 thumbnail: "/assets/experience/hanscom.webp"
 thumbnail_alt: "Team Hanscom shield for Hanscom Air Force Base."
 ---
-- Supported daily security operations and investigated potential vulnerabilities.
-- Received training in networking, UNIX programming, and security procedures.
+- Investigated potential vulnerabilities and handled daily computer security operations during a six-month Air Force assignment through Northeastern’s co-op program.
+- Trained in networking, UNIX programming and security procedures.

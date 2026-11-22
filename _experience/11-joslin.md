@@ -7,4 +7,5 @@ period: "January 2001 – June 2001"
 thumbnail: "/assets/experience/joslin.webp"
 thumbnail_alt: "Historical Joslin Diabetes Center wordmark."
 ---
-- Designed data-entry templates and helped doctors use the software as the hospital moved from paper forms to digital records.
+- Helped build the software Joslin used to replace paper forms with digital records during my Northeastern co-op.
+- Designed templates for entering patient information and worked directly with doctors as they learned to use them.

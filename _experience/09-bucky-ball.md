@@ -10,5 +10,5 @@ gallery_link:
   group: bucky-ball
   label: "Archived Bucky Ball Web homepage"
 ---
-- Built and hosted more than 100 websites for small and midsize businesses and provided online marketing services.
-- Used a self-hosted LAMP stack to simplify deployment and automate business workflows.
+- Built and hosted more than 100 websites for small and midsize businesses. We wrote our customer portal from scratch and ran it on our own LAMP servers.
+- We started by automating website deployment and hosting, then helped clients automate other parts of their businesses and market their services online.
