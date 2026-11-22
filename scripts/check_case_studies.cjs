@@ -364,6 +364,7 @@ async function check() {
         const projectReturn = ending.getByRole('link', { name: projectNames[study.card] + ' project summary', exact: true });
         assert.equal(await projectReturn.getAttribute('href'), '/work/#' + study.card);
         if (study.card === 'bayer') {
+          if (width === 1280) await checkShareImage(page, 'bayer-aleve.jpg');
           assert.match(await page.locator('.study-header .lead').innerText(), /lead software developer for Aleve\.com/i);
           assert.equal(await page.locator('.study-header + .study-evidence').count(), 1, 'Show project images directly after the role');
           assert.equal(await page.locator('.study-figures figcaption').count(), 0);
@@ -481,9 +482,9 @@ async function check() {
           assert.equal(page.url(), new URL('/#connect', workUrl).href);
           assert.equal(await page.locator(':target').getAttribute('id'), 'connect');
           const contacts = page.getByRole('contentinfo');
-          assert.ok(await contacts.getByRole('heading', { name: 'Work with me', exact: true }).isVisible());
+          assert.ok(await contacts.getByRole('heading', { name: 'Aaron Schneider', exact: true }).isVisible());
           assert.ok(await contacts.locator('a[href="https://www.linkedin.com/in/aarondrewschneider/"]').isVisible());
-          assert.ok(await contacts.locator('a[href="https://www.linkedin.com/company/commondevops/"]').isVisible());
+          assert.ok(await contacts.getByRole('link', { name: 'Team consulting · CommonDevOps website', exact: true }).isVisible());
           await page.goBack();
           assert.equal(page.url(), workUrl + study.path + '/');
         }

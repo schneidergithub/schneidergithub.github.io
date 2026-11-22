@@ -17,7 +17,9 @@ PAGES = ['/', '/experience/', '/work/', '/articles/', '/pgp/', '/404.html', ESSA
 STUDIES = ['/work/super-salon-checkout/', '/work/indiana-case-archives/', '/work/bayer-aleve/',
            '/work/westinghouse-performance/', '/work/scientific-ai-benchmark/', '/work/node-ipc-investigation/',
            '/work/chess-puzzle-qa/']
-CASE_CARDS = {
+SHARE_CARDS = {
+    ESSAY: 'fresh-sandbox-github',
+    '/work/bayer-aleve/': 'bayer-aleve',
     '/work/westinghouse-performance/': 'westinghouse-performance',
     '/work/scientific-ai-benchmark/': 'tbs-meta-analysis',
 }
@@ -139,12 +141,14 @@ for route in PAGES + STUDIES:
     if len(set(page.ids)) != len(page.ids): errors.append(f'{route}: duplicate IDs')
     if page.canonical != ['https://www.aaronschneider.org' + route]: errors.append(f'{route}: canonical URL mismatch')
     if route in PAGES[:4] + STUDIES + [ESSAY]:
-        card = CASE_CARDS.get(route, 'aaron-schneider')
+        card = SHARE_CARDS.get(route, 'aaron-schneider')
         image = f'/assets/portfolio/share/{card}.jpg'
+        image_url = 'https://www.aaronschneider.org' + image
         expected_meta = {
-            'og:image': 'https://www.aaronschneider.org' + image,
+            'og:image': image_url, 'og:image:type': 'image/jpeg',
             'og:image:width': '1200', 'og:image:height': '630',
-            'twitter:card': 'summary_large_image'
+            'twitter:card': 'summary_large_image', 'twitter:image': image_url,
+            'twitter:image:alt': page.metadata.get('og:image:alt', '')
         }
         for key, value in expected_meta.items():
             if page.metadata.get(key) != value:

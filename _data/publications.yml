@@ -35,6 +35,19 @@
       url: "https://www.aaronschneider.org/common-devops-reports/reports/2026-10/"
     - label: "PDF edition"
       url: "https://www.aaronschneider.org/common-devops-reports/reports/2026-10/common-devops-october-2026.pdf"
+- title: "What a fresh sandbox inherits from GitHub"
+  id: fresh-sandbox-github
+  home_featured: true
+  type: "Engineering essay"
+  publisher: "Aaron Schneider"
+  url: "/articles/fresh-sandbox-github/"
+  description: "A pull-request comment can change what the next reviewer sees. A chess-video milestone shows how to keep publication a separate decision."
+  attribution: "By Aaron Schneider"
+  preview:
+    src: "/assets/publications/chess-render.jpg"
+    alt: "Chess puzzle from the local render, with highlighted squares and coordinates around the board."
+    width: 1280
+    height: 720
 - title: "node-ipc Supply Chain Incident Report"
   home_featured: true
   home_summary: "I traced a maintainer domain’s registration and mail routing during the node-ipc investigation."
@@ -79,8 +92,6 @@
   companion:
     id: node-ipc-report
     label: "Report details on this page"
-  home_featured: true
-  home_summary: "Maintainer Brandon Miller recalls joining the public response thread and comparing findings with community investigators."
   preview:
     src: "/assets/publications/node-ipc-interview.jpg"
     alt: "Video artwork tracing an expired domain to the node-ipc package"
@@ -172,15 +183,3 @@
     alt: "April summary cover with four small technology and security illustrations"
     width: 640
     height: 359
-- title: "What a fresh sandbox inherits from GitHub"
-  id: fresh-sandbox-github
-  type: "Engineering essay"
-  publisher: "Aaron Schneider"
-  url: "/articles/fresh-sandbox-github/"
-  description: "A pull-request comment can change what the next reviewer sees. A chess-video milestone shows how to keep publication a separate decision."
-  attribution: "By Aaron Schneider"
-  preview:
-    src: "/assets/publications/chess-render.jpg"
-    alt: "Chess puzzle from the local render, with highlighted squares and coordinates around the board."
-    width: 1280
-    height: 720

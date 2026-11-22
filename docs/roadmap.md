@@ -45,6 +45,12 @@ The November 21 planning session committed to the following sequence. Marketing 
 
 **Sprint 2 story added by Aaron.** Remove the thin line below the header name across the site and the hover underlines on the two homepage actions. Check the header with the phone menu open and closed, verify both hover states, and retain the active navigation indicator and keyboard focus outlines.
 
+**Sprint 2 review.** The Work index opens with a recognizable Aleve screenshot and Aaron’s lead-development credit, both visible in the first 375px phone screen. Bucky Ball and Berkeley now lead directly from Experience to their artifacts. Reviewers also checked the header with the menu open and closed, hover styling on both homepage actions and keyboard focus. [Release 57](https://github.com/schneidergithub/schneidergithub.github.io/pull/57) · [Production verification](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44981109400)
+
+**Sprint 3 contact story added by Aaron.** Keep the portrait and charcoal card. Change the invitation to Aaron’s name, remove the second handwritten name, and use the champagne area for AI research, software development, DevSecOps and project management. Group the three links beneath the specialties. The LinkedIn mark identifies Aaron’s individual consulting route, a two-person icon opens the CommonDevOps website for team consulting, and the YouTube mark opens the channel. Review the links and tap targets at phone and desktop widths. Keep the interior footers compact.
+
+**Newsletter readiness.** Four isolated Jekyll builds exercised seven actual issues plus successive test issues for November, December and January coverage. The new issue became the homepage lead, the archive count advanced on each build, and December coverage stayed with its original year after a January publication date. January coverage created the new year group. The October bookmark and its three editions stayed available. Use the actual public LinkedIn article and confirmed cover for the December release once published.
+
 At sprint review, the designer and marketing reviewer should inspect the resting page before seeing test results. QA should verify the same journey with a keyboard and enlarged text. This adds a human design decision to the existing production checks. Keep the source-dependent TDD follow-up in the editorial backlog and preserve the approved exclusion of node-ipc editorial revisions.
 
 ## Monthly newsletter archive

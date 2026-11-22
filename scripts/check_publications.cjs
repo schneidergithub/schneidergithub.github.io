@@ -9,6 +9,7 @@ const origin = process.argv[2];
 const presentation = '/articles/#benchmark-presentation';
 const graderGuide = '/work/scientific-ai-benchmark/#checking-the-grader';
 const ids = ['e26_SSPpOP0', 'TZ04u6cj1ls', 'i0a7tXSLj3c'];
+const homeVideoIds = ['e26_SSPpOP0', 'i0a7tXSLj3c'];
 const reviewWidths = [375, 768, 1280];
 const publications = JSON.parse(execFileSync('ruby', [
   '-ryaml', '-rjson', '-e', 'puts JSON.generate(YAML.load_file(ARGV.fetch(0)))',
@@ -32,9 +33,9 @@ async function decodeCover(image) {
   });
 }
 
-async function checkPlayers(page) {
+async function checkPlayers(page, expectedIds = ids) {
   const disclosures = page.locator('.publication-video');
-  assert.equal(await disclosures.count(), ids.length);
+  assert.equal(await disclosures.count(), expectedIds.length);
   assert.equal(await page.locator('iframe').count(), 0, 'Players should load on demand');
   const seen = [];
   const start = page.url();
@@ -78,7 +79,7 @@ async function checkPlayers(page) {
     const box = await frame.boundingBox();
     assert.ok(box.width >= 200 && box.height >= 200 && box.x >= 0 && box.x + box.width <= page.viewportSize().width, 'Player does not fit ' + start);
   }
-  assert.deepEqual(seen.sort(), [...ids].sort());
+  assert.deepEqual(seen.sort(), [...expectedIds].sort());
   await disclosures.last().locator('summary').press('Space');
   await page.locator('iframe').waitFor({ state: 'detached' });
   assert.equal(page.url(), start, 'Playback should stay on the current page');
@@ -157,52 +158,57 @@ async function checkConsultingFooter(page, width) {
   const footer = page.getByRole('contentinfo');
   const layout = footer.locator('#connect');
   assert.equal(await footer.getAttribute('id'), 'footer');
-  const heading = layout.getByRole('heading', { name: 'Work with me', exact: true });
-  const signature = footer.locator('.footer-signature');
-  assert.equal(await signature.innerText(), 'Aaron Schneider');
-  assert.ok(await signature.evaluate(async el => {
-    const style = getComputedStyle(el);
-    const faces = await document.fonts.load(style.fontStyle + ' ' + style.fontSize + ' "Instrument Serif"', el.textContent);
-    return style.fontFamily.includes('Instrument Serif') && faces.some(face => face.status === 'loaded');
-  }), 'Use the local signature typeface');
+  const heading = layout.getByRole('heading', { name: 'Aaron Schneider', exact: true });
+  assert.equal(await footer.locator('.footer-signature').count(), 0);
+  assert.equal(await footer.getByText('Work with me', { exact: true }).count(), 0);
+  assert.ok(await heading.evaluate(el => getComputedStyle(el).fontStyle === 'italic' &&
+    getComputedStyle(el).color === 'rgb(232, 198, 158)'), 'Use the champagne italic name beside the portrait');
+  const specialties = layout.getByRole('list', { name: 'Specialties' });
+  assert.deepEqual(await specialties.getByRole('listitem').allTextContents(),
+    ['AI research', 'Software development', 'DevSecOps', 'Project management']);
   const photo = layout.getByRole('img', { name: 'Aaron beside a waterfall' });
   await decodeCover(photo);
   const frame = await photo.locator('..').boundingBox();
   assert.ok(frame.width >= 72 && frame.width <= 96 && Math.abs(frame.width - frame.height) < 1);
-  const invitation = await heading.boundingBox();
-  assert.ok(frame.x + frame.width <= invitation.x && invitation.y < frame.y + frame.height &&
-    frame.y < invitation.y + invitation.height, 'Pair the portrait with the invitation');
+  const name = await heading.boundingBox();
+  assert.ok(frame.x + frame.width <= name.x && name.y < frame.y + frame.height &&
+    frame.y < name.y + name.height, 'Pair the portrait with Aaron’s name');
 
   const links = footer.getByRole('link');
   assert.equal(await links.count(), 3);
   const destinations = [
     ['Individual consulting with Aaron Schneider on LinkedIn', 'https://www.linkedin.com/in/aarondrewschneider/', 'linkedin'],
-    ['Team consulting · CommonDevOps on LinkedIn', 'https://www.linkedin.com/company/commondevops/', 'linkedin'],
+    ['Team consulting · CommonDevOps website', 'https://commondevops.com/', 'team'],
     ['CommonDevOps on YouTube', 'https://www.youtube.com/@commondevops', 'youtube']
   ];
   for (const [label, url, icon] of destinations) {
     const link = footer.getByRole('link', { name: label, exact: true });
     assert.equal(await link.getAttribute('href'), url);
     assert.equal(await page.locator('a[href="' + url + '"]').count(), 1, 'Offer each destination once');
-    const shape = link.locator('svg use');
-    assert.ok((await shape.getAttribute('href')).endsWith('#' + icon));
-    assert.ok(await shape.evaluate(el => el.getBBox().width > 0));
+    const graphic = link.locator('svg');
+    assert.equal(await graphic.getAttribute('aria-hidden'), 'true');
+    if (icon === 'team') {
+      assert.equal(await graphic.locator('circle').count(), 2);
+      assert.equal(await graphic.getAttribute('stroke'), 'currentColor');
+    } else {
+      assert.ok((await graphic.locator('use').getAttribute('href')).endsWith('#' + icon));
+    }
+    assert.ok(await graphic.evaluate(el => el.getBBox().width > 0));
     const box = await link.boundingBox();
     assert.ok(box.width >= 44 && box.height >= 44, 'Keep each contact easy to activate');
   }
   const card = await footer.boundingBox();
   assert.ok(card.width <= 802 && card.x >= 12 && Math.abs(card.x * 2 + card.width - width) <= 2,
-    'Center the signed card with visible page margins');
+    'Center the contact card with visible page margins');
   const contacts = await layout.locator('.consulting-links a').evaluateAll(items => items.map(a => a.getBoundingClientRect().toJSON()));
-  const name = await signature.boundingBox();
-  const channel = await footer.getByRole('link', { name: 'CommonDevOps on YouTube' }).boundingBox();
-  assert.ok(contacts[0].top >= frame.y + frame.height - 1 && Math.max(...contacts.map(a => a.bottom)) <= name.y + 1,
-    'Present the invitation and consulting routes before the signature');
-  assert.ok(name.x + name.width <= channel.x && channel.y < name.y + name.height && name.y < channel.y + channel.height,
-    'Pair the signature and channel on the closing strip');
+  const specialtyBox = await specialties.boundingBox();
+  assert.ok(specialtyBox.y >= frame.y + frame.height - 1 &&
+    specialtyBox.y + specialtyBox.height <= Math.min(...contacts.map(a => a.top)) + 1,
+    'Follow the portrait with specialties, then contact choices');
   if (width <= 375) assert.ok(contacts[0].bottom <= contacts[1].top + 1, 'Stack the two phone contact routes');
   if (width === 1280) {
-    assert.ok(Math.abs(contacts[0].top - contacts[1].top) <= 1, 'Align desktop consulting routes');
+    const centers = contacts.map(box => box.top + box.height / 2);
+    assert.ok(Math.max(...centers) - Math.min(...centers) <= 1, 'Align all three desktop contact routes');
     assert.ok(await layout.locator('.consulting-links a > span:first-of-type').evaluateAll(labels =>
       labels.every(el => el.offsetHeight <= parseFloat(getComputedStyle(el).lineHeight) + 1)),
     'Give both desktop contact labels room for a single line');
@@ -210,7 +216,7 @@ async function checkConsultingFooter(page, width) {
 
   if (width === 320) {
     const large = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
-    assert.ok(await footer.evaluate(el => el.scrollWidth <= innerWidth && [...el.querySelectorAll('.footer-signature, h2, a')].every(item => {
+    assert.ok(await footer.evaluate(el => el.scrollWidth <= innerWidth && [...el.querySelectorAll('h2, li, a')].every(item => {
       const box = item.getBoundingClientRect();
       return box.left >= 0 && box.right <= innerWidth && item.scrollWidth <= item.clientWidth + 1;
     })), 'Reflow the footer at 320px with doubled text');
@@ -309,12 +315,13 @@ async function checkHomepage(page) {
     assert.equal(new Set(heights).size, 1, 'Closed desktop media cards should align');
   }
   const recordings = cards.filter({ has: page.locator('details.publication-video') });
-  assert.equal(await recordings.count(), 2);
+  assert.equal(await recordings.count(), 1);
   assert.equal(await recordings.locator('h3 a').count(), 0, 'Recording headings should not take the visitor off site');
   const linkedCovers = cards.locator('a').filter({ has: page.locator('img') });
-  assert.equal(await linkedCovers.count(), 2);
+  assert.equal(await linkedCovers.count(), 3);
   assert.deepEqual((await linkedCovers.evaluateAll(links => links.map(a => a.href))).sort(), [
     'https://commondevops.com/node-ipc-supply-chain-incident-report/',
+    new URL('/articles/fresh-sandbox-github/', origin).href,
     monthlyIssues[0].url
   ].sort());
   const newsletter = cards.first();
@@ -326,7 +333,8 @@ async function checkHomepage(page) {
     await decodeCover(card.locator('img'));
     const isWritten = (await card.locator('a.media-story').count()) === 1;
     const cue = await card.locator('h3').evaluate(el => getComputedStyle(el, '::after').content);
-    assert.equal(cue.includes('↗'), isWritten, 'Give linked written headlines a cue distinct from recording headings');
+    const external = isWritten && await card.locator('.media-story').evaluate(link => link.origin !== location.origin);
+    assert.equal(cue.includes('↗'), external, 'Use the external-link arrow only for off-site stories');
     if (isWritten) {
       const isNewsletter = (await card.locator('.media-story').getAttribute('href')) === monthlyIssues[0].url;
       assert.equal(await card.getByRole('link').count(), isNewsletter ? 2 : 1);
@@ -386,7 +394,7 @@ async function checkHomepage(page) {
   }
 }
 
-async function checkFallbacks(page) {
+async function checkFallbacks(page, expectedIds = ids) {
   const videos = page.locator('.publication-video');
   const urls = [];
   for (const video of await videos.all()) {
@@ -399,7 +407,7 @@ async function checkFallbacks(page) {
     }
     urls.push(await fallback.getAttribute('href'));
   }
-  assert.deepEqual(urls.sort(), ids.map(id => 'https://www.youtube.com/watch?v=' + id).sort());
+  assert.deepEqual(urls.sort(), expectedIds.map(id => 'https://www.youtube.com/watch?v=' + id).sort());
   assert.equal(await page.locator('iframe').count(), 0);
 }
 
@@ -458,6 +466,17 @@ async function checkEssay(page, { capture = false, directEntry = false } = {}) {
   const directory = page.locator('.publication-group[aria-labelledby="engineering-essays"]');
   const entry = directory.locator('#fresh-sandbox-github');
   assert.equal((await entry.locator('.attribution').innerText()).trim(), 'By Aaron Schneider');
+  const permalink = entry.getByRole('link', { name: 'Link to ' + title, exact: true });
+  assert.equal(await permalink.count(), 1);
+  assert.equal(await permalink.getAttribute('href'), '#fresh-sandbox-github');
+  assert.ok(await permalink.evaluate(link => {
+    const author = link.closest('.attribution')?.querySelector('span');
+    if (!author) return false;
+    const text = author.getBoundingClientRect();
+    const target = link.getBoundingClientRect();
+    return target.width >= 44 && target.height >= 44 && text.right <= target.left + 1 &&
+      text.top < target.bottom && target.top < text.bottom;
+  }), 'Place one touch-sized permalink beside the author');
   const coverLink = entry.locator('a.collection-cover');
   const cover = coverLink.locator('img');
   await decodeCover(cover);
@@ -469,6 +488,29 @@ async function checkEssay(page, { capture = false, directEntry = false } = {}) {
   if (capture) await captureSection(page, directory, 'engineering-essays-entry');
   const link = entry.locator('h3').getByRole('link', { name: title, exact: true });
   assert.equal(await link.getAttribute('href'), essayPath);
+  if (page.viewportSize().width === 375) {
+    const lines = await link.locator('.publication-title').evaluate(el => {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      return range.getClientRects().length;
+    });
+    assert.ok(lines >= 1 && lines <= 3, 'The essay title takes ' + lines + ' lines at 375px');
+    await link.focus();
+    await page.keyboard.press('Tab');
+    assert.ok(await permalink.evaluate(el => document.activeElement === el && el.matches(':focus-visible') &&
+      getComputedStyle(el).outlineStyle !== 'none'), 'Tab from the essay title to its visible bookmark');
+    if (capture) {
+      const normal = page.viewportSize();
+      await page.setViewportSize({ width: 320, height: 812 });
+      const enlarged = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+      assert.ok(await entry.evaluate(el => [...el.querySelectorAll('h3, .collection-cover, .essay-byline, .entry-permalink')].every(item => {
+        const box = item.getBoundingClientRect();
+        return box.width > 0 && box.left >= -1 && box.right <= innerWidth + 1;
+      })), 'Keep the essay title, thumbnail, author and bookmark within the 320px viewport at doubled text');
+      await enlarged.evaluate(style => style.remove());
+      await page.setViewportSize(normal);
+    }
+  }
   await Promise.all([page.waitForURL(new URL(essayPath, origin).href), link.press('Enter')]);
   if (directEntry) await page.reload();
   const article = page.locator('.engineering-essay');
@@ -727,7 +769,7 @@ async function checkNoScript(browser) {
     await page.keyboard.press('Tab');
     assert.ok(await link.evaluate(el => el === document.activeElement && el.getBoundingClientRect().height > 0), 'No-script navigation must be visible and reachable by keyboard');
   }
-  await checkFallbacks(page);
+  await checkFallbacks(page, homeVideoIds);
   const deepLink = new URL('/articles/#node-ipc-interview', origin).href;
   await page.goto(deepLink);
   await page.reload();
@@ -844,10 +886,10 @@ async function check() {
         await checkHomepage(page);
         if (reviewWidths.includes(width)) await captureHome(page, new URL(origin).hostname === '127.0.0.1' ? 'preview' : 'live');
         if (width === 375 || width === 1280) {
-          await checkPlayers(page);
+          await checkPlayers(page, homeVideoIds);
           await checkCollection(page, width);
           await captureCollection(page, new URL(origin).hostname === '127.0.0.1' ? 'preview' : 'live');
-          console.log(width + 'px: verified all three embedded players on both the homepage and Articles & Demos.');
+          console.log(width + 'px: verified two homepage players and all three recordings on Articles & Demos.');
         }
         console.log(width + 'px: verified five homepage covers, project results, navigation and fit.');
       }
