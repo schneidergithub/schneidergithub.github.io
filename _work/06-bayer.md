@@ -1,4 +1,8 @@
 ---
+index_order: 5
+index_case: /work/bayer-aleve/
+index_title: Building Aleve.com for Bayer
+index_gallery_label: Bayer websites and apps
 order: 6
 slug: "bayer"
 organization: "Bayer"

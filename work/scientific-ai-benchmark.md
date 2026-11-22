@@ -1,5 +1,6 @@
 ---
 layout: case-study
+work_design: true
 project: commondevops
 permalink: /work/scientific-ai-benchmark/
 title: "Can AI reproduce a meta-analysis?"

@@ -83,7 +83,7 @@ async function checkEvidence(page, url) {
       }
       await Promise.all([page.waitForURL(destination.href), link.press('Enter')]);
       if (destination.hash) {
-        assert.equal(await page.locator('.project-card:target h2').innerText(), 'Automating internal security checks');
+        assert.equal(await page.locator('.project-card:target h3').innerText(), 'Automating internal security checks');
       } else if (href.startsWith('/articles/')) {
         assert.equal(await page.locator('.engineering-essay h1').innerText(), 'Why I Came to Trust Automated Testing');
       } else {
@@ -173,10 +173,7 @@ async function check() {
         }
       }
       await page.screenshot({ path: path.join(reviewDir, version + '-experience-first-screen-' + width + '.jpg'), quality: 82 });
-      await page.goto(new URL('/work/', url).href);
-      const leadership = page.getByRole('link', { name: 'DevSecOps leadership at Nuix', exact: true });
-      assert.equal(await leadership.getAttribute('href'), '/experience/#nuix');
-      await leadership.press('Enter');
+      await page.goto(new URL('#nuix', url).href);
       await checkTarget(page, 'nuix');
       await page.screenshot({ path: path.join(reviewDir, version + '-experience-nuix-' + width + '.jpg'), quality: 82 });
       await page.route('https://www.youtube-nocookie.com/embed/**', route => route.abort());

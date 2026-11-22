@@ -1,4 +1,6 @@
 ---
+index_order: 3
+index_title: Chess benchmarks and software supply-chain research
 order: 1
 slug: "commondevops"
 organization: "CommonDevOps"
@@ -9,4 +11,4 @@ publication:
   id: benchmark-presentation
   label: Benchmark presentation
 ---
-I co-authored a Terminal-Bench-Science task with Dr. Ian Miller. I reviewed chess puzzle videos for our qualitative benchmark of AI-assisted software development. I also led the node-ipc investigation and was the primary author of its post-incident report.
+I reviewed chess puzzle videos to see where AI-assisted development gave away the solution. I also led the node-ipc investigation and wrote its post-incident report as primary author.

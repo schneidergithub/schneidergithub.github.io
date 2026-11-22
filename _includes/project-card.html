@@ -1,23 +1,38 @@
-<article class="project-card" id="{{ project.slug }}">
-  <div class="card-copy">
-    <p class="context">{{ project.context | escape }}</p>
-    <h2>{{ project.title | escape }}</h2>
+{% assign studies = all_studies | where: 'project', project.slug | sort: 'title' %}
+{% assign group = site.data.gallery | where: 'id', project.slug | first %}
+{% assign primary = studies | where: 'url', project.index_case | first %}
+<article class="project-card{% if project.index_feature %} work-support{% endif %}" id="{{ project.slug }}" tabindex="-1">
+  <div class="project-copy">
+    <p class="context work-kicker">{{ project.context | escape }}</p>
+    <h3>
+      {% if primary %}<a href="{{ primary.url | relative_url }}">{% endif %}
+      {% if project.index_feature == 'metric' %}<span class="work-metric">{{ project.home_highlight.value | escape }}</span> {{ project.home_highlight.label | escape }}{% else %}{{ project.index_title | default: project.title | escape }}{% endif %}
+      {% if primary %}</a>{% endif %}
+    </h3>
     <div class="project-detail">{{ project.content }}</div>
-    {% assign studies = site.pages | where: 'layout', 'case-study' | where: 'project', project.slug | sort: 'title' %}
-    {% if studies.size > 0 or project.publication %}
-    <ul class="project-links">
-      {% for study in studies %}
-      <li><a href="{{ study.url | relative_url }}">{{ study.link_label | default: study.title | escape }}</a></li>
-      {% endfor %}
-      {% if project.publication %}
-      <li><a href="{{ '/articles/' | relative_url }}#{{ project.publication.id | escape }}">{{ project.publication.label | escape }}</a></li>
-      {% endif %}
-    </ul>
-    {% endif %}
   </div>
   {% if project.image %}
-  <figure>
-    <a class="image-link image-enlarge" id="project-original-{{ project.slug }}" href="{{ project.image | relative_url }}" aria-label="View full-size screenshot: {{ project.image_alt | escape }}"><img src="{{ project.image | relative_url }}" alt="{{ project.image_alt | escape }}" width="{{ project.image_width }}" height="{{ project.image_height }}" loading="lazy" decoding="async"></a>
-  </figure>
+    {% assign preview = group.items | first %}
+    {% if project.index_feature == 'product' %}{% assign thumb = preview.thumbnail %}{% else %}{% assign thumb = project.image %}{% endif %}
+    <a class="work-thumbnail image-enlarge" id="project-original-{{ project.slug }}" href="{{ project.image | relative_url }}" aria-label="View full-size screenshot: {{ project.image_alt | escape }}">
+      <img src="{{ thumb | relative_url }}" alt="{{ project.image_alt | escape }}" width="{{ project.image_width }}" height="{{ project.image_height }}" loading="lazy" decoding="async">
+    </a>
   {% endif %}
+  <div class="work-links">
+    {% for study in studies %}
+      {% unless study.url == page.lead_case or study.url == project.index_case %}
+        <a href="{{ study.url | relative_url }}">{{ study.index_label | default: study.title | escape }}</a>
+      {% endunless %}
+    {% endfor %}
+    {% if project.publication %}
+      {% assign publication = site.data.publications | where: 'id', project.publication.id | first %}
+      {% assign publication_url = publication.url | slice: 0 %}
+      {% if publication_url == '/' %}
+        <a href="{{ publication.url | relative_url }}">{{ project.publication.label | escape }}</a>
+      {% else %}
+        <a href="{{ '/articles/' | relative_url }}#{{ project.publication.id }}">{{ project.publication.label | escape }}</a>
+      {% endif %}
+    {% endif %}
+    {% if group %}<a href="#gallery-{{ group.id }}">{{ project.index_gallery_label | default: 'Project images' | escape }}</a>{% endif %}
+  </div>
 </article>
