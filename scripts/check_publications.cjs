@@ -185,7 +185,11 @@ async function checkResearchFeature(panel, width) {
   assert.equal(await panel.locator('h2').innerText(), 'Terminal-Bench-Science');
   assert.equal(await panel.getByRole('link').count(), 0, 'Keep extra navigation out of the spotlight');
   const summary = panel.locator(':scope > p');
-  assert.match(await summary.innerText(), /AI agents on scientific workflows.*approved.*MDD Executive Function.*maintainer and reviewer.*paper.*ongoing work.*coming soon/s);
+  const text = await summary.innerText();
+  assert.match(text, /frontier LLMs on scientific workflows/i);
+  assert.match(text, /Version 1 includes.*MDD Executive Function.*co-authored with Dr\. Ian Miller/);
+  assert.match(text, /review tasks, analyze results, and lead DevOps and infrastructure/);
+  assert.match(text, /targeting a late-2026 release.*research paper to follow/);
   const heading = await panel.locator('h2').boundingBox();
   const player = await panel.locator('summary').boundingBox();
   const copy = await summary.boundingBox();
