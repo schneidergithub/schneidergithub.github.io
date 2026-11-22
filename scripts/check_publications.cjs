@@ -357,7 +357,16 @@ async function checkHomepage(page) {
   }
   const results = page.locator('.selected-results');
   assert.equal(await results.getByRole('link', { name: 'Browse project summaries' }).getAttribute('href'), '/work/#project-summaries');
-  assert.equal(await page.locator('#home-media').getByRole('link', { name: 'Browse articles & recordings' }).getAttribute('href'), '/articles/');
+  const mediaHeading = page.locator('#home-media').getByRole('heading', { name: 'Articles & Demos', exact: true });
+  const collectionLink = mediaHeading.getByRole('link', { name: 'Articles & Demos', exact: true });
+  assert.equal(await collectionLink.getAttribute('href'), '/articles/');
+  assert.ok((await collectionLink.boundingBox()).height >= 44, 'Keep the linked collection heading easy to activate');
+  if (width === 320) {
+    const largeText = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+    assert.ok(await collectionLink.evaluate(el => el.scrollWidth <= el.clientWidth + 1 && el.getBoundingClientRect().right <= innerWidth),
+      'The linked heading should wrap at doubled phone text sizes');
+    await largeText.evaluate(style => style.remove());
+  }
   for (const card of await results.locator('.feature').all()) {
     assert.equal(await card.getByRole('link').count(), 1, 'Give each result a single link');
     assert.ok(await card.locator('h3 a').isVisible(), 'The result heading opens the evidence');
@@ -713,7 +722,7 @@ async function captureCollection(page, version) {
 }
 
 async function checkCollection(page, width) {
-  const collectionLink = page.locator('#home-media .section-heading a');
+  const collectionLink = page.locator('#writing-title').getByRole('link', { name: 'Articles & Demos', exact: true });
   const collectionUrl = new URL('/articles/', origin).href;
   await Promise.all([page.waitForURL(collectionUrl), collectionLink.press('Enter')]);
   const benchmark = page.locator('#benchmark-presentation');

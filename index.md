@@ -40,10 +40,7 @@ permalink: /
 </section>
 
 <section class="section" id="home-media" aria-labelledby="writing-title">
-  <div class="section-heading">
-    <h2 id="writing-title">Articles &amp; Demos</h2>
-    <a href="{{ '/articles/' | relative_url }}">Browse articles &amp; recordings</a>
-  </div>
+  <h2 class="collection-heading" id="writing-title"><a href="{{ '/articles/' | relative_url }}">Articles &amp; <span>Demos</span></a></h2>
   <div class="media-grid">
     {% assign latest_issue = site.data.publications | where_exp: 'item', 'item.issue_month' | sort: 'issue_month' | reverse | slice: 0, 1 %}
     {% assign selections = site.data.publications | where: 'home_featured', true %}
