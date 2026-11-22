@@ -34,7 +34,7 @@ The challenge combines reading scientific literature, selecting comparable outco
 
 ## Explore the task and working sessions
 
-The [merged task]({{ page.contribution_url }}) contains the instructions and implementation. The [benchmark presentation]({{ '/articles/' | relative_url }}#benchmark-presentation) introduces the work; the recordings below show specific authoring decisions.
+The repository contains the task instructions and implementation. The [benchmark presentation]({{ '/articles/' | relative_url }}#benchmark-presentation) introduces the work; the recordings below show specific authoring decisions.
 
 <details class="technical-details" id="checking-the-grader">
 <summary>Technical appendix: checking the benchmark grader</summary>
@@ -47,6 +47,8 @@ Dr. Miller and I worked through three questions in October. Was the reference nu
 3. **Read the participant instructions.** We checked where the instructions disclosed each grading rule. Citations to the original papers gave reviewers a way to check the evidence for a row. [Instructions and verifier, 13:11](https://www.youtube.com/watch?v=fN4p2HbGkog&t=791s).
 
 The merged grader reads two CSV tables derived from the key. Each required comparison needs its own submitted row. The second table defines additional admissible comparisons. A submitted row that matches neither table fails. The parser skips a completely blank line and flags a row with empty fields. [Merged verifier](https://github.com/harbor-framework/terminal-bench-science/blob/0c9b52723f35d39505b57e349c403dc9bdc66e46/tasks/life-sciences/neuroscience/mdd-executive-function/tests/test_outputs.py#L2-L103).
+
+[Case overview](#case-title).
 
 </div>
 </details>
