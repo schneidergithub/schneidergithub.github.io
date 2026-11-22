@@ -89,7 +89,7 @@ main{min-height:65vh}
   margin: 0;
 }
 .contact-route dt { color: var(--muted); font-size: .92rem; line-height: 1.45; }
-.contact-route dd { margin: 0; }
+.contact-route dd { margin: .5rem 0 0; }
 .contact-route a {
   display: inline-flex;
   align-items: center;
@@ -401,6 +401,7 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 .media-type{margin-bottom:.35rem;color:var(--muted);font-size:.875rem;line-height:1.4}
 .media-copy h3{font-size:clamp(1.1rem,1.5vw,1.25rem);line-height:1.28;margin-bottom:.55rem}
 .media-copy h3 a,.media-story h3,.publication-heading h3 a{color:var(--accent);text-decoration:none}
+.media-story h3::after { content: "\00a0↗" / ""; font-size: .8em; font-weight: 500; }
 .media-copy h3 a:is(:hover,:focus-visible),.media-story:is(:hover,:focus-visible) h3,
 .publication-heading h3 a:is(:hover,:focus-visible){text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em}
 .media-description{margin:0;padding:0 1rem 1rem;color:var(--muted);font-size:.94rem;line-height:1.48}

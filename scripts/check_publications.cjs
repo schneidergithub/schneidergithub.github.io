@@ -207,6 +207,16 @@ async function checkContactCard(page, width) {
         return el === document.activeElement && el.matches(':focus-visible') && style.outlineStyle !== 'none' &&
           parseFloat(style.outlineWidth) > 0 && (!contact || (box.width >= 44 && box.height >= 44 && style.outlineColor === 'rgb(255, 213, 138)'));
       }, isContact), 'Keyboard navigation should go from the recording subscription through each contact to PGP: ' + await link.innerText());
+      if (isContact) {
+        const clearance = await link.evaluate(el => {
+          const text = document.createRange();
+          text.selectNodeContents(el.closest('dl > div').querySelector('dt'));
+          const style = getComputedStyle(el);
+          return el.getBoundingClientRect().top - parseFloat(style.outlineOffset) -
+            parseFloat(style.outlineWidth) - text.getBoundingClientRect().bottom;
+        });
+        assert.ok(clearance >= 1, 'Keep the focus ring below the audience label at ' + width + 'px; clearance ' + clearance + 'px');
+      }
       if (await link.getAttribute('href') === routes[1][2]) await captureSection(page, card, 'home-contact-keyboard');
     }
     if (width === 375) await page.setViewportSize(originalViewport);
@@ -305,7 +315,12 @@ async function checkHomepage(page) {
   for (const card of await cards.all()) {
     assert.equal(await card.locator('img').count(), 1);
     await decodeCover(card.locator('img'));
+    const isWritten = (await card.locator('a.media-story').count()) === 1;
+    const cue = await card.locator('h3').evaluate(el => getComputedStyle(el, '::after').content);
+    assert.equal(cue.includes('↗'), isWritten, 'Give linked written headlines a cue distinct from recording headings');
+    if (isWritten) assert.equal(await card.getByRole('link').count(), 1);
   }
+  if (width === 375 || width === 1280) await captureSection(page, page.locator('#home-media'), 'home-media');
 
   const projects = [
     ['/work/indiana-case-archives/', /92.*counties|counties.*92/is],
