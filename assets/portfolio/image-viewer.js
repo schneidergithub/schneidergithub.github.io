@@ -49,11 +49,23 @@
   function finish(restore = true) {
     document.documentElement.classList.remove('image-viewer-open');
     if (restore && trigger?.isConnected) {
-      trigger.focus({ preventScroll: true });
-      window.scrollTo({ left: pagePosition.x, top: pagePosition.y, behavior: 'instant' });
-      if (innerWidth !== pagePosition.width || innerHeight !== pagePosition.height) {
-        trigger.scrollIntoView({ block: 'center', behavior: 'instant' });
-      }
+      const opener = trigger;
+      const saved = pagePosition;
+      const restorePosition = () => {
+        if (dialog.open || trigger !== opener || !opener.isConnected) return;
+        opener.focus({ preventScroll: true });
+        if (innerWidth !== saved.width || innerHeight !== saved.height) {
+          opener.scrollIntoView({ block: 'center', behavior: 'instant' });
+        } else {
+          window.scrollTo({ left: saved.x, top: saved.y, behavior: 'instant' });
+        }
+      };
+      restorePosition();
+      // WebKit can finish viewport layout and native focus scrolling after close.
+      requestAnimationFrame(() => {
+        restorePosition();
+        requestAnimationFrame(restorePosition);
+      });
     }
   }
 

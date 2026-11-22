@@ -259,14 +259,20 @@ async function checkImageReturns(browser, workUrl) {
 
   await control.press('Enter');
   await page.setViewportSize({width:1280,height:900});
+  await page.waitForFunction(() => innerWidth === 1280 && innerHeight === 900);
   await page.keyboard.press('Escape');
   await viewer.waitFor({state:'hidden'});
   // The native close event restores scroll after the dialog stops rendering.
-  await page.waitForFunction(id => {
-    const el = document.getElementById(id);
-    const box = el.getBoundingClientRect();
-    return document.activeElement === el && box.top >= 0 && box.bottom <= innerHeight;
-  }, await control.getAttribute('id'), {timeout:5000});
+  try {
+    await page.waitForFunction(id => {
+      const el = document.getElementById(id);
+      const box = el.getBoundingClientRect();
+      return document.activeElement === el && box.top >= 0 && box.bottom <= innerHeight;
+    }, await control.getAttribute('id'), {timeout:5000});
+  } catch (error) {
+    const state = await control.evaluate(el => ({bounds:el.getBoundingClientRect().toJSON(), active:document.activeElement?.id, width:innerWidth, height:innerHeight, scrollY}));
+    throw new Error('Resize return: ' + JSON.stringify(state), {cause:error});
+  }
   await page.setViewportSize({width:375,height:812});
 
   // Loading failure leaves the original and Close available.
