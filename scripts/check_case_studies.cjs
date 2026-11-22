@@ -261,10 +261,12 @@ async function checkImageReturns(browser, workUrl) {
   await page.setViewportSize({width:1280,height:900});
   await page.keyboard.press('Escape');
   await viewer.waitFor({state:'hidden'});
-  assert.ok(await control.evaluate(el => {
+  // The native close event restores scroll after the dialog stops rendering.
+  await page.waitForFunction(id => {
+    const el = document.getElementById(id);
     const box = el.getBoundingClientRect();
     return document.activeElement === el && box.top >= 0 && box.bottom <= innerHeight;
-  }), 'Closing after resize restores the trigger within the new viewport');
+  }, await control.getAttribute('id'), {timeout:5000});
   await page.setViewportSize({width:375,height:812});
 
   // Loading failure leaves the original and Close available.
