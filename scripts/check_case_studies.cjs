@@ -402,7 +402,8 @@ async function check() {
         const actions = ending.getByRole('link');
         const footerLinks = page.getByRole('contentinfo').getByRole('link');
         assert.deepEqual(await footerLinks.evaluateAll(items => items.map(a => a.href)), [
-          'https://www.linkedin.com/in/aarondrewschneider/', 'https://www.youtube.com/@commondevops'
+          new URL('/', workUrl).href, 'https://www.linkedin.com/in/aarondrewschneider/',
+          'https://www.youtube.com/@commondevops', new URL('/pgp/', workUrl).href
         ]);
         assert.equal(await actions.count(), 2);
         const discuss = ending.getByRole('link', { name: 'Discuss a project', exact: true });

@@ -214,6 +214,37 @@ async function checkResearchFeature(panel, width) {
   assert.equal(dimensions.declaredHeight, dimensions.height);
 }
 
+async function checkMakerPlate(page, width) {
+  const footer = page.getByRole('contentinfo');
+  const home = footer.getByRole('link', { name: 'Aaron Schneider, home', exact: true });
+  const linkedin = footer.getByRole('link', { name: 'Aaron Schneider on LinkedIn' });
+  const youtube = footer.getByRole('link', { name: 'CommonDevOps on YouTube' });
+  const key = footer.getByRole('link', { name: 'PGP key', exact: true });
+  assert.equal(await home.getAttribute('href'), '/');
+  assert.equal(await key.getAttribute('href'), '/pgp/');
+  assert.equal(await linkedin.locator('use').getAttribute('href'), '/assets/portfolio/social-icons.svg?v=2#linkedin');
+  assert.equal(await youtube.locator('use').getAttribute('href'), '/assets/portfolio/social-icons.svg?v=2#youtube');
+  assert.equal(await footer.getByRole('link').count(), 4);
+  assert.equal(Math.round((await footer.boundingBox()).height), 56, 'Compact single-row footer at ' + width + 'px');
+  await home.focus();
+  for (const link of [linkedin, youtube, key]) {
+    await page.keyboard.press('Tab');
+    assert.ok(await link.evaluate(el => el === document.activeElement && el.matches(':focus-visible') &&
+      getComputedStyle(el).outlineStyle !== 'none' && el.getBoundingClientRect().height >= 44));
+  }
+  await captureSection(page, footer, 'subpage-maker-plate');
+  if (width === 375) {
+    await page.setViewportSize({ width: 320, height: 900 });
+    const zoom = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+    assert.ok(await footer.getByRole('link').evaluateAll(links => links.every(link => {
+      const box = link.getBoundingClientRect();
+      return box.width > 0 && box.left >= 0 && box.right <= innerWidth;
+    })), 'All four footer links fit with doubled text');
+    await zoom.evaluate(el => el.remove());
+    await page.setViewportSize({ width, height: 900 });
+  }
+}
+
 async function checkConsultingFooter(page, width) {
   const footer = page.getByRole('contentinfo');
   const layout = footer.locator('#connect');
@@ -461,7 +492,7 @@ async function checkHomepage(page) {
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Homepage overflows');
   if (width === 1280) {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    const immediate = await page.locator('.hero .button, .hero .play-mark, #connect a, .social-links a').evaluateAll(controls =>
+    const immediate = await page.locator('.hero .button, .hero .play-mark, #connect a').evaluateAll(controls =>
       controls.every(el => getComputedStyle(el).transitionDuration.split(',').every(value => parseFloat(value) === 0)));
     assert.ok(immediate, 'Respect reduced motion for hero, contact and footer controls');
     await page.emulateMedia({ reducedMotion: null });
@@ -982,6 +1013,7 @@ async function check() {
         if (width === 375 || width === 1280) {
           await checkPlayers(page, homeVideoIds);
           await checkCollection(page, width);
+          await checkMakerPlate(page, width);
           await captureCollection(page, new URL(origin).hostname === '127.0.0.1' ? 'preview' : 'live');
           console.log(width + 'px: verified two homepage players and the full recording collection on Articles & Demos.');
         }

@@ -46,15 +46,19 @@
     {% if page.contact_footer %}
     {% include consulting-contacts.html %}
     {% else %}
-    <div class="footer-inner wrap">
-      <span class="footer-signature">Aaron Schneider</span>
-      <nav class="social-links" aria-label="Social profiles">
-        <a href="https://www.linkedin.com/in/aarondrewschneider/" aria-label="Aaron Schneider on LinkedIn">
-          <svg width="34" height="34" aria-hidden="true" focusable="false"><use href="{{ social_icons }}#linkedin"></use></svg>
+    <div class="maker-plate wrap">
+      <a class="maker-home" href="{{ '/' | relative_url }}" aria-label="Aaron Schneider, home">
+        <span class="maker-mark" aria-hidden="true">AS</span>
+        <span>{{ site.data.profile.name | escape }}</span>
+      </a>
+      <nav class="maker-links" aria-label="Profiles and public key">
+        <a href="{{ site.data.profile.linkedin | escape }}" aria-label="Aaron Schneider on LinkedIn">
+          <svg width="28" height="28" aria-hidden="true" focusable="false"><use href="{{ social_icons }}#linkedin"></use></svg>
         </a>
         <a href="https://www.youtube.com/@commondevops" aria-label="CommonDevOps on YouTube">
-          <svg width="46" height="46" aria-hidden="true" focusable="false"><use href="{{ social_icons }}#youtube"></use></svg>
+          <svg width="36" height="26" aria-hidden="true" focusable="false"><use href="{{ social_icons }}#youtube"></use></svg>
         </a>
+        <a class="maker-key" href="{{ '/pgp/' | relative_url }}">PGP key</a>
       </nav>
     </div>
     {% endif %}
