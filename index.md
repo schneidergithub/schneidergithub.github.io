@@ -61,7 +61,7 @@ contact_footer: true
     {% for item in featured_media %}
     <article class="media-card">
       {% if item.type == 'Video' %}
-      <div class="media-art">{% include publication-media.html publication=item %}</div>
+      <div class="media-art">{% include publication-media.html publication=item defer_source=true %}</div>
       <div class="media-copy">
         <h3>{{ item.title | escape }}</h3>
       </div>
@@ -78,6 +78,7 @@ contact_footer: true
       </a>
       {% endif %}
       <p class="media-description">{{ item.home_summary | default: item.description | escape }}</p>
+      {% if item.type == 'Video' %}{% include recording-source.html publication=item %}{% endif %}
       {% if item.issue_month %}<a class="newsletter-archive-link" href="{{ '/articles/' | relative_url }}#monthly-reviews">Newsletter archive</a>{% endif %}
     </article>
     {% endfor %}

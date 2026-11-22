@@ -27,7 +27,11 @@ Use a pull request for each sprint, inspect its preview, and verify the released
 
 **Scope added during delivery.** The chess video project is a qualitative benchmark of AI-assisted software development. The separate YouTube recording presents the benchmark. Use that distinction in the case, essay and publication index and provide a playable presentation entry. For the node-ipc investigation, credit Aaron as investigation lead and primary author of the post-incident report. Bring its DOI and two CommonDevOps recordings together in the final sprint. Preserve the original source timestamps and the limits of the investigation’s findings.
 
-**Sprint 1 review.** Experience now opens the CommonDevOps role with the approved task, current maintenance and review responsibilities, and trial analysis. The CD mark is distinguishable at phone size while the report retains its own cover in Articles. [Release 60](https://github.com/schneidergithub/schneidergithub.github.io/pull/60)
+**Sprint 3 footer story.** As a visitor, I want to see which channel the YouTube icon opens. Put the red play icon immediately to the left of the visible CommonDevOps label in one channel link. Keep the separate team consulting link to the company website. Pack the links toward the left edge of the homepage card and check their spacing, tap targets and keyboard order on desktop and phone, including enlarged text.
+
+**Sprint 1 review.** Experience now opens the CommonDevOps role with the approved task, current maintenance and review responsibilities, and trial analysis. The CD mark is distinguishable at phone size while the report retains its own cover in Articles. [Release 60](https://github.com/schneidergithub/schneidergithub.github.io/pull/60) · [Production verification](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44983135210)
+
+**Sprint 2 review.** The signed essay links to the case observation about the early answer reveal, and the case returns readers to the related passage. An original frame illustrates the qualitative chess-video benchmark. The presentation has its own playable entry. The custom-domain check confirmed both fragment destinations and the case image after deployment. [Release 61](https://github.com/schneidergithub/schneidergithub.github.io/pull/61) · [Production verification](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44983585175)
 
 
 <a id="sprint-review-and-proposed-next-three-sprints"></a>

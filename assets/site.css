@@ -516,8 +516,8 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 .media-card:has(.publication-video[open]){grid-column:span 2}
 .media-art{border-bottom:1px solid var(--line);border-radius:5px 5px 0 0;background:#10151b}
 .media-art:has(.publication-video){background:transparent;border-bottom:0}
-.media-art .watch-source{margin-inline:1rem}
-.media-card:has(.publication-video) .media-copy{padding-top:0}
+.media-card > .watch-source{margin:0 1rem .45rem}
+.media-card:has(.publication-video) .media-description{padding-bottom:0}
 .media-art .publication-preview,.focus-media .publication-preview{display:block;width:100%;max-width:none;height:auto;aspect-ratio:16/9;object-fit:contain;margin:0;border:0}
 .media-art .publication-preview{border-radius:5px 5px 0 0}
 .focus-media .publication-preview{border-radius:4px}
@@ -673,15 +673,15 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
   border-inline-start: 1px solid #9c8a72;
 }
 .consulting-links {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-start;
   gap: .15rem clamp(.75rem, 3vw, 1.75rem);
 }
 .consulting-links a {
   display: inline-flex;
   align-items: center;
-  justify-self: start;
   gap: .5rem;
   min-height: 44px;
   max-width: 100%;
@@ -695,21 +695,15 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 }
 .consulting-links a:is(:hover, :focus-visible) { color: #132e48; text-decoration: underline; }
 .consulting-links svg { flex: none; }
-.consulting-links .contact-channel {
-  justify-content: center;
-  justify-self: end;
-  width: 52px;
-  height: 52px;
-}
 @container contact-card (max-width: 38rem) {
   .contact-specialties { gap: .3em 1.15em; }
   .contact-specialties li + li { margin: 0; padding: 0; border: 0; }
-  .consulting-links { grid-template-columns: minmax(0, 1fr) auto; }
-  .consulting-links a:first-child { grid-column: 1 / -1; }
+}
+@container contact-card (max-width: 27rem) {
+  .consulting-links { flex-direction: column; align-items: flex-start; }
 }
 @container contact-card (max-width: 16rem) {
-  .contact-heading, .consulting-links { grid-template-columns: minmax(0, 1fr); }
-  .consulting-links .contact-channel { justify-self: start; }
+  .contact-heading { grid-template-columns: minmax(0, 1fr); }
 }
 .prose{max-width:780px;padding-bottom:4rem}
 .prose h2{margin-top:2rem}

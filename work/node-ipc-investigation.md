@@ -5,8 +5,15 @@ permalink: /work/node-ipc-investigation/
 title: "node-ipc and the evidence in the domain records"
 link_label: "node-ipc investigation"
 context: "CommonDevOps · Software supply-chain investigation"
-description: "In May 2026, three malicious node-ipc releases appeared on npm. I led an independent investigation into the domain associated with a maintainer account and documented how far the public evidence could take us."
+description: "I led the CommonDevOps investigation into the May 2026 node-ipc incident and was the primary author of the post-incident report. We traced the domain associated with a maintainer account after three malicious releases appeared on npm."
 ---
+
+## Report and recordings
+{: #report-and-recordings tabindex="-1"}
+
+- [Post-incident report on Figshare · first edition](https://doi.org/10.6084/m9.figshare.33865414.v1)
+- [Interview with node-ipc creator Brandon Miller](https://www.youtube.com/watch?v=TZ04u6cj1ls)
+- [Follow-up with Brandon Miller and security researcher Roni Carta](https://www.youtube.com/watch?v=eSvYhh7_Kyo)
 
 ## What a domain record can establish
 
@@ -20,10 +27,10 @@ I also documented our request for the registrar to preserve its records. The reg
 
 Maintainer Brandon Miller recalled reading the incident brief, joining the public discussion, and comparing findings with people already investigating. [Hear maintainer Brandon Miller’s account at 6:54](https://www.youtube.com/watch?v=TZ04u6cj1ls&t=414s).
 
-Security researcher Roni Carta described a different constraint. His team prioritized outreach by weekly package installations. Other dependencies ranked ahead of node-ipc in that queue. His account helps explain how a team can recognize a risk before it reaches a maintainer. [Hear researcher Roni Carta explain the queue at 4:12](https://www.youtube.com/watch?v=eSvYhh7_Kyo&t=252s).
+In the follow-up with Miller, security researcher Roni Carta explained how his team prioritized outreach by weekly package installations. Other dependencies ranked ahead of node-ipc in that queue. [Hear Carta on outreach priorities at 4:12](https://www.youtube.com/watch?v=eSvYhh7_Kyo&t=252s).
 
 ## What we published
 
 Our evidence register distinguishes confirmed publication of malicious releases from the supported conclusion that someone misused valid publishing authority. The exact route to that authority and the operator’s identity remained unresolved. Readers can inspect the records behind each judgment in the [CommonDevOps incident report](https://commondevops.com/node-ipc-supply-chain-incident-report/).
 
-[Cite the first edition on Figshare](https://doi.org/10.6084/m9.figshare.33865414.v1) · [Report entry in Articles & Demos]({{ '/articles/' | relative_url }}#node-ipc-report).
+[Report entry in Articles & Demos]({{ '/articles/' | relative_url }}#node-ipc-report).

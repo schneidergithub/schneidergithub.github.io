@@ -57,7 +57,7 @@ groups:
       {% else %}
       <p class="attribution">{{ item.attribution | escape }}</p>
       {% endif %}
-      {% if item.editions or item.related or item.case_url or item.companion %}
+      {% if item.editions or item.related or item.case_url or item.companions %}
       <p class="publication-actions">
         {% for edition in item.editions %}<a class="publication-edition" href="{{ edition.url | escape }}">{{ edition.label | escape }}</a>{% endfor %}
         {% if item.related %}<a class="publication-related" href="{{ item.related.url | escape }}">{{ item.related.label | escape }}&nbsp;<span aria-hidden="true">↗</span></a>{% endif %}
@@ -65,7 +65,7 @@ groups:
           {% assign study = site.pages | where: 'url', item.case_url | first %}
           {% if study %}<a class="publication-case" href="{{ study.url | relative_url }}">{{ study.link_label | default: study.title | escape }}</a>{% endif %}
         {% endif %}
-        {% if item.companion %}<a class="publication-context" href="#{{ item.companion.id | escape }}">{{ item.companion.label | escape }}</a>{% endif %}
+        {% for companion in item.companions %}<a class="publication-context" href="#{{ companion.id | escape }}">{{ companion.label | escape }}</a>{% endfor %}
       </p>
       {% endif %}
     </div>
