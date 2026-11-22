@@ -354,7 +354,7 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 @media(max-width:850px){.publication:has(.publication-video[open]){grid-template-columns:1fr}
 .hero{grid-template-columns:minmax(0,1fr);gap:1.5rem;padding-block:1.75rem}
 .feature-grid{gap:1.25rem}
-.project-grid{grid-template-columns:1fr}
+.project-grid{grid-template-columns:minmax(0,1fr)}
 .site-footer{flex-direction:column}
 .role{grid-template-columns:145px minmax(0,1fr);column-gap:1rem}
 }
@@ -376,7 +376,7 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 .result-value{font-size:2.65rem}
 }
 @media(max-width:540px){body{font-size:16px}
-.wrap{width:calc(100% - 2rem)}
+.wrap{width:calc(100% - min(2rem,32px))}
 .page-intro{padding-top:2.5rem}
 .section{padding-block:2.5rem}
 .section-heading{align-items:flex-start;flex-direction:column;gap:.6rem}
@@ -424,9 +424,10 @@ a{color:inherit}
 .gallery-jumps a{color:var(--accent);text-decoration:underline}
 .count{display:inline-block;margin-left:.4rem;color:var(--muted);font-size:.875rem;font-weight:400;letter-spacing:0}
 .work-intro{padding-bottom:1.75rem}
+.work-intro,.study-directory,.work-leadership,.work-projects,.portfolio-gallery{overflow-wrap:anywhere}
 .work-projects > h2:focus-visible,.study-directory > h2:focus-visible,.portfolio-gallery > h2:focus-visible{width:fit-content;outline:3px solid var(--focus);outline-offset:4px}
 .gallery-jumps{margin-block:.5rem 2rem;gap:.25rem 1.5rem}
-.gallery-jumps a{display:inline-flex;align-items:center;gap:.3rem;min-height:44px;line-height:1.4}
+.gallery-jumps a{display:inline-flex;align-items:center;gap:.3rem;min-height:44px;max-width:100%;line-height:1.4}
 .portfolio-gallery>h2{font-size:clamp(2rem,4vw,3rem);max-width:22ch}
 .gallery-group{display:grid;grid-template-columns:minmax(0,23rem) minmax(0,1fr);column-gap:clamp(1.5rem,4vw,3.5rem);align-items:start;padding-block:.75rem 2.5rem;scroll-margin-top:1rem}
 .gallery-heading{grid-column:2;grid-row:1}
@@ -503,7 +504,7 @@ a{color:inherit}
 .gallery-heading{margin-bottom:.75rem}
 }
 
-@media(max-width:540px){.thumbnail-grid{grid-template-columns:1fr}
+@media(max-width:540px){.thumbnail-grid{grid-template-columns:minmax(0,1fr)}
 .gallery-jumps{gap:.3rem 1rem}
 .gallery-jumps a{font-size:.875rem}
 }

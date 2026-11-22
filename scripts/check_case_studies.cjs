@@ -237,7 +237,24 @@ async function checkImageReturns(browser, workUrl) {
   await page.setViewportSize({ width: 320, height: 812 });
   await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
   await summary.press('Enter');
-  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Expanded gallery must fit at enlarged text size');
+  const reflow = await page.evaluate(() => {
+    const pageWidth = document.documentElement.scrollWidth;
+    const offenders = [];
+    if (pageWidth > innerWidth) {
+      for (const el of document.body.querySelectorAll('*')) {
+        const box = el.getBoundingClientRect();
+        if (!box.width || (box.left >= -1 && box.right <= innerWidth + 1)) continue;
+        offenders.push({ tag: el.tagName, id: el.id, classes: el.className, left: Math.round(box.left),
+          right: Math.round(box.right), width: Math.round(box.width), text: (el.textContent || '').trim().slice(0, 65) });
+      }
+      offenders.sort((a, b) => b.right - a.right);
+    }
+    return { viewport: innerWidth, pageWidth, offenders: offenders.slice(0, 14) };
+  });
+  if (reflow.pageWidth > reflow.viewport) {
+    await captureWork(page, 'gallery-reflow-' + browser.browserType().name());
+    assert.fail('Expanded gallery overflows with 200% text in ' + browser.browserType().name() + ': ' + JSON.stringify(reflow));
+  }
   await page.close();
   console.log('Verified same-tab image return, nested disclosure state, keyboard focus and reduced-motion gallery behavior.');
 }
