@@ -237,6 +237,9 @@ async function checkHomepage(page) {
     .evaluateAll(items => items.map(el => el.id || (el.classList.contains('hero') ? 'hero' : 'results')));
   assert.deepEqual(sequence, ['hero', 'results', 'home-media', 'connect'], 'Show engineering results before the media collection and contacts');
   const nav = page.locator('.site-header nav');
+  assert.ok(await page.locator('.site-header').evaluate(el => getComputedStyle(el).borderBottomWidth === '0px' &&
+    getComputedStyle(el.querySelector('.brand')).textDecorationLine === 'none'), 'Leave clear space below the name');
+
   if (width >= 768) {
     assert.ok(await nav.isVisible(), 'Show the main links when there is room');
     const brand = await page.locator('.site-header .brand').boundingBox();
@@ -264,6 +267,15 @@ async function checkHomepage(page) {
   assert.deepEqual(await heroLinks.allTextContents(), ['Explore selected work', 'View experience']);
   assert.deepEqual(await heroLinks.evaluateAll(links => links.map(link => link.pathname)), ['/work/', '/experience/']);
   await checkActionTargets(heroLinks, width === 375);
+  if (width === 375 || width === 1280) {
+    for (const link of await heroLinks.all()) {
+      await link.hover();
+      assert.equal(await link.evaluate(el => getComputedStyle(el).textDecorationLine), 'none',
+        'Use the hover color without an underline on homepage actions');
+    }
+    await page.mouse.move(0, 0);
+  }
+
   if (width === 320 || width === 375) {
     const largerText = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
     await checkActionTargets(heroLinks);
@@ -657,6 +669,9 @@ async function checkPhoneEntry(browser) {
     return style.textDecorationLine.includes('underline') && parseFloat(style.textDecorationThickness) >= 2 &&
       style.textDecorationColor === style.color;
   }), 'Underline the current section in the expanded menu');
+  assert.equal(await nav.evaluate(el => getComputedStyle(el).borderTopWidth), '0px',
+    'Keep the space beneath the name clear when the phone menu opens');
+
   await captureSection(page, header, 'mobile-menu-open');
   for (const link of await links.all()) {
     await page.keyboard.press('Tab');

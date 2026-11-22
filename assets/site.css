@@ -35,7 +35,6 @@ img{display:block;max-width:100%;height:auto}
   align-items: center;
   gap: .5rem 1rem;
   border-block-start: 3px solid var(--masthead-ink);
-  border-block-end: 1px solid var(--masthead-rule);
   padding-block: .5rem;
 }
 .brand {
@@ -211,13 +210,15 @@ main{min-height:65vh}
 .page-intro h1{font-size:clamp(2.5rem,5vw,3.75rem);max-width:none}
 .study-directory{display:block;margin-bottom:1.35rem}
 .study-directory h2{margin-bottom:.65rem}
-.study-directory ul {
+.directory-layout {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 2rem;
+  grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
+  gap: 1rem clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+.study-directory ul {
   margin: 0;
-  padding: 0 0 0 1rem;
-  border-inline-start: 2px solid var(--line);
+  padding: 0;
   list-style: none;
 }
 .study-directory a, .project-links a, .role-study, .study-ending a:not(.button) {
@@ -234,6 +235,21 @@ main{min-height:65vh}
   line-height: 1.45;
 }
 .study-directory a { font-size: 1rem; font-weight: 600; }
+.study-directory .directory-feature a {
+  display: grid;
+  gap: .65rem;
+  padding: 0;
+  font: 400 clamp(1.4rem, 2.5vw, 1.85rem)/1.2 Georgia, "Times New Roman", serif;
+}
+.directory-feature img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 5px;
+}
+.directory-feature p { margin: .35rem 0 0; color: var(--muted); }
 .study-directory a:is(:hover, :focus-visible),
 .project-links a:is(:hover, :focus-visible),
 .role-links a:is(:hover, :focus-visible) {
@@ -689,7 +705,7 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 .study-ending{flex-direction:column;align-items:flex-start}
 .study-ending a.study-return{margin-inline-start:0}
 .media-grid{grid-template-columns:1fr}
-.study-directory ul{grid-template-columns:minmax(0,1fr)}
+.directory-layout{grid-template-columns:minmax(0,1fr)}
 .media-card:has(.publication-video[open]){grid-column:auto}
 }
 @media(max-width:540px){body{font-size:16px}
@@ -719,6 +735,7 @@ figure{padding-inline:1.4rem}
 @media(prefers-reduced-motion:no-preference){
   .hero .button,.play-mark{transition:background-color 140ms ease-out,border-color 140ms ease-out}
 }
+.hero .actions .button:hover{text-decoration:none}
 .hero .button:not(.secondary):hover{background:#a5ceff;border-color:#a5ceff;filter:none}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}
 }
@@ -938,7 +955,6 @@ a{color:inherit}
     grid-column: 1 / -1;
     justify-self: stretch;
     gap: 0 1.1rem;
-    border-top: 1px solid var(--masthead-rule);
     padding-top: .25rem;
   }
   .site-header nav a {
