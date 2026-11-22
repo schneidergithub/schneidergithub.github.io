@@ -532,7 +532,8 @@ async function checkGraderGuide(page, directEntry = false) {
     assert.equal(await appendix.getAttribute('open'), null);
     await heading.press('Enter');
   } else {
-    await page.waitForFunction(() => document.querySelector('#checking-the-grader').open);
+    await page.waitForFunction(() => document.querySelector('#checking-the-grader').open &&
+      document.activeElement === document.querySelector('#checking-the-grader > summary'));
   }
   const target = await heading.evaluate(el => {
     const box = el.getBoundingClientRect();
