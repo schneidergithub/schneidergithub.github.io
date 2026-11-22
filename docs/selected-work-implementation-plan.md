@@ -149,6 +149,6 @@ Visual review used 1280px desktop and 375px phone layouts, including the hero, p
 
 The first phone layout measured approximately 6,180px collapsed against the earlier approximately 5,850px baseline: readable previews and the engagement overview take space. Removing repetition improved the structure; a shorter total page was not treated as proof of usability. The final revision also removes a redundant Westinghouse performance paragraph.
 
-A repeated CI run exposed a thumbnail-scroll stability timeout in the no-script image-decoding check. That check now scrolls the image directly before decoding it; gallery controls and focus continue to use actual keyboard interactions. Versioned gallery scripts prevent returning visitors from retaining obsolete bookmark behavior.
+A repeated CI run exposed a thumbnail-scroll stability timeout in the no-script image-decoding check. That check now scrolls the image directly before decoding it; gallery controls and focus continue to use actual keyboard interactions. Versioned gallery scripts prevent returning visitors from retaining obsolete bookmark behavior. A manual resize check also found an offscreen return target; the viewer now brings its trigger into the resized viewport when closed, with a regression check in both browser suites.
 
 This is an implementation review and simulated reader walkthrough, not a participant study. Real-reader comprehension, hesitation, and conversion remain unmeasured. No new claims of benchmark performance or measured user success were introduced.

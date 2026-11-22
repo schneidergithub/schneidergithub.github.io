@@ -51,6 +51,9 @@
     if (restore && trigger?.isConnected) {
       trigger.focus({ preventScroll: true });
       window.scrollTo({ left: pagePosition.x, top: pagePosition.y, behavior: 'instant' });
+      if (innerWidth !== pagePosition.width || innerHeight !== pagePosition.height) {
+        trigger.scrollIntoView({ block: 'center', behavior: 'instant' });
+      }
     }
   }
 
@@ -63,7 +66,7 @@
     // The real href remains available for unsupported browsers and modified clicks.
     event.preventDefault();
     trigger = link;
-    pagePosition = { x: scrollX, y: scrollY };
+    pagePosition = { x: scrollX, y: scrollY, width: innerWidth, height: innerHeight };
     images = [...group.querySelectorAll('a.image-enlarge')].sort((a, b) =>
       Number(a.dataset.imageOrder) - Number(b.dataset.imageOrder));
     title.textContent = group.dataset.imageTitle || 'Project images';

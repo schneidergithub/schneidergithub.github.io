@@ -257,6 +257,16 @@ async function checkImageReturns(browser, workUrl) {
   assert.ok(await control.evaluate(el => el === document.activeElement));
   assert.ok(Math.abs((await page.evaluate(() => scrollY)) - before) <= 2);
 
+  await control.press('Enter');
+  await page.setViewportSize({width:1280,height:900});
+  await page.keyboard.press('Escape');
+  await viewer.waitFor({state:'hidden'});
+  assert.ok(await control.evaluate(el => {
+    const box = el.getBoundingClientRect();
+    return document.activeElement === el && box.top >= 0 && box.bottom <= innerHeight;
+  }), 'Closing after resize restores the trigger within the new viewport');
+  await page.setViewportSize({width:375,height:812});
+
   // Loading failure leaves the original and Close available.
   const broken = await browser.newPage({viewport:{width:375,height:812}});
   await broken.route('**/assets/portfolio/supersalon.webp', route => route.abort());
