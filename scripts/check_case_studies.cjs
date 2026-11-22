@@ -196,16 +196,51 @@ async function openImageAndReturn(page, control) {
   const imageUrl = new URL(await control.getAttribute('href'), sourceUrl).href;
   const tabs = page.context().pages().length;
   assert.ok([null, '', '_self'].includes(await control.getAttribute('target')), 'Image link must open in the current tab');
-  await Promise.all([page.waitForURL(imageUrl, { timeout: 7000 }), control.press('Enter')]);
+  await control.scrollIntoViewIfNeeded();
+  await control.focus();
+  const before = await control.evaluate(el => ({
+    id: el.id, focused: document.activeElement === el, bounds: el.getBoundingClientRect().toJSON(),
+    scrollY, viewport: innerHeight, open: [...document.querySelectorAll('details[open]')].map(group => group.id)
+  }));
+  assert.ok(before.focused && before.bounds.top < before.viewport && before.bounds.bottom > 0,
+    'The image link must have focus and be on screen before Enter: ' + JSON.stringify(before));
+  await Promise.all([page.waitForURL(imageUrl, { waitUntil: 'load', timeout: 7000 }), page.keyboard.press('Enter')]);
   assert.equal(page.context().pages().length, tabs);
-  await page.goBack({ waitUntil: 'domcontentloaded' });
+  const original = page.locator('img');
+  await original.evaluate(async image => {
+    await image.decode();
+    if (!image.naturalWidth) throw new Error('The full-size image did not load');
+  });
+  await page.goBack({ waitUntil: 'load' });
   assert.equal(page.url(), sourceUrl);
-  await page.waitForFunction(href => {
-    const current = document.activeElement;
-    if (current?.href !== href) return false;
-    const bounds = current.getBoundingClientRect();
-    return bounds.width > 0 && bounds.height > 0 && bounds.top < innerHeight && bounds.bottom > 0;
-  }, imageUrl, { timeout: 7000 });
+  try {
+    await page.waitForFunction(async href => {
+      const activeTop = () => {
+        const current = document.activeElement;
+        if (current?.href !== href) return null;
+        const bounds = current.getBoundingClientRect();
+        return bounds.width && bounds.height && bounds.top < innerHeight && bounds.bottom > 0 ? bounds.top : null;
+      };
+      const firstTop = activeTop();
+      if (firstTop === null) return false;
+      // A transient focus position can precede the browser's native Back scroll.
+      for (let frame = 0; frame < 3; frame++) {
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        const top = activeTop();
+        if (top === null || Math.abs(top - firstTop) > 1) return false;
+      }
+      return true;
+    }, imageUrl, { timeout: 7000 });
+  } catch (error) {
+    const after = await control.evaluate(el => ({
+      id: el.id, activeId: document.activeElement?.id, activeHref: document.activeElement?.href,
+      bounds: el.getBoundingClientRect().toJSON(), scrollY, viewport: innerHeight, fragment: location.hash,
+      open: [...document.querySelectorAll('details[open]')].map(group => group.id), returnState: history.state?.imageReturn,
+      navigation: performance.getEntriesByType('navigation')[0]?.type
+    }));
+    throw new Error('Back failed in ' + page.context().browser().browserType().name() + ': ' +
+      JSON.stringify({ sourceUrl, imageUrl, before, after }), { cause: error });
+  }
   assert.ok(await control.evaluate(el => el === document.activeElement), 'Return keyboard focus to the image that opened the original');
 }
 

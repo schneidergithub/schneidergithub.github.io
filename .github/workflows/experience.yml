@@ -96,6 +96,7 @@ jobs:
           for attempt in {1..30}; do
             if node scripts/check_experience_browser.cjs https://www.aaronschneider.org/experience/ &&
                node scripts/check_case_studies.cjs https://www.aaronschneider.org &&
+               node scripts/check_case_studies.cjs https://www.aaronschneider.org --webkit-gallery &&
                node scripts/check_publications.cjs https://www.aaronschneider.org; then exit 0; fi
             sleep 10
           done
