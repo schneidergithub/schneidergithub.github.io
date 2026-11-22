@@ -113,6 +113,10 @@ async function checkGallery(page, workUrl, width, directEntry) {
     assert.equal(await cover.locator('a').getAttribute('href'), group.items[0].image);
     const captions = await cover.locator('figcaption').allTextContents();
     assert.deepEqual(captions, group.items[0].caption ? [group.items[0].caption] : []);
+    if (group.id === 'westinghouse') {
+      assert.deepEqual(captions, [], 'Keep the Westinghouse cover free of descriptive captions');
+      assert.match(group.description, /load-tested.*tripled Elasticsearch throughput/);
+    }
     if (['bayer', 'propoint', 'westinghouse'].includes(group.id)) {
       await cover.locator('img').scrollIntoViewIfNeeded();
       await cover.locator('img').evaluate(img => img.decode());
