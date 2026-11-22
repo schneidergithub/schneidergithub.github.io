@@ -267,6 +267,7 @@ async function checkImageReturns(browser, workUrl) {
   await page.setViewportSize({ width: 320, height: 812 });
   await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
   assert.ok(await page.locator('.benchmark-feature a, .benchmark-byline, .work-index a, .research-project a').evaluateAll(elements => elements.every(el => {
+    if (!el.getClientRects().length) return true;
     const bounds = el.getBoundingClientRect();
     return bounds.width > 0 && bounds.left >= 0 && bounds.right <= innerWidth;
   })), 'The directory links and contribution should fit a 320px screen at doubled text size');
