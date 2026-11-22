@@ -228,24 +228,24 @@ async function openImageAndReturn(page, control) {
   });
   await page.goBack({ waitUntil: 'load' });
   assert.equal(page.url(), sourceUrl);
+  const sample = await page.evaluateHandle(() => ({ top: null, stableFrames: 0 }));
   try {
-    await page.waitForFunction(async href => {
-      const activeTop = () => {
-        const current = document.activeElement;
-        if (current?.href !== href) return null;
-        const bounds = current.getBoundingClientRect();
-        return bounds.width && bounds.height && bounds.top < innerHeight && bounds.bottom > 0 ? bounds.top : null;
-      };
-      const firstTop = activeTop();
-      if (firstTop === null) return false;
-      // A transient focus position can precede the browser's native Back scroll.
-      for (let frame = 0; frame < 3; frame++) {
-        await new Promise(resolve => requestAnimationFrame(resolve));
-        const top = activeTop();
-        if (top === null || Math.abs(top - firstTop) > 1) return false;
+    // Poll a synchronous observation. An async predicate returns a truthy
+    // Promise even on frames where the browser is still restoring focus.
+    await page.waitForFunction(({ id, href, sample }) => {
+      const el = document.activeElement;
+      const bounds = el?.getBoundingClientRect();
+      if (el?.id !== id || el.href !== href || !bounds.width || !bounds.height ||
+          bounds.top >= innerHeight || bounds.bottom <= 0) {
+        sample.stableFrames = 0;
+        sample.top = null;
+        return false;
       }
-      return true;
-    }, imageUrl, { timeout: 7000 });
+      sample.stableFrames = sample.top !== null && Math.abs(bounds.top - sample.top) <= 1
+        ? sample.stableFrames + 1 : 1;
+      sample.top = bounds.top;
+      return sample.stableFrames >= 4;
+    }, { href: imageUrl, id: before.id, sample }, { polling: 'raf', timeout: 7000 });
   } catch (error) {
     const after = await control.evaluate(el => ({
       id: el.id, activeId: document.activeElement?.id, activeHref: document.activeElement?.href,
@@ -255,6 +255,8 @@ async function openImageAndReturn(page, control) {
     }));
     throw new Error('Back failed in ' + page.context().browser().browserType().name() + ': ' +
       JSON.stringify({ sourceUrl, imageUrl, before, after }), { cause: error });
+  } finally {
+    await sample.dispose();
   }
   assert.ok(await control.evaluate(el => el === document.activeElement), 'Return keyboard focus to the image that opened the original');
 }
