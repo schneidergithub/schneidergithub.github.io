@@ -279,7 +279,9 @@ async function checkHomepage(page) {
     assert.ok(await nav.isVisible(), 'Show the main links when there is room');
     const brand = await page.locator('.site-header .brand').boundingBox();
     const links = await nav.boundingBox();
-    assert.ok(Math.min(brand.y + brand.height, links.y + links.height) > Math.max(brand.y, links.y), 'Wide header should use one row');
+    const navRows = await nav.locator('a').evaluateAll(items => items.map(a => Math.round(a.getBoundingClientRect().top)));
+    assert.ok(Math.min(brand.y + brand.height, links.y + links.height) > Math.max(brand.y, links.y) && new Set(navRows).size === 1,
+      'Keep the brand and all four links on one row at ' + width + 'px: ' + JSON.stringify({ brand, links, navRows }));
   }
   const signature = page.locator('.hero h1 .hero-signature');
   assert.equal(await signature.textContent(), 'A systematic approach.');
@@ -671,19 +673,42 @@ async function checkPhoneEntry(browser) {
   assert.equal(await menu.getAttribute('aria-expanded'), 'true');
   const links = nav.locator('a');
   assert.deepEqual(await links.evaluateAll(items => items.map(a => a.pathname)), ['/', '/experience/', '/work/', '/articles/']);
-  assert.equal(await nav.locator('a[aria-current="page"]').getAttribute('href'), '/articles/');
+  const currentPage = nav.locator('a[aria-current="page"]');
+  assert.equal(await currentPage.getAttribute('href'), '/articles/');
+  assert.ok(await currentPage.evaluate(el => parseFloat(getComputedStyle(el, '::after').height) >= 2),
+    'Mark the current section visually in the expanded menu');
+  await captureSection(page, header, 'mobile-menu-open');
   for (const link of await links.all()) {
     await page.keyboard.press('Tab');
     assert.ok(await link.evaluate(el => {
       const b = el.getBoundingClientRect();
       return document.activeElement === el && el.matches(':focus-visible') && getComputedStyle(el).outlineStyle !== 'none' &&
-        b.width >= 44 && b.height >= 44;
-    }), 'Menu links need keyboard focus in document order and 44px targets');
+        b.width >= 44 && b.height >= 48;
+    }), 'Menu links need keyboard focus in document order and 48px rows');
   }
   await page.keyboard.press('Escape');
   assert.equal(await nav.isVisible(), false);
   assert.equal(await menu.getAttribute('aria-expanded'), 'false');
   assert.ok(await menu.evaluate(el => document.activeElement === el), 'Escape should return focus to Menu');
+  await menu.press('Space');
+  await page.mouse.click(2, 12);
+  await nav.waitFor({ state: 'hidden' });
+  assert.equal(await menu.getAttribute('aria-expanded'), 'false', 'An outside click should close the menu');
+
+  await page.setViewportSize({ width: 1024, height: 812 });
+  await nav.waitFor({ state: 'visible' });
+  await links.first().focus();
+  await page.setViewportSize({ width: 375, height: 812 });
+  await nav.waitFor({ state: 'hidden' });
+  assert.ok(await menu.evaluate(el => document.activeElement === el), 'Move focus from a hidden link to Menu on resize');
+
+  await page.setViewportSize({ width: 1024, height: 812 });
+  await menu.waitFor({ state: 'hidden' });
+  assert.ok(await currentPage.evaluate(el => document.activeElement === el), 'Restore focus to the current desktop section');
+  await page.setViewportSize({ width: 375, height: 812 });
+  await menu.waitFor({ state: 'visible' });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  assert.equal(await menu.locator('.menu-glyph').evaluate(el => getComputedStyle(el, '::before').transitionDuration), '0s');
   await menu.press('Space');
   const workUrl = new URL('/work/', origin).href;
   await Promise.all([page.waitForURL(workUrl), nav.getByRole('link', { name: 'Selected Work' }).press('Enter')]);
