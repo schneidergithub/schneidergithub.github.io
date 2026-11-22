@@ -9,11 +9,7 @@ home_highlight:
   label: "Elasticsearch throughput"
   description: "At Westinghouse, I used load tests to find bottlenecks and tune the Elasticsearch configuration."
   link_label: "See the performance-testing results"
-title: "Test-driven performance improvement"
-category: "QA leadership & reliability"
+title: "Load testing a website release"
 context: "Westinghouse · Sogeti / Capgemini engagement"
-summary: "Using performance-testing results to diagnose bottlenecks and improve Elasticsearch throughput."
-outcome: "Tripled Elasticsearch throughput through configuration improvements informed by performance testing."
-technologies: ["Elasticsearch","JMeter","BlazeMeter","LoadRunner","QA automation"]
 ---
-As a QA Manager & SDET, I led automation and performance testing across 13 projects. Testing exposed bottlenecks that I addressed through infrastructure and configuration improvements.
+I load-tested a new release of Westinghouse’s $20 million website. I used the results to tune Elasticsearch, tripling its throughput.

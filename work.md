@@ -16,12 +16,12 @@ permalink: /work/
 <nav class="study-directory" aria-labelledby="case-studies-title">
   <h2 id="case-studies-title" tabindex="-1">Case studies</h2>
   <ul>
-    {% assign studies = site.pages | where: 'layout', 'case-study' | sort: 'title' %}
+    {% assign studies = site.pages | where: 'layout', 'case-study' | sort_natural: 'link_label' %}
     {% for study in studies %}<li><a href="{{ study.url | relative_url }}">{{ study.link_label | default: study.title | escape }}</a></li>{% endfor %}
   </ul>
 </nav>
 
-<p class="work-leadership"><a href="{{ '/experience/' | relative_url }}#engineering-leadership">Compare engineering leadership roles on Experience</a></p>
+<p class="work-leadership"><a href="{{ '/experience/' | relative_url }}#engineering-leadership">Engineering leadership</a></p>
 
 <section class="work-projects" aria-labelledby="project-summaries">
   <h2 id="project-summaries" tabindex="-1">Project summaries</h2>

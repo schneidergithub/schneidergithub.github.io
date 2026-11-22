@@ -1,21 +1,23 @@
 <article class="project-card" id="{{ project.slug }}">
   <div class="card-copy">
-    <p class="eyebrow">{{ project.category | escape }}</p>
-    <h2>{{ project.title | escape }}</h2>
     <p class="context">{{ project.context | escape }}</p>
-    <p>{{ project.summary | escape }}</p>
+    <h2>{{ project.title | escape }}</h2>
     <div class="project-detail">{{ project.content }}</div>
-    <p class="outcome"><strong>Outcome</strong> {{ project.outcome | escape }}</p>
     {% assign studies = site.pages | where: 'layout', 'case-study' | where: 'project', project.slug | sort: 'title' %}
-    {% for study in studies %}
-    <p class="case-link"><a href="{{ study.url | relative_url }}">{% if studies.size > 1 %}{{ study.link_label | default: study.title | escape }}{% else %}Read case study<span class="visually-hidden"> — {{ study.title | escape }}</span>{% endif %}</a></p>
-    {% endfor %}
-    <ul class="tags" aria-label="Technologies and methods">{% for tag in project.technologies %}<li>{{ tag | escape }}</li>{% endfor %}</ul>
+    {% if studies.size > 0 or project.publication %}
+    <ul class="project-links">
+      {% for study in studies %}
+      <li><a href="{{ study.url | relative_url }}">{{ study.link_label | default: study.title | escape }}</a></li>
+      {% endfor %}
+      {% if project.publication %}
+      <li><a href="{{ '/articles/' | relative_url }}#{{ project.publication.id | escape }}">{{ project.publication.label | escape }}</a></li>
+      {% endif %}
+    </ul>
+    {% endif %}
   </div>
   {% if project.image %}
   <figure>
     <a class="image-link" href="{{ project.image | relative_url }}" aria-label="View full-size screenshot: {{ project.image_alt | escape }}"><img src="{{ project.image | relative_url }}" alt="{{ project.image_alt | escape }}" width="{{ project.image_width }}" height="{{ project.image_height }}" loading="lazy" decoding="async"></a>
-    <figcaption>{{ project.caption | escape }}</figcaption>
   </figure>
   {% endif %}
 </article>

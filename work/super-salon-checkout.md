@@ -1,11 +1,11 @@
 ---
 layout: case-study
 project: propoint
-link_label: "Catching a one-cent checkout error at Super Salon"
+link_label: "Super Salon checkout"
 permalink: /work/super-salon-checkout/
 title: "One sale, two totals"
 context: "ProPoint Global · Super Salon"
-description: "A pre-release test bought eleven bottles of shampoo at a 15% discount. Super Salon’s online and desktop applications recorded the same sale one cent apart."
+description: "Before release, our checkout test bought eleven bottles of shampoo at a 15% discount. Super Salon’s online and desktop records came out one cent apart."
 figure_heading: "The two Super Salon applications"
 figures:
   - image: /assets/portfolio/supersalon.webp
@@ -17,19 +17,12 @@ figures:
     width: 1024
     height: 1001
     alt: "Super Salon web calendar showing appointments by stylist and checkout status."
-    caption: "The SaaS calendar shows a different part of the same product. Staff could see which appointments were ready for checkout and which had already been paid."
 ---
-
-## Following the sale past checkout
-
-At ProPoint, I developed software for both the salon desktop application and its SaaS counterpart. I also programmed credit-card terminals and barcode scanners, and wrote hundreds of automated tests across the product stack. A sale could begin online and end up in a salon’s desktop records. That gave us two places to check what the customer had paid.
-
-When the team introduced discounts for online purchases, an automated test applied the discount, recorded the sale in the SaaS application, and compared it with the desktop record after synchronization. Both applications accepted the sale. Comparing the amounts exposed the defect.
 
 ## Where the cent came from
 
-The online application carried four decimal places through the calculation. The desktop software rounded to two. The difference became visible on the discounted multi-item purchase, and the team caught it before the feature went live.
+At ProPoint, I developed software for both applications and wrote hundreds of automated tests. When we added discounts for online purchases, our test followed a sale through synchronization and compared the total at the desktop register with the amount charged online.
 
-Super Salon served tens of thousands of salons and handled more than $300 million in annual transactions. For the salon closing its books, the relevant question was simpler. Did the desktop record agree with the amount charged online? Testing the full trip through synchronization let us answer that question before release.
+Both applications accepted the sale. The online calculation carried four decimal places, and the desktop calculation rounded to two. Comparing the totals caught the error before the discount feature went live.
 
-I used the same question when reviewing a generated chess video. The file played, but what did the viewer actually see before the timer expired? [Read the chess puzzle QA case]({{ '/work/chess-puzzle-qa/' | relative_url }}).
+[How a chess puzzle gave away its answer]({{ '/work/chess-puzzle-qa/' | relative_url }}).

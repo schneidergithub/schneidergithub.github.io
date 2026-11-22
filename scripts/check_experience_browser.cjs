@@ -23,20 +23,21 @@ async function checkTarget(page, id) {
 
 async function checkLeadership(page, url, reviewDir) {
   await page.goto(new URL('/work/', url).href);
-  const link = page.getByRole('link', { name: 'Compare engineering leadership roles on Experience' });
+  const link = page.getByRole('link', { name: 'Engineering leadership', exact: true });
   assert.equal(await link.getAttribute('href'), '/experience/#engineering-leadership');
   await link.press('Enter');
   await checkTarget(page, 'engineering-leadership');
   const panel = page.locator('section[aria-labelledby="engineering-leadership"]');
   const summaries = panel.locator('h3');
-  assert.deepEqual(await summaries.allTextContents(), ['Nuix role details', 'Yo Pagos role details']);
-  assert.match(await panel.innerText(), /12 engineers[\s\S]*time zones/i);
-  assert.match(await panel.innerText(), /(?:five|5) developers/i);
+  assert.deepEqual(await summaries.allTextContents(), ['Nuix role', 'Yo Pagos role']);
+  const descriptions = await panel.locator('.leadership-roles p').allTextContents();
+  assert.match(descriptions[0], /12 engineers.*time zones.*testing and rollback/i);
+  assert.match(descriptions[1], /(?:five|5) developers.*DevSecOps.*fintech/i);
   const width = page.viewportSize().width;
   const version = new URL(url).hostname === '127.0.0.1' ? 'preview' : 'live';
   await page.screenshot({ path: path.join(reviewDir, version + '-leadership-' + width + '.jpg'), quality: 82 });
   for (const [name, id] of [['Nuix', 'nuix'], ['Yo Pagos', 'yo-pagos']]) {
-    const roleLink = panel.getByRole('link', { name: name + ' role details', exact: true });
+    const roleLink = panel.getByRole('link', { name: name + ' role', exact: true });
     assert.equal(await roleLink.getAttribute('href'), '#' + id);
     await roleLink.press('Enter');
     await checkTarget(page, id);
@@ -44,7 +45,7 @@ async function checkLeadership(page, url, reviewDir) {
   }
   if (width === 375) {
     const text = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
-    await panel.getByRole('link', { name: 'Nuix role details', exact: true }).press('Enter');
+    await panel.getByRole('link', { name: 'Nuix role', exact: true }).press('Enter');
     await checkTarget(page, 'nuix');
     const overflow = await page.evaluate(() => [...document.querySelectorAll('body *')]
       .filter(el => el.getBoundingClientRect().right > innerWidth + 1)

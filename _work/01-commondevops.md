@@ -3,15 +3,10 @@ order: 1
 slug: "commondevops"
 organization: "CommonDevOps"
 featured: false
-title: "AI-assisted software development"
-category: "AI research & DevSecOps"
+title: "AI testing and supply-chain research"
 context: "CommonDevOps · Full Stack Engineer"
-summary: "Combining frontier cloud models and local LLMs with a structured software development process."
-outcome: "Ongoing research and engineering work connecting AI-assisted development with testing and delivery automation."
-technologies: ["Python","JavaScript","CI/CD","TDD","Docker","Terraform"]
+publication:
+  id: benchmark-presentation
+  label: Benchmark presentation
 ---
-I work with a scrum team on software development and AI research, focusing on DevSecOps architecture, test-driven development, and CI/CD. The work combines GitHub Actions and cloud services with on-premises resources.
-
-Dr. Ian Miller and I co-authored a Terminal-Bench-Science task to test whether an AI agent can reproduce calculations from published research. [Explore the presentation and task]({{ '/articles/' | relative_url }}#benchmark-presentation).
-
-For the node-ipc incident report, I investigated public domain and DNS records and documented which questions required evidence from the registrar.
+I co-authored a scientific benchmark task with Dr. Ian Miller, examined domain registration and DNS records for the node-ipc investigation, and found a generated chess video that revealed its solution too soon.
