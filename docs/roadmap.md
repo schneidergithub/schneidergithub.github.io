@@ -25,6 +25,11 @@ The prior release established the signed essay, the illustrated Work directory a
 
 Use a pull request for each sprint, inspect its preview, and verify the released journey on the custom domain before advancing.
 
+**Scope added during delivery.** The chess video project is a qualitative benchmark of AI-assisted software development. The separate YouTube recording presents the benchmark. Use that distinction in the case, essay and publication index and provide a playable presentation entry. For the node-ipc investigation, credit Aaron as investigation lead and primary author of the post-incident report. Bring its DOI and two CommonDevOps recordings together in the final sprint. Preserve the original source timestamps and the limits of the investigation’s findings.
+
+**Sprint 1 review.** Experience now opens the CommonDevOps role with the approved task, current maintenance and review responsibilities, and trial analysis. The CD mark is distinguishable at phone size while the report retains its own cover in Articles. [Release 60](https://github.com/schneidergithub/schneidergithub.github.io/pull/60)
+
+
 <a id="sprint-review-and-proposed-next-three-sprints"></a>
 
 ## Released sprints · Contact, project evidence and publishing

@@ -8,7 +8,7 @@ const { chromium } = require('playwright-core');
 const origin = process.argv[2];
 const presentation = '/articles/#benchmark-presentation';
 const graderGuide = '/work/scientific-ai-benchmark/#checking-the-grader';
-const ids = ['e26_SSPpOP0', 'TZ04u6cj1ls', 'i0a7tXSLj3c'];
+const ids = ['e26_SSPpOP0', 'IXzLwNlLAI4', 'TZ04u6cj1ls', 'i0a7tXSLj3c'];
 const homeVideoIds = ['e26_SSPpOP0', 'i0a7tXSLj3c'];
 const reviewWidths = [375, 768, 1280];
 const publications = JSON.parse(execFileSync('ruby', [
@@ -18,7 +18,7 @@ const publications = JSON.parse(execFileSync('ruby', [
 const monthlyIssues = publications.filter(item => item.issue_month)
   .sort((a, b) => b.issue_month.localeCompare(a.issue_month));
 const publicationGroups = {
-  recordings: ['benchmark-presentation', 'node-ipc-interview', 'security-livestream'],
+  recordings: ['benchmark-presentation', 'chess-benchmark-presentation', 'node-ipc-interview', 'security-livestream'],
   'engineering-essays': ['fresh-sandbox-github'],
   'monthly-reviews': monthlyIssues.map(item => item.id),
   investigations: ['node-ipc-report']
@@ -889,7 +889,7 @@ async function check() {
           await checkPlayers(page, homeVideoIds);
           await checkCollection(page, width);
           await captureCollection(page, new URL(origin).hostname === '127.0.0.1' ? 'preview' : 'live');
-          console.log(width + 'px: verified two homepage players and all three recordings on Articles & Demos.');
+          console.log(width + 'px: verified two homepage players and the full recording collection on Articles & Demos.');
         }
         console.log(width + 'px: verified five homepage covers, project results, navigation and fit.');
       }
