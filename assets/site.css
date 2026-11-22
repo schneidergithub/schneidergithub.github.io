@@ -154,6 +154,7 @@ main{min-height:65vh}
   }
 }
 .study-evidence{border-top:1px solid var(--line);margin-top:2rem}
+.study-header + .study-evidence{border-top:0;margin-top:1.5rem}
 .study-figures{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr));gap:1.5rem;align-items:start}
 .study-figures figure{margin:0;padding:0;min-width:0}
 .study-image{display:grid;place-items:center;background:#fff;border:1px solid var(--line);border-radius:5px;overflow:hidden}

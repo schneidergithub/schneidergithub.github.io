@@ -93,7 +93,12 @@ async function checkGallery(page, workUrl, width, directEntry) {
     assert.equal(await section.locator('.gallery-heading p').first().innerText(), group.description);
     const cover = section.locator(':scope > .thumbnail-card');
     assert.equal(await cover.locator('a').getAttribute('href'), group.items[0].image);
-    assert.equal(await cover.locator('figcaption').innerText(), group.items[0].caption);
+    const captions = await cover.locator('figcaption').allTextContents();
+    assert.deepEqual(captions, group.items[0].caption ? [group.items[0].caption] : []);
+    if (group.id === 'bayer') {
+      assert.deepEqual(captions, [], 'Let the Aleve gallery preview stand on its own');
+      assert.ok((await cover.locator('a').innerText()).includes(group.items[0].title));
+    }
     const details = section.locator('details');
     const summary = details.locator('summary');
     if (group.items.length > 1) {
@@ -191,6 +196,12 @@ async function check() {
         assert.equal(await ending.getByRole('link', { name: /CommonDevOps.*LinkedIn/i }).getAttribute('href'), 'https://www.linkedin.com/company/commondevops/');
         const projectReturn = ending.getByRole('link', { name: projectNames[study.card] + ' project summary', exact: true });
         assert.equal(await projectReturn.getAttribute('href'), '/work/#' + study.card);
+        if (study.card === 'bayer') {
+          assert.match(await page.locator('.study-header .lead').innerText(), /lead software developer for Aleve\.com/i);
+          assert.equal(await page.locator('.study-header + .study-evidence').count(), 1, 'Show project images directly after the role');
+          assert.equal(await page.locator('.study-figures figcaption').count(), 0);
+          await captureWork(page, 'bayer-showcase');
+        }
         if (study.card === 'westinghouse') {
           assert.match(await page.locator('.case-study').innerText(), /Elasticsearch/i);
           if (width === 1280) await checkShareImage(page, 'westinghouse-performance.jpg');
