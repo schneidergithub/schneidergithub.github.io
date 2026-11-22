@@ -13,7 +13,15 @@ The standing scrum team includes a UI/UX specialist, a graphic designer and prof
 - MVP release: published through PR #1; the YouTube subscription button followed in PR #2. Live domains, pages, images, and the unchanged PGP key were verified.
 - The charcoal-and-blue design and manual edits through `4b3ad29` merged in [PR #3](https://github.com/schneidergithub/schneidergithub.github.io/pull/3), including removal of education and certifications from the Experience page. [PR #4](https://github.com/schneidergithub/schneidergithub.github.io/pull/4) added versioned stylesheet and favicon URLs.
 
-## Three-sprint content release · Scientific QA, incident investigation and engineering leadership
+## Released sprints · Scientific QA, incident investigation and engineering leadership
+
+**Live and accepted, November 21, 2026.** All 12 stories (44 planned points) shipped in three sequential releases. The team checked each release on the custom domain before starting implementation of the next sprint.
+
+| Sprint | Accepted scope | Published journeys | Production review |
+| --- | --- | --- | --- |
+| [1 · Scientific QA](https://github.com/schneidergithub/schneidergithub.github.io/pull/30) | 3 stories, 10 points | Open the grader guide from the recording, follow a timestamped decision and return to the presentation. | [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44963286032) |
+| [2 · Incident investigation and navigation](https://github.com/schneidergithub/schneidergithub.github.io/pull/31) | 4 stories, 16 points | Trace the investigation and both participant accounts. Return to the case directory or the named project. | [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44964202846) |
+| [3 · Leadership, chess QA and recordings](https://github.com/schneidergithub/schneidergithub.github.io/pull/32) | 5 stories, 18 points | Share a leadership role, compare the two stages of a puzzle video, and choose inline playback, YouTube or the written grader guide. | [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44964847811) |
 
 **Kickoff and review, November 21, 2026.** The technical project manager, product reviewer, editor, frontend developer and QA reviewed the production portfolio and the timestamped video sources. The benchmark case described the task but offered little evidence about testing its grader. The node-ipc investigation had a report and interview entry, but no case explaining Aaron’s contribution. The Experience page named two leadership roles but gave hiring managers no direct links to either role.
 
@@ -61,6 +69,14 @@ Product and the technical project manager reviewed the November 21 transcript ed
 **Accepted and live.** Four stories shipped (16 planned points). The writers and independent reviewer checked the two interview passages, Aaron’s investigation, the registrar’s response and the first-edition DOI. Phone review caught the package name breaking across lines, so the revised headline opens with *node-ipc*. QA followed the directory and named project links, the homepage project jump, both in-page companion links and the two CommonDevOps cases. [Release #31](https://github.com/schneidergithub/schneidergithub.github.io/pull/31) · [Production checks](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44964202846)
 
 **Retrospective.** Following a link from a shared case revealed a problem that checking the URL alone missed. In Sprint 3, the reviewer will compare the visible action with what happens next, especially when choosing between inline playback, the source video and the written guide.
+
+### Sprint 3 review · Leadership, chess QA and recordings
+
+**Accepted and live.** Five stories shipped (18 planned points). From Selected Work, reviewers opened the leadership comparison and the actual Nuix and Yo Pagos roles. Both team sizes and their responsibilities fit together on a 375px phone. All eleven employer headings have stable IDs. At 200% text size, QA found that Experience could scroll horizontally. The released layout allows longer headings to wrap and gives the employer heading its own row when needed.
+
+The professional writers verified the chess milestone and three recording passages. The graphic designer checked that the proposed thinking and reveal checks read in sequence on phone and desktop. The UI/UX reviewer used the featured and shared recording entries, confirmed that the player opens in place, and followed **Watch on YouTube** and the written guide to their distinct destinations. The featured title, complete poster and both playback choices fit on the first 375 × 812 screen. QA verified the public source links with scripts disabled. [Release #32](https://github.com/schneidergithub/schneidergithub.github.io/pull/32) · [Production checks and captures](https://github.com/schneidergithub/schneidergithub.github.io/actions/runs/44964847811)
+
+**Retrospective.** A keyboard walkthrough and a 200% text check found issues a link-status report could miss. At the next change to recording controls, design and QA will also review a compact secondary recording at 320px with enlarged text. The featured recording title can split *meta-analysis* at its hyphen on a 375px screen. Design will revisit that line break with the next recording typography update. The signed engineering essay and full-size gallery navigation remain ordered follow-up work.
 
 ## Released sprints · Mobile browsing, project evidence and contact
 
