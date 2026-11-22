@@ -333,9 +333,9 @@ async function check() {
         assert.deepEqual(await footerLinks.evaluateAll(items => items.map(a => a.href)), [
           'https://www.linkedin.com/in/aarondrewschneider/', 'https://www.youtube.com/@commondevops'
         ]);
-        assert.equal(await actions.count(), 3);
-        assert.equal(await ending.getByRole('link', { name: 'Aaron on LinkedIn', exact: true }).getAttribute('href'), 'https://www.linkedin.com/in/aarondrewschneider/');
-        assert.equal(await ending.getByRole('link', { name: 'CommonDevOps on LinkedIn', exact: true }).getAttribute('href'), 'https://www.linkedin.com/company/commondevops/');
+        assert.equal(await actions.count(), 2);
+        const discuss = ending.getByRole('link', { name: 'Discuss a project', exact: true });
+        assert.equal(await discuss.getAttribute('href'), '/#connect');
         const projectReturn = ending.getByRole('link', { name: projectNames[study.card] + ' project summary', exact: true });
         assert.equal(await projectReturn.getAttribute('href'), '/work/#' + study.card);
         if (study.card === 'bayer') {
@@ -442,21 +442,25 @@ async function check() {
           await image.evaluate(img => img.decode());
         }
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Horizontal overflow on ' + page.url());
-        if (study.card === 'propoint' && width === 375) {
+        if (study.card === 'propoint') {
           await ending.evaluate(el => el.scrollIntoView({ block: 'center' }));
-          const personal = ending.getByRole('link', { name: /Aaron.*LinkedIn/i });
-          const team = ending.getByRole('link', { name: /CommonDevOps.*LinkedIn/i });
-          await team.focus();
+          await projectReturn.focus();
           await page.keyboard.press('Shift+Tab');
-          for (const link of [personal, team, projectReturn]) {
-            assert.ok(await link.evaluate(el => {
-              const style = getComputedStyle(el);
-              return document.activeElement === el && el.matches(':focus-visible') &&
-                style.outlineStyle !== 'none' && parseFloat(style.outlineWidth) > 0;
-            }), 'Tab should visibly focus the individual, team and return links in that order');
-            if (link === personal) await captureWork(page, 'super-salon-contact');
-            if (link !== projectReturn) await page.keyboard.press('Tab');
-          }
+          assert.ok(await discuss.evaluate(el => el === document.activeElement && el.matches(':focus-visible') &&
+            getComputedStyle(el).outlineStyle !== 'none'), 'Show keyboard focus on the contact action');
+          await captureWork(page, 'super-salon-contact');
+          await page.keyboard.press('Tab');
+          assert.ok(await projectReturn.evaluate(el => el === document.activeElement && el.matches(':focus-visible') &&
+            getComputedStyle(el).outlineStyle !== 'none'), 'Tab should move from contact to the project summary');
+          await discuss.press('Enter');
+          assert.equal(page.url(), new URL('/#connect', workUrl).href);
+          assert.equal(await page.locator(':target').getAttribute('id'), 'connect');
+          const contacts = page.getByRole('contentinfo');
+          assert.ok(await contacts.getByRole('heading', { name: 'Work with me', exact: true }).isVisible());
+          assert.ok(await contacts.locator('a[href="https://www.linkedin.com/in/aarondrewschneider/"]').isVisible());
+          assert.ok(await contacts.locator('a[href="https://www.linkedin.com/company/commondevops/"]').isVisible());
+          await page.goBack();
+          assert.equal(page.url(), workUrl + study.path + '/');
         }
         await projectReturn.press('Enter');
         assert.equal(page.url(), workUrl + '#' + study.card);

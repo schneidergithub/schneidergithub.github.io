@@ -158,7 +158,7 @@ async function checkConsultingFooter(page, width) {
   const layout = footer.locator('#connect');
   assert.equal(await footer.getAttribute('id'), 'footer');
   const heading = layout.getByRole('heading', { name: 'Work with me', exact: true });
-  const signature = layout.locator('.footer-signature');
+  const signature = footer.locator('.footer-signature');
   assert.equal(await signature.innerText(), 'Aaron Schneider');
   assert.ok(await signature.evaluate(async el => {
     const style = getComputedStyle(el);
@@ -168,12 +168,12 @@ async function checkConsultingFooter(page, width) {
   const photo = layout.getByRole('img', { name: 'Aaron beside a waterfall' });
   await decodeCover(photo);
   const frame = await photo.locator('..').boundingBox();
-  assert.ok(frame.width >= 56 && frame.width <= 72 && Math.abs(frame.width - frame.height) < 1);
-  const name = await signature.boundingBox();
-  assert.ok(frame.x + frame.width <= name.x && name.y < frame.y + frame.height && frame.y < name.y + name.height,
-    'Keep the portrait beside the signature');
+  assert.ok(frame.width >= 72 && frame.width <= 96 && Math.abs(frame.width - frame.height) < 1);
+  const invitation = await heading.boundingBox();
+  assert.ok(frame.x + frame.width <= invitation.x && invitation.y < frame.y + frame.height &&
+    frame.y < invitation.y + invitation.height, 'Pair the portrait with the invitation');
 
-  const links = layout.getByRole('link');
+  const links = footer.getByRole('link');
   assert.equal(await links.count(), 3);
   const destinations = [
     ['Individual consulting with Aaron Schneider on LinkedIn', 'https://www.linkedin.com/in/aarondrewschneider/', 'linkedin'],
@@ -181,7 +181,7 @@ async function checkConsultingFooter(page, width) {
     ['CommonDevOps on YouTube', 'https://www.youtube.com/@commondevops', 'youtube']
   ];
   for (const [label, url, icon] of destinations) {
-    const link = layout.getByRole('link', { name: label, exact: true });
+    const link = footer.getByRole('link', { name: label, exact: true });
     assert.equal(await link.getAttribute('href'), url);
     assert.equal(await page.locator('a[href="' + url + '"]').count(), 1, 'Offer each destination once');
     const shape = link.locator('svg use');
@@ -190,25 +190,22 @@ async function checkConsultingFooter(page, width) {
     const box = await link.boundingBox();
     assert.ok(box.width >= 44 && box.height >= 44, 'Keep each contact easy to activate');
   }
-  const channel = layout.getByRole('link', { name: 'CommonDevOps on YouTube' });
-  const band = await footer.boundingBox();
-  const inner = await layout.boundingBox();
-  const header = await page.locator('.site-header').boundingBox();
-  assert.ok(Math.abs(band.x) <= 1 && Math.abs(band.width - width) <= 1 &&
-    Math.abs(inner.x - header.x) <= 1 && Math.abs(inner.width - header.width) <= 1,
-    'Use a full-width footer with its content aligned to the header');
-  const options = await heading.boundingBox();
-  const channelBox = await channel.boundingBox();
-  const compact = await page.evaluate(() => matchMedia('(max-width: 52em)').matches);
-  if (compact) {
-    assert.ok(channelBox.x >= name.x + name.width - 1 && channelBox.y < frame.y + frame.height &&
-      options.y >= Math.max(frame.y + frame.height, channelBox.y + channelBox.height),
-      'Group the portrait, name and channel above the consulting options');
-    const contacts = await layout.locator('.consulting-links a').evaluateAll(items => items.map(a => a.getBoundingClientRect().toJSON()));
-    assert.ok(contacts[0].bottom <= contacts[1].top + 1);
-  } else {
-    assert.ok(options.x >= name.x + name.width && channelBox.x >= options.x + options.width - 1,
-      'Arrange identity, consulting and the channel across the desktop footer');
+  const card = await footer.boundingBox();
+  assert.ok(card.width <= 802 && card.x >= 12 && Math.abs(card.x * 2 + card.width - width) <= 2,
+    'Center the signed card with visible page margins');
+  const contacts = await layout.locator('.consulting-links a').evaluateAll(items => items.map(a => a.getBoundingClientRect().toJSON()));
+  const name = await signature.boundingBox();
+  const channel = await footer.getByRole('link', { name: 'CommonDevOps on YouTube' }).boundingBox();
+  assert.ok(contacts[0].top >= frame.y + frame.height - 1 && Math.max(...contacts.map(a => a.bottom)) <= name.y + 1,
+    'Present the invitation and consulting routes before the signature');
+  assert.ok(name.x + name.width <= channel.x && channel.y < name.y + name.height && name.y < channel.y + channel.height,
+    'Pair the signature and channel on the closing strip');
+  if (width <= 375) assert.ok(contacts[0].bottom <= contacts[1].top + 1, 'Stack the two phone contact routes');
+  if (width === 1280) {
+    assert.ok(Math.abs(contacts[0].top - contacts[1].top) <= 1, 'Align desktop consulting routes');
+    assert.ok(await layout.locator('.consulting-links a > span:first-of-type').evaluateAll(labels =>
+      labels.every(el => el.offsetHeight <= parseFloat(getComputedStyle(el).lineHeight) + 1)),
+    'Give both desktop contact labels room for a single line');
   }
 
   if (width === 320) {
@@ -224,14 +221,12 @@ async function checkConsultingFooter(page, width) {
     assert.equal(await page.locator(':target').getAttribute('id'), 'connect');
     await captureSection(page, footer, 'home-consulting-footer');
     await page.locator('#home-media a:visible').last().focus();
-    const order = compact && await layout.evaluate(el => getComputedStyle(el).getPropertyValue('reading-flow') === 'grid-rows')
-      ? [destinations[2], destinations[0], destinations[1]] : destinations;
-    for (const [label] of order) {
+    for (const [label] of destinations) {
       await page.keyboard.press('Tab');
-      const link = layout.getByRole('link', { name: label, exact: true });
+      const link = footer.getByRole('link', { name: label, exact: true });
       assert.ok(await link.evaluate(el => el === document.activeElement && el.matches(':focus-visible') &&
-        getComputedStyle(el).outlineColor === 'rgb(48, 37, 29)' && getComputedStyle(el).outlineStyle !== 'none'),
-        'Show dark keyboard focus on ' + label);
+        getComputedStyle(el).outlineStyle !== 'none' && parseFloat(getComputedStyle(el).outlineWidth) >= 2),
+        'Show keyboard focus on ' + label);
     }
   }
 }
