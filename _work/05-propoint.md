@@ -7,7 +7,6 @@ home_highlight:
   organization: "ProPoint · Super Salon"
   label: "Caught a checkout error before release"
   description: "An automated test found a one-cent rounding difference between the online and desktop totals for the same sale."
-  link_label: "Read the checkout case study"
 title: "Super Salon checkout and hardware"
 context: "ProPoint Global / Super Salon"
 image: "/assets/images/propoint-guestpass.webp"

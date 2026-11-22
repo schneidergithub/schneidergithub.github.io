@@ -5,7 +5,7 @@ layout: default
   <header class="study-header">
     <a class="study-back" href="{{ '/work/' | relative_url }}#case-studies-title">All case studies</a>
     <p class="eyebrow">{{ page.context | escape }}</p>
-    <h1>{{ page.title | escape }}</h1>
+    <h1 id="case-title" tabindex="-1">{{ page.title | escape }}</h1>
     <p class="lead">{{ page.description | escape }}</p>
   </header>
   {% assign study_body = content | strip %}

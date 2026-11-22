@@ -178,7 +178,7 @@ if '/articles/' in parsed:
         entry = item.get('id', '')
         if not entry or entry not in collection.ids or '#' + entry not in collection.links:
             errors.append(f"/articles/: missing entry link for {item['title']}")
-        for source in (item, item.get('related', {})):
+        for source in (item, item.get('related', {}), *item.get('editions', [])):
             if source and source['url'] not in collection.links:
                 errors.append(f"/articles/: missing source {source['url']}")
 for route, name, count in [('/work/', 'project-card', 6), ('/articles/', 'publication', publication_count), ('/experience/', 'role', 11), ('/', 'feature', 3)]:

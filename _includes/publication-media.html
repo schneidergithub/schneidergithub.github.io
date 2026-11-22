@@ -1,5 +1,15 @@
 {% assign media = include.publication %}
-{% capture preview %}<img class="publication-preview" src="{{ media.preview.src | relative_url | escape }}" alt="{{ media.preview.alt | escape }}" width="{{ media.preview.width }}" height="{{ media.preview.height }}"{% if include.eager %} fetchpriority="high"{% else %} loading="lazy"{% endif %} decoding="async">{% endcapture %}
+{% capture load_hint %}{% if include.eager %}fetchpriority="high"{% else %}loading="lazy"{% endif %}{% endcapture %}
+{% capture preview %}
+  {% if media.id == 'benchmark-presentation' %}
+    <picture class="benchmark-cover">
+      {% unless include.link_cover %}<source media="(min-width: 851px)" srcset="{{ media.preview.src | relative_url | escape }}">{% endunless %}
+      <img class="publication-preview" src="{{ '/assets/publications/benchmark-session.jpg' | relative_url }}" alt="Three participants in the Terminal-Bench-Science presentation" width="1280" height="720" {{ load_hint }} decoding="async">
+    </picture>
+  {% else %}
+    <img class="publication-preview" src="{{ media.preview.src | relative_url | escape }}" alt="{{ media.preview.alt | escape }}" width="{{ media.preview.width }}" height="{{ media.preview.height }}" {{ load_hint }} decoding="async">
+  {% endif %}
+{% endcapture %}
 {% if media.type == 'Video' %}
 {% assign video_id = media.url | remove: 'https://www.youtube.com/watch?v=' %}
 <details class="publication-video" name="publication-players">
@@ -12,7 +22,7 @@
 </details>
 <a class="watch-source" href="{{ media.url | escape }}">Watch on YouTube<span class="visually-hidden"> · {{ media.title | escape }}</span></a>
 {% elsif include.link_cover %}
-<a class="collection-cover" href="{{ media.url | escape }}" tabindex="-1">{{ preview }}</a>
+<a class="collection-cover{% if media.id == 'node-ipc-report' %} report-masthead{% endif %}" href="{{ media.url | escape }}" tabindex="-1">{{ preview }}</a>
 {% else %}
 {{ preview }}
 {% endif %}

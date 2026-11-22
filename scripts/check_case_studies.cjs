@@ -269,7 +269,7 @@ async function check() {
     for (const width of [375, 1280]) {
       const page = await browser.newPage({ viewport: { width, height: width === 375 ? 812 : 900 } });
       await page.goto(new URL('/', workUrl).href);
-      const allProjects = page.getByRole('link', { name: 'View all projects', exact: true });
+      const allProjects = page.getByRole('link', { name: 'Browse project summaries', exact: true });
       assert.equal(await allProjects.getAttribute('href'), '/work/#project-summaries');
       await allProjects.press('Enter');
       assert.equal(page.url(), workUrl + '#project-summaries');
