@@ -73,10 +73,13 @@ permalink: /
 </section>
 
 <section class="section contact-card" id="connect" aria-labelledby="connect-title">
-  <h2 id="connect-title">Work with me</h2>
+  <div class="contact-heading">
+    <span class="contact-portrait"><img src="{{ '/assets/portfolio/aaron-schneider-portrait.jpg' | relative_url }}" alt="Aaron Schneider" width="200" height="200" loading="lazy" decoding="async"></span>
+    <h2 id="connect-title">Work with me</h2>
+  </div>
   <dl class="contact-routes">
     <div class="contact-route">
-      <dt>Engineering roles &amp; individual consulting</dt>
+      <dt>Individual consulting</dt>
       <dd><a href="https://www.linkedin.com/in/aarondrewschneider/">Aaron Schneider on LinkedIn</a></dd>
     </div>
     <div class="contact-route">
