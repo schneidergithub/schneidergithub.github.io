@@ -241,3 +241,15 @@
     alt: "April summary cover with four small technology and security illustrations"
     width: 640
     height: 359
+- title: "Why I Came to Trust Automated Testing"
+  id: why-i-came-to-trust-automated-testing
+  type: "Engineering essay"
+  url: "/articles/why-i-came-to-trust-automated-testing/"
+  description: "Our distributed team agreed on what each user story had to prove. A discounted sale put that agreement to the test."
+  attribution: "By Aaron Schneider"
+  case_url: "/work/from-booking-to-checkout/"
+  preview:
+    src: "/assets/portfolio/thumbs/supersalon.webp"
+    width: 520
+    height: 293
+    alt: "Super Salon desktop register showing a sale and its payment controls."

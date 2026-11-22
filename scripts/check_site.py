@@ -13,9 +13,9 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / '_site'
 CHESS_ESSAY = '/articles/why-chess-pros-sometimes-ignore-super-intelligent-ai/'
-ESSAYS = ['/articles/fresh-sandbox-github/', CHESS_ESSAY]
+ESSAYS = ['/articles/fresh-sandbox-github/', CHESS_ESSAY, '/articles/why-i-came-to-trust-automated-testing/']
 PAGES = ['/', '/experience/', '/work/', '/articles/', '/pgp/', '/404.html'] + ESSAYS
-STUDIES = ['/work/super-salon-checkout/', '/work/indiana-case-archives/', '/work/bayer-aleve/',
+STUDIES = ['/work/from-booking-to-checkout/', '/work/super-salon-checkout/', '/work/indiana-case-archives/', '/work/bayer-aleve/',
            '/work/westinghouse-performance/', '/work/scientific-ai-benchmark/', '/work/node-ipc-investigation/',
            '/work/chess-puzzle-qa/']
 SHARE_CARDS = {

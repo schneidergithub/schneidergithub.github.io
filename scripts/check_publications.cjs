@@ -20,7 +20,7 @@ const monthlyIssues = publications.filter(item => item.issue_month)
   .sort((a, b) => b.issue_month.localeCompare(a.issue_month));
 const publicationGroups = {
   recordings: ['benchmark-presentation', 'chess-benchmark-presentation', 'elo-rating-system', 'node-ipc-interview', 'node-ipc-follow-up', 'security-livestream'],
-  'engineering-essays': ['why-chess-pros-sometimes-ignore-super-intelligent-ai', 'fresh-sandbox-github'],
+  'engineering-essays': ['why-chess-pros-sometimes-ignore-super-intelligent-ai', 'fresh-sandbox-github', 'why-i-came-to-trust-automated-testing'],
   'monthly-reviews': monthlyIssues.map(item => item.id),
   investigations: ['node-ipc-report']
 };
@@ -451,12 +451,12 @@ async function checkHomepage(page) {
     }
   }
   if (width === 375 || width === 1280) await captureSection(page, results, 'home-results');
-  const checkout = page.locator('.feature').filter({ has: page.locator('a[href="/work/super-salon-checkout/"]') });
+  const checkout = page.locator('.feature').filter({ has: page.locator('a[href="/work/from-booking-to-checkout/"]') });
   const guestPassCover = await checkout.locator('.feature-cover img').getAttribute('src');
   assert.equal(new URL(guestPassCover, origin).pathname, '/assets/portfolio/thumbs/guestpass-mockups-01-orig.webp',
     'Feature the Guest Pass salon finder on the homepage checkout card');
-  assert.match(await checkout.locator('h3').innerText(), /caught.*checkout.*before release/i);
-  assert.match(await checkout.locator('p').last().innerText(), /automated test.*one.cent.*online.*desktop/i);
+  assert.match(await checkout.locator('h3').innerText(), /building software for 30,000 salons/i);
+  assert.match(await checkout.locator('p').last().innerText(), /booking.*phone.*payment.*front desk/i);
   await checkConsultingFooter(page, width);
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Homepage overflows');
   if (width === 1280) {
@@ -835,7 +835,7 @@ async function checkNoScript(browser) {
   const reviewDir = path.join(process.env.RUNNER_TEMP || os.tmpdir(), 'homepage-previews');
   fs.mkdirSync(reviewDir, { recursive: true });
   const version = new URL(origin).hostname === '127.0.0.1' ? 'preview' : 'live';
-  const checkout = page.locator('.feature').filter({ has: page.locator('a[href="/work/super-salon-checkout/"]') });
+  const checkout = page.locator('.feature').filter({ has: page.locator('a[href="/work/from-booking-to-checkout/"]') });
   await checkout.evaluate(el => el.scrollIntoView({ block: 'center' }));
   await page.screenshot({ path: path.join(reviewDir, version + '-super-salon-outcome-375x812.jpg'), quality: 82 });
   const header = page.locator('.site-header');

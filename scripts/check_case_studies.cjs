@@ -6,6 +6,7 @@ const { chromium, webkit } = require('playwright-core');
 const gallery = require('../_data/gallery.json');
 
 const studies = [
+  { card: 'propoint', path: 'from-booking-to-checkout', label: 'From Booking to Checkout', images: 4 },
   { card: 'propoint', path: 'super-salon-checkout', label: 'Super Salon checkout', images: 2 },
   { card: 'indiana', path: 'indiana-case-archives', label: 'Indiana case archives', images: 0 },
   { card: 'bayer', path: 'bayer-aleve', label: 'Bayer’s Aleve website', images: 2 },
@@ -383,7 +384,7 @@ async function check() {
           for (const detail of [/one.county pilot/i, /filename/i, /repair/i, /statewide/i]) assert.match(lead, detail);
           assert.match(title, /92 counties/i);
         }
-        if (study.card === 'propoint') {
+        if (study.path === 'super-salon-checkout') {
           const lead = await page.locator('.study-header .lead').innerText();
           for (const detail of [/eleven bottles|11 bottles/i, /15%/, /one.cent|1¢/i]) assert.match(lead, detail);
         }
@@ -485,7 +486,7 @@ async function check() {
           await image.evaluate(img => img.decode());
         }
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Horizontal overflow on ' + page.url());
-        if (study.card === 'propoint') {
+        if (study.path === 'super-salon-checkout') {
           await ending.evaluate(el => el.scrollIntoView({ block: 'center' }));
           await projectReturn.focus();
           await page.keyboard.press('Shift+Tab');

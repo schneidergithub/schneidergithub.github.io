@@ -25,4 +25,6 @@ At ProPoint, I developed software for both applications and wrote hundreds of au
 
 Both applications accepted the sale. The online calculation carried four decimal places, and the desktop calculation rounded to two. Comparing the totals caught the error before the discount feature went live.
 
+[How the salon software worked]({{ '/work/from-booking-to-checkout/' | relative_url }}) · [Why I came to trust automated testing]({{ '/articles/why-i-came-to-trust-automated-testing/' | relative_url }})
+
 [How a chess puzzle gave away its answer]({{ '/work/chess-puzzle-qa/' | relative_url }}).

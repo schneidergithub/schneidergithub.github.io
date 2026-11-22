@@ -14,7 +14,7 @@ const evidenceByRole = {
   commondevops: ['/work/chess-puzzle-qa/', '/work/node-ipc-investigation/', '/work/scientific-ai-benchmark/'],
   bcforward: ['/work/indiana-case-archives/', '/work/#eli-lilly'],
   'sogeti-capgemini': ['/work/westinghouse-performance/'],
-  'propoint-global': ['/work/super-salon-checkout/'],
+  'propoint-global': ['/work/from-booking-to-checkout/', '/articles/why-i-came-to-trust-automated-testing/'],
   ciber: ['/work/bayer-aleve/'],
   'berkeley-communications': ['/work/#gallery-berkeley'],
   'bucky-ball-web': ['/work/#gallery-bucky-ball']
@@ -91,6 +91,8 @@ async function checkEvidence(page, url) {
         await image.locator('img').evaluate(img => img.decode());
       } else if (destination.hash) {
         assert.equal(await page.locator('.project-card:target h2').innerText(), 'Automating internal security checks');
+      } else if (href.startsWith('/articles/')) {
+        assert.equal(await page.locator('.engineering-essay h1').innerText(), 'Why I Came to Trust Automated Testing');
       } else {
         assert.ok(await page.locator('.case-study h1').isVisible(), 'Open the case study at ' + href);
       }
