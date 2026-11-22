@@ -2,7 +2,7 @@
 index_order: 2
 index_feature: metric
 index_case: /work/westinghouse-performance/
-index_gallery_label: Westinghouse image
+index_gallery_label: Westinghouse company history banner
 order: 4
 slug: "westinghouse"
 organization: "Westinghouse"

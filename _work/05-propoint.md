@@ -2,7 +2,15 @@
 index_order: 1
 index_feature: product
 index_case: /work/from-booking-to-checkout/
-index_title: From booking to checkout
+index_title: From mobile booking to front-desk checkout
+index_scale: Around 30,000
+index_scale_label: salons used Super Salon
+index_volume: The platform handled hundreds of millions of dollars in transactions annually.
+index_screens:
+  - title: Book a service
+    label: Guest Pass booking
+  - title: Desktop checkout
+    label: Super Salon checkout
 index_gallery_label: Guest Pass and Super Salon screens
 order: 5
 slug: "propoint"
@@ -19,9 +27,5 @@ publication:
   label: "Why I Came to Trust Automated Testing"
 title: "Guest Pass and Super Salon"
 context: "ProPoint Global / Super Salon"
-image: "/assets/images/propoint-guestpass.webp"
-image_alt: "Super Salon Guest Pass mobile screens showing nearby salon locations, wait times, and store details."
-image_width: 1071
-image_height: 800
 ---
-I built Guest Pass for mobile booking and developed Super Salon’s scheduling and checkout software. Around 30,000 salons used Super Salon, which handled hundreds of millions of dollars in transactions annually.
+I built Guest Pass for mobile booking and developed Super Salon’s scheduling and checkout software, including the payment terminals and barcode scanners.

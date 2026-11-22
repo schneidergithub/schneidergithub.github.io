@@ -3,7 +3,7 @@ layout: default
 ---
 <article class="case-study">
   <header class="study-header">
-    <a class="study-back" href="{{ '/work/' | relative_url }}#case-studies-title">All case studies</a>
+    <a class="study-back" href="{{ '/work/' | relative_url }}#selected-work">Back to Selected Work</a>
     <p class="eyebrow">{{ page.context | escape }}</p>
     <h1 id="case-title" tabindex="-1">{{ page.title | escape }}</h1>
     <p class="lead">{{ page.description | escape }}</p>
@@ -33,7 +33,8 @@ layout: default
   <nav class="study-ending" aria-label="After this case study">
     <a class="button" href="{{ '/' | relative_url }}#connect">Discuss a project</a>
     {% assign project = site.work | where: 'slug', page.project | first %}
-    <a class="study-return" href="{{ '/work/' | relative_url }}#{{ page.project | escape }}">{{ project.organization | default: project.title | escape }} project summary</a>
+    {% capture default_label %}{{ project.organization | default: project.title }} project summary{% endcapture %}
+    <a class="study-return" href="{{ '/work/' | relative_url }}#{{ page.work_return_id | default: page.project | escape }}">{{ page.work_return_label | default: default_label | escape }}</a>
   </nav>
 </article>
 {% if figures %}<script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}" defer></script>{% endif %}
