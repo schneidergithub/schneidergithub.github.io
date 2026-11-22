@@ -18,9 +18,17 @@
     <span class="close-player">Close player<span class="visually-hidden"> for {{ media.title | escape }}</span></span>
   </summary>
   <template><iframe width="640" height="360" src="https://www.youtube-nocookie.com/embed/{{ video_id | escape }}?autoplay=1&amp;playsinline=1" title="{{ media.title | escape }}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></template>
-  <noscript><p class="playback-note">Inline playback requires JavaScript. Use the YouTube link below to watch.</p></noscript>
+  {% unless include.spotlight %}<noscript><p class="playback-note">Inline playback requires JavaScript. Use the YouTube link below to watch.</p></noscript>{% endunless %}
 </details>
+{% if include.spotlight %}
+<noscript>
+  <a class="video-poster" href="{{ media.url | escape }}" aria-label="Play {{ media.title | escape }} on YouTube">
+    {{ preview }}<span class="play-mark"><span class="play-caption">Play recording</span></span>
+  </a>
+</noscript>
+{% else %}
 <a class="watch-source" href="{{ media.url | escape }}">Watch on YouTube<span class="visually-hidden"> · {{ media.title | escape }}</span></a>
+{% endif %}
 {% elsif include.link_cover %}
 <a class="collection-cover{% if media.id == 'node-ipc-report' %} report-masthead{% elsif media.id == 'fresh-sandbox-github' %} essay-board{% endif %}" href="{{ include.cover_url | default: media.url | escape }}" tabindex="-1">{{ preview }}</a>
 {% else %}

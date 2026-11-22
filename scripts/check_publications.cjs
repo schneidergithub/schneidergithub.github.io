@@ -40,9 +40,14 @@ async function checkPlayers(page) {
     const toggle = disclosure.locator('summary');
     assert.equal(await toggle.locator('.play-caption').innerText(), 'Play here');
     const source = disclosure.locator('..').getByRole('link', { name: /watch on youtube/i });
-    assert.ok(await source.isVisible(), 'Expose the original recording before playback');
-    assert.equal(await source.getAttribute('href'), 'https://www.youtube.com/watch?v=' + id);
-    assert.equal(await disclosure.locator('..').locator('details + a.watch-source').count(), 1);
+    const spotlight = new URL(start).pathname === '/' && id === ids[0];
+    if (spotlight) {
+      assert.equal(await source.count(), 0, 'Use the player as the single spotlight action');
+    } else {
+      assert.ok(await source.isVisible(), 'Expose the original recording before playback');
+      assert.equal(await source.getAttribute('href'), 'https://www.youtube.com/watch?v=' + id);
+      assert.equal(await disclosure.locator('..').locator('details + a.watch-source').count(), 1);
+    }
     await toggle.focus();
     await page.keyboard.press('Tab');
     await page.keyboard.press('Shift+Tab');
@@ -61,7 +66,7 @@ async function checkPlayers(page) {
     assert.equal(await page.locator('.publication-video[open]').count(), 1);
     assert.equal(await page.locator('iframe').count(), 1);
     assert.ok(await frame.getAttribute('title'));
-    assert.ok(await source.isVisible(), 'Keep the source available while playing');
+    if (!spotlight) assert.ok(await source.isVisible(), 'Keep the source available while playing');
     assert.equal(page.url(), start);
     const box = await frame.boundingBox();
     assert.ok(box.width >= 200 && box.height >= 200 && box.x >= 0 && box.x + box.width <= page.viewportSize().width, 'Player does not fit ' + start);
@@ -118,22 +123,16 @@ async function checkActionTargets(links, sameRow = false) {
 }
 
 async function checkResearchFeature(panel, width) {
-  assert.equal((await panel.locator('.eyebrow').textContent()).trim(), 'Terminal-Bench-Science');
-  assert.equal((await panel.locator('h2').textContent()).trim(), 'Can an AI agent reproduce a scientific result?');
-  const byPosition = await panel.evaluate(element => {
-    const label = element.querySelector('.eyebrow');
-    const question = element.querySelector('h2');
-    const player = element.querySelector('summary');
-    return {
-      documentOrder: !!(label.compareDocumentPosition(question) & Node.DOCUMENT_POSITION_FOLLOWING) &&
-        !!(question.compareDocumentPosition(player) & Node.DOCUMENT_POSITION_FOLLOWING),
-      visualOrder: label.getBoundingClientRect().bottom <= question.getBoundingClientRect().top + 1 &&
-        question.getBoundingClientRect().bottom <= player.getBoundingClientRect().top + 1,
-      playBottom: player.querySelector('.play-mark').getBoundingClientRect().bottom + scrollY
-    };
-  });
-  assert.ok(byPosition.documentOrder && byPosition.visualOrder, 'Identify the research before playback at ' + width + 'px');
-  if (width === 375) assert.ok(byPosition.playBottom <= panel.page().viewportSize().height, 'Play control must fit on the first phone screen');
+  assert.equal(await panel.locator('h2').innerText(), 'Terminal-Bench-Science');
+  assert.equal(await panel.getByRole('link').count(), 0, 'Keep extra navigation out of the spotlight');
+  const summary = panel.locator(':scope > p');
+  assert.match(await summary.innerText(), /AI agents on scientific workflows.*approved.*MDD Executive Function.*maintainer and reviewer.*paper.*ongoing work.*coming soon/s);
+  const heading = await panel.locator('h2').boundingBox();
+  const player = await panel.locator('summary').boundingBox();
+  const copy = await summary.boundingBox();
+  assert.ok(heading.y + heading.height <= player.y + 1 && player.y + player.height <= copy.y + 1,
+    'Present the project name, video and short summary in order');
+  if (width === 375) assert.ok(player.y + player.height <= 812, 'The whole spotlight poster fits on the first phone screen');
   const cover = panel.locator('.publication-video img');
   await decodeCover(cover);
   const artPath = await cover.evaluate(img => new URL(img.currentSrc).pathname);
@@ -251,8 +250,7 @@ async function checkHomepage(page) {
   assert.ok(signatureLayout.lines > 0 && signatureLayout.fits, 'Headline must fit its column at ' + width + 'px');
   if (width > 850) assert.equal(signatureLayout.lines, 1, 'Desktop signature wrapped at ' + width + 'px');
   const heroLinks = page.locator('.hero h1 + .actions a');
-  const caseLink = page.locator('.hero a[href="/work/westinghouse-performance/"]');
-  assert.match(await caseLink.innerText(), /^Westinghouse.*3\s*[×x].*Elasticsearch throughput/i);
+  assert.equal(await page.locator('.hero > div > .eyebrow, .hero a[href="/work/westinghouse-performance/"]').count(), 0);
   assert.deepEqual(await heroLinks.allTextContents(), ['Explore selected work', 'View experience']);
   assert.deepEqual(await heroLinks.evaluateAll(links => links.map(link => link.pathname)), ['/work/', '/experience/']);
   await checkActionTargets(heroLinks, width === 375);
@@ -267,23 +265,9 @@ async function checkHomepage(page) {
       return r.width > 0 && r.left >= -1 && r.right <= innerWidth + 1 && el.scrollWidth <= el.clientWidth + 1;
     })), 'Menu controls must fit at enlarged text size');
     await menu.press('Escape');
-    assert.ok(await caseLink.evaluate(link => {
-      const rect = link.getBoundingClientRect();
-      return rect.left >= 0 && rect.right <= innerWidth + 1 && link.scrollWidth <= link.clientWidth + 1;
-    }), 'Enlarged Westinghouse link must fit on the phone');
     await largerText.evaluate(style => style.remove());
   }
   if (width === 375) {
-    const grouped = await page.locator('.hero > div > .eyebrow').evaluate(label => {
-      const range = document.createRange();
-      const text = label.firstChild;
-      const phrase = text.textContent.match(/AI\s+Research/);
-      if (!phrase) return false;
-      range.setStart(text, phrase.index);
-      range.setEnd(text, phrase.index + phrase[0].length);
-      return range.getClientRects().length === 1;
-    });
-    assert.ok(grouped, 'Keep AI Research together on phones');
     assert.ok(await heroLinks.last().evaluate(link => getComputedStyle(link).textDecorationLine.includes('underline')), 'The secondary phone action must read as a link');
     await heroLinks.last().focus();
     await page.keyboard.press('Shift+Tab');
@@ -294,8 +278,6 @@ async function checkHomepage(page) {
   }
   const hero = page.locator('.focus-panel');
   assert.equal(await hero.locator('.publication-video').count(), 1);
-  const guide = hero.getByRole('link', { name: 'How we tested the benchmark grader' });
-  assert.equal(await guide.getAttribute('href'), graderGuide);
   await checkResearchFeature(hero, width);
 
   const cards = page.locator('#home-media .media-card');
@@ -358,9 +340,13 @@ async function checkFallbacks(page) {
   const videos = page.locator('.publication-video');
   const urls = [];
   for (const video of await videos.all()) {
-    const fallback = video.locator('..').getByRole('link', { name: /watch on youtube/i });
-    assert.ok(await fallback.isVisible(), 'Expose the original without JavaScript or an extra disclosure');
-    assert.ok(await fallback.isVisible(), 'Missing visible no-JavaScript fallback');
+    const container = video.locator('..');
+    const fallback = container.getByRole('link', { name: /on youtube/i });
+    assert.ok(await fallback.isVisible(), 'Expose the original with JavaScript disabled');
+    if (await container.locator('noscript > a.video-poster').count()) {
+      assert.equal(await video.isVisible(), false, 'Show one working poster when scripting is disabled');
+      assert.ok(await fallback.locator('img').isVisible());
+    }
     urls.push(await fallback.getAttribute('href'));
   }
   assert.deepEqual(urls.sort(), ids.map(id => 'https://www.youtube.com/watch?v=' + id).sort());
@@ -686,12 +672,9 @@ async function captureCollection(page, version) {
 }
 
 async function checkCollection(page, width) {
-  const guideLink = page.locator('.focus-panel').getByRole('link', { name: 'How we tested the benchmark grader' });
-  await Promise.all([page.waitForURL(new URL(graderGuide, origin).href), guideLink.press('Enter')]);
-  const guideHeading = page.locator('h2#checking-the-grader:target');
-  assert.ok(await guideHeading.evaluate(el => el === document.activeElement && el.getBoundingClientRect().top >= -1));
-  const presentationLink = page.locator('.study-copy a[href="' + presentation + '"]');
-  await Promise.all([page.waitForURL(new URL(presentation, origin).href), presentationLink.press('Enter')]);
+  const collectionLink = page.locator('#home-media .section-heading a');
+  const collectionUrl = new URL('/articles/', origin).href;
+  await Promise.all([page.waitForURL(collectionUrl), collectionLink.press('Enter')]);
   const benchmark = page.locator('#benchmark-presentation');
   const preview = benchmark.locator('picture.benchmark-cover img');
   await decodeCover(preview);
