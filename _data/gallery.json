@@ -262,7 +262,7 @@
     "title": "Westinghouse",
     "description": "At Sogeti / Capgemini, I load-tested a release of Westinghouse\u2019s $20 million website. The results guided configuration changes that tripled Elasticsearch throughput.",
     "related": {
-      "label": "Westinghouse search performance",
+      "label": "QA leadership at Westinghouse",
       "url": "/work/westinghouse-performance/"
     },
     "items": [
