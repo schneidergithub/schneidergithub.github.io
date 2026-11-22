@@ -10,10 +10,10 @@ contact_footer: true
     <div class="actions"><a class="button" href="{{ '/work/' | relative_url }}">Explore selected work</a><a class="button secondary" href="{{ '/experience/' | relative_url }}">View experience</a></div>
   </div>
   <aside class="focus-panel" aria-labelledby="focus-title">
-    <h2 id="focus-title">Terminal-Bench-Science</h2>
+    <h2 id="focus-title">Research spotlight</h2>
     {% assign benchmark = site.data.publications | where: 'id', 'benchmark-presentation' | first %}
     <div class="focus-media">{% include publication-media.html publication=benchmark eager=true spotlight=true %}</div>
-    <p>We test frontier LLMs on scientific workflows. Version 1 includes “MDD Executive Function,” which I co-authored with Dr. Ian Miller. I review tasks, analyze results, and lead DevOps and infrastructure. We’re targeting a late-2026 release, with a research paper to follow.</p>
+    <p>I’m honored to have been invited to join Terminal-Bench-Science as a reviewer. Led by researchers at Stanford, the project tests frontier AI agents on real scientific work. Version 1 will include “MDD Executive Function,” the task Dr. Ian Miller and I co-authored.</p>
   </aside>
 </section>
 
