@@ -19,6 +19,12 @@ permalink: /experience/
   </header>
   <div class="role-details">
     {{ role.content }}
+    {% if role.recording %}
+      <div class="role-recording focus-media">
+        <h4>{{ role.recording.title | escape }}</h4>
+        {% include publication-media.html publication=role.recording %}
+      </div>
+    {% endif %}
     {% assign studies = nil %}
     {% if role.case_project %}
       {% assign studies = site.pages | where: 'layout', 'case-study' | where: 'project', role.case_project | sort: 'title' %}
@@ -37,3 +43,4 @@ permalink: /experience/
 </article>
 {% endfor %}
 </div>
+<script src="{{ '/assets/publications/video-player.js' | relative_url }}" defer></script>

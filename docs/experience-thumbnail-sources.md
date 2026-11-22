@@ -4,6 +4,8 @@ The role list displays these thumbnails at approximately 70 × 44 pixels on phon
 
 | Experience thumbnail | Source | Treatment |
 | --- | --- | --- |
+| [CommonDevOps](../assets/experience/commondevops-channel.jpg) | [CommonDevOps YouTube channel avatar](https://www.youtube.com/@commondevops) | Full square channel artwork, resized for the role list. |
+| [Yo.cr advertisement poster](../assets/experience/yo-pagos-ad.jpg) | [Official YouTube thumbnail](https://i.ytimg.com/vi/1eXiTsmDtgM/maxresdefault.jpg) | Full 16:9 frame, resized to 640 × 360 for the inline player. |
 | [BCforward](../assets/experience/bcforward.png) | [BCforward’s official site icon](https://www.bcforward.com/wp-content/uploads/2026/05/cropped-favicon4-192x192.png) | The current blue-and-silver employer emblem, unaltered. |
 | [ProPoint Global](../assets/experience/supersalon-checkout.png) | [Super Salon point-of-sale screen](../assets/portfolio/supersalon.webp) | Subtotal, tax, total and payment control. Crop at (1162, 516), 275 × 174. |
 | [Ciber](../assets/experience/aleve-homepage.png) | [Aleve homepage](../assets/portfolio/portfolio-aleve.webp) | Aleve wordmark and gardening scene. Crop at (31, 6), 228 × 144. |

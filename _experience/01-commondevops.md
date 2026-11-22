@@ -6,8 +6,8 @@ case_project: commondevops
 organization: "CommonDevOps"
 title: "Full Stack Engineer"
 period: "April 2025 – present"
-thumbnail: "/assets/experience/commondevops-mark.png"
-thumbnail_alt: "The white CD monogram on the blue CommonDevOps mark."
+thumbnail: "/assets/experience/commondevops-channel.jpg"
+thumbnail_alt: "Common DevOps channel emblem with a gear and an infinity symbol."
 ---
 - Dr. Ian Miller and I co-authored “MDD Executive Function,” a task approved for version 1 of Terminal-Bench-Science.
 - As a maintainer, I review DevOps and infrastructure changes and help analyze trial results.

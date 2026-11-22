@@ -8,7 +8,9 @@ const { isDeepStrictEqual } = require('node:util');
 const roleIds = ['commondevops', 'nuix', 'yo-pagos', 'bcforward', 'sogeti-capgemini', 'propoint-global',
   'ciber', 'berkeley-communications', 'bucky-ball-web', 'hanscom-air-force-base', 'joslin-diabetes-center'];
 
+const yoPagosSource = 'https://www.youtube.com/watch?v=1eXiTsmDtgM&list=PLB4Bw8Cz9mfBLMPI9dwP9cfvF5wtfa4ks&index=10';
 const evidenceByRole = {
+  'yo-pagos': [yoPagosSource],
   commondevops: ['/work/chess-puzzle-qa/', '/work/node-ipc-investigation/', '/work/scientific-ai-benchmark/'],
   bcforward: ['/work/indiana-case-archives/', '/work/#eli-lilly'],
   'sogeti-capgemini': ['/work/westinghouse-performance/'],
@@ -35,13 +37,28 @@ async function checkTarget(page, id) {
   }), 'Shared role bookmark must focus a visible target: ' + id);
 }
 
+async function checkYoPagosVideo(role) {
+  const video = role.locator('.publication-video');
+  await video.locator('img').evaluate(img => img.decode());
+  const toggle = video.locator('summary');
+  const player = video.locator('iframe');
+  assert.equal(await player.count(), 0);
+  await toggle.press('Enter');
+  await player.waitFor({ state: 'visible' });
+  assert.equal(new URL(await player.getAttribute('src')).pathname, '/embed/1eXiTsmDtgM');
+  assert.equal(await player.getAttribute('title'), 'Yo.cr bill payment advertisement');
+  await toggle.press('Enter');
+  await player.waitFor({ state: 'detached' });
+  assert.ok(await role.locator('.watch-source').isVisible());
+}
+
 async function checkEvidence(page, url) {
   const roles = page.locator('article.role');
   const actual = await roles.evaluateAll(items => Object.fromEntries(items.map(role => [
-    role.querySelector('h2').id, [...role.querySelectorAll('.role-details a')].map(link => link.pathname + link.hash).sort()
+    role.querySelector('h2').id, [...role.querySelectorAll('.role-details a')].map(link => link.origin === location.origin ? link.pathname + link.hash : link.href).sort()
   ]).filter(([, links]) => links.length)));
   const expected = Object.fromEntries(Object.entries(evidenceByRole).map(([id, links]) => [id, [...links].sort()]));
-  assert.deepEqual(actual, expected, 'Offer the ten evidence destinations under their own employers');
+  assert.deepEqual(actual, expected, 'Offer the evidence destinations under their own employers');
 
   for (const [id, destinations] of Object.entries(evidenceByRole)) {
     const roleUrl = new URL('#' + id, url).href;
@@ -49,6 +66,11 @@ async function checkEvidence(page, url) {
     for (const [index, href] of destinations.entries()) {
       await page.goto(roleUrl);
       const link = role.locator('.role-details a[href="' + href + '"]');
+      if (id === 'yo-pagos') {
+        assert.equal(await link.getAttribute('href'), yoPagosSource);
+        await checkYoPagosVideo(role);
+        continue;
+      }
       const destination = new URL(href, url);
       if (id === 'bcforward') {
         assert.equal(await role.locator('.role-links a').count(), 0);
@@ -141,7 +163,7 @@ async function check() {
       for (const detail of [/maintainer/i, /review DevOps and infrastructure/i, /analy[sz]e trial results/i, /led the node-ipc investigation/i, /primary author/i]) assert.match(currentWork, detail);
       assert.match(await roleEntry(page, 'nuix').locator('.role-details li').first().innerText(), /12 engineers.*tests?.*rollback/i);
       assert.match(await roleEntry(page, 'yo-pagos').locator('.role-details li').first().innerText(), /five developers.*DevSecOps.*fintech/i);
-      assert.equal(await current.locator('img').getAttribute('src'), '/assets/experience/commondevops-mark.png');
+      assert.equal(await current.locator('.role-thumbnail').getAttribute('src'), '/assets/experience/commondevops-channel.jpg');
       assert.equal(await current.getByRole('link', { name: 'Qualitative chess benchmark', exact: true }).getAttribute('href'), '/work/chess-puzzle-qa/');
       if (width === 375) {
         assert.equal(await page.evaluate(() => scrollY), 0);
@@ -162,13 +184,14 @@ async function check() {
       await leadership.press('Enter');
       await checkTarget(page, 'nuix');
       await page.screenshot({ path: path.join(reviewDir, version + '-experience-nuix-' + width + '.jpg'), quality: 82 });
+      await page.route('https://www.youtube-nocookie.com/embed/**', route => route.abort());
       await checkEvidence(page, url);
       await page.goto(url);
       if (width === 1280) {
         const signature = await roles.evaluateAll(articles => articles.map(article => ({
           text: article.innerText.trim(),
-          thumbnail: article.querySelector('img')?.getAttribute('src'),
-          description: article.querySelector('img')?.alt
+          thumbnail: article.querySelector('.role-thumbnail')?.getAttribute('src'),
+          description: article.querySelector('.role-thumbnail')?.alt
         })));
         if (preview) {
           fs.writeFileSync(signaturePath, JSON.stringify(signature));
@@ -178,11 +201,11 @@ async function check() {
         }
       }
       for (const role of await roles.all()) {
-        const image = role.locator('img');
+        const image = role.locator('.role-thumbnail');
         await image.scrollIntoViewIfNeeded();
         await image.evaluate(img => img.decode());
         const layout = await role.evaluate(article => {
-          const img = article.querySelector('img');
+          const img = article.querySelector('.role-thumbnail');
           const rect = selector => article.querySelector(selector).getBoundingClientRect();
           return {
             name: article.querySelector('h2').textContent,
@@ -233,10 +256,15 @@ async function check() {
       } else {
         assert.equal(await plain.locator('h2:target').getAttribute('id'), id);
       }
+      if (id === 'yo-pagos') {
+        const source = roleEntry(plain, id).locator('.watch-source');
+        assert.ok(await source.isVisible());
+        assert.equal(await source.getAttribute('href'), yoPagosSource);
+      }
       await plain.keyboard.press('Tab');
       assert.ok(await plain.locator(':target').evaluate(el => {
         const next = document.activeElement;
-        return next.matches('a[href]:focus-visible') && (el.compareDocumentPosition(next) & Node.DOCUMENT_POSITION_FOLLOWING);
+        return next.matches(':is(a[href], summary):focus-visible') && (el.compareDocumentPosition(next) & Node.DOCUMENT_POSITION_FOLLOWING);
       }), 'Keyboard navigation should continue forward from #' + id);
     }
     await plain.close();
