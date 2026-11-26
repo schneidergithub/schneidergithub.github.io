@@ -41,8 +41,8 @@ lead_case: /work/scientific-ai-benchmark/
           <div class="work-links">
             <a href="{{ publication.case_url | relative_url }}">Read the case study<span class="visually-hidden"> about {{ project.title | escape }}</span></a>
           </div>
-          <a class="work-evidence-link{% if project.slug == 'chess-benchmarks' %} chess-preview{% endif %}" href="{{ project.source_url | relative_url }}">
-            <span class="work-media-frame"><img src="{{ publication.preview.src | relative_url }}" alt="" width="{{ publication.preview.width }}" height="{{ publication.preview.height }}" loading="lazy" decoding="async"></span>
+          <a class="work-evidence-link{% if project.slug == 'chess-benchmarks' %} chess-preview{% endif %}" href="{{ project.source_url | relative_url }}" aria-label="{{ project.source_label | escape }}">
+            <span class="work-media-frame"><img src="{{ publication.preview.src | relative_url }}" alt="{{ publication.preview.alt | escape }}" width="{{ publication.preview.width }}" height="{{ publication.preview.height }}" loading="lazy" decoding="async"></span>
             <span>{{ project.source_label | escape }}</span>
           </a>
         </section>
