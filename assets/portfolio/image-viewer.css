@@ -42,3 +42,34 @@
   .viewer-original { order: 3; flex-basis: 100%; }
   .viewer-controls button { flex: 1; }
 }
+
+/* Joined brass arrows on the Experience gallery strips and in their image viewer. */
+.gallery-plate { display: inline-flex; flex: none; }
+.gallery-plate[hidden] { display: none; }
+.gallery-plate > button {
+  position: relative;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: 44px; height: 44px; padding: 0;
+  border: 1px solid #9b815b;
+  background: linear-gradient(#423b31, #2d2a26);
+  box-shadow: inset 0 1px #615342;
+  color: #f0d19d;
+  font: 400 25px/1 system-ui, sans-serif;
+  cursor: pointer;
+}
+.gallery-plate > button:first-child { border-radius: 6px 0 0 6px; }
+.gallery-plate > button:last-child { border-left: 0; border-radius: 0 6px 6px 0; }
+@media (hover: hover) {
+  .gallery-plate > button:enabled:not([aria-disabled="true"]):hover {
+    background: #dbc194; border-color: #ead5b2; color: #242119;
+  }
+}
+.gallery-plate > button:enabled:not([aria-disabled="true"]):active {
+  background: #baa079; color: #242119; box-shadow: inset 0 1px 2px #806949;
+}
+.gallery-plate > button:is(:disabled, [aria-disabled="true"]) { opacity: .4; cursor: default; }
+.gallery-plate > button:focus-visible { z-index: 1; outline: 3px solid var(--focus); outline-offset: 2px; }
+.viewer-controls-plate .viewer-original { order: 0; flex: 0 1 auto; }
+.viewer-controls-plate .gallery-plate { margin-inline-start: auto; }

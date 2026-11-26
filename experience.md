@@ -50,15 +50,15 @@ permalink: /experience/
         </a>
         {% endfor %}
       </div>
-      <div class="role-gallery-controls" hidden>
-        <button type="button" aria-controls="thumbnails-{{ gallery.id }}" aria-label="Scroll {{ gallery.short_name | escape }} thumbnails left"><span aria-hidden="true">‹</span></button>
-        <button type="button" aria-controls="thumbnails-{{ gallery.id }}" aria-label="Scroll {{ gallery.short_name | escape }} thumbnails right"><span aria-hidden="true">›</span></button>
+      <div class="role-gallery-controls gallery-plate" hidden>
+        <button type="button" aria-controls="thumbnails-{{ gallery.id }}" aria-label="Scroll {{ gallery.short_name | escape }} thumbnails left"><span aria-hidden="true">←</span></button>
+        <button type="button" aria-controls="thumbnails-{{ gallery.id }}" aria-label="Scroll {{ gallery.short_name | escape }} thumbnails right"><span aria-hidden="true">→</span></button>
       </div>
     </section>
   {% endif %}
 </article>
 {% endfor %}
 </div>
-{% include image-viewer.html %}
+{% include image-viewer.html makers_plate=true %}
 <script src="{{ '/assets/portfolio/experience-gallery.js' | relative_url }}" defer></script>
 <script src="{{ '/assets/publications/video-player.js' | relative_url }}" defer></script>
