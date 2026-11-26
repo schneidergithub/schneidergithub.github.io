@@ -8,7 +8,7 @@
   type: "Video"
   publisher: "YouTube"
   url: "https://www.youtube.com/watch?v=e26_SSPpOP0"
-  description: "In this Terminal-Bench-Science task, AI agents select eligible comparisons from studies of executive function in major depressive disorder, extract the statistics, and calculate effect sizes."
+  description: "Dr. Ian Miller and I co-authored this Terminal-Bench-Science task. AI agents select eligible comparisons from studies of executive function in major depressive disorder, extract the statistics, and calculate effect sizes."
   guide:
     label: "Grader guide"
     context: "in the scientific benchmark case"
@@ -68,7 +68,7 @@
   type: "Research report"
   publisher: "CommonDevOps"
   url: "https://commondevops.com/node-ipc-supply-chain-incident-report/"
-  description: "The report traces the maintainer domain’s registration and mail routing after the May 2026 compromise. The operator’s identity remains unresolved."
+  description: "Aaron Schneider led the investigation and was the primary author."
   attribution: "Aaron Schneider led the investigation and was the primary author, with help from Dr. Ian Miller and Javier Bonilla."
   preview:
     src: "/assets/experience/commondevops.png"
@@ -157,7 +157,7 @@
       label: "Report details on this page"
   preview:
     src: "/assets/publications/node-ipc-follow-up.jpg"
-    alt: "Five panelists in the CommonDevOps follow-up, beneath the title “The Node-IPC Hack.”"
+    alt: "Five panelists in the follow-up discussion, beneath the title “The Node-IPC Hack.”"
     width: 320
     height: 180
 - title: "AI & Cybersecurity: August 2026"
@@ -186,7 +186,7 @@
   type: "Video"
   publisher: "CommonDevOps on YouTube"
   url: "https://www.youtube.com/watch?v=i0a7tXSLj3c"
-  description: "Ian Miller and Aaron Schneider discuss AI security disclosures from OpenAI, Anthropic, and the AI Security Institute."
+  description: "Ian Miller and I discuss AI security disclosures from OpenAI, Anthropic, and the AI Security Institute."
   attribution: "CommonDevOps on YouTube · Ian Miller and Aaron Schneider"
 - title: "July summary of A.I. tech news"
   id: july-review

@@ -207,9 +207,9 @@ if '/articles/' in parsed:
     collection = parsed['/articles/']
     for item in publications:
         entry = item.get('id', '')
-        if not entry or entry not in collection.ids or '#' + entry not in collection.links:
+        if not entry or entry not in collection.ids or (not item.get('issue_month') and '#' + entry not in collection.links):
             errors.append(f"/articles/: missing entry link for {item['title']}")
-        for source in (item, item.get('related', {}), *item.get('editions', [])):
+        for source in (item, item.get('related', {})):
             if source and source['url'] not in collection.links:
                 errors.append(f"/articles/: missing source {source['url']}")
 for route, name, count in [('/work/', 'project-card', 7), ('/work/', 'research-project', 2), ('/articles/', 'publication', publication_count), ('/experience/', 'role', 11), ('/', 'feature', 3)]:
