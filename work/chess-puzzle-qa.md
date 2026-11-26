@@ -25,7 +25,7 @@ figures:
 
 AI coding tools were asked to turn a daily Lichess puzzle into a playable local video. This made the output directly inspectable: we could watch the result and compare it with the requested behavior.
 
-The [milestone checklist on GitHub](https://github.com/commondevops/llm-chess-experiment/blob/8d660666fc25a99a8846a2867089f8cfe6381f63/milestone1_local_recreation_instructions.md) covered the data, board frames, and playable MP4. It even specified that the pieces should sit in the middle of their squares. In a companion essay, I explain [why I’d separate rendering from publishing]({{ '/articles/fresh-sandbox-github/' | relative_url }}#publishing-the-video).
+The [milestone checklist on GitHub](https://github.com/commondevops/llm-chess-experiment/blob/8d660666fc25a99a8846a2867089f8cfe6381f63/milestone1_local_recreation_instructions.md) covered the data, board frames, and playable MP4. It even specified that the pieces should sit in the middle of their squares.
 
 ## My review: from working software to a usable puzzle
 

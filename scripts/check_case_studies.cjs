@@ -520,12 +520,6 @@ async function check() {
             const source = copy.locator('a[href="https://www.youtube.com/watch?v=IXzLwNlLAI4&t=' + seconds + 's"]');
             assert.ok((await source.innerText()).includes(timestamp), 'Expose the chess recording timestamp');
           }
-          const essayPassage = '/articles/fresh-sandbox-github/#publishing-the-video';
-          await copy.locator('a[href="' + essayPassage + '"]').press('Enter');
-          assert.equal(page.url(), new URL(essayPassage, workUrl).href);
-          assert.ok(await page.locator(':target').evaluate(el => el === document.activeElement), 'Land at the essay passage');
-          await page.locator('.essay-copy a[href="/work/chess-puzzle-qa/#what-a-playable-video-can-miss"]').press('Enter');
-          assert.ok(await copy.locator('h2:target').evaluate(el => el === document.activeElement), 'Return to the benchmark observations');
           const proposal = copy.getByRole('heading', { name: 'How I would test the reveal' });
           assert.ok(await proposal.isVisible(), 'Introduce the frame checks as proposed tests');
           assert.match(await copy.innerText(), /proposed regression tests/i);

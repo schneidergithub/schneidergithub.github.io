@@ -48,18 +48,6 @@
     alt: "White’s rook move marked as a mistake beside the engine’s +1.4 evaluation."
     width: 758
     height: 475
-- title: "What a fresh sandbox inherits from GitHub"
-  id: fresh-sandbox-github
-  type: "Engineering essay"
-  publisher: "Aaron Schneider"
-  url: "/articles/fresh-sandbox-github/"
-  description: "A pull-request comment can change what the next reviewer sees. A qualitative chess-video benchmark shows why publishing the result needs a separate decision."
-  attribution: "By Aaron Schneider"
-  preview:
-    src: "/assets/publications/chess-render.jpg"
-    alt: "Chess puzzle from the local render, with highlighted squares and coordinates around the board."
-    width: 1280
-    height: 720
 - title: "node-ipc Supply Chain Incident Report"
   home_featured: true
   home_summary: "I led the investigation and wrote the post-incident report with help from Dr. Ian Miller and Javier Bonilla."
