@@ -69,6 +69,7 @@ async function checkDirectory(page, workUrl) {
     [...new Set(items.filter(a => a.pathname.startsWith('/work/') && !a.hash).map(a => a.pathname))].sort());
   assert.deepEqual(routes, studies.map(study => '/work/' + study.path + '/').sort());
   assert.equal(await page.locator('.project-card').count(), 7);
+  assert.equal(await page.getByRole('link', { name: 'Discuss a project', exact: true }).count(), 0);
   const report = page.locator('#node-ipc');
   assert.match(await report.innerText(), /Three releases appeared on npm.*primary author/s);
   assert.deepEqual(await report.locator('a').evaluateAll(links => links.map(a => a.getAttribute('href'))), [
@@ -104,6 +105,7 @@ async function checkGallery(page, workUrl, width, directEntry) {
       assert.equal(await section.locator('a, button').count(), 0);
       continue;
     }
+    assert.equal(await section.locator('figcaption').count(), 0);
     const links = section.locator('.thumbnail-card a');
     const displayed = group.id === 'propoint'
       ? group.items.filter(item => ['Book a service', 'Desktop checkout'].includes(item.title)) : group.items;
@@ -111,8 +113,8 @@ async function checkGallery(page, workUrl, width, directEntry) {
     assert.equal(await section.locator('details').count(), 0, 'Every displayed thumbnail is directly available');
     assert.deepEqual(await links.evaluateAll(items => items.map(a => a.pathname)), displayed.map(item => item.image));
     if (width === 1280 && group.contact_sheet) {
-      const featured = group.items.filter(item => item.preview_label);
-      assert.deepEqual(await section.locator('figcaption:visible').allTextContents(), featured.map(item => item.preview_label));
+      const featured = group.items.filter(item => item.featured_preview);
+      assert.deepEqual(await section.locator('.thumbnail-card a:visible').evaluateAll(items => items.map(a => a.pathname)), featured.map(item => item.image));
       const frames = await section.locator('.thumbnail-frame:visible').evaluateAll(items => items.map(item => item.getBoundingClientRect().toJSON()));
       assert.ok(frames[0].width > frames[1].width && frames[0].height > frames[1].height);
       const openAll = section.getByRole('button', { name: /View all/ });
@@ -358,7 +360,8 @@ async function checkImageReturns(browser, workUrl) {
   assert.equal(await page.locator('#images-bayer .image-enlarge:visible').count(), 12);
   const strip = page.locator('#gallery-bayer');
   await strip.getByRole('button', {name:'Next screenshot'}).click();
-  await strip.getByText('2 of 12 · Aleve story page', {exact:true}).waitFor();
+  const status = strip.locator('.filmstrip-status.visually-hidden');
+  await status.filter({hasText:'2 of 12 · Aleve story page'}).waitFor({state:'attached'});
   await strip.locator('.thumbnail-card a').nth(1).press('Enter');
   assert.match(await viewer.locator('.viewer-caption').innerText(), /^2 of 12/);
   await page.keyboard.press('Escape');
@@ -440,9 +443,7 @@ async function check() {
           new URL('/', workUrl).href, 'https://www.linkedin.com/in/aarondrewschneider/',
           'https://www.youtube.com/@commondevops', new URL('/pgp/', workUrl).href
         ]);
-        assert.equal(await actions.count(), 2);
-        const discuss = ending.getByRole('link', { name: 'Discuss a project', exact: true });
-        assert.equal(await discuss.getAttribute('href'), '/#connect');
+        assert.equal(await actions.count(), 1);
         const returnLabels = { 'case-studies-title': 'Terminal-Bench-Science feature', 'node-ipc': 'Node-IPC investigation section', 'chess-benchmarks': 'Chess benchmarks section' };
         const projectReturn = ending.getByRole('link', { name: returnLabels[study.card] || projectNames[study.card] + ' project summary', exact: true });
         assert.equal(await projectReturn.getAttribute('href'), '/work/#' + study.card);
@@ -575,28 +576,16 @@ async function check() {
         if (study.path === 'super-salon-checkout') {
           await ending.evaluate(el => el.scrollIntoView({ block: 'center' }));
           await projectReturn.focus();
-          await page.keyboard.press('Shift+Tab');
-          assert.ok(await discuss.evaluate(el => el === document.activeElement && el.matches(':focus-visible') &&
-            getComputedStyle(el).outlineStyle !== 'none'), 'Show keyboard focus on the contact action');
-          await captureWork(page, 'super-salon-contact');
           await page.keyboard.press('Tab');
+          await page.keyboard.press('Shift+Tab');
           assert.ok(await projectReturn.evaluate(el => el === document.activeElement && el.matches(':focus-visible') &&
-            getComputedStyle(el).outlineStyle !== 'none'), 'Tab should move from contact to the project summary');
-          await discuss.press('Enter');
-          assert.equal(page.url(), new URL('/#connect', workUrl).href);
-          assert.equal(await page.locator(':target').getAttribute('id'), 'connect');
-          const contacts = page.getByRole('contentinfo');
-          assert.ok(await contacts.getByRole('heading', { name: 'Aaron Schneider', exact: true }).isVisible());
-          assert.ok(await contacts.locator('a[href="https://www.linkedin.com/in/aarondrewschneider/"]').isVisible());
-          assert.ok(await contacts.getByRole('link', { name: 'Team consulting · CommonDevOps website', exact: true }).isVisible());
-          await page.goBack();
-          assert.equal(page.url(), workUrl + study.path + '/');
+            getComputedStyle(el).outlineStyle !== 'none'), 'Show keyboard focus on the return to the project summary');
         }
         await projectReturn.press('Enter');
         assert.equal(page.url(), workUrl + '#' + study.card);
         assert.ok(await page.locator(':target').evaluate(el => el === document.activeElement), 'Return focus to the originating project or feature');
       }
-      console.log(width + 'px: verified ' + studies.length + ' case studies, contact paths and project returns.');
+      console.log(width + 'px: verified ' + studies.length + ' case studies and project returns.');
       if (width === 1280) await checkGallery(page, workUrl, width, false);
       await page.close();
     }

@@ -2,11 +2,14 @@
 <section class="project-gallery portfolio-gallery{% if group.contact_sheet %} curated-gallery{% endif %}" id="gallery-{{ group.id }}" aria-labelledby="gallery-{{ group.id }}-title" data-image-group="{{ group.id }}" data-image-title="{{ group.title | escape }}">
   {% if group.id == 'propoint' %}<span class="legacy-anchor" id="portfolio-gallery"></span><span class="legacy-anchor" id="gallery-title"></span>{% endif %}
   <h3 class="visually-hidden" id="gallery-{{ group.id }}-title">{{ group.title | escape }} images</h3>
+  {% if group.contact_sheet %}
+    <button class="gallery-open-all" type="button" data-open-collection hidden>View all {{ group.items.size }} images<span class="visually-hidden"> from {{ group.title | escape }}</span></button>
+  {% endif %}
   <div{% if group.contact_sheet %} data-filmstrip{% endif %} id="images-{{ group.id }}" class="work-thumbnails{% if include.screens %} work-screen-pair{% elsif group.items.size == 1 %} work-single-image{% endif %}">
     {% if include.screens %}
       {% for screen in include.screens %}
         {% assign item = group.items | where: 'title', screen.title | first %}
-        {% include gallery-image.html item=item label=screen.label order=forloop.index %}
+        {% include gallery-image.html item=item order=forloop.index %}
       {% endfor %}
       {% for item in group.items %}
         {% assign shown = include.screens | where: 'title', item.title | first %}
@@ -14,15 +17,13 @@
       {% endfor %}
     {% elsif group.contact_sheet %}
       {% for item in group.items %}
-        {% assign label = item.preview_label | default: item.title %}
-        {% include gallery-image.html item=item order=forloop.index label=label curated=true %}
+        {% include gallery-image.html item=item order=forloop.index curated=true %}
       {% endfor %}
     {% else %}
       {% for item in group.items %}{% include gallery-image.html item=item order=forloop.index %}{% endfor %}
     {% endif %}
   </div>
   {% if group.contact_sheet %}
-    {% include filmstrip-controls.html track_id=group.id %}
-    <button class="gallery-open-all" type="button" data-open-collection hidden>View all {{ group.items.size }} images<span class="visually-hidden"> from {{ group.title | escape }}</span></button>
+    {% include filmstrip-controls.html track_id=group.id hide_status=true %}
   {% endif %}
 </section>

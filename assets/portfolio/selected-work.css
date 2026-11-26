@@ -29,14 +29,14 @@
 .benchmark-byline, .project-detail { margin: 0; color: #d2d9e2; }
 .project-detail p { margin: 0; }
 .work-links { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 1.15rem; margin-top: .45rem; }
-.work-links a, .work-contact, .work-evidence-link {
+.work-links a, .work-evidence-link {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   max-width: 100%;
   font-size: .94rem;
 }
-.work-links a:first-child, .work-contact { font-weight: 650; }
+.work-links a:first-child { font-weight: 650; }
 .featured-projects {
   display: grid;
   grid-template-columns: 1.2fr 1fr 1fr;
@@ -67,7 +67,6 @@
 .work-index .project-card { padding-block: 1.25rem; border-top: 1px solid var(--line); }
 .work-index .project-card.has-evidence { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem; align-items: start; }
 .work-index .project-detail { max-width: 65ch; }
-.work-contact { margin-top: 1rem; }
 .project-gallery, .project-banner { margin-top: .7rem; }
 .project-banner { width: 100%; max-width: 16rem; min-width: 0; }
 .project-banner img {
@@ -93,7 +92,6 @@
 .work-thumbnails a:is(:hover, :focus-visible) .thumbnail-frame { border-color: var(--accent); }
 .work-screen-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; }
 .work-screen-pair .thumbnail-frame { background: #f4f1e9; }
-.work-screen-pair figcaption { color: #d2d9e2; font-size: .9rem; line-height: 1.35; }
 .work-single-image { display: block; max-width: 16rem; }
 .work-single-image .thumbnail-frame { aspect-ratio: auto; }
 .work-single-image .thumbnail-frame img { height: auto; max-height: 8rem; }
@@ -164,10 +162,11 @@
 [data-filmstrip] .image-enlarge::after { width: 1.55rem; height: 1.55rem; background-size: 1rem; }
 [data-filmstrip] .image-enlarge:focus-visible { outline: 3px solid var(--focus); outline-offset: 1px; }
 .filmstrip-controls { display: flex; align-items: center; justify-content: space-between; gap: .65rem; margin-top: .3rem; }
+.curated-gallery .filmstrip-controls { justify-content: flex-end; }
 .filmstrip-controls[hidden], .gallery-open-all[hidden] { display: none; }
 .filmstrip-status { color: #d6dde6; font-size: .91rem; font-variant-numeric: tabular-nums; }
 .gallery-open-all {
-  display: none; align-items: center; min-height: 44px; margin-top: .25rem; padding: .25rem 0;
+  display: none; align-items: center; min-height: 44px; margin: 0 0 .25rem auto; padding: .25rem 0;
   font: 600 .94rem/1.4 system-ui,sans-serif; color: var(--accent); background: transparent; border: 0; cursor: pointer;
 }
 .gallery-open-all:hover { text-decoration: underline; }
@@ -176,16 +175,14 @@
   .work-thumbnails[data-filmstrip] { grid-auto-flow: row; grid-template-columns: repeat(3,minmax(0,1fr)); overflow: visible; padding: 0; }
   [data-filmstrip].contact-ready { grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr); gap: .7rem; align-items: stretch; }
   [data-filmstrip].contact-ready .thumbnail-card { display: none; }
-  [data-filmstrip].contact-ready .thumbnail-card[data-featured] { display: grid; grid-template-rows: minmax(0, 1fr) auto; }
+  [data-filmstrip].contact-ready .thumbnail-card[data-featured] { display: grid; grid-template-rows: minmax(0, 1fr); }
   [data-filmstrip].contact-ready .thumbnail-card:first-child { grid-row: span 2; }
   [data-filmstrip].contact-ready .thumbnail-frame { height: clamp(5.3rem,15cqi,8rem); aspect-ratio: auto; }
   [data-filmstrip].contact-ready .thumbnail-card:first-child .thumbnail-frame { height: 100%; }
-  [data-filmstrip].contact-ready figcaption { display: block; }
-  [data-filmstrip].contact-ready .thumbnail-card:first-child figcaption { font: 400 1.1rem/1.3 Georgia,serif; color: #f7f3e9; }
   [data-filmstrip].contact-ready .thumbnail-card:is(:target,:has(:target)):not([data-featured]) { display: block; grid-column: 1/-1; }
   [data-filmstrip].contact-ready .image-enlarge:not(:hover,:focus-visible)::after { opacity: 0; }
   .filmstrip-controls { display: none; }
-  .gallery-open-all:not([hidden]) { display: inline-flex; }
+  .gallery-open-all:not([hidden]) { display: flex; width: fit-content; }
 }
 .project-index .index-layout { display: grid; grid-template-columns: minmax(9.5rem,.55fr) minmax(0,1.45fr); gap: clamp(1rem,3vw,2.25rem); align-items: start; }
 .index-choices { display: grid; }

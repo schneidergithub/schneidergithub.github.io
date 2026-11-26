@@ -55,7 +55,6 @@ lead_case: /work/scientific-ai-benchmark/
       {% for project in projects %}{% unless project.index_feature or project.research_publication %}{% include project-card.html %}{% endunless %}{% endfor %}
     </div>
   </section>
-  <a class="work-contact" href="{{ '/#connect' | relative_url }}">Discuss a project</a>
 </div>
 
 <script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}?v=3" defer></script>
