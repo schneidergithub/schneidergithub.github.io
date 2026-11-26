@@ -915,7 +915,12 @@ async function checkCollection(page, width) {
   const collectionLink = page.locator('#writing-title').getByRole('link', { name: 'Articles & Demos', exact: true });
   const collectionUrl = new URL('/articles/', origin).href;
   await Promise.all([page.waitForURL(collectionUrl), collectionLink.press('Enter')]);
+  const sectionTitle = page.getByRole('heading', { name: 'Recordings', exact: true });
+  assert.ok(await sectionTitle.evaluate(el => getComputedStyle(el).fontFamily.includes('Georgia')));
   const benchmark = page.locator('#benchmark-presentation');
+  const titleButton = benchmark.locator('[data-player-heading] button');
+  await titleButton.focus();
+  assert.equal(await titleButton.evaluate(el => getComputedStyle(el).outlineColor), 'rgb(255, 213, 138)');
   const preview = benchmark.locator('.video-poster img');
   await decodeCover(preview);
   assert.equal(await preview.evaluate(img => new URL(img.currentSrc).pathname), '/assets/publications/benchmark-meta-analysis.jpg');
