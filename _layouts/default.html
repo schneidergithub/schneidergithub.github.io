@@ -24,7 +24,7 @@
   <link rel="icon" href="{{ '/assets/favicon.svg' | relative_url }}?v={{ site.time | date: '%s' }}" type="image/svg+xml">
   <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   {% if page.work_design %}<link rel="stylesheet" href="{{ '/assets/portfolio/selected-work.css' | relative_url }}?v={{ site.time | date: '%s' }}">{% endif %}
-  {% if page.url == '/work/' or page.layout == 'case-study' %}<link rel="stylesheet" href="{{ '/assets/portfolio/image-viewer.css' | relative_url }}?v={{ site.time | date: '%s' }}">{% endif %}
+  {% if page.url == '/work/' or page.url == '/experience/' or page.layout == 'case-study' %}<link rel="stylesheet" href="{{ '/assets/portfolio/image-viewer.css' | relative_url }}?v={{ site.time | date: '%s' }}">{% endif %}
   <script src="{{ '/assets/navigation.js' | relative_url }}?v=2" defer></script>
 </head>
 <body>

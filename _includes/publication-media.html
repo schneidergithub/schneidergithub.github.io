@@ -19,9 +19,9 @@
   </summary>
   {% if include.spotlight %}{% include recording-source.html publication=media %}{% endif %}
   <template><iframe width="640" height="360" src="https://www.youtube-nocookie.com/embed/{{ video_id | escape }}?autoplay=1&amp;playsinline=1" title="{{ media.title | escape }}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></template>
-  {% unless include.spotlight %}<noscript><p class="playback-note">Inline playback requires JavaScript. Use the YouTube link below to watch.</p></noscript>{% endunless %}
+  {% unless include.spotlight or include.poster_fallback %}<noscript><p class="playback-note">Inline playback requires JavaScript. Use the YouTube link below to watch.</p></noscript>{% endunless %}
 </details>
-{% if include.spotlight %}
+{% if include.spotlight or include.poster_fallback %}
 <noscript>
   <a class="video-poster" href="{{ media.url | escape }}" aria-label="Play {{ media.title | escape }} on YouTube">
     {{ preview }}<span class="play-mark"><span class="play-caption">Play recording</span></span>

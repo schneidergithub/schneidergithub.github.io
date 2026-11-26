@@ -185,45 +185,77 @@ async function openImageAndReturn(page, control) {
 
 async function checkRoleGalleries(browser, origin) {
   const url = new URL('/experience/', origin).href;
-  const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
   await page.goto(url);
-  assert.equal(await page.locator('.role-gallery:not([open])').count(), 3);
-  assert.equal(await page.locator('a.role-single').count(), 2);
-  for (const group of gallery) {
-    const role = page.locator('.role').filter({ has: page.locator('h2#' + group.role_id) });
-    const links = role.locator('a.image-enlarge');
-    const destinations = await links.evaluateAll(items => items.map(link => link.pathname));
-    assert.deepEqual(destinations.sort(), group.items.map(item => item.image).sort(), group.role_id);
+  assert.equal(await page.locator('.role-gallery').count(), 3);
+  const viewer = page.getByRole('dialog');
+
+  for (const width of [1280, 375]) {
+    await page.setViewportSize({ width, height: 812 });
+    for (const group of gallery) {
+      const role = page.locator('.role').filter({ has: page.locator('h2#' + group.role_id) });
+      const strip = role.locator('.role-thumbnails');
+      const links = strip.locator('a');
+      if (group.items.length === 1) {
+        assert.equal(await role.locator('a.image-enlarge').count(), 0);
+        assert.ok(await role.locator('img.role-thumbnail').isVisible());
+        continue;
+      }
+      const items = await links.evaluateAll(anchors => anchors.map(a => ({
+        path: a.pathname, top: a.offsetTop, width: a.offsetWidth, height: a.offsetHeight
+      })));
+      assert.deepEqual(items.map(item => item.path), group.items.map(item => item.image));
+      assert.ok(items.every(item => item.top === items[0].top && item.width >= 44 && item.height >= 44 && item.height <= 100));
+      const row = await strip.evaluate(el => ({
+        full: el.scrollWidth, visible: el.clientWidth, left: el.getBoundingClientRect().left
+      }));
+      assert.ok(Math.abs(row.left - await role.locator('.role-details').evaluate(el => el.getBoundingClientRect().left)) < 1);
+      const [back, forward] = await role.locator('.role-gallery-controls button').all();
+      if (width === 1280 && row.full > row.visible + 1) {
+        assert.ok(await forward.isVisible());
+        await forward.click();
+        await page.waitForFunction(id => document.getElementById(id).scrollLeft > 0, 'thumbnails-' + group.id);
+        await back.click();
+      } else {
+        assert.ok(await forward.isHidden());
+      }
+      if (width === 375) assert.ok(row.full > row.visible, 'Expose a swipeable row on mobile');
+      const index = group.items.length - 1;
+      const link = links.nth(index);
+      await link.scrollIntoViewIfNeeded();
+      await link.focus();
+      const position = await strip.evaluate(el => [el.scrollLeft, scrollY]);
+      await link.press('Enter');
+      await viewer.waitFor({ state: 'visible' });
+      assert.equal(await viewer.locator('h2').innerText(), group.title);
+      assert.equal(await viewer.locator('.viewer-original').getAttribute('href'), new URL(group.items[index].image, url).href);
+      assert.equal(await viewer.locator('.viewer-caption').innerText(),
+        group.items.length + ' of ' + group.items.length + ' · ' + (group.items[index].caption || group.items[index].title));
+      assert.ok(await viewer.getByRole('button', { name: 'Next', exact: true }).isDisabled());
+      await page.keyboard.press('ArrowLeft');
+      assert.equal(await viewer.locator('.viewer-original').getAttribute('href'), new URL(group.items[index - 1].image, url).href);
+      await viewer.locator('.viewer-stage img').evaluate(img => img.decode());
+      await page.keyboard.press('Escape');
+      await viewer.waitFor({ state: 'hidden' });
+      await page.waitForFunction(({ id, stripId, position }) =>
+        document.activeElement === document.getElementById(id) &&
+        Math.abs(document.getElementById(stripId).scrollLeft - position[0]) <= 2 &&
+        Math.abs(scrollY - position[1]) <= 2,
+        { id: await link.getAttribute('id'), stripId: 'thumbnails-' + group.id, position });
+    }
   }
-
-  const propoint = page.locator('#images-propoint');
-  const toggle = propoint.getByText('View 4 ProPoint images', { exact: true }).locator('..');
-  await toggle.press('Enter');
-  assert.equal(await propoint.locator('.thumbnail-card a:visible').count(), 4);
-  assert.deepEqual(await propoint.locator('figcaption').allTextContents(),
-    ['Find a salon', 'Book a service', 'Appointment calendar', 'Desktop checkout']);
-  await toggle.press('Space');
-  await toggle.locator('img').click();
-  assert.equal(await propoint.locator('.thumbnail-card a:visible').count(), 4, 'The cover opens the same sheet');
-
-  const bayer = page.locator('#images-bayer');
-  await bayer.locator(':scope > summary').press('Enter');
-  assert.equal(await bayer.locator('.thumbnail-card a:visible').count(), 8);
-  const app = bayer.locator('.gallery-detail-set').first();
-  await app.locator('summary').press('Enter');
-  await openImageAndReturn(page, app.locator('a').last());
-  assert.ok(await app.evaluate(el => el.open && el.closest('.role-gallery').open));
-  await openImageAndReturn(page, page.locator('#image-bucky-ball'));
   await page.setViewportSize({ width: 320, height: 812 });
   await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
-    'Expanded Experience sheets reflow with enlarged text');
+    'Gallery overflow stays within its row at enlarged text sizes');
   await page.close();
 
   const plain = await browser.newPage({ javaScriptEnabled: false });
-  await plain.goto(url + '#berkeley-communications');
-  await plain.locator('#images-berkeley > summary').press('Enter');
-  assert.equal(await plain.locator('#images-berkeley .thumbnail-card a:visible').count(), 8);
+  await plain.goto(url);
+  const fallback = plain.locator('#images-berkeley .role-thumbnails a').first();
+  const original = await fallback.getAttribute('href');
+  await Promise.all([plain.waitForURL(new URL(original, url).href), fallback.click()]);
+  await plain.locator('img').evaluate(img => img.decode());
   await plain.close();
 }
 

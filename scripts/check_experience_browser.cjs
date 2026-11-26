@@ -10,12 +10,10 @@ const roleIds = ['commondevops', 'nuix', 'yo-pagos', 'bcforward', 'sogeti-capgem
 
 const yoPagosSource = 'https://www.youtube.com/watch?v=1eXiTsmDtgM&list=PLB4Bw8Cz9mfBLMPI9dwP9cfvF5wtfa4ks&index=10';
 const evidenceByRole = {
-  'yo-pagos': [yoPagosSource],
   commondevops: ['/work/chess-puzzle-qa/', '/work/node-ipc-investigation/', '/work/scientific-ai-benchmark/'],
   bcforward: ['/work/indiana-case-archives/', '/work/#eli-lilly'],
   'sogeti-capgemini': ['/work/westinghouse-performance/'],
-  'propoint-global': ['/work/from-booking-to-checkout/', '/articles/why-i-came-to-trust-automated-testing/'],
-  ciber: ['/work/bayer-aleve/']
+  'propoint-global': ['/work/from-booking-to-checkout/', '/articles/why-i-came-to-trust-automated-testing/']
 };
 
 function roleEntry(page, id) {
@@ -47,10 +45,11 @@ async function checkYoPagosVideo(role) {
   assert.equal(await player.getAttribute('title'), 'Yo.cr bill payment advertisement');
   await toggle.press('Enter');
   await player.waitFor({ state: 'detached' });
-  assert.ok(await role.locator('.watch-source').isVisible());
+  assert.equal(await role.locator('.watch-source').count(), 0);
 }
 
 async function checkEvidence(page, url) {
+  await checkYoPagosVideo(roleEntry(page, 'yo-pagos'));
   const roles = page.locator('article.role');
   const actual = await roles.evaluateAll(items => Object.fromEntries(items.map(role => [
     role.querySelector('h2').id, [...role.querySelectorAll('.role-details a')].map(link => link.origin === location.origin ? link.pathname + link.hash : link.href).sort()
@@ -64,11 +63,6 @@ async function checkEvidence(page, url) {
     for (const [index, href] of destinations.entries()) {
       await page.goto(roleUrl);
       const link = role.locator('.role-details a[href="' + href + '"]');
-      if (id === 'yo-pagos') {
-        assert.equal(await link.getAttribute('href'), yoPagosSource);
-        await checkYoPagosVideo(role);
-        continue;
-      }
       const destination = new URL(href, url);
       if (id === 'bcforward') {
         assert.equal(await role.locator('.role-links a').count(), 0);
@@ -212,9 +206,7 @@ async function check() {
         });
         assert.equal(layout.fit, layout.name === 'BCforward' ? 'cover' : 'contain', layout.name);
         assert.ok(layout.headingFits, 'Heading overflow: ' + layout.name);
-        const sheet = await role.locator('.role-gallery').count();
-        const single = await role.locator('.role-single').count();
-        assert.equal(layout.imageControl, sheet ? 'SUMMARY' : single ? 'A' : null, layout.name);
+        assert.equal(layout.imageControl, null, layout.name);
         assert.ok(layout.imageRight <= layout.headingLeft, layout.name);
         assert.ok(layout.headingBottom <= layout.bodyTop, layout.name);
         const expectedLeft = width === 375 ? layout.imageLeft : layout.headingLeft;
@@ -249,7 +241,7 @@ async function check() {
         assert.equal(await plain.locator('h2:target').getAttribute('id'), id);
       }
       if (id === 'yo-pagos') {
-        const source = roleEntry(plain, id).locator('.watch-source');
+        const source = roleEntry(plain, id).locator('a.video-poster');
         assert.ok(await source.isVisible());
         assert.equal(await source.getAttribute('href'), yoPagosSource);
       }

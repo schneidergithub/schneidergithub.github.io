@@ -882,34 +882,51 @@ a{color:inherit}
 
 
 
-/* The native summary owns both the cover and the text control. Reserve its
-   cover's grid cell so enlarged text and the expanded sheet stay in flow. */
-.role:has(.role-gallery)::before {
-  content: "";
-  grid-area: image;
-  align-self: start;
-  width: var(--cover-width);
-  aspect-ratio: 19 / 12;
+/* Each role keeps its cover beside the heading and its gallery below the copy. */
+.role-gallery {
+  grid-column: details;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  min-width: 0;
 }
-.role-single { grid-area: image; width: var(--cover-width); align-self: start; border-radius: 5px; }
-.role-gallery { grid-column: 1 / -1; min-width: 0; }
-.role-gallery > summary { margin-inline-start: calc(var(--cover-width) + var(--role-gap)); }
-.role-gallery > summary .role-thumbnail {
-  position: absolute;
-  inset-block-start: var(--role-padding);
-  inset-inline-start: 0;
-  width: var(--cover-width);
-  box-shadow: 2px -2px var(--bg), 4px -4px var(--line), 6px -6px var(--panel);
+.role-thumbnails {
+  display: flex;
+  flex: 1;
+  gap: .5rem;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: var(--control-border) transparent;
+  padding-block: .25rem;
 }
-.role-gallery > summary:focus-visible .role-thumbnail { outline: 3px solid var(--focus); outline-offset: 3px; }
-.role-gallery .thumbnail-grid {
-  margin-block-start: .75rem;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+.role-thumbnails a {
+  display: block;
+  flex: 0 0 6rem;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border: 1px solid var(--control-border);
+  border-radius: .25rem;
+  background: var(--panel);
+  scroll-snap-align: start;
 }
-.role-gallery .thumbnail-frame { aspect-ratio: 16 / 10; background: var(--panel); }
-.role-gallery .thumbnail-frame img { max-height: 100%; min-height: 0; }
+.role-thumbnails img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.role-thumbnails a::after { content: none; }
+.role-thumbnails a:hover { border-color: var(--accent); }
+.role-thumbnails a:focus-visible { outline-offset: -3px; outline: 3px solid var(--focus); }
+.role-gallery-controls:not([hidden]) { display: flex; flex: none; gap: .25rem; }
+.role-gallery-controls button {
+  display: grid; place-items: center; width: 44px; height: 44px; padding: 0;
+  border: 1px solid var(--control-border); border-radius: .25rem;
+  background: var(--panel); color: var(--text); cursor: pointer; font: 1.5rem/1 system-ui;
+}
+.role-gallery-controls button[aria-disabled="true"] { opacity: .4; cursor: default; }
+.role-gallery-controls button:focus-visible { outline: 3px solid var(--focus); outline-offset: 1px; }
 @media (max-width: 540px) {
-  .role-gallery > summary { margin-inline-start: 0; }
+  .role-thumbnails a { flex-basis: calc((100% - 1.5rem) / 3.35); }
+  .role-gallery-controls:not([hidden]) { display: none; }
 }
 
 /* Shared interaction hierarchy and comfortable touch targets. */

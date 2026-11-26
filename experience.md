@@ -11,14 +11,8 @@ permalink: /experience/
 <div class="timeline">
 {% for role in roles %}
 {% assign gallery = site.data.gallery | where: 'role_id', role.role_id | first %}
-{% capture thumbnail %}<img class="role-thumbnail" src="{{ role.thumbnail | relative_url | escape }}" alt="{{ role.thumbnail_alt | escape }}" width="190" height="120" decoding="async"{% unless forloop.first %} loading="lazy"{% endunless %}>{% endcapture %}
 <article class="role">
-  {% if gallery.items.size == 1 %}
-    {% assign item = gallery.items.first %}
-    <a class="role-single image-enlarge" id="image-{{ gallery.id }}" href="{{ item.image | relative_url }}" aria-label="{{ item.open_label | default: item.title | escape }}{% unless item.open_label %} — open full-size image{% endunless %}">{{ thumbnail }}</a>
-  {% elsif gallery == nil %}
-    {{ thumbnail }}
-  {% endif %}
+  <img class="role-thumbnail"{% if gallery.items.size == 1 %} id="image-{{ gallery.id }}"{% endif %} src="{{ role.thumbnail | relative_url | escape }}" alt="{{ role.thumbnail_alt | escape }}" width="190" height="120" decoding="async"{% unless forloop.first %} loading="lazy"{% endunless %}>
   <header class="role-heading"{% if role.role_id == 'nuix' %} id="engineering-leadership" tabindex="-1"{% endif %}>
     {% if role.current %}<p class="role-current">Current</p>{% endif %}
     <h2 id="{{ role.role_id | escape }}" tabindex="-1">{{ role.organization | escape }}</h2>
@@ -29,7 +23,7 @@ permalink: /experience/
     {% if role.recording %}
       <div class="role-recording focus-media">
         <h4>{{ role.recording.title | escape }}</h4>
-        {% include publication-media.html publication=role.recording %}
+        {% include publication-media.html publication=role.recording poster_fallback=true %}
       </div>
     {% endif %}
     {% assign studies = nil %}
@@ -48,18 +42,23 @@ permalink: /experience/
     {% endif %}
   </div>
   {% if gallery.items.size > 1 %}
-    {% assign examples = gallery.items | where_exp: 'item', 'item.detail_of == nil' %}
-    <details class="role-gallery gallery-disclosure" id="images-{{ gallery.id }}">
-      <summary>
-        <span aria-hidden="true">{{ thumbnail }}</span>
-        <span class="gallery-expand">View {{ gallery.items.size }} {{ gallery.short_name | escape }} images</span>
-        <span class="gallery-collapse">Hide {{ gallery.short_name | escape }} images</span>
-      </summary>
-      {% include gallery-grid.html group=gallery items=examples offset=0 %}
-    </details>
+    <section class="role-gallery" id="images-{{ gallery.id }}" aria-label="{{ gallery.title | escape }} images" data-image-group="{{ gallery.id }}" data-image-title="{{ gallery.title | escape }}">
+      <div class="role-thumbnails" id="thumbnails-{{ gallery.id }}">
+        {% for item in gallery.items %}
+        <a class="image-enlarge" href="{{ item.image | relative_url }}" id="original-{{ item.image | split: '/' | last | slugify }}" data-image-order="{{ forloop.index }}" data-image-caption="{{ item.caption | default: item.title | escape }}" aria-label="Enlarge {{ item.title | escape }}">
+          <img src="{{ item.thumbnail | relative_url }}?v={{ item.thumbnail_version }}" alt="{{ item.alt | escape }}" width="{{ item.width }}" height="{{ item.height }}" loading="lazy" decoding="async">
+        </a>
+        {% endfor %}
+      </div>
+      <div class="role-gallery-controls" hidden>
+        <button type="button" aria-controls="thumbnails-{{ gallery.id }}" aria-label="Scroll {{ gallery.short_name | escape }} thumbnails left"><span aria-hidden="true">‹</span></button>
+        <button type="button" aria-controls="thumbnails-{{ gallery.id }}" aria-label="Scroll {{ gallery.short_name | escape }} thumbnails right"><span aria-hidden="true">›</span></button>
+      </div>
+    </section>
   {% endif %}
 </article>
 {% endfor %}
 </div>
-<script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}?v=3" defer></script>
+{% include image-viewer.html %}
+<script src="{{ '/assets/portfolio/experience-gallery.js' | relative_url }}" defer></script>
 <script src="{{ '/assets/publications/video-player.js' | relative_url }}" defer></script>
