@@ -151,25 +151,23 @@ async function check() {
       const current = roleEntry(page, 'commondevops');
       assert.ok(await current.getByText('Current', { exact: true }).isVisible());
       assert.equal(await page.getByRole('heading', { name: 'Engineering leadership', exact: true }).count(), 0);
-      const first = current.locator('.role-details li').first();
-      const firstText = await first.innerText();
-      for (const detail of [/MDD Executive Function/i, /Dr\. Ian Miller/i, /co-authored/i, /approved|accepted/i]) assert.match(firstText, detail);
-      const currentWork = await current.locator('.role-details').innerText();
-      for (const detail of [/maintainer/i, /review DevOps and infrastructure/i, /analy[sz]e trial results/i, /led the node-ipc investigation/i, /primary author/i]) assert.match(currentWork, detail);
+      const summary = current.locator('.role-details > ul:not(.role-links) > li');
+      assert.equal(await summary.count(), 1);
+      assert.match(await summary.innerText(), /As a CommonDevOps co-founder, I study how autonomous agents run on local language models\./);
       assert.match(await roleEntry(page, 'nuix').locator('.role-details li').first().innerText(), /12 engineers.*tests?.*rollback/i);
       assert.match(await roleEntry(page, 'yo-pagos').locator('.role-details li').first().innerText(), /five developers.*DevSecOps.*fintech/i);
       assert.equal(await current.locator('.role-thumbnail').getAttribute('src'), '/assets/experience/commondevops-channel.jpg');
       assert.equal(await current.getByRole('link', { name: 'Qualitative chess benchmark', exact: true }).getAttribute('href'), '/work/chess-puzzle-qa/');
       if (width === 375) {
         assert.equal(await page.evaluate(() => scrollY), 0);
-        for (const item of [current.locator('h2'), current.locator('h3'), first]) {
+        for (const item of [current.locator('h2'), current.locator('h3'), summary]) {
           assert.ok(await item.evaluate(el => {
             const range = document.createRange();
             range.selectNodeContents(el);
             const rects = [...range.getClientRects()];
             return rects.length > 0 && rects.every(box => box.top >= 0 && box.left >= 0 &&
               box.bottom <= innerHeight + 1 && box.right <= innerWidth + 1);
-          }), 'Show the current employer, title and full first accomplishment before scrolling');
+          }), 'Show the current employer, title and full CommonDevOps summary before scrolling');
         }
       }
       await page.screenshot({ path: path.join(reviewDir, version + '-experience-first-screen-' + width + '.jpg'), quality: 82 });
