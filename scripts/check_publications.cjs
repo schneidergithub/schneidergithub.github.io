@@ -49,7 +49,9 @@ async function checkPlayers(page, expectedIds = ids) {
   assert.equal(await page.locator('iframe').count(), 0, 'Players should load on demand');
   const seen = [];
   const start = page.url();
-  const home = new URL(start).pathname === '/';
+  const pathname = new URL(start).pathname;
+  const home = pathname === '/';
+  const collection = pathname === '/articles/';
   for (const entry of await recordingEntries(page).all()) {
     const disclosure = entry.locator('details.publication-video');
     const src = await disclosure.locator('template').evaluate(template => template.content.querySelector('iframe').src);
@@ -60,14 +62,12 @@ async function checkPlayers(page, expectedIds = ids) {
     const toggle = disclosure.locator('summary');
     assert.equal(await toggle.locator('.play-caption').innerText(), 'Play here');
     const source = entry.locator('a.watch-source');
-    assert.equal(await source.count(), 1);
-    assert.equal(await source.getAttribute('href'), expectedWatchUrl(id));
-    const spotlight = home && id === ids[0];
-    if (spotlight) {
-      assert.ok(await source.isHidden(), 'Use the poster as the single closed spotlight action');
-    } else {
-      assert.ok(await source.isVisible(), 'Expose the original recording before playback');
-      if (home) {
+    assert.equal(await source.count(), collection ? 0 : 1);
+    if (!collection) {
+      assert.equal(await source.getAttribute('href'), expectedWatchUrl(id));
+      const spotlight = home && id === ids[0];
+      assert.equal(await source.isVisible(), !spotlight);
+      if (home && !spotlight) {
         assert.ok(await entry.evaluate(card => {
           const selectors = ['.video-poster', 'h3', '.media-description', 'a.watch-source'];
           const items = selectors.map(selector => card.querySelector(selector));
@@ -78,7 +78,7 @@ async function checkPlayers(page, expectedIds = ids) {
               previous.getBoundingClientRect().bottom <= item.getBoundingClientRect().top + 1;
           });
         }), 'Present the homepage poster, title and summary before the secondary source');
-      } else {
+      } else if (!home) {
         assert.equal(await entry.locator('details + a.watch-source').count(), 1);
       }
     }
@@ -100,7 +100,7 @@ async function checkPlayers(page, expectedIds = ids) {
     assert.equal(await page.locator('.publication-video[open]').count(), 1);
     assert.equal(await page.locator('iframe').count(), 1);
     assert.ok(await frame.getAttribute('title'));
-    assert.ok(await source.isVisible(), 'Keep the source available while playing');
+    if (!collection) assert.ok(await source.isVisible(), 'Keep the source available while playing');
     assert.equal(page.url(), start);
     const box = await frame.boundingBox();
     assert.ok(box.width >= 200 && box.height >= 200 && box.x >= 0 && box.x + box.width <= page.viewportSize().width, 'Player does not fit ' + start);
@@ -569,7 +569,7 @@ async function checkGraderGuide(page, directEntry = false) {
   const back = page.locator('.case-study').getByRole('link', { name: 'benchmark presentation', exact: true });
   assert.equal(await back.getAttribute('href'), presentation);
   await Promise.all([page.waitForURL(new URL(presentation, origin).href), back.press('Enter')]);
-  assert.ok(await page.locator('#benchmark-presentation:target summary').isVisible());
+  assert.ok(await page.locator('#benchmark-presentation:target .video-poster:visible').isVisible());
 }
 
 async function checkEssay(page, { capture = false, directEntry = false } = {}) {
@@ -577,18 +577,11 @@ async function checkEssay(page, { capture = false, directEntry = false } = {}) {
   const essayPath = '/articles/fresh-sandbox-github/';
   const directory = page.locator('.publication-group[aria-labelledby="engineering-essays"]');
   const entry = directory.locator('#fresh-sandbox-github');
-  assert.equal((await entry.locator('.attribution').innerText()).trim(), 'By Aaron Schneider');
+  assert.equal(await entry.locator('.attribution').count(), 0);
   const permalink = entry.getByRole('link', { name: 'Link to ' + title, exact: true });
   assert.equal(await permalink.count(), 1);
   assert.equal(await permalink.getAttribute('href'), '#fresh-sandbox-github');
-  assert.ok(await permalink.evaluate(link => {
-    const author = link.closest('.attribution')?.querySelector('span');
-    if (!author) return false;
-    const text = author.getBoundingClientRect();
-    const target = link.getBoundingClientRect();
-    return target.width >= 44 && target.height >= 44 && text.right <= target.left + 1 &&
-      text.top < target.bottom && target.top < text.bottom;
-  }), 'Place one touch-sized permalink beside the author');
+  assert.equal(await entry.locator('.publication-copy .entry-permalink').count(), 1);
   const coverLink = entry.locator('a.collection-cover');
   const cover = coverLink.locator('img');
   await decodeCover(cover);
@@ -615,10 +608,10 @@ async function checkEssay(page, { capture = false, directEntry = false } = {}) {
       const normal = page.viewportSize();
       await page.setViewportSize({ width: 320, height: 812 });
       const enlarged = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
-      assert.ok(await entry.evaluate(el => [...el.querySelectorAll('h3, .collection-cover, .essay-byline, .entry-permalink')].every(item => {
+      assert.ok(await entry.evaluate(el => [...el.querySelectorAll('h3, .collection-cover, .entry-permalink')].every(item => {
         const box = item.getBoundingClientRect();
         return box.width > 0 && box.left >= -1 && box.right <= innerWidth + 1;
-      })), 'Keep the essay title, thumbnail, author and bookmark within the 320px viewport at doubled text');
+      })), 'Keep the essay title, thumbnail and bookmark within the 320px viewport at doubled text');
       await enlarged.evaluate(style => style.remove());
       await page.setViewportSize(normal);
     }
@@ -678,6 +671,7 @@ async function checkDiscovery(page) {
     assert.ok(await heading.isVisible());
     const rows = page.locator('.publication-group').filter({ has: heading }).locator('li.publication');
     assert.deepEqual((await rows.evaluateAll(items => items.map(item => item.id))).sort(), [...entries].sort());
+    if (group === 'monthly-reviews') continue; // Newsletter titles and covers link directly to LinkedIn.
     for (const entry of entries) {
       const row = page.locator('li#' + entry);
       const permalink = row.locator('.entry-permalink');
@@ -708,7 +702,8 @@ async function checkDiscovery(page) {
     const row = page.locator('li.publication:target');
     assert.equal(await row.getAttribute('id'), id);
     assert.ok(await row.getByRole('heading').isVisible());
-    assert.equal(await row.locator('.watch-source').getAttribute('href'), 'https://www.youtube.com/watch?v=' + video);
+    const embed = await row.locator('template').evaluate(template => template.content.querySelector('iframe').src);
+    assert.equal(new URL(embed).pathname, '/embed/' + video);
     assert.equal(await row.getByRole('link', { name: 'node-ipc investigation', exact: true }).getAttribute('href'), incidentPath);
     const back = row.getByRole('link', { name: 'Report details on this page', exact: true });
     assert.equal(await back.getAttribute('href'), '#node-ipc-report');
@@ -753,7 +748,7 @@ async function checkEnlargedCollection(page) {
   assert.ok(crop.clipped && Math.abs(crop.aspect - 16 / 7) < 0.08 && crop.left <= 147 && crop.right >= 292,
     'Keep the printed report name inside its compact masthead: ' + JSON.stringify(crop));
   for (const item of [interview, page.locator('#node-ipc-report')]) {
-    for (const control of await item.locator('h3, .entry-permalink, .meta, .watch-source, .publication-actions a').all()) {
+    for (const control of await item.locator('h3, .entry-permalink, .meta, .publication-actions a').all()) {
       const box = await control.boundingBox();
       assert.ok(box && box.width > 0 && box.x >= -1 && box.x + box.width <= 321,
         'A compact publication control overflows at 320px with doubled text: ' + JSON.stringify(box));
@@ -781,13 +776,12 @@ async function checkPhoneEntry(browser) {
   const poster = await featured.locator('picture.benchmark-cover').boundingBox();
   const play = await featured.locator('summary .play-mark').boundingBox();
   const row = await featured.boundingBox();
-  const source = await featured.getByRole('link', { name: /watch on youtube/i }).boundingBox();
   assert.ok(await featured.locator('h3 .keep-term').evaluate(el => {
     const range = document.createRange();
     range.selectNodeContents(el);
     return el.textContent === 'meta-analysis' && range.getClientRects().length === 1;
   }), 'Keep meta-analysis together in the phone recording title');
-  for (const [name, box] of Object.entries({ title, poster, play, source })) {
+  for (const [name, box] of Object.entries({ title, poster, play })) {
     assert.ok(box.y >= 0 && box.y + box.height <= 812 && box.x >= 0 && box.x + box.width <= 376,
       'First recording ' + name + ' must fit before scrolling at 375×812: ' + JSON.stringify(box));
   }
@@ -921,7 +915,11 @@ async function checkCollection(page, width) {
   const preview = benchmark.locator('picture.benchmark-cover img');
   await decodeCover(preview);
   assert.equal(await preview.evaluate(img => new URL(img.currentSrc).pathname), '/assets/publications/benchmark-session.jpg');
-  assert.equal(await benchmark.getByRole('link', { name: /watch on youtube/i }).getAttribute('href'), 'https://www.youtube.com/watch?v=e26_SSPpOP0');
+  const main = page.locator('main');
+  assert.equal(await main.getByRole('link', { name: /watch on youtube/i }).count(), 0);
+  assert.doesNotMatch(await main.innerText(), /CommonDevOps|By Aaron Schneider/i);
+  assert.equal(await page.locator('#node-ipc-report .publication-copy > p').first().innerText(),
+    'Aaron Schneider led the investigation and was the primary author.');
   assert.equal(await page.locator('#node-ipc-report').getByRole('link', { name: 'Report on Figshare' }).getAttribute('href'), 'https://doi.org/10.6084/m9.figshare.33865414');
   await checkGraderGuide(page);
   await checkDiscovery(page);
@@ -952,7 +950,6 @@ async function checkCollection(page, width) {
       assert.equal(await imageLink.getAttribute('href'), await row.locator('h3 a').getAttribute('href'), 'Cover and title should open the same publication');
     } else {
       assert.equal(await row.locator('h3 a').count(), 0, 'Keep the title distinct from playback and source links');
-      assert.ok(await row.getByRole('link', { name: /watch on youtube/i }).isVisible());
       assert.ok(await row.locator('summary .play-caption').isVisible(), 'Identify inline playback on the poster');
     }
     const frame = row.locator('.video-poster, a.collection-cover');
@@ -960,20 +957,18 @@ async function checkCollection(page, width) {
     assert.ok(box.width > 0 && box.x >= -1 && box.x + box.width <= width + 1, 'Publication cover must fit its row');
   }
   const issue = page.locator('#october-review');
-  const issueUrl = 'https://www.aaronschneider.org/common-devops-reports/reports/2026-10/';
   const archive = page.getByRole('region', { name: 'Monthly newsletter archive' });
-  assert.match(await archive.locator('.archive-source').textContent(), /CommonDevOps.*LinkedIn/);
+  assert.equal(await archive.locator('.archive-source').count(), 0);
   assert.deepEqual(await archive.locator('time').evaluateAll(items => items.map(el => el.dateTime)),
     monthlyIssues.map(item => item.issue_month));
   assert.deepEqual(await archive.locator('.archive-year').allTextContents(),
     [...new Set(monthlyIssues.map(item => item.issue_month.slice(0, 4)))]);
   for (const item of monthlyIssues) {
-    assert.equal(await archive.locator('#' + item.id + ' h3 a').getAttribute('href'), item.url);
+    const links = await archive.locator('#' + item.id + ' a').evaluateAll(anchors => anchors.map(a => a.href));
+    assert.deepEqual(links, [item.url, item.url], 'The cover and title should link only to the LinkedIn article');
   }
   assert.equal(await issue.getByRole('link', { name: 'Are AI Security Controls Keeping Up?', exact: true }).getAttribute('href'),
     'https://www.linkedin.com/pulse/october-2026-ai-security-controls-keeping-up-commondevops-a632c/');
-  assert.equal(await issue.getByRole('link', { name: 'Web edition' }).getAttribute('href'), issueUrl);
-  assert.equal(await issue.getByRole('link', { name: 'PDF edition' }).getAttribute('href'), issueUrl + 'common-devops-october-2026.pdf');
   const issueLink = issue.locator('h3 a');
   assert.ok(await issueLink.evaluate(el => !getComputedStyle(el).textDecorationLine.includes('underline')),
     'The structured October title should be quiet at rest');
@@ -986,22 +981,12 @@ async function checkCollection(page, width) {
       style.textDecorationLine.includes('underline') && style.outlineStyle !== 'none';
   }), 'Keyboard focus should visibly identify the October title as an action');
   await page.locator('#monthly-reviews').focus();
-  assert.equal(await page.locator('#september-review').getByRole('link', { name: 'Web edition', exact: true }).getAttribute('href'),
-    'https://www.aaronschneider.org/common-devops-reports/reports/2026-09/');
   await captureSection(page, archive, 'newsletter-archive');
   for (const entry of ['october-review', 'node-ipc-report', 'node-ipc-interview']) {
     await captureSection(page, page.locator('#' + entry), 'articles-' + entry);
   }
   await checkPlayers(page);
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Publication list overflows');
-  if (width === 1280) {
-    const html = await page.request.get(await issue.getByRole('link', { name: 'Web edition' }).getAttribute('href'));
-    assert.ok(html.ok(), 'October HTML edition returned ' + html.status());
-    assert.match(await html.text(), /<title>Cybersecurity Must Keep Pace with AI/);
-    const pdf = await page.request.get(await issue.getByRole('link', { name: /PDF edition/ }).getAttribute('href'));
-    assert.ok(pdf.ok(), 'October PDF returned ' + pdf.status());
-    assert.equal((await pdf.body()).subarray(0, 5).toString(), '%PDF-');
-  }
 }
 
 async function check() {

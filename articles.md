@@ -1,6 +1,6 @@
 ---
 title: Articles & Demos
-description: Selected CommonDevOps articles, research, interviews, and videos covering AI, software engineering, and cybersecurity.
+description: Selected articles, research, interviews, and videos covering AI, software engineering, and cybersecurity.
 permalink: /articles/
 groups:
   - id: recordings
@@ -46,20 +46,14 @@ groups:
       {% unless group.id == 'engineering-essays' %}{{ permalink }}{% endunless %}
     </div>
     <div class="meta">
-      {% include publication-media.html publication=item link_cover=true cover_url=source_url eager=featured %}
+      {% include publication-media.html publication=item link_cover=true cover_url=source_url eager=featured poster_fallback=true %}
     </div>
     <div class="publication-copy">
       {% if item.period or item.date %}<p class="publication-date">{% if item.period %}{{ item.period | escape }} issue{% endif %}{% if item.period and item.date %} · {% endif %}{% if item.date %}Published <time datetime="{{ item.date }}">{{ item.date | date: '%B %-d, %Y' }}</time>{% endif %}</p>{% endif %}
-      <p>{{ item.description | escape }}</p>
+      <p>{{ item.description | escape }}{% if group.id == 'engineering-essays' %} {{ permalink }}{% endif %}</p>
       {% if item.guide %}<p><a class="publication-guide" href="{{ item.guide.url | relative_url | escape }}">{{ item.guide.label | escape }}</a> {{ item.guide.context | escape }}.</p>{% endif %}
-      {% if group.id == 'engineering-essays' %}
-      <p class="attribution essay-byline"><span>{{ item.attribution | escape }}</span>{{ permalink }}</p>
-      {% else %}
-      <p class="attribution">{{ item.attribution | escape }}</p>
-      {% endif %}
-      {% if item.editions or item.related or item.case_url or item.companions %}
+      {% if item.related or item.case_url or item.companions %}
       <p class="publication-actions">
-        {% for edition in item.editions %}<a class="publication-edition" href="{{ edition.url | escape }}">{{ edition.label | escape }}</a>{% endfor %}
         {% if item.related %}<a class="publication-related" href="{{ item.related.url | escape }}">{{ item.related.label | escape }}&nbsp;<span aria-hidden="true">↗</span></a>{% endif %}
         {% if item.case_url %}
           {% assign study = site.pages | where: 'url', item.case_url | first %}

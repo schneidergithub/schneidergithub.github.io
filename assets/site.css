@@ -72,7 +72,7 @@ main{min-height:65vh}
 .focus-panel h2{font-size:1.1rem;line-height:1.3;margin-bottom:.7rem}
 .focus-panel p{color:var(--muted);font-size:.96rem;line-height:1.5;margin:0}
 .focus-media{margin-bottom:.75rem}
-.focus-media:has(noscript > a) .publication-video{display:none}
+:is(.focus-media, .publication .meta):has(noscript > a.video-poster) .publication-video{display:none}
 .section{padding-block:3.5rem;border-top:1px solid var(--line)}
 .section-heading{display:flex;justify-content:space-between;gap:1rem;align-items:baseline;margin-bottom:1.5rem}
 .section-heading h2{margin:0}
@@ -483,7 +483,6 @@ figcaption{font-size:.875rem;line-height:1.5;color:var(--muted);padding-top:.7re
 }
 .edition-source {color:var(--muted);font-size:.875rem;font-weight:500}
 .publication p{color:var(--muted);max-width:70ch}
-.publication .attribution{font-size:.875rem;margin-bottom:0}
 .publication .type{font-size:.875rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);display:block}
 /* Home media previews share the collection's player and keep the original cover proportions. */
 .media-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem}
@@ -1090,12 +1089,7 @@ a{color:inherit}
   grid-area: copy;
   min-width: 0;
 }
-.essay-byline {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0 .25rem;
-}
+.publication-copy p > .entry-permalink { vertical-align: middle; }
 .publication-date {
   margin-bottom: .4rem;
   font-size: .875rem;
@@ -1228,7 +1222,6 @@ a{color:inherit}
   font-size: .94rem;
 }
 .newsletter-archive > h2 { margin-bottom: .35rem; }
-.archive-source { margin-bottom: 1.2rem; color: var(--muted); }
 .archive-year { margin: 1.5rem 0 .8rem; font-size: 1.2rem; font-weight: 650; }
 .newsletter-list { max-width: 48rem; gap: 1.15rem; }
 .newsletter-list .newsletter-issue {
@@ -1240,8 +1233,6 @@ a{color:inherit}
 .issue-month { display: block; font-size: .875rem; color: var(--muted); }
 .newsletter-issue .publication-heading { align-items: baseline; justify-content: space-between; }
 .newsletter-issue h3 { font-size: clamp(1.05rem, 2vw, 1.32rem); }
-.newsletter-issue .publication-actions { margin: 0; }
-.newsletter-issue .entry-permalink { align-self: start; }
 @container (max-width: 16rem) {
   .newsletter-list .newsletter-issue {
     grid-template: "media" auto "detail" auto / minmax(0, 1fr);
