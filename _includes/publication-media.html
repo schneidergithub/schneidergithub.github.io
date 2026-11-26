@@ -1,9 +1,9 @@
 {% assign media = include.publication %}
 {% capture load_hint %}{% if include.eager %}fetchpriority="high"{% else %}loading="lazy"{% endif %}{% endcapture %}
 {% capture preview %}
-  {% if media.id == 'benchmark-presentation' %}
+  {% if media.id == 'benchmark-presentation' and include.link_cover != true %}
     <picture class="benchmark-cover">
-      {% unless include.link_cover %}<source media="(min-width: 851px)" srcset="{{ media.preview.src | relative_url | escape }}">{% endunless %}
+      <source media="(min-width: 851px)" srcset="{{ media.preview.src | relative_url | escape }}">
       <img class="publication-preview" src="{{ '/assets/publications/benchmark-session.jpg' | relative_url }}" alt="Three participants in the Terminal-Bench-Science presentation" width="1280" height="720" {{ load_hint }} decoding="async">
     </picture>
   {% else %}

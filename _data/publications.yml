@@ -52,6 +52,7 @@
   home_featured: true
   home_summary: "I led the investigation and wrote the post-incident report with help from Dr. Ian Miller and Javier Bonilla."
   id: node-ipc-report
+  case_label: "Read the case study"
   case_url: "/work/node-ipc-investigation/"
   type: "Research report"
   publisher: "CommonDevOps"
@@ -64,7 +65,7 @@
     width: 640
     height: 308
   related:
-    label: "Report on Figshare"
+    label: "Read the report on Figshare"
     url: "https://doi.org/10.6084/m9.figshare.33865414"
   companions:
     - id: node-ipc-interview
@@ -233,7 +234,7 @@
   id: why-i-came-to-trust-automated-testing
   type: "Engineering essay"
   url: "/articles/why-i-came-to-trust-automated-testing/"
-  description: "Our distributed team agreed on what each user story had to prove. A discounted sale put that agreement to the test."
+  description: "The same discounted sale showed $19.99 in one system and $20.00 in the other. Our automated test caught the difference before release."
   attribution: "By Aaron Schneider"
   preview:
     src: "/assets/portfolio/thumbs/supersalon.webp"

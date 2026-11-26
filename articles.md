@@ -9,12 +9,12 @@ groups:
   - id: engineering-essays
     label: Engineering essays
     type: Engineering essay
-  - id: monthly-reviews
-    label: Monthly archive
-    type: Article
   - id: investigations
     label: Investigations
     type: Research report
+  - id: monthly-reviews
+    label: Monthly archive
+    type: Article
 ---
 <header class="page-intro publication-intro">
   <h1>Articles &amp; Demos</h1>
@@ -36,7 +36,7 @@ groups:
   {% capture permalink %}<a class="entry-permalink" href="#{{ item.id | escape }}" aria-label="Link to {{ item.title | escape }}" title="Link to this entry"></a>{% endcapture %}
   <li class="publication{% if featured %} publication-featured{% endif %}" id="{{ item.id | escape }}" tabindex="-1">
     <div class="publication-heading">
-      <h3>{% if item.type == 'Video' %}{{ display_title }}{% else %}<a href="{{ source_url | escape }}">{{ display_title }}{% if item.primary_edition %} <span class="edition-source">{{ item.primary_edition | escape }}</span>{% elsif first_character != '/' %} <span aria-hidden="true">↗</span>{% endif %}</a>{% endif %}</h3>
+      <h3{% if featured %} data-player-heading{% endif %}>{% if item.type == 'Video' %}{{ display_title }}{% else %}<a href="{{ source_url | escape }}">{{ display_title }}{% if item.primary_edition %} <span class="edition-source">{{ item.primary_edition | escape }}</span>{% elsif first_character != '/' %} <span aria-hidden="true">↗</span>{% endif %}</a>{% endif %}</h3>
       {% unless group.id == 'engineering-essays' %}{{ permalink }}{% endunless %}
     </div>
     <div class="meta">
@@ -51,7 +51,7 @@ groups:
         {% if item.related %}<a class="publication-related" href="{{ item.related.url | escape }}">{{ item.related.label | escape }}&nbsp;<span aria-hidden="true">↗</span></a>{% endif %}
         {% if item.case_url %}
           {% assign study = site.pages | where: 'url', item.case_url | first %}
-          {% if study %}<a class="publication-case" href="{{ study.url | relative_url }}">{{ study.link_label | default: study.title | escape }}</a>{% endif %}
+          {% if study %}<a class="publication-case" href="{{ study.url | relative_url }}">{{ item.case_label | default: study.link_label | default: study.title | escape }}</a>{% endif %}
         {% endif %}
         {% for companion in item.companions %}<a class="publication-context" href="#{{ companion.id | escape }}">{{ companion.label | escape }}</a>{% endfor %}
       </p>
