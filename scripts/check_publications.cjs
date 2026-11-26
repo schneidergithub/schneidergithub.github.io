@@ -192,10 +192,9 @@ async function checkResearchFeature(panel, width) {
   assert.equal(await panel.locator('h2').innerText(), 'Research spotlight');
   assert.equal(await panel.getByRole('link').count(), 0, 'Keep extra navigation out of the spotlight');
   const summary = panel.locator(':scope > p');
-  const text = await summary.innerText();
-  assert.match(text, /invited to join Terminal-Bench-Science as a reviewer/);
-  assert.match(text, /researchers at Stanford.*frontier AI agents on real scientific work/);
-  assert.match(text, /Version 1 will include “MDD Executive Function,” the task Dr\. Ian Miller and I co-authored/);
+  assert.equal(await summary.innerText(),
+    'I’m honored to have been invited to join Terminal-Bench-Science. ' +
+    'Led by researchers at Stanford, the project tests frontier AI agents on real scientific work.');
   const heading = await panel.locator('h2').boundingBox();
   const player = await panel.locator('summary').boundingBox();
   const copy = await summary.boundingBox();
