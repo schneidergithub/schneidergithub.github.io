@@ -14,6 +14,6 @@ home_highlight:
   label: "Indiana counties"
   description: "I automated file archiving for closed cases. When a prosecutor reopened a case, its files were restored automatically."
 title: "Archiving prosecutors’ case files"
-context: "Indiana State Department · BCforward engagement"
+context: "Indiana State Department"
 ---
 I built an archiver that automatically restored files when Indiana prosecutors reopened a case. A one-county pilot exposed filenames it couldn’t handle. I wrote a repair utility before the statewide rollout.
