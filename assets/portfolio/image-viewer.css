@@ -74,3 +74,5 @@
 .viewer-controls-plate .viewer-original { order: 0; flex: 0 1 auto; }
 .viewer-controls-plate .gallery-plate { margin-inline-start: auto; }
 .viewer-controls-plate:has(.viewer-previous:disabled):has(.viewer-next:disabled) .gallery-plate { display: none; }
+
+.image-viewer .viewer-preview { display: block; position: fixed; max-width: none; max-height: none; object-fit: contain; pointer-events: none; z-index: 2; }

@@ -1,0 +1,27 @@
+{% assign collections = include.group.items | group_by: 'collection' %}
+<section class="study-evidence project-index" aria-labelledby="screens-title">
+  <h2 id="screens-title">Bayer websites and sales tools</h2>
+  <div class="index-layout">
+    <nav class="index-choices" aria-label="Screenshot collections">
+      {% for collection in collections %}
+      <a href="#collection-{{ collection.name | slugify }}">{{ collection.name | escape }}</a>
+      {% endfor %}
+    </nav>
+    <div class="index-panels">
+      {% assign count = 0 %}
+      {% for collection in collections %}
+        {% capture track_id %}{{ include.group.id }}-{{ collection.name | slugify }}{% endcapture %}
+        <section class="index-panel" id="collection-{{ collection.name | slugify }}" data-image-group="{{ track_id }}" data-image-title="{{ collection.name | escape }}" aria-label="{{ collection.name | escape }}">
+          <h3 class="index-panel-title">{{ collection.name | escape }}</h3>
+          <div class="work-thumbnails" id="images-{{ track_id }}" data-filmstrip>
+            {% for item in collection.items %}
+              {% assign count = count | plus: 1 %}
+              {% include gallery-image.html item=item order=forloop.index case_number=count label=item.title curated=true %}
+            {% endfor %}
+          </div>
+          {% include filmstrip-controls.html track_id=track_id %}
+        </section>
+      {% endfor %}
+    </div>
+  </div>
+</section>

@@ -1,5 +1,5 @@
-<figure class="thumbnail-card"{% if include.item.id %} id="details-{{ group.id }}-{{ include.item.id }}"{% endif %}>
-  <a class="image-enlarge" data-image-order="{{ include.order }}" data-image-caption="{{ include.item.caption | default: include.item.title | escape }}" id="original-{{ include.item.image | split: '/' | last | slugify }}" href="{{ include.item.image | relative_url }}" aria-label="Open full-size image of {{ include.item.title | escape }}">
+<figure class="thumbnail-card"{% if include.curated %} data-slide-title="{{ include.item.title | escape }}"{% if include.item.preview_label %} data-featured{% endif %}{% endif %}{% if include.item.id %} id="details-{{ group.id }}-{{ include.item.id }}"{% endif %}>
+  <a class="image-enlarge{% if include.case_number %} study-image{% endif %}" data-image-order="{{ include.order }}" data-image-caption="{{ include.item.caption | default: include.item.title | escape }}" id="{% if include.case_number %}case-original-{{ include.case_number }}{% else %}original-{{ include.item.image | split: '/' | last | slugify }}{% endif %}" href="{{ include.item.image | relative_url }}" aria-label="Open full-size image of {{ include.item.title | escape }}">
     <span class="thumbnail-frame"><img src="{{ include.item.thumbnail | relative_url }}?v={{ include.item.thumbnail_version }}" alt="{{ include.item.alt | escape }}" width="{{ include.item.width }}" height="{{ include.item.height }}" loading="lazy" decoding="async"></span>
   </a>
   {% if include.label %}<figcaption>{{ include.label | escape }}</figcaption>{% endif %}

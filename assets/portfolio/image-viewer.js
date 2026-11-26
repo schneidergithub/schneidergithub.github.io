@@ -16,7 +16,36 @@
   let pagePosition;
   let generation = 0;
 
+  // Animate a loaded thumbnail while the full-resolution image is requested.
+  function enterFrom(thumbnail, source) {
+    if (!source || !thumbnail.naturalWidth || !thumbnail.animate ||
+        matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const frame = stage.getBoundingClientRect();
+    const fit = Math.min(frame.width / thumbnail.naturalWidth, frame.height / thumbnail.naturalHeight);
+    const width = thumbnail.naturalWidth * fit;
+    const height = thumbnail.naturalHeight * fit;
+    if (!width || !height) return;
+    const preview = thumbnail.cloneNode();
+    preview.removeAttribute('id');
+    preview.removeAttribute('loading');
+    preview.alt = '';
+    preview.className = 'viewer-preview';
+    const left = frame.left + (frame.width - width) / 2;
+    const top = frame.top + (frame.height - height) / 2;
+    Object.assign(preview.style, {left: left + 'px', top: top + 'px', width: width + 'px', height: height + 'px'});
+    dialog.append(preview);
+    const scale = Math.min(source.width / width, source.height / height);
+    const dx = source.left + source.width / 2 - left - width / 2;
+    const dy = source.top + source.height / 2 - top - height / 2;
+    const animation = preview.animate([
+      { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + scale + ')' },
+      { transform: 'none' }
+    ], {duration: 180, easing: 'cubic-bezier(.2,.75,.25,1)'});
+    animation.onfinish = animation.oncancel = () => preview.remove();
+  }
+
   function show(index) {
+    dialog.querySelector('.viewer-preview')?.remove();
     position = index;
     const link = images[index];
     const image = new Image();
@@ -47,15 +76,20 @@
   }
 
   function finish(restore = true) {
+    dialog.querySelector('.viewer-preview')?.remove();
     document.documentElement.classList.remove('image-viewer-open');
     if (restore && trigger?.isConnected) {
       const opener = trigger;
       const saved = pagePosition;
       const restorePosition = () => {
         if (dialog.open || trigger !== opener || !opener.isConnected) return;
-        opener.focus({ preventScroll: true });
+        const group = opener.closest('[data-image-group]');
+        const destination = opener.getClientRects().length ? opener :
+          [group?.querySelector('[data-open-collection]'), group?.querySelector('a.image-enlarge')].find(el => el?.getClientRects().length);
+        if (!destination) return;
+        destination.focus({ preventScroll: true });
         if (innerWidth !== saved.width || innerHeight !== saved.height) {
-          opener.scrollIntoView({ block: 'center', behavior: 'instant' });
+          destination.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' });
         } else {
           window.scrollTo({ left: saved.x, top: saved.y, behavior: 'instant' });
         }
@@ -70,14 +104,18 @@
   }
 
   document.addEventListener('click', event => {
-    const link = event.target.closest('a.image-enlarge');
-    const group = link?.closest('[data-image-group]');
+    const opener = event.target.closest('a.image-enlarge, button[data-open-collection]');
+    const group = opener?.closest('[data-image-group]');
+    const link = opener?.matches('a') ? opener : group?.querySelector('a.image-enlarge');
     if (!link || !group || event.defaultPrevented || event.button !== 0 ||
         event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ||
         link.origin !== location.origin || (link.target && link.target !== '_self')) return;
     // The real href remains available for unsupported browsers and modified clicks.
     event.preventDefault();
-    trigger = link;
+    trigger = opener;
+    const thumbnail = link.querySelector('img');
+    const source = opener === link && link.closest('.curated-gallery, .project-index')
+      ? thumbnail.getBoundingClientRect() : null;
     pagePosition = { x: scrollX, y: scrollY, width: innerWidth, height: innerHeight };
     images = [...group.querySelectorAll('a.image-enlarge')].sort((a, b) =>
       Number(a.dataset.imageOrder) - Number(b.dataset.imageOrder));
@@ -86,6 +124,7 @@
     dialog.showModal();
     document.documentElement.classList.add('image-viewer-open');
     close.focus();
+    enterFrom(thumbnail, source);
   });
 
   previous.addEventListener('click', () => show(position - 1));
