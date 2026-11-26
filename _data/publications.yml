@@ -247,7 +247,6 @@
   url: "/articles/why-i-came-to-trust-automated-testing/"
   description: "Our distributed team agreed on what each user story had to prove. A discounted sale put that agreement to the test."
   attribution: "By Aaron Schneider"
-  case_url: "/work/from-booking-to-checkout/"
   preview:
     src: "/assets/portfolio/thumbs/supersalon.webp"
     width: 520

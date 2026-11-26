@@ -660,14 +660,14 @@ async function checkDiscovery(page) {
   assert.equal(await benchmark.getByRole('link', { name: 'Merged task on GitHub' }).getAttribute('href'), mergedTask);
   const caseLinks = benchmark.locator('a[href^="/work/scientific-ai-benchmark/"]');
   assert.deepEqual(await caseLinks.evaluateAll(links => links.map(a => a.pathname + a.hash)), [graderGuide]);
+  assert.equal(await page.getByRole('navigation', { name: 'Publication formats' }).count(), 0);
+  assert.equal(await page.locator('main a[href="/work/from-booking-to-checkout/"]').count(), 0);
   const headings = await page.locator('.publication-group > h2').evaluateAll(items => items.map(el => el.id));
   assert.deepEqual(headings, Object.keys(publicationGroups), 'Keep all four publication sections in reading order');
   for (const [group, entries] of Object.entries(publicationGroups)) {
-    const jump = page.locator('.publication-jumps a[href="#' + group + '"]');
-    assert.match(await jump.innerText(), new RegExp('\\b' + entries.length + '\\b'));
-    await jump.press('Enter');
-    assert.equal(page.url(), collection + '#' + group);
-    const heading = page.locator('h2#' + group);
+    await page.goto(collection + '#' + group);
+    const heading = page.locator('h2:target');
+    assert.equal(await heading.getAttribute('id'), group);
     assert.ok(await heading.isVisible());
     const rows = page.locator('.publication-group').filter({ has: heading }).locator('li.publication');
     assert.deepEqual((await rows.evaluateAll(items => items.map(item => item.id))).sort(), [...entries].sort());
