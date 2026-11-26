@@ -9,7 +9,7 @@ const studies = [
   { card: 'propoint', path: 'from-booking-to-checkout', images: 4 },
   { card: 'propoint', path: 'super-salon-checkout', images: 2 },
   { card: 'indiana', path: 'indiana-case-archives', images: 0 },
-  { card: 'bayer', path: 'bayer-aleve', images: 2 },
+  { card: 'bayer', path: 'bayer-aleve', images: 12 },
   { card: 'westinghouse', path: 'westinghouse-performance', images: 0 },
   { card: 'case-studies-title', path: 'scientific-ai-benchmark', images: 0 },
   { card: 'node-ipc', path: 'node-ipc-investigation', images: 0 },
@@ -110,7 +110,22 @@ async function checkGallery(page, workUrl, width, directEntry) {
     assert.equal(await section.locator('h3').innerText(), group.title + ' images');
     assert.equal(await section.locator('details').count(), 0, 'Every displayed thumbnail is directly available');
     assert.deepEqual(await links.evaluateAll(items => items.map(a => a.pathname)), displayed.map(item => item.image));
-    for (const img of await links.locator('img').all()) {
+    if (width === 1280 && group.contact_sheet) {
+      const featured = group.items.filter(item => item.preview_label);
+      assert.deepEqual(await section.locator('figcaption:visible').allTextContents(), featured.map(item => item.preview_label));
+      const frames = await section.locator('.thumbnail-frame:visible').evaluateAll(items => items.map(item => item.getBoundingClientRect().toJSON()));
+      assert.ok(frames[0].width > frames[1].width && frames[0].height > frames[1].height);
+      const openAll = section.getByRole('button', { name: /View all/ });
+      await openAll.click();
+      const dialog = page.getByRole('dialog');
+      for (const [i, item] of group.items.entries()) {
+        assert.equal(await dialog.locator('.viewer-original').getAttribute('href'), new URL(item.image, workUrl).href);
+        if (i < group.items.length - 1) await page.keyboard.press('ArrowRight');
+      }
+      await page.keyboard.press('Escape');
+      await page.waitForFunction(id => document.activeElement === document.querySelector('#gallery-' + id + ' [data-open-collection]'), group.id);
+    }
+    for (const img of await links.locator('img:visible').all()) {
       await img.scrollIntoViewIfNeeded();
       await img.evaluate(el => el.decode());
     }
@@ -341,12 +356,15 @@ async function checkImageReturns(browser, workUrl) {
 
   await page.goto(workUrl + '#gallery-bayer');
   assert.equal(await page.locator('#images-bayer .image-enlarge:visible').count(), 12);
-  await page.locator('#gallery-bayer .thumbnail-card a').first().press('Enter');
-  assert.match(await viewer.locator('.viewer-caption').innerText(), /^1 of 12/);
+  const strip = page.locator('#gallery-bayer');
+  await strip.getByRole('button', {name:'Next screenshot'}).click();
+  await strip.getByText('2 of 12 · Aleve story page', {exact:true}).waitFor();
+  await strip.locator('.thumbnail-card a').nth(1).press('Enter');
+  assert.match(await viewer.locator('.viewer-caption').innerText(), /^2 of 12/);
   await page.keyboard.press('Escape');
   await page.goto(workUrl + 'bayer-aleve/');
   await page.locator('.study-image').nth(1).press('Enter');
-  assert.match(await viewer.locator('.viewer-caption').innerText(), /^2 of 2/);
+  assert.match(await viewer.locator('.viewer-caption').innerText(), /^2 of 5/);
   await page.goBack();
   assert.equal(page.url(), workUrl + '#gallery-bayer');
   await page.goForward();
@@ -432,7 +450,18 @@ async function check() {
           if (width === 1280) await checkShareImage(page, 'bayer-aleve.jpg');
           assert.match(await page.locator('.study-header .lead').innerText(), /lead software developer for Aleve\.com/i);
           assert.equal(await page.locator('.study-header + .study-evidence').count(), 1, 'Show project images directly after the role');
-          assert.equal(await page.locator('.study-figures figcaption').count(), 0);
+          const choices = page.locator('.index-choices a');
+          assert.deepEqual(await choices.allTextContents(), ['Brand websites', 'Joint Visualizer', 'Pest Management', 'Lawn & Landscape']);
+          for (const [i, size] of [5, 1, 3, 3].entries()) {
+            await choices.nth(i).click();
+            const panel = page.locator('.index-panel:visible');
+            assert.equal(await panel.count(), 1);
+            assert.equal(await panel.locator('.study-image').count(), size);
+            await panel.locator('.study-image').first().press('Enter');
+            assert.match(await page.getByRole('dialog').locator('.viewer-caption').innerText(), new RegExp('^1 of ' + size + ' '));
+            await page.keyboard.press('Escape');
+          }
+          await choices.first().click();
           await captureWork(page, 'bayer-showcase');
         }
         if (study.card === 'westinghouse') {
@@ -538,7 +567,7 @@ async function check() {
         assert.equal(await imageLinks.count(), study.images);
         assert.ok(await imageLinks.evaluateAll(links => links.every(a => a.classList.contains('image-enlarge') &&
           (!a.target || a.target === '_self') && a.getAttribute('aria-label')?.trim())), 'Each case figure has one named enlargement link');
-        for (const image of await images.all()) {
+        for (const image of await page.locator('.study-evidence img:visible').all()) {
           await image.evaluate(img => img.scrollIntoView({block: 'center', behavior: 'instant'}));
           await image.evaluate(img => img.decode());
         }

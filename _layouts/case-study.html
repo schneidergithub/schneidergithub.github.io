@@ -16,7 +16,10 @@ layout: default
     {% assign group = site.data.gallery | where: 'id', page.gallery_group | first %}
     {% assign figures = group.items %}
   {% endif %}
-  {% if figures %}
+  {% if page.collection_index %}
+    {% assign group = site.data.gallery | where: 'id', page.collection_index | first %}
+    {% include project-index.html group=group %}
+  {% elsif figures %}
   <section class="study-evidence" data-image-group="{{ page.url | escape }}" data-image-title="{{ page.title | escape }}" aria-labelledby="screens-title">
     <h2 id="screens-title"{% unless page.figure_heading %} class="visually-hidden"{% endunless %}>{{ page.figure_heading | default: "Project screenshots" | escape }}</h2>
     <div class="study-figures">
@@ -38,4 +41,4 @@ layout: default
     <a class="study-return" href="{{ '/work/' | relative_url }}#{{ work_anchor | escape }}">{{ page.work_return_label | default: default_label | escape }}</a>
   </nav>
 </article>
-{% if figures %}{% include image-viewer.html makers_plate=true %}{% endif %}{% if figures or page.work_design %}<script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}?v=3" defer></script>{% endif %}
+{% if figures or page.collection_index %}{% include image-viewer.html makers_plate=true %}{% endif %}{% if figures or page.work_design %}<script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}?v=3" defer></script>{% endif %}

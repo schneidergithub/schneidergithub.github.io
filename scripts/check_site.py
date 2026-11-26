@@ -60,9 +60,11 @@ class Page(HTMLParser):
                 errors.append(f'{self.path}: unexpected video embed')
         allowed_scripts = {'/assets/navigation.js?v=2'}
         if self.path.is_relative_to(SITE / 'work'):
-            allowed_scripts.update({'/assets/portfolio/gallery-return.js?v=3', '/assets/portfolio/image-viewer.js?v=2'})
+            allowed_scripts.update({'/assets/portfolio/gallery-return.js?v=3', '/assets/portfolio/image-viewer.js?v=3'})
+        if self.path in (SITE / 'work/index.html', file_for('/work/bayer-aleve/')):
+            allowed_scripts.add('/assets/portfolio/work-galleries.js?v=1')
         if self.path == SITE / 'experience/index.html':
-            allowed_scripts.update({'/assets/portfolio/experience-gallery.js', '/assets/portfolio/image-viewer.js?v=2'})
+            allowed_scripts.update({'/assets/portfolio/experience-gallery.js', '/assets/portfolio/image-viewer.js?v=3'})
         if media_page:
             player_script = '/assets/publications/video-player.js'
             if self.path == SITE / 'articles/index.html':
