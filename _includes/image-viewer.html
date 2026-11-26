@@ -8,10 +8,17 @@
     <figcaption class="viewer-caption" aria-live="polite" aria-atomic="true"></figcaption>
   </figure>
   <p class="viewer-error" role="status" hidden>The image could not be loaded. Try opening the original, or choose another image.</p>
-  <nav class="viewer-controls" aria-label="Image navigation">
-    <button type="button" class="viewer-previous">Previous</button>
+  <nav class="viewer-controls{% if include.makers_plate %} viewer-controls-plate{% endif %}" aria-label="Image navigation">
+    {% unless include.makers_plate %}<button type="button" class="viewer-previous">Previous</button>{% endunless %}
     <a class="viewer-original">Open original</a>
+    {% if include.makers_plate %}
+    <div class="gallery-plate">
+      <button type="button" class="viewer-previous" aria-label="Previous"><span aria-hidden="true">←</span></button>
+      <button type="button" class="viewer-next" aria-label="Next"><span aria-hidden="true">→</span></button>
+    </div>
+    {% else %}
     <button type="button" class="viewer-next">Next</button>
+    {% endif %}
   </nav>
 </dialog>
 <script src="{{ '/assets/portfolio/image-viewer.js' | relative_url }}?v=2" defer></script>

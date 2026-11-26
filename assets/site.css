@@ -916,14 +916,6 @@ a{color:inherit}
 .role-thumbnails a::after { content: none; }
 .role-thumbnails a:hover { border-color: var(--accent); }
 .role-thumbnails a:focus-visible { outline-offset: -3px; outline: 3px solid var(--focus); }
-.role-gallery-controls:not([hidden]) { display: flex; flex: none; gap: .25rem; }
-.role-gallery-controls button {
-  display: grid; place-items: center; width: 44px; height: 44px; padding: 0;
-  border: 1px solid var(--control-border); border-radius: .25rem;
-  background: var(--panel); color: var(--text); cursor: pointer; font: 1.5rem/1 system-ui;
-}
-.role-gallery-controls button[aria-disabled="true"] { opacity: .4; cursor: default; }
-.role-gallery-controls button:focus-visible { outline: 3px solid var(--focus); outline-offset: 1px; }
 @media (max-width: 540px) {
   .role-thumbnails a { flex-basis: calc((100% - 1.5rem) / 3.35); }
   .role-gallery-controls:not([hidden]) { display: none; }

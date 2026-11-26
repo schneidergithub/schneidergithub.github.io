@@ -183,6 +183,15 @@ async function openImageAndReturn(page, control) {
   assert.ok(await control.evaluate(el => el === document.activeElement), 'Return keyboard focus to the image that opened the original');
 }
 
+async function checkJoinedArrows(plate) {
+  const buttons = plate.getByRole('button');
+  assert.deepEqual(await buttons.allTextContents(), ['←', '→']);
+  const [left, right] = await buttons.evaluateAll(items => items.map(item => item.getBoundingClientRect().toJSON()));
+  assert.ok([left, right].every(box => box.width >= 44 && box.height >= 44));
+  assert.ok(Math.abs(left.right - right.left) <= 1 && Math.abs(left.top - right.top) <= 1,
+    'Previous and Next should share one edge');
+}
+
 async function checkRoleGalleries(browser, origin) {
   const url = new URL('/experience/', origin).href;
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
@@ -213,6 +222,7 @@ async function checkRoleGalleries(browser, origin) {
       const [back, forward] = await role.locator('.role-gallery-controls button').all();
       if (width === 1280 && row.full > row.visible + 1) {
         assert.ok(await forward.isVisible());
+        await checkJoinedArrows(role.locator('.role-gallery-controls'));
         await forward.click();
         await page.waitForFunction(id => document.getElementById(id).scrollLeft > 0, 'thumbnails-' + group.id);
         await back.click();
@@ -227,6 +237,7 @@ async function checkRoleGalleries(browser, origin) {
       const position = await strip.evaluate(el => [el.scrollLeft, scrollY]);
       await link.press('Enter');
       await viewer.waitFor({ state: 'visible' });
+      await checkJoinedArrows(viewer.locator('.gallery-plate'));
       assert.equal(await viewer.locator('h2').innerText(), group.title);
       assert.equal(await viewer.locator('.viewer-original').getAttribute('href'), new URL(group.items[index].image, url).href);
       assert.equal(await viewer.locator('.viewer-caption').innerText(),
