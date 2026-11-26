@@ -581,7 +581,7 @@ async function checkEssay(page, { capture = false, directEntry = false } = {}) {
   const permalink = entry.getByRole('link', { name: 'Link to ' + title, exact: true });
   assert.equal(await permalink.count(), 1);
   assert.equal(await permalink.getAttribute('href'), '#fresh-sandbox-github');
-  assert.equal(await entry.locator('.publication-heading .entry-permalink').count(), 1);
+  assert.equal(await entry.locator('.publication-copy .entry-permalink').count(), 1);
   const coverLink = entry.locator('a.collection-cover');
   const cover = coverLink.locator('img');
   await decodeCover(cover);

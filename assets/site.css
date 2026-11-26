@@ -1089,6 +1089,7 @@ a{color:inherit}
   grid-area: copy;
   min-width: 0;
 }
+.publication-copy p > .entry-permalink { vertical-align: middle; }
 .publication-date {
   margin-bottom: .4rem;
   font-size: .875rem;
