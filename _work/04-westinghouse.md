@@ -14,6 +14,6 @@ home_highlight:
   label: "Elasticsearch throughput"
   description: "My load tests exposed server errors two weeks before launch. I tuned Elasticsearch and tripled search throughput."
 title: "Load testing a website release"
-context: "Westinghouse · Sogeti / Capgemini engagement"
+context: "Westinghouse · Sogeti / Capgemini"
 ---
 Load tests exposed server errors two weeks before launch. I reconfigured the cloud services and tuned Elasticsearch to resolve the errors. I led QA across 13 projects with a 20-person offshore team.
