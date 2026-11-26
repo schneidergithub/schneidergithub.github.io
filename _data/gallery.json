@@ -258,6 +258,7 @@
   },
   {
     "id": "westinghouse",
+    "static_on_work_index": true,
     "role_id": "sogeti-capgemini",
     "title": "Westinghouse",
     "description": "At Sogeti / Capgemini, I led QA across 13 Westinghouse projects: QTP/UFT automation, performance testing with LoadRunner, JMeter, and BlazeMeter, and playbooks and documentation for a 20-person offshore team.",

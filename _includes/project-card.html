@@ -1,7 +1,9 @@
 {% assign studies = all_studies | where: 'project', project.slug | sort: 'title' %}
 {% assign group = site.data.gallery | where: 'id', project.slug | first %}
+{% assign banner = project.index_banner %}
+{% if group.static_on_work_index %}{% assign banner = group.items | first %}{% endif %}
 {% assign heading = include.heading | default: 'h3' %}
-<article class="project-card{% if project.index_feature %} work-support{% endif %}{% if group %} has-evidence{% endif %}" id="{{ project.slug }}" tabindex="-1">
+<article class="project-card{% if project.index_feature %} work-support{% endif %}{% if banner or group %} has-evidence{% endif %}" id="{{ project.slug }}" tabindex="-1">
   <div class="project-copy">
     <p class="work-kicker">{{ project.context | escape }}</p>
     <{{ heading }} class="project-heading">{% if project.index_metric %}<span class="work-metric">{{ project.index_metric | escape }}</span> {% endif %}{{ project.index_title | default: project.title | escape }}</{{ heading }}>
@@ -14,5 +16,12 @@
     </div>
     {% endif %}
   </div>
-  {% if group %}{% include project-gallery.html group=group screens=project.index_screens %}{% endif %}
+  {% if banner %}
+  <div class="project-banner"{% if group %} id="gallery-{{ group.id }}"{% endif %}>
+    {% if group %}<span class="legacy-anchor" id="images-{{ group.id }}"></span>{% endif %}
+    <img{% if group %} id="original-{{ banner.image | split: '/' | last | slugify }}"{% endif %} src="{{ banner.image | relative_url }}" alt="{{ banner.alt | escape }}" width="{{ banner.width }}" height="{{ banner.height }}" loading="lazy" decoding="async">
+  </div>
+  {% elsif group %}
+    {% include project-gallery.html group=group screens=project.index_screens %}
+  {% endif %}
 </article>

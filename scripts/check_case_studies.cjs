@@ -52,11 +52,18 @@ async function checkDirectory(page, workUrl) {
   assert.match(await page.locator('#propoint').innerText(), /Around 30,000[\s\S]*hundreds of millions/i);
   assert.match(await page.locator('#westinghouse .project-heading').innerText(), /3×\s+Elasticsearch throughput/);
   assert.match(await page.locator('#indiana .project-heading').innerText(), /92\s+counties/);
+  const map = page.locator('#indiana .project-banner img');
+  assert.match(await map.getAttribute('alt'), /Indiana.*92 counties/);
+  assert.equal(await page.locator('#indiana .project-banner :is(a, button)').count(), 0);
   const first = await page.locator('#propoint .project-heading').boundingBox();
   assert.ok(first.y >= 0 && first.y + first.height <= page.viewportSize().height, 'The second project is identifiable without scrolling');
   if (page.viewportSize().width === 1280) {
     const cards = await page.locator('.work-support').evaluateAll(items => items.map(el => el.getBoundingClientRect().top));
     assert.ok(cards.every(top => Math.abs(top - cards[0]) <= 1), 'The three engineering projects share a row');
+    const media = await page.locator('.featured-projects :is(.project-gallery, .project-banner)').evaluateAll(items =>
+      items.map(el => el.getBoundingClientRect().top));
+    assert.equal(media.length, 3);
+    assert.ok(media.every(top => Math.abs(top - media[0]) <= 1), 'Featured project images align on desktop');
   }
   const routes = await page.locator('.benchmark-actions a, .work-links a').evaluateAll(items =>
     [...new Set(items.filter(a => a.pathname.startsWith('/work/') && !a.hash).map(a => a.pathname))].sort());
@@ -76,6 +83,8 @@ async function checkDirectory(page, workUrl) {
   assert.equal(await page.getByText('Project summaries', {exact:true}).count(), 0);
   assert.equal(await page.locator('main a[href="/experience/#nuix"]').count(), 0);
   await captureWork(page, 'directory');
+  await map.scrollIntoViewIfNeeded();
+  await map.evaluate(img => img.decode());
   await read.press('Enter');
   assert.equal(page.url(), workUrl + 'scientific-ai-benchmark/');
   await page.getByRole('link', {name:'Back to Selected Work',exact:true}).press('Enter');
@@ -88,6 +97,13 @@ async function checkGallery(page, workUrl, width, directEntry) {
   for (const group of gallery) {
     await page.goto(workUrl + '#gallery-' + group.id);
     const section = page.locator('#gallery-' + group.id);
+    if (group.static_on_work_index) {
+      const banner = section.getByRole('img', { name: group.items[0].alt });
+      assert.equal(await banner.getAttribute('src'), group.items[0].image);
+      await banner.evaluate(img => img.decode());
+      assert.equal(await section.locator('a, button').count(), 0);
+      continue;
+    }
     const links = section.locator('.thumbnail-card a');
     const displayed = group.id === 'propoint'
       ? group.items.filter(item => ['Book a service', 'Desktop checkout'].includes(item.title)) : group.items;
@@ -337,14 +353,11 @@ async function checkImageReturns(browser, workUrl) {
   assert.equal(await page.locator('dialog[open]').count(), 0, 'Back/Forward does not revive the overlay');
 
   await page.goto(workUrl);
-  for (const id of ['westinghouse', 'bucky-ball']) {
-    const single = page.locator('#gallery-' + id + ' .image-enlarge');
-    await single.press('Enter');
-    assert.ok(await viewer.locator('.gallery-plate').isHidden(), 'Single originals need no gallery arrows');
-    assert.ok(await viewer.getByRole('link', {name:'Open original'}).isVisible());
-    await page.keyboard.press('Escape');
-    await viewer.waitFor({state:'hidden'});
-  }
+  await page.locator('#gallery-bucky-ball .image-enlarge').press('Enter');
+  assert.ok(await viewer.locator('.gallery-plate').isHidden(), 'Single originals need no gallery arrows');
+  assert.ok(await viewer.getByRole('link', {name:'Open original'}).isVisible());
+  await page.keyboard.press('Escape');
+  await viewer.waitFor({state:'hidden'});
   await page.emulateMedia({reducedMotion:'reduce'});
   assert.ok(await page.locator('#case-studies-title').evaluate(el => !CSS.supports('view-transition-name: none') || getComputedStyle(el).viewTransitionName === 'none'));
   await page.setViewportSize({width:320,height:812});
