@@ -19,12 +19,6 @@ groups:
 <header class="page-intro publication-intro">
   <h1>Articles &amp; Demos</h1>
   <p class="lead">Talks and field reports on AI, cybersecurity, and software delivery.</p>
-  <nav class="publication-jumps section-jumps" aria-label="Publication formats">
-    {% for group in page.groups %}
-      {% if group.id == 'monthly-reviews' %}{% assign members = site.data.publications | where_exp: 'item', 'item.issue_month' %}{% else %}{% assign members = site.data.publications | where: 'type', group.type %}{% endif %}
-      <a href="#{{ group.id }}">{{ group.label }} <span class="count">{{ members.size }}</span></a>
-    {% endfor %}
-  </nav>
 </header>
 {% for group in page.groups %}
 {% if group.id == 'monthly-reviews' %}{% include newsletter-archive.html %}{% continue %}{% endif %}

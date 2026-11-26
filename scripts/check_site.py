@@ -13,13 +13,12 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / '_site'
 CHESS_ESSAY = '/articles/why-chess-pros-sometimes-ignore-super-intelligent-ai/'
-ESSAYS = ['/articles/fresh-sandbox-github/', CHESS_ESSAY, '/articles/why-i-came-to-trust-automated-testing/']
+ESSAYS = [CHESS_ESSAY, '/articles/why-i-came-to-trust-automated-testing/']
 PAGES = ['/', '/experience/', '/work/', '/articles/', '/pgp/', '/404.html'] + ESSAYS
 STUDIES = ['/work/from-booking-to-checkout/', '/work/super-salon-checkout/', '/work/indiana-case-archives/', '/work/bayer-aleve/',
            '/work/westinghouse-performance/', '/work/scientific-ai-benchmark/', '/work/node-ipc-investigation/',
            '/work/chess-puzzle-qa/']
 SHARE_CARDS = {
-    '/articles/fresh-sandbox-github/': 'fresh-sandbox-github',
     '/work/chess-puzzle-qa/': 'chess-puzzle-benchmark',
     '/work/bayer-aleve/': 'bayer-aleve',
     '/work/westinghouse-performance/': 'westinghouse-performance',
@@ -219,6 +218,9 @@ if '/experience/' in parsed:
     check_experience(file_for('/experience/'))
 
 sitemap = file_for('/sitemap.xml').read_text()
+retired_essay = '/articles/fresh-sandbox-github/'
+if file_for(retired_essay).exists() or retired_essay in sitemap:
+    errors.append(f'{retired_essay}: unpublished essay included in the site or sitemap')
 for route in ESSAYS:
     if route not in parsed['/articles/'].links or sitemap.count(f'<loc>https://www.aaronschneider.org{route}</loc>') != 1:
         errors.append(f'{route}: expected a link in Articles & Demos and a unique sitemap entry')

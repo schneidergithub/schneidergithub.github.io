@@ -20,7 +20,7 @@ const monthlyIssues = publications.filter(item => item.issue_month)
   .sort((a, b) => b.issue_month.localeCompare(a.issue_month));
 const publicationGroups = {
   recordings: ['benchmark-presentation', 'chess-benchmark-presentation', 'elo-rating-system', 'node-ipc-interview', 'node-ipc-follow-up', 'security-livestream'],
-  'engineering-essays': ['why-chess-pros-sometimes-ignore-super-intelligent-ai', 'fresh-sandbox-github', 'why-i-came-to-trust-automated-testing'],
+  'engineering-essays': ['why-chess-pros-sometimes-ignore-super-intelligent-ai', 'why-i-came-to-trust-automated-testing'],
   'monthly-reviews': monthlyIssues.map(item => item.id),
   investigations: ['node-ipc-report']
 };
@@ -573,23 +573,20 @@ async function checkGraderGuide(page, directEntry = false) {
 }
 
 async function checkEssay(page, { capture = false, directEntry = false } = {}) {
-  const title = 'What a fresh sandbox inherits from GitHub';
-  const essayPath = '/articles/fresh-sandbox-github/';
+  const title = 'Why I Came to Trust Automated Testing';
+  const essayPath = '/articles/why-i-came-to-trust-automated-testing/';
   const directory = page.locator('.publication-group[aria-labelledby="engineering-essays"]');
-  const entry = directory.locator('#fresh-sandbox-github');
+  const entry = directory.locator('#why-i-came-to-trust-automated-testing');
   assert.equal(await entry.locator('.attribution').count(), 0);
   const permalink = entry.getByRole('link', { name: 'Link to ' + title, exact: true });
   assert.equal(await permalink.count(), 1);
-  assert.equal(await permalink.getAttribute('href'), '#fresh-sandbox-github');
+  assert.equal(await permalink.getAttribute('href'), '#why-i-came-to-trust-automated-testing');
   assert.equal(await entry.locator('.publication-copy .entry-permalink').count(), 1);
   const coverLink = entry.locator('a.collection-cover');
   const cover = coverLink.locator('img');
   await decodeCover(cover);
   assert.equal(await coverLink.getAttribute('href'), essayPath);
-  assert.ok(await cover.evaluate(img => new URL(img.currentSrc).pathname === '/assets/publications/chess-render.jpg' &&
-    img.naturalWidth === 1280 && img.naturalHeight === 720 && /chess|board/i.test(img.alt)));
-  const frame = await coverLink.boundingBox();
-  assert.ok(frame.width > 0 && Math.abs(frame.width - frame.height) <= 2, 'The chessboard thumbnail should have a square frame');
+  assert.equal(await cover.evaluate(img => new URL(img.currentSrc).pathname), '/assets/portfolio/thumbs/supersalon.webp');
   if (capture) await captureSection(page, directory, 'engineering-essays-entry');
   const link = entry.locator('h3').getByRole('link', { name: title, exact: true });
   assert.equal(await link.getAttribute('href'), essayPath);
@@ -623,10 +620,7 @@ async function checkEssay(page, { capture = false, directEntry = false } = {}) {
   assert.equal(await article.locator('.essay-meta').count(), 1);
   assert.equal((await article.locator('.essay-meta').innerText()).trim(), 'By Aaron Schneider');
   assert.equal(await page.locator('.site-header [aria-current="location"]').getAttribute('href'), '/articles/');
-  const recording = article.locator('a[href="https://www.youtube.com/watch?v=i0a7tXSLj3c&t=3571s"]');
-  assert.ok(await recording.isVisible());
-  const milestone = 'https://github.com/commondevops/llm-chess-experiment/blob/8d660666fc25a99a8846a2867089f8cfe6381f63/milestone1_local_recreation_instructions.md#L16-L51';
-  assert.ok(await article.locator('a[href="' + milestone + '"]').isVisible(), 'Link the example to the pinned project instructions');
+  assert.ok(await article.getByRole('link', { name: 'How the checkout calculation differed' }).isVisible());
   if (capture) {
     await captureSection(page, article, 'engineering-essay');
     if (page.viewportSize().width === 375) {
@@ -660,14 +654,14 @@ async function checkDiscovery(page) {
   assert.equal(await benchmark.getByRole('link', { name: 'Merged task on GitHub' }).getAttribute('href'), mergedTask);
   const caseLinks = benchmark.locator('a[href^="/work/scientific-ai-benchmark/"]');
   assert.deepEqual(await caseLinks.evaluateAll(links => links.map(a => a.pathname + a.hash)), [graderGuide]);
+  assert.equal(await page.getByRole('navigation', { name: 'Publication formats' }).count(), 0);
+  assert.equal(await page.locator('main a[href="/work/from-booking-to-checkout/"]').count(), 0);
   const headings = await page.locator('.publication-group > h2').evaluateAll(items => items.map(el => el.id));
   assert.deepEqual(headings, Object.keys(publicationGroups), 'Keep all four publication sections in reading order');
   for (const [group, entries] of Object.entries(publicationGroups)) {
-    const jump = page.locator('.publication-jumps a[href="#' + group + '"]');
-    assert.match(await jump.innerText(), new RegExp('\\b' + entries.length + '\\b'));
-    await jump.press('Enter');
-    assert.equal(page.url(), collection + '#' + group);
-    const heading = page.locator('h2#' + group);
+    await page.goto(collection + '#' + group);
+    const heading = page.locator('h2:target');
+    assert.equal(await heading.getAttribute('id'), group);
     assert.ok(await heading.isVisible());
     const rows = page.locator('.publication-group').filter({ has: heading }).locator('li.publication');
     assert.deepEqual((await rows.evaluateAll(items => items.map(item => item.id))).sort(), [...entries].sort());
