@@ -21,8 +21,8 @@ const monthlyIssues = publications.filter(item => item.issue_month)
 const publicationGroups = {
   recordings: ['benchmark-presentation', 'chess-benchmark-presentation', 'elo-rating-system', 'node-ipc-interview', 'node-ipc-follow-up', 'security-livestream'],
   'engineering-essays': ['why-chess-pros-sometimes-ignore-super-intelligent-ai', 'why-i-came-to-trust-automated-testing'],
-  'monthly-reviews': monthlyIssues.map(item => item.id),
-  investigations: ['node-ipc-report']
+  investigations: ['node-ipc-report'],
+  'monthly-reviews': monthlyIssues.map(item => item.id)
 };
 
 async function decodeCover(image) {
@@ -59,8 +59,9 @@ async function checkPlayers(page, expectedIds = ids) {
     assert.ok(ids.includes(id), 'Unknown YouTube video ' + id);
     seen.push(id);
     const embed = 'https://www.youtube-nocookie.com/embed/' + id;
-    const toggle = disclosure.locator('summary');
-    assert.equal(await toggle.locator('.play-caption').innerText(), 'Play here');
+    const summary = disclosure.locator('summary');
+    const toggle = collection && id === ids[0] ? entry.locator('[data-player-heading] button') : summary;
+    assert.equal(await summary.locator('.play-caption').innerText(), 'Play here');
     const source = entry.locator('a.watch-source');
     assert.equal(await source.count(), collection ? 0 : 1);
     if (!collection) {
@@ -680,7 +681,7 @@ async function checkDiscovery(page) {
   }
   const report = page.locator('#node-ipc-report');
   const incidentPath = '/work/node-ipc-investigation/';
-  const incident = report.getByRole('link', { name: 'node-ipc investigation', exact: true });
+  const incident = report.getByRole('link', { name: 'Read the case study', exact: true });
   assert.equal(await incident.getAttribute('href'), incidentPath);
   await Promise.all([page.waitForURL(new URL(incidentPath, origin).href), incident.press('Enter')]);
   const reportEntry = page.locator('.study-copy a[href="/articles/#node-ipc-report"]');
@@ -767,7 +768,7 @@ async function checkPhoneEntry(browser) {
 
   const featured = page.locator('#benchmark-presentation');
   const title = await featured.locator('h3').boundingBox();
-  const poster = await featured.locator('picture.benchmark-cover').boundingBox();
+  const poster = await featured.locator('.video-poster img').boundingBox();
   const play = await featured.locator('summary .play-mark').boundingBox();
   const row = await featured.boundingBox();
   assert.ok(await featured.locator('h3 .keep-term').evaluate(el => {
@@ -785,11 +786,20 @@ async function checkPhoneEntry(browser) {
   fs.mkdirSync(dir, { recursive: true });
   const version = new URL(origin).hostname === '127.0.0.1' ? 'preview' : 'live';
   await page.screenshot({ path: path.join(dir, version + '-articles-375x812.jpg'), quality: 85, animations: 'disabled' });
-  await featured.locator('summary').press('Enter');
+  const titleToggle = featured.locator('[data-player-heading]').getByRole('button', { name: /^Play Reconstructing a meta-analysis with AI agents$/ });
+  const summary = featured.locator('summary');
+  assert.equal(await summary.evaluate(el => el.tabIndex), -1, 'Only the title needs a tab stop to start playback');
+  await titleToggle.click();
   const frame = featured.locator('iframe');
   await frame.waitFor({ state: 'visible' });
   assert.ok((await frame.boundingBox()).width >= row.width - 4, 'The open phone player should span the available row');
-  await featured.locator('summary').press('Space');
+  assert.equal(await featured.locator('[data-player-heading] button').getAttribute('aria-expanded'), 'true');
+  await summary.press('Space');
+  await frame.waitFor({ state: 'detached' });
+  await summary.locator('.video-poster').click();
+  await frame.waitFor({ state: 'visible' });
+  assert.equal(await featured.locator('iframe').count(), 1);
+  await featured.locator('[data-player-heading] button').press('Enter');
   await frame.waitFor({ state: 'detached' });
   for (const entry of publicationGroups.recordings.slice(1)) {
     const other = page.locator('#' + entry);
@@ -906,15 +916,15 @@ async function checkCollection(page, width) {
   const collectionUrl = new URL('/articles/', origin).href;
   await Promise.all([page.waitForURL(collectionUrl), collectionLink.press('Enter')]);
   const benchmark = page.locator('#benchmark-presentation');
-  const preview = benchmark.locator('picture.benchmark-cover img');
+  const preview = benchmark.locator('.video-poster img');
   await decodeCover(preview);
-  assert.equal(await preview.evaluate(img => new URL(img.currentSrc).pathname), '/assets/publications/benchmark-session.jpg');
+  assert.equal(await preview.evaluate(img => new URL(img.currentSrc).pathname), '/assets/publications/benchmark-meta-analysis.jpg');
   const main = page.locator('main');
   assert.equal(await main.getByRole('link', { name: /watch on youtube/i }).count(), 0);
   assert.doesNotMatch(await main.innerText(), /CommonDevOps|By Aaron Schneider/i);
   assert.equal(await page.locator('#node-ipc-report .publication-copy > p').first().innerText(),
     'Aaron Schneider led the investigation and was the primary author.');
-  assert.equal(await page.locator('#node-ipc-report').getByRole('link', { name: 'Report on Figshare' }).getAttribute('href'), 'https://doi.org/10.6084/m9.figshare.33865414');
+  assert.equal(await page.locator('#node-ipc-report').getByRole('link', { name: 'Read the report on Figshare' }).getAttribute('href'), 'https://doi.org/10.6084/m9.figshare.33865414');
   await checkGraderGuide(page);
   await checkDiscovery(page);
   await checkEssay(page, { capture: true });
