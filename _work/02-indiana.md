@@ -1,7 +1,9 @@
 ---
-index_order: 4
+index_order: 3
+index_feature: archive
 index_case: /work/indiana-case-archives/
-index_title: Archiving case files across 92 Indiana counties
+index_metric: "92"
+index_title: counties archiving case files
 order: 2
 slug: "indiana"
 organization: "Indiana State Department"
@@ -14,4 +16,4 @@ home_highlight:
 title: "Archiving prosecutors’ case files"
 context: "Indiana State Department · BCforward engagement"
 ---
-I built a program for 92 Indiana counties that moved closed-case files into lower-cost storage and restored them automatically when a prosecutor reopened a case.
+I built an archiver that automatically restored files when Indiana prosecutors reopened a case. A one-county pilot exposed filenames it couldn’t handle. I wrote a repair utility before the statewide rollout.

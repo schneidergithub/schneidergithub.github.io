@@ -4,8 +4,7 @@ slug: chess-benchmarks
 title: Chess benchmarks
 context: CommonDevOps · AI-assisted software development
 research_publication: chess-benchmark-presentation
-case_label: Case study
-source_label: Watch the chess benchmark presentation
+source_label: View recording details
 source_url: /articles/#chess-benchmark-presentation
 ---
-A qualitative benchmark of AI-assisted software development: ask coding tools to build a chess puzzle video, then inspect the result. I reviewed board orientation, move cues, and when the solution appeared.
+I asked AI coding tools to build playable chess puzzle videos. One version revealed the solution while the countdown was still running. I reviewed the rendered frames to see whether a viewer had time to solve the puzzle.

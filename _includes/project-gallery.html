@@ -1,17 +1,19 @@
 {% assign group = include.group %}
-{% assign examples = group.items | where_exp: 'image', 'image.detail_of == nil' %}
-{% assign detail_count = group.items.size | minus: examples.size %}
-{% assign cover = examples | first %}
-{% if include.cover %}{% assign cover = examples | where: 'title', include.cover | first | default: cover %}{% endif %}
-<section class="project-gallery portfolio-gallery" id="gallery-{{ group.id }}" aria-label="{{ group.title | escape }} images" data-image-group="{{ group.id }}" data-image-title="{{ group.title | escape }}">
-  {% if group.id == 'propoint' %}<span class="legacy-anchor" id="portfolio-gallery" tabindex="-1" aria-label="Project images"></span><span class="legacy-anchor" id="gallery-title"></span>{% endif %}
+<section class="project-gallery portfolio-gallery" id="gallery-{{ group.id }}" aria-labelledby="gallery-{{ group.id }}-title" data-image-group="{{ group.id }}" data-image-title="{{ group.title | escape }}">
+  {% if group.id == 'propoint' %}<span class="legacy-anchor" id="portfolio-gallery"></span><span class="legacy-anchor" id="gallery-title"></span>{% endif %}
   <h3 class="visually-hidden" id="gallery-{{ group.id }}-title">{{ group.title | escape }} images</h3>
-  {% unless include.collapsed %}{% include gallery-image.html item=cover cover=true %}{% endunless %}
-  {% if examples.size > 1 or include.collapsed %}
-  <details class="gallery-disclosure" id="images-{{ group.id }}">
-    <summary><span class="gallery-expand">{% if include.archive %}View archived image{% elsif examples.size == 1 %}View image{% elsif detail_count > 0 %}Browse {{ examples.size }} examples and {{ detail_count }} detail views{% else %}View all {{ examples.size }} images{% endif %}</span><span class="gallery-collapse">{% if examples.size == 1 %}Hide image{% else %}Show fewer images{% endif %}</span><span class="visually-hidden"> from {{ group.title | escape }}</span></summary>
-    {% if include.collapsed %}{% assign remaining = examples %}{% else %}{% assign remaining = examples | where_exp: 'image', 'image.image != cover.image' %}{% endif %}
-    {% include gallery-grid.html group=group items=remaining offset=0 %}
-  </details>
-  {% endif %}
+  <div id="images-{{ group.id }}" class="work-thumbnails{% if include.screens %} work-screen-pair{% elsif group.items.size == 1 %} work-single-image{% endif %}">
+    {% if include.screens %}
+      {% for screen in include.screens %}
+        {% assign item = group.items | where: 'title', screen.title | first %}
+        {% include gallery-image.html item=item label=screen.label order=forloop.index %}
+      {% endfor %}
+      {% for item in group.items %}
+        {% assign shown = include.screens | where: 'title', item.title | first %}
+        {% unless shown %}<a class="old-image-bookmark" id="original-{{ item.image | split: '/' | last | slugify }}" href="{{ item.image | relative_url }}">Open original image of {{ item.title | escape }}</a>{% endunless %}
+      {% endfor %}
+    {% else %}
+      {% for item in group.items %}{% include gallery-image.html item=item order=forloop.index %}{% endfor %}
+    {% endif %}
+  </div>
 </section>

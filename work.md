@@ -1,6 +1,6 @@
 ---
 title: Selected Work
-description: Aaron Schneider’s work on Terminal-Bench-Science, salon booking and checkout software, and enterprise search performance.
+description: Scientific AI benchmarks, salon software for 30,000 salons, enterprise search performance, and case-file archiving across Indiana’s 92 counties.
 permalink: /work/
 work_design: true
 lead_case: /work/scientific-ai-benchmark/
@@ -15,26 +15,19 @@ lead_case: /work/scientific-ai-benchmark/
   <div>
     <p class="work-kicker">Terminal-Bench-Science</p>
     <h2 id="case-studies-title" tabindex="-1">{{ benchmark.title | escape }}</h2>
-    <p class="benchmark-byline">Terminal-Bench-Science is the latest benchmark project used to test frontier AI agents on real scientific work. Version 1 and associated research paper will include “MDD Executive Function,” the task Dr. Ian Miller and I co-authored.</p>
-    <div class="benchmark-actions">
-      <a class="work-primary" href="{{ benchmark.url | relative_url }}">Explore the research task</a>
-      <a href="{{ benchmark.contribution_url | escape }}">View the merged task</a>
+  </div>
+  <div>
+    <p class="benchmark-byline">Dr. Ian Miller and I co-authored “MDD Executive Function.” To reproduce the published effect sizes, an AI agent must first choose which study results can be compared.</p>
+    <div class="benchmark-actions work-links">
+      <a href="{{ benchmark.url | relative_url }}">Explore the research task</a>
+      <a href="{{ benchmark.contribution_url | escape }}">Merged task on GitHub</a>
     </div>
   </div>
-  <figure class="research-process" aria-labelledby="research-process-title">
-    <figcaption id="research-process-title">From papers to effect sizes</figcaption>
-    <ol>
-      <li><strong>Published studies</strong><span>Find comparisons that answer the research question.</span></li>
-      <li><strong>Study results</strong><span>Extract the numbers reported for each group.</span></li>
-      <li><strong>Comparable effects</strong><span>Calculate an effect size for each comparison.</span></li>
-    </ol>
-  </figure>
 </section>
 
 {% assign projects = site.work | sort: 'index_order' %}
 <div class="work-projects">
-  <section class="work-index" aria-label="Featured projects">
-    <span class="legacy-anchor" id="project-summaries" tabindex="-1" aria-label="Featured projects"></span>
+  <section class="featured-projects" id="project-summaries" tabindex="-1" aria-label="Featured projects">
     {% for project in projects %}{% if project.index_feature %}{% include project-card.html heading="h2" %}{% endif %}{% endfor %}
   </section>
   <div class="work-research-list" id="commondevops" tabindex="-1">
@@ -42,23 +35,15 @@ lead_case: /work/scientific-ai-benchmark/
       {% if project.research_publication %}
         {% assign publication = site.data.publications | where: 'id', project.research_publication | first %}
         <section class="research-project" id="{{ project.slug }}" tabindex="-1" aria-labelledby="{{ project.slug }}-title">
-          <div>
-            <p class="work-kicker">{{ project.context | escape }}</p>
-            <h2 id="{{ project.slug }}-title"><a href="{{ publication.case_url | relative_url }}">{{ project.title | escape }}</a></h2>
-            {{ project.content }}
-            <div class="work-links">
-              <a href="{{ publication.case_url | relative_url }}">{{ project.case_label | escape }}<span class="visually-hidden">: {{ project.title | escape }}</span></a>
-              <a href="{{ project.source_url | relative_url }}">{{ project.source_label | escape }}</a>
-              {% for video in project.videos %}
-                {% assign recording = site.data.publications | where: 'id', video.id | first %}
-                <a class="work-video-link" href="{{ recording.url | escape }}"><svg width="22" height="16" aria-hidden="true"><use href="{{ "/assets/portfolio/social-icons.svg" | relative_url }}#youtube"></use></svg>{{ video.label | escape }}</a>
-              {% endfor %}
-            </div>
+          <p class="work-kicker">{{ project.context | escape }}</p>
+          <h2 id="{{ project.slug }}-title">{{ project.title | escape }}</h2>
+          <div class="project-detail">{{ project.content }}</div>
+          <div class="work-links">
+            <a href="{{ publication.case_url | relative_url }}">Read the case study<span class="visually-hidden"> about {{ project.title | escape }}</span></a>
           </div>
-          <a class="work-media-link{% if project.slug == 'chess-benchmarks' %} chess-preview{% endif %}" href="{{ project.source_url | relative_url }}" aria-label="{% if project.slug == 'node-ipc' %}Open the published Node-IPC report{% else %}Watch the chess benchmark presentation{% endif %}">
+          <a class="work-evidence-link{% if project.slug == 'chess-benchmarks' %} chess-preview{% endif %}" href="{{ project.source_url | relative_url }}" aria-label="{{ project.source_label | escape }}">
             <span class="work-media-frame"><img src="{{ publication.preview.src | relative_url }}" alt="{{ publication.preview.alt | escape }}" width="{{ publication.preview.width }}" height="{{ publication.preview.height }}" loading="lazy" decoding="async"></span>
-            <span class="work-media-label">{% if project.slug == 'node-ipc' %}Read the published report{% else %}<svg width="22" height="16" aria-hidden="true"><use href="{{ '/assets/portfolio/social-icons.svg' | relative_url }}#youtube"></use></svg>Watch the presentation{% endif %}</span>
-            {% if project.slug == 'chess-benchmarks' %}<span class="work-media-credit">Claude Opus 4.6 · board detail from the presentation</span>{% endif %}
+            <span>{{ project.source_label | escape }}</span>
           </a>
         </section>
       {% endif %}
@@ -74,5 +59,4 @@ lead_case: /work/scientific-ai-benchmark/
 </div>
 
 <script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}?v=3" defer></script>
-
-{% include image-viewer.html %}
+{% include image-viewer.html makers_plate=true %}
