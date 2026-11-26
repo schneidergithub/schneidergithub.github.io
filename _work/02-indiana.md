@@ -1,6 +1,11 @@
 ---
 index_order: 3
 index_feature: archive
+index_banner:
+  image: /assets/portfolio/indiana-counties.svg
+  alt: "Map of Indiana with its 92 counties outlined."
+  width: 520
+  height: 240
 index_case: /work/indiana-case-archives/
 index_metric: "92"
 index_title: counties archiving case files

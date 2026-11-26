@@ -68,7 +68,17 @@
 .work-index .project-card.has-evidence { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem; align-items: start; }
 .work-index .project-detail { max-width: 65ch; }
 .work-contact { margin-top: 1rem; }
-.project-gallery { margin-top: .7rem; }
+.project-gallery, .project-banner { margin-top: .7rem; }
+.project-banner { width: 100%; max-width: 16rem; min-width: 0; }
+.project-banner img {
+  display: block; box-sizing: border-box; width: 100%; height: auto; aspect-ratio: 13 / 6;
+  object-fit: contain; background: var(--panel); border: 1px solid var(--line); border-radius: 3px;
+}
+@media (width > 52rem) {
+  .featured-projects { row-gap: .7rem; }
+  .featured-projects > article { display: grid; grid-row: span 2; grid-template-rows: subgrid; }
+  .featured-projects :is(.project-gallery, .project-banner) { margin-top: 0; }
+}
 .work-index .project-gallery { margin-top: 0; }
 .work-thumbnails {
   display: grid;
