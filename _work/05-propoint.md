@@ -5,9 +5,7 @@ index_case: /work/from-booking-to-checkout/
 index_title: From mobile booking to front-desk checkout
 index_screens:
   - title: Book a service
-    label: Guest Pass booking
   - title: Desktop checkout
-    label: Super Salon checkout
 order: 5
 slug: "propoint"
 organization: "ProPoint Global"

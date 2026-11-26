@@ -35,7 +35,6 @@ layout: default
   </section>
   {% endif %}
   <nav class="study-ending" aria-label="After this case study">
-    <a class="button" href="{{ '/' | relative_url }}#connect">Discuss a project</a>
     {% assign project = site.work | where: 'slug', page.project | first %}
     {% capture default_label %}{{ project.organization | default: project.title }} project summary{% endcapture %}
     <a class="study-return" href="{{ '/work/' | relative_url }}#{{ work_anchor | escape }}">{{ page.work_return_label | default: default_label | escape }}</a>

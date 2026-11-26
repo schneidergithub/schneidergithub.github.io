@@ -63,7 +63,7 @@
       {
         "title": "Aleve homepage",
         "collection": "Brand websites",
-        "preview_label": "Aleve homepage",
+        "featured_preview": true,
         "alt": "Aleve website with product navigation, a campaign feature, and pain-relief information.",
         "image": "/assets/portfolio/portfolio-aleve.webp",
         "thumbnail": "/assets/portfolio/thumbs/portfolio-aleve.webp",
@@ -114,7 +114,7 @@
       {
         "title": "Hemophilia Joint Visualizer",
         "collection": "Joint Visualizer",
-        "preview_label": "Joint Visualizer",
+        "featured_preview": true,
         "alt": "Hemophilia Joint Visualizer with a patient profile, a three-dimensional knee, and a slider for the stages of joint damage.",
         "image": "/assets/portfolio/portfolio-hjv.webp",
         "thumbnail": "/assets/portfolio/thumbs/portfolio-hjv.webp",
@@ -147,7 +147,7 @@
       {
         "title": "Pest Management rate calculator",
         "collection": "Pest Management",
-        "preview_label": "Rate calculator",
+        "featured_preview": true,
         "alt": "Pest Management calculator showing a product quantity, tank size, and a photo of ants.",
         "image": "/assets/portfolio/portfolio-cellphone2.webp",
         "thumbnail": "/assets/portfolio/thumbs/portfolio-cellphone2.webp",
@@ -201,7 +201,7 @@
     "items": [
       {
         "title": "Warehouse inventory",
-        "preview_label": "Warehouse inventory",
+        "featured_preview": true,
         "alt": "Berkeley warehouse form for entering a part number, quantity, warranty, and the sites where an item can be listed.",
         "image": "/assets/portfolio/berkcom-inventory.webp",
         "thumbnail": "/assets/portfolio/thumbs/berkcom-inventory.webp",
@@ -220,7 +220,7 @@
       },
       {
         "title": "ADrive",
-        "preview_label": "ADrive",
+        "featured_preview": true,
         "alt": "ADrive web interface displaying folders, uploaded files, and file-management controls.",
         "image": "/assets/portfolio/adrive.webp",
         "thumbnail": "/assets/portfolio/thumbs/adrive.webp",
@@ -257,7 +257,7 @@
       },
       {
         "title": "Looklister video frame designer",
-        "preview_label": "Looklister frame designer",
+        "featured_preview": true,
         "alt": "Looklister Framemaker with a draggable video area inside a custom frame and fields for the frame name and description.",
         "image": "/assets/portfolio/looklister2.webp",
         "thumbnail": "/assets/portfolio/thumbs/looklister2.webp",

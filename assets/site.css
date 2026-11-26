@@ -208,7 +208,7 @@ main{min-height:65vh}
 }
 .page-intro{padding-block:4rem 2.5rem;max-width:850px}
 .page-intro h1{font-size:clamp(2.5rem,5vw,3.75rem);max-width:none}
-.role-study, .study-ending a:not(.button) {
+.role-study, .study-ending .study-return {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -225,10 +225,8 @@ main{min-height:65vh}
   text-decoration: underline;
 }
 .study-ending{margin-top:2.5rem;align-items:center;gap:.25rem 1.25rem}
-.study-ending .button{max-width:100%;color:var(--bg)}
-.study-ending a:not(.button,.study-return){text-decoration:underline;text-decoration-color:var(--control-border)}
 .study-ending a.study-return{margin-inline-start:auto;color:var(--muted);font-size:.875rem}
-.study-ending a:not(.button):is(:hover,:focus-visible){text-decoration:underline;text-decoration-color:currentColor}
+.study-ending .study-return:is(:hover,:focus-visible){text-decoration:underline;text-decoration-color:currentColor}
 .role-study{font-size:.95rem}
 .context{margin-bottom:.3rem;font-size:.9rem;color:var(--muted)}
 .case-link{margin:.75rem 0}

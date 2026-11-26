@@ -1,5 +1,5 @@
 <div class="filmstrip-controls" hidden>
-  <span class="filmstrip-status" role="status" aria-atomic="true"></span>
+  <span class="filmstrip-status{% if include.hide_status %} visually-hidden{% endif %}" role="status" aria-atomic="true"></span>
   <div class="gallery-plate">
     <button type="button" aria-label="Previous screenshot" aria-controls="images-{{ include.track_id }}"><span aria-hidden="true">←</span></button>
     <button type="button" aria-label="Next screenshot" aria-controls="images-{{ include.track_id }}"><span aria-hidden="true">→</span></button>
