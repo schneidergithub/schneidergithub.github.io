@@ -64,7 +64,10 @@ class Page(HTMLParser):
         if self.path == SITE / 'experience/index.html':
             allowed_scripts.update({'/assets/portfolio/experience-gallery.js', '/assets/portfolio/image-viewer.js?v=2'})
         if media_page:
-            allowed_scripts.add('/assets/publications/video-player.js')
+            player_script = '/assets/publications/video-player.js'
+            if self.path == SITE / 'articles/index.html':
+                player_script += '?v=2'
+            allowed_scripts.add(player_script)
         if tag == 'form' or (tag == 'script' and a.get('src') not in allowed_scripts):
             errors.append(f'{self.path}: unexpected {tag}')
         if a.get('href', '').startswith(('mailto:', 'tel:')): errors.append(f'{self.path}: non-LinkedIn contact')

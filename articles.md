@@ -62,4 +62,4 @@ groups:
 </ul>
 </section>
 {% endfor %}
-<script src="{{ '/assets/publications/video-player.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/publications/video-player.js' | relative_url }}?v=2" defer></script>
