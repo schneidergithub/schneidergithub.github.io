@@ -2,7 +2,8 @@
 index_order: 2
 index_feature: metric
 index_case: /work/westinghouse-performance/
-index_title: Leading QA across 13 projects
+index_metric: 3×
+index_title: Elasticsearch throughput
 order: 4
 slug: "westinghouse"
 organization: "Westinghouse"
@@ -15,4 +16,4 @@ home_highlight:
 title: "Load testing a website release"
 context: "Westinghouse · Sogeti / Capgemini engagement"
 ---
-I managed a 20-person offshore team through a vendor handover. I automated tests with QTP/UFT, ran performance tests with LoadRunner, JMeter, and BlazeMeter, and wrote detailed QA playbooks and test documentation.
+Load tests exposed server errors two weeks before launch. I reconfigured the cloud services and tuned Elasticsearch to resolve the errors. I led QA across 13 projects with a 20-person offshore team.

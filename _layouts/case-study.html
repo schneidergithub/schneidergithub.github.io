@@ -2,8 +2,9 @@
 layout: default
 ---
 <article class="case-study">
+  {% assign work_anchor = page.work_return_id | default: page.project %}
   <header class="study-header">
-    <a class="study-back" href="{{ '/work/' | relative_url }}#selected-work">Back to Selected Work</a>
+    <a class="study-back" href="{{ '/work/' | relative_url }}#{{ work_anchor | escape }}">Back to Selected Work</a>
     <p class="eyebrow">{{ page.context | escape }}</p>
     <h1 id="case-title" tabindex="-1">{{ page.title | escape }}</h1>
     <p class="lead">{{ page.description | escape }}</p>
@@ -34,7 +35,7 @@ layout: default
     <a class="button" href="{{ '/' | relative_url }}#connect">Discuss a project</a>
     {% assign project = site.work | where: 'slug', page.project | first %}
     {% capture default_label %}{{ project.organization | default: project.title }} project summary{% endcapture %}
-    <a class="study-return" href="{{ '/work/' | relative_url }}#{{ page.work_return_id | default: page.project | escape }}">{{ page.work_return_label | default: default_label | escape }}</a>
+    <a class="study-return" href="{{ '/work/' | relative_url }}#{{ work_anchor | escape }}">{{ page.work_return_label | default: default_label | escape }}</a>
   </nav>
 </article>
-{% if figures %}{% include image-viewer.html %}{% endif %}{% if figures or page.work_design %}<script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}?v=3" defer></script>{% endif %}
+{% if figures %}{% include image-viewer.html makers_plate=true %}{% endif %}{% if figures or page.work_design %}<script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}?v=3" defer></script>{% endif %}

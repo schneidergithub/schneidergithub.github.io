@@ -6,7 +6,7 @@ work_return_id: case-studies-title
 work_return_label: Terminal-Bench-Science feature
 contribution_url: https://github.com/harbor-framework/terminal-bench-science/pull/1513
 permalink: /work/scientific-ai-benchmark/
-title: "Can AI reproduce a meta-analysis?"
+title: "Testing AI agents on published effect sizes"
 link_label: "Scientific AI benchmark"
 context: "CommonDevOps · Scientific AI benchmarking"
 description: "Dr. Ian Miller and I co-authored “MDD Executive Function” for Terminal-Bench-Science. The task asks an AI agent to reconstruct effect sizes from published studies of executive function in major depressive disorder."
@@ -26,9 +26,14 @@ After Terminal-Bench-Science merged our task, I continued working on the benchma
 
 A meta-analysis brings results from multiple studies onto a common scale. This task starts with source articles from Snyder’s 2013 meta-analysis and asks the agent to reconstruct the study-level effects.
 
-1. Select the comparisons that meet the task criteria.
-2. Extract the group statistics reported for each eligible comparison.
-3. Calculate the effect size using the Hedges correction for small samples.
+<figure class="research-process" aria-labelledby="research-process-title">
+  <figcaption id="research-process-title">From papers to effect sizes</figcaption>
+  <ol>
+    <li><strong>Select comparable results</strong><span>Find the comparisons that meet the task criteria.</span></li>
+    <li><strong>Extract the group statistics</strong><span>Record the numbers each study reports for those groups.</span></li>
+    <li><strong>Calculate each effect size</strong><span>Apply the Hedges correction for small samples.</span></li>
+  </ol>
+</figure>
 
 The challenge combines reading scientific literature, selecting comparable outcomes, and calculating reproducible results. Correct arithmetic alone does not establish that a comparison answers the research question.
 

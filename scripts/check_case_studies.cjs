@@ -44,31 +44,33 @@ async function captureWork(page, name) {
 async function checkDirectory(page, workUrl) {
   const feature = page.locator('.benchmark-feature');
   const read = feature.getByRole('link', { name: 'Explore the research task' });
-  assert.equal(await feature.locator('.benchmark-byline').innerText(),
-    'Terminal-Bench-Science is the latest benchmark project used to test frontier AI agents on real scientific work. ' +
-    'Version 1 and associated research paper will include “MDD Executive Function,” the task Dr. Ian Miller and I co-authored.');
+  assert.match(await feature.locator('.benchmark-byline').innerText(), /Dr. Ian Miller and I co-authored.*effect sizes/);
+  assert.equal(await feature.locator('.research-process').count(), 0);
   const action = await read.boundingBox();
-  assert.ok(action.y + action.height <= page.viewportSize().height, 'Lead action is visible on the first screen');
-  assert.deepEqual(await page.locator('.work-support').evaluateAll(items => items.map(el => el.id)), ['propoint', 'westinghouse']);
+  assert.ok(action.y + action.height <= page.viewportSize().height, 'Lead action fits the first screen');
+  assert.deepEqual(await page.locator('.work-support').evaluateAll(items => items.map(el => el.id)), ['propoint', 'westinghouse', 'indiana']);
   assert.match(await page.locator('#propoint').innerText(), /Around 30,000[\s\S]*hundreds of millions/i);
-  const west = page.locator('#westinghouse');
-  for (const term of ['20-person', 'vendor handover', 'QTP/UFT', 'LoadRunner', 'JMeter', 'BlazeMeter', 'playbooks', 'documentation']) {
-    assert.ok((await west.locator('.project-detail').innerText()).includes(term), term);
-  }
-  assert.match(await west.locator('.scope-result').innerText(), /3×[\s\S]*Elasticsearch throughput/);
+  assert.match(await page.locator('#westinghouse .project-heading').innerText(), /3×\s+Elasticsearch throughput/);
+  assert.match(await page.locator('#indiana .project-heading').innerText(), /92\s+counties/);
+  const first = await page.locator('#propoint .project-heading').boundingBox();
+  assert.ok(first.y >= 0 && first.y + first.height <= page.viewportSize().height, 'The second project is identifiable without scrolling');
   if (page.viewportSize().width === 1280) {
-    const first = await page.locator('#propoint').boundingBox();
-    const second = await west.boundingBox();
-    assert.ok(second.y >= first.y + first.height - 1, 'Projects use independent rows');
+    const cards = await page.locator('.work-support').evaluateAll(items => items.map(el => el.getBoundingClientRect().top));
+    assert.ok(cards.every(top => Math.abs(top - cards[0]) <= 1), 'The three engineering projects share a row');
   }
   const routes = await page.locator('.benchmark-actions a, .work-links a').evaluateAll(items =>
     [...new Set(items.filter(a => a.pathname.startsWith('/work/') && !a.hash).map(a => a.pathname))].sort());
   assert.deepEqual(routes, studies.map(study => '/work/' + study.path + '/').sort());
   assert.equal(await page.locator('.project-card').count(), 7);
-  assert.equal(await page.locator('#node-ipc p:not(.work-kicker)').innerText(), 'I was the primary author of the official post-incident report.');
-  for (const url of ['https://doi.org/10.6084/m9.figshare.33865414.v1', 'https://www.youtube.com/watch?v=eSvYhh7_Kyo', 'https://www.youtube.com/watch?v=TZ04u6cj1ls']) {
-    assert.ok(await page.locator('#node-ipc a').evaluateAll((links, url) => links.some(a => a.href === url), url));
-  }
+  const report = page.locator('#node-ipc');
+  assert.match(await report.innerText(), /Three releases appeared on npm.*primary author/s);
+  assert.deepEqual(await report.locator('a').evaluateAll(links => links.map(a => a.getAttribute('href'))), [
+    '/work/node-ipc-investigation/', 'https://doi.org/10.6084/m9.figshare.33865414.v1'
+  ]);
+  const chess = page.locator('#chess-benchmarks');
+  assert.equal(await chess.locator('a').count(), 2);
+  assert.equal(await chess.getByRole('link', { name: 'View recording details' }).getAttribute('href'),
+    '/articles/#chess-benchmark-presentation');
   assert.equal(await page.locator('.work-mast a, .portfolio-gallery > nav').count(), 0);
   assert.equal(await page.getByRole('heading', {name:'Gallery',exact:true}).count(), 0);
   assert.equal(await page.getByText('Project summaries', {exact:true}).count(), 0);
@@ -77,36 +79,25 @@ async function checkDirectory(page, workUrl) {
   await read.press('Enter');
   assert.equal(page.url(), workUrl + 'scientific-ai-benchmark/');
   await page.getByRole('link', {name:'Back to Selected Work',exact:true}).press('Enter');
-  assert.equal(page.url(), workUrl + '#selected-work');
-  assert.ok(await page.locator('h1:target').evaluate(el => el === document.activeElement));
+  assert.equal(page.url(), workUrl + '#case-studies-title');
+  assert.ok(await page.locator('h2:target').evaluate(el => el === document.activeElement));
 }
 
 async function checkGallery(page, workUrl, width, directEntry) {
   await page.goto(workUrl);
-  const images = page.locator('.project-gallery .thumbnail-card a');
-  const originals = gallery.flatMap(group => group.items.map(item => item.image));
-  assert.equal(new Set(originals).size, 26);
-  assert.deepEqual(await images.evaluateAll(links => links.map(a => a.pathname).sort()), originals.slice().sort());
   for (const group of gallery) {
     await page.goto(workUrl + '#gallery-' + group.id);
     const section = page.locator('#gallery-' + group.id);
+    const links = section.locator('.thumbnail-card a');
+    const displayed = group.id === 'propoint'
+      ? group.items.filter(item => ['Book a service', 'Desktop checkout'].includes(item.title)) : group.items;
     assert.equal(await section.locator('h3').innerText(), group.title + ' images');
-    assert.ok(await section.evaluate(el => el.closest('.project-card') !== null), 'Images belong to the project');
-    const details = section.locator(':scope > details');
-    if (await details.count()) {
-      if (!(await details.evaluate(el => el.open))) await details.locator(':scope > summary').press('Enter');
-      await details.locator('.thumbnail-card a').first().waitFor({state: 'visible'});
-      for (const nested of await details.locator('details').all()) {
-        await nested.locator(':scope > summary').press('Enter');
-        await nested.locator('.thumbnail-card a').first().waitFor({state: 'visible'});
-      }
+    assert.equal(await section.locator('details').count(), 0, 'Every displayed thumbnail is directly available');
+    assert.deepEqual(await links.evaluateAll(items => items.map(a => a.pathname)), displayed.map(item => item.image));
+    for (const img of await links.locator('img').all()) {
+      await img.scrollIntoViewIfNeeded();
+      await img.evaluate(el => el.decode());
     }
-    assert.deepEqual(await section.locator('.thumbnail-card a:visible').evaluateAll(links => links.map(a => a.pathname).sort()), group.items.map(item => item.image).sort());
-    for (const image of await section.locator('img').all()) {
-      await image.evaluate(img => img.scrollIntoView({block: 'center', behavior: 'instant'}));
-      await image.evaluate(img => img.decode());
-    }
-    if (group.id === 'bayer') assert.equal(await section.locator('.gallery-detail-set').count(), 2);
     if (width === 1280) {
       await captureWork(page, group.id + '-images');
       for (const item of group.items) {
@@ -115,17 +106,19 @@ async function checkGallery(page, workUrl, width, directEntry) {
         await response.dispose();
       }
     }
-    if (await details.count()) {
-      await details.locator(':scope > summary').press('Space');
-      assert.equal(await details.getAttribute('open'), null);
-    }
+  }
+  const oldImages = page.locator('#gallery-propoint .old-image-bookmark');
+  for (const link of await oldImages.all()) {
+    await page.goto(workUrl + '#' + await link.getAttribute('id'));
+    assert.ok(await link.isVisible(), 'Older individual image bookmarks still expose the original');
+    assert.ok(await link.getAttribute('href'));
   }
   if (directEntry) {
     await page.goto(workUrl + '#westinghouse');
     assert.ok(await page.locator(':target').getByRole('heading').first().isVisible());
   }
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Work page overflows');
-  console.log(width + 'px: all 26 original images remain grouped with their projects.');
+  console.log(width + 'px: verified project thumbnails, original files and legacy bookmarks.');
 }
 
 async function openImageAndReturn(page, control) {
@@ -273,14 +266,14 @@ async function checkRoleGalleries(browser, origin) {
 async function checkImageReturns(browser, workUrl) {
   const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
   await page.goto(workUrl);
-  const control = page.locator('#gallery-propoint > .thumbnail-card a');
+  const control = page.locator('#gallery-propoint a[aria-label="Open full-size image of Book a service"]');
   await control.scrollIntoViewIfNeeded();
   const before = await page.evaluate(() => scrollY);
   await control.press('Enter');
   const viewer = page.getByRole('dialog');
   await viewer.waitFor({state:'visible'});
   assert.equal(page.url(), workUrl);
-  assert.match(await viewer.locator('.viewer-caption').innerText(), /^2 of 4/);
+  assert.match(await viewer.locator('.viewer-caption').innerText(), /^1 of 2/);
   assert.ok(await viewer.getByRole('button', {name:'Close',exact:true}).evaluate(el => el === document.activeElement));
   await page.keyboard.press('Shift+Tab');
   assert.ok(await viewer.getByRole('button', {name:'Next',exact:true}).evaluate(el => el === document.activeElement));
@@ -288,10 +281,9 @@ async function checkImageReturns(browser, workUrl) {
   assert.ok(await viewer.getByRole('button', {name:'Close',exact:true}).evaluate(el => el === document.activeElement));
   await page.keyboard.press('ArrowLeft');
   assert.ok(await viewer.getByRole('button', {name:'Previous',exact:true}).isDisabled());
+  await checkJoinedArrows(viewer.locator('.gallery-plate'));
   await page.keyboard.press('ArrowRight');
-  await page.keyboard.press('ArrowRight');
-  await page.keyboard.press('ArrowRight');
-  assert.match(await viewer.locator('.viewer-caption').innerText(), /^4 of 4/);
+  assert.match(await viewer.locator('.viewer-caption').innerText(), /^2 of 2/);
   assert.ok(await viewer.getByRole('button', {name:'Next',exact:true}).isDisabled());
   await viewer.locator('img').evaluate(img => img.decode());
   await captureWork(page, 'image-viewer');
@@ -323,9 +315,8 @@ async function checkImageReturns(browser, workUrl) {
   const broken = await browser.newPage({viewport:{width:375,height:812}});
   await broken.route('**/assets/portfolio/supersalon.webp', route => route.abort());
   await broken.goto(workUrl);
-  await broken.locator('#gallery-propoint > .thumbnail-card a').press('Enter');
+  await broken.locator('#gallery-propoint a[aria-label="Open full-size image of Book a service"]').press('Enter');
   const failedViewer = broken.getByRole('dialog');
-  await failedViewer.getByRole('button', {name:'Next',exact:true}).click();
   await failedViewer.getByRole('button', {name:'Next',exact:true}).click();
   await failedViewer.locator('.viewer-error').waitFor({state:'visible'});
   assert.equal(await failedViewer.getByRole('link', {name:'Open original'}).getAttribute('href'), new URL('/assets/portfolio/supersalon.webp',workUrl).href);
@@ -333,8 +324,8 @@ async function checkImageReturns(browser, workUrl) {
   await broken.close();
 
   await page.goto(workUrl + '#gallery-bayer');
-  assert.ok(await page.locator('#images-bayer').evaluate(el => el.open), 'Old gallery bookmarks reveal the relocated collection');
-  await page.locator('#gallery-bayer > .thumbnail-card a').press('Enter');
+  assert.equal(await page.locator('#images-bayer .image-enlarge:visible').count(), 12);
+  await page.locator('#gallery-bayer .thumbnail-card a').first().press('Enter');
   assert.match(await viewer.locator('.viewer-caption').innerText(), /^1 of 12/);
   await page.keyboard.press('Escape');
   await page.goto(workUrl + 'bayer-aleve/');
@@ -346,8 +337,15 @@ async function checkImageReturns(browser, workUrl) {
   assert.equal(await page.locator('dialog[open]').count(), 0, 'Back/Forward does not revive the overlay');
 
   await page.goto(workUrl);
+  for (const id of ['westinghouse', 'bucky-ball']) {
+    const single = page.locator('#gallery-' + id + ' .image-enlarge');
+    await single.press('Enter');
+    assert.ok(await viewer.locator('.gallery-plate').isHidden(), 'Single originals need no gallery arrows');
+    assert.ok(await viewer.getByRole('link', {name:'Open original'}).isVisible());
+    await page.keyboard.press('Escape');
+    await viewer.waitFor({state:'hidden'});
+  }
   await page.emulateMedia({reducedMotion:'reduce'});
-  assert.equal(await page.locator('.research-process').evaluate(el => getComputedStyle(el,'::after').animationName), 'none');
   assert.ok(await page.locator('#case-studies-title').evaluate(el => !CSS.supports('view-transition-name: none') || getComputedStyle(el).viewTransitionName === 'none'));
   await page.setViewportSize({width:320,height:812});
   await page.addStyleTag({content:'html { font-size: 200% !important; }'});
@@ -366,8 +364,8 @@ async function checkImageReturns(browser, workUrl) {
   const fallback = await browser.newPage({viewport:{width:375,height:812}});
   await fallback.addInitScript(() => { HTMLDialogElement.prototype.showModal = undefined; });
   await fallback.goto(workUrl + '#gallery-bayer');
-  await openImageAndReturn(fallback, fallback.locator('#gallery-bayer > .thumbnail-card a'));
-  assert.ok(await fallback.locator('#images-bayer').evaluate(el => el.open));
+  await openImageAndReturn(fallback, fallback.locator('#gallery-bayer .thumbnail-card a').first());
+  assert.ok(await fallback.locator('#images-bayer .image-enlarge').first().isVisible());
   await fallback.close();
   console.log('Verified image viewer, keyboard/focus, errors, history, bookmarks, reduced motion and native fallback.');
 }
@@ -404,7 +402,7 @@ async function check() {
         assert.ok(title);
         const ending = page.locator('.study-ending');
         const directory = page.locator('.study-header').getByRole('link', { name: 'Back to Selected Work', exact: true });
-        assert.equal(await directory.getAttribute('href'), '/work/#selected-work');
+        assert.equal(await directory.getAttribute('href'), '/work/#' + study.card);
         const actions = ending.getByRole('link');
         const footerLinks = page.getByRole('contentinfo').getByRole('link');
         assert.deepEqual(await footerLinks.evaluateAll(items => items.map(a => a.href)), [
@@ -445,19 +443,8 @@ async function check() {
           for (const detail of [/eleven bottles|11 bottles/i, /15%/, /one.cent|1¢/i]) assert.match(lead, detail);
         }
         if (study.path === 'scientific-ai-benchmark') {
-          assert.equal(await page.locator('h1').innerText(), 'Can AI reproduce a meta-analysis?');
-          if (width === 375) {
-            const fits = await page.locator('h1').evaluate(el => {
-              const node = el.firstChild;
-              const phrase = 'meta-analysis';
-              const start = node.textContent.indexOf(phrase);
-              const range = document.createRange();
-              range.setStart(node, start);
-              range.setEnd(node, start + phrase.length);
-              return range.getClientRects().length === 1;
-            });
-            assert.ok(fits, 'Keep meta-analysis together on the phone');
-          }
+          assert.equal(await page.locator('h1').innerText(), 'Testing AI agents on published effect sizes');
+          assert.equal(await page.locator('.research-process li').count(), 3);
           const studyText = await page.locator('.case-study').innerText();
           assert.match(studyText, /Dr\. Ian Miller and I co-authored/);
           assert.match(studyText, /as a maintainer\. I review DevOps and infrastructure/);
