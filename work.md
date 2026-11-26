@@ -17,7 +17,7 @@ lead_case: /work/scientific-ai-benchmark/
     <h2 id="case-studies-title" tabindex="-1">{{ benchmark.title | escape }}</h2>
   </div>
   <div>
-    <p class="benchmark-byline">Dr. Ian Miller and I co-authored “MDD Executive Function.” To reproduce the published effect sizes, an AI agent must first choose which study results can be compared.</p>
+    <p class="benchmark-byline">I co-authored “MDD Executive Function.” To reproduce the published effect sizes, an AI agent must first choose which study results can be compared.</p>
     <div class="benchmark-actions work-links">
       <a href="{{ benchmark.url | relative_url }}">Explore the research task</a>
       <a href="{{ benchmark.contribution_url | escape }}">Merged task on GitHub</a>

@@ -44,7 +44,7 @@ async function captureWork(page, name) {
 async function checkDirectory(page, workUrl) {
   const feature = page.locator('.benchmark-feature');
   const read = feature.getByRole('link', { name: 'Explore the research task' });
-  assert.match(await feature.locator('.benchmark-byline').innerText(), /Dr. Ian Miller and I co-authored.*effect sizes/);
+  assert.match(await feature.locator('.benchmark-byline').innerText(), /^I co-authored “MDD Executive Function\.”.*effect sizes/);
   assert.equal(await feature.locator('.research-process').count(), 0);
   const action = await read.boundingBox();
   assert.ok(action.y + action.height <= page.viewportSize().height, 'Lead action fits the first screen');
