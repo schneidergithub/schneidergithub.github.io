@@ -80,9 +80,13 @@
 .work-index {
   container: work-index / inline-size;
   display: grid;
-  gap: clamp(2.25rem, 4vw, 3.5rem);
+  gap: clamp(1.75rem, 2.5vw, 2rem);
 }
-.work-index .project-detail { max-width: 65ch; }
+.work-index .project-detail { max-width: 85ch; }
+.work-index .project-card:is(:not(.has-evidence), :has(.work-single-image)) {
+  background: #1d242c;
+  padding: clamp(1rem, 2vw, 1.5rem);
+}
 .project-gallery, .project-banner { margin-top: .7rem; }
 .project-banner { width: 100%; max-width: 16rem; min-width: 0; }
 .project-banner img {
@@ -94,7 +98,7 @@
   .featured-projects > article { display: grid; grid-row: span 2; grid-template-rows: subgrid; }
   .featured-projects :is(.project-gallery, .project-banner) { margin-top: 0; }
 }
-.work-index .project-gallery { margin-top: 0; }
+.work-index .project-gallery { margin-top: .75rem; }
 .work-thumbnails {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(5.3rem, 100%), 1fr));
@@ -108,9 +112,7 @@
 .work-thumbnails a:is(:hover, :focus-visible) .thumbnail-frame { border-color: var(--accent); }
 .work-screen-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; }
 .work-screen-pair .thumbnail-frame { background: #f4f1e9; }
-.work-single-image { display: block; max-width: 16rem; }
-.work-single-image .thumbnail-frame { aspect-ratio: auto; }
-.work-single-image .thumbnail-frame img { height: auto; max-height: 8rem; }
+.work-single-image { display: block; max-width: 12.5rem; }
 .old-image-bookmark:not(:target) { display: none; }
 .old-image-bookmark:target { grid-column: 1/-1; }
 .legacy-anchor { display: block; height: 0; scroll-margin-top: 1rem; }
@@ -147,19 +149,6 @@
 .technical-details > summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .technical-details > div { padding-block: .5rem; }
 
-/* Archive images start on the project heading's baseline, below the organization. */
-@media (min-width: 54rem) {
-  .work-index .project-card.has-evidence {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-    column-gap: clamp(1.75rem, 4vw, 3.75rem);
-    align-items: start;
-  }
-  .work-index .project-card > .work-kicker { grid-column: 1 / -1; }
-}
-@media (width < 54rem) {
-  .work-index .project-gallery { margin-top: .9rem; }
-}
 [data-filmstrip] {
   display: grid;
   grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 86%;
@@ -190,13 +179,31 @@
 .filmstrip-ready [data-filmstrip] figcaption { display: none; }
 @container work-index (min-width: 27rem) {
   .work-thumbnails[data-filmstrip] { grid-auto-flow: row; grid-template-columns: repeat(3,minmax(0,1fr)); overflow: visible; padding: 0; }
-  [data-filmstrip].contact-ready { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 35rem; }
+  [data-filmstrip].contact-ready { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   [data-filmstrip].contact-ready .thumbnail-card { display: none; }
   [data-filmstrip].contact-ready .thumbnail-card[data-featured],
   [data-filmstrip].contact-ready .thumbnail-card:is(:target, :has(:target)) { display: block; }
   [data-filmstrip].contact-ready .image-enlarge:not(:hover,:focus-visible)::after { opacity: 0; }
   .filmstrip-controls { display: none; }
   .gallery-open-all:not([hidden]) { display: flex; width: fit-content; }
+}
+@container work-index (min-width: 48rem) {
+  .work-thumbnails[data-filmstrip] { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; }
+  .project-card:not(.has-evidence) .project-copy {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    column-gap: 2rem;
+    align-content: center;
+  }
+  .project-card:not(.has-evidence) .project-detail { grid-area: 1 / 2 / span 2; align-self: center; }
+  .project-card:not(.has-evidence) .project-heading { margin-bottom: 0; }
+  .project-card:has(.work-single-image) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 12.5rem;
+    align-items: center;
+    column-gap: 2rem;
+  }
+  .project-card:has(.work-single-image) .project-gallery { margin-top: 0; }
 }
 .project-index .index-layout { display: grid; grid-template-columns: minmax(9.5rem,.55fr) minmax(0,1.45fr); gap: clamp(1rem,3vw,2.25rem); align-items: start; }
 .index-choices { display: grid; }

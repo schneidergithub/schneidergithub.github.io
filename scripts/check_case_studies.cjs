@@ -64,6 +64,17 @@ async function checkDirectory(page, workUrl) {
       items.map(el => el.getBoundingClientRect().top));
     assert.equal(media.length, 3);
     assert.ok(media.every(top => Math.abs(top - media[0]) <= 1), 'Featured project images align on desktop');
+    const archive = page.locator('.work-index');
+    assert.deepEqual(await archive.locator('.project-card').evaluateAll(cards => cards.map(card => card.id)),
+      ['bayer', 'eli-lilly', 'berkeley', 'bucky-ball']);
+    const lilly = archive.locator('#eli-lilly');
+    const lillyTitle = await lilly.locator('.project-heading').boundingBox();
+    const lillyBody = await lilly.locator('.project-detail').boundingBox();
+    assert.ok(lillyBody.x > lillyTitle.x + lillyTitle.width, 'Lilly’s description sits beside its heading');
+    const bucky = archive.locator('#bucky-ball');
+    const buckyCopy = await bucky.locator('.project-copy').boundingBox();
+    const buckyImage = await bucky.locator('.thumbnail-frame').boundingBox();
+    assert.ok(buckyImage.x > buckyCopy.x + buckyCopy.width, 'Bucky Ball Web’s preview sits beside its text');
   }
   const routes = await page.locator('.benchmark-actions a, .work-links a').evaluateAll(items =>
     [...new Set(items.filter(a => a.pathname.startsWith('/work/') && !a.hash).map(a => a.pathname))].sort());
@@ -116,15 +127,15 @@ async function checkGallery(page, workUrl, width, directEntry) {
       const featured = group.items.filter(item => item.featured_preview);
       assert.deepEqual(await section.locator('.thumbnail-card a:visible').evaluateAll(items => items.map(a => a.pathname)), featured.map(item => item.image));
       const frames = await section.locator('.thumbnail-frame:visible').evaluateAll(items => items.map(item => item.getBoundingClientRect().toJSON()));
-      assert.equal(frames.length, 4, 'Four previews form a desktop contact sheet');
-      const [first, second, third, fourth] = frames;
+      assert.equal(frames.length, 4, 'Four previews form a desktop gallery strip');
+      const first = frames[0];
       assert.ok(frames.every(frame => Math.abs(frame.width - first.width) <= 1 && Math.abs(frame.height - first.height) <= 1));
-      assert.ok(second.x > first.right && third.y > first.bottom);
-      assert.ok(Math.abs(second.y - first.y) <= 1 && Math.abs(fourth.y - third.y) <= 1);
-      assert.ok(Math.abs(third.x - first.x) <= 1 && Math.abs(fourth.x - second.x) <= 1);
+      assert.ok(frames.every((frame, i) => Math.abs(frame.y - first.y) <= 1 && (i === 0 || frame.x > frames[i - 1].right)));
       const project = page.locator('#' + group.id);
-      const heading = await project.locator('.project-heading').boundingBox();
-      assert.ok(Math.abs(first.y - heading.y) <= 1, 'Gallery starts level with the project heading');
+      const copy = await project.locator('.project-copy').boundingBox();
+      assert.ok(first.y >= copy.y + copy.height, 'The strip follows the description and links');
+      assert.ok(Math.abs(first.x - copy.x) <= 1 && Math.abs(frames[3].right - copy.x - copy.width) <= 1,
+        'The strip spans the project width');
       const openAll = project.locator('.work-links').getByRole('button', { name: /View all/ });
       await openAll.click();
       const dialog = page.getByRole('dialog');

@@ -3,11 +3,9 @@
 {% assign banner = project.index_banner %}
 {% if group.static_on_work_index %}{% assign banner = group.items | first %}{% endif %}
 {% assign heading = include.heading | default: 'h3' %}
-{% capture kicker %}<p class="work-kicker">{{ project.context | escape }}</p>{% endcapture %}
 <article class="project-card{% if project.index_feature %} work-support{% endif %}{% if banner or group %} has-evidence{% endif %}" id="{{ project.slug }}" tabindex="-1"{% if group and banner == nil %} data-image-group="{{ group.id }}" data-image-title="{{ group.title | escape }}"{% endif %}>
-  {% unless project.index_feature %}{{ kicker }}{% endunless %}
   <div class="project-copy">
-    {% if project.index_feature %}{{ kicker }}{% endif %}
+    <p class="work-kicker">{{ project.context | escape }}</p>
     <{{ heading }} class="project-heading">{% if project.index_metric %}<span class="work-metric">{{ project.index_metric | escape }}</span> {% endif %}{{ project.index_title | default: project.title | escape }}</{{ heading }}>
     <div class="project-detail">{{ project.content }}</div>
     {% if project.index_case or project.role_id or group.contact_sheet %}
