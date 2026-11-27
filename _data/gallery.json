@@ -4,7 +4,7 @@
     "role_id": "propoint-global",
     "short_name": "ProPoint",
     "title": "Guest Pass and Super Salon",
-    "description": "I built Guest Pass for mobile booking and developed Super Salon’s scheduling and checkout software. Around 30,000 salons used Super Salon.",
+    "description": "I built Guest Pass for mobile booking and developed Super Salon\u2019s scheduling and checkout software. Around 30,000 salons used Super Salon.",
     "related": {
       "label": "From Booking to Checkout",
       "url": "/work/from-booking-to-checkout/"
@@ -89,7 +89,8 @@
         "thumbnail": "/assets/portfolio/thumbs/portfolio-aspirin.webp",
         "width": 490,
         "height": 350,
-        "thumbnail_version": "8e29b1953888"
+        "thumbnail_version": "8e29b1953888",
+        "featured_preview": true
       },
       {
         "title": "TruBiotics",
@@ -131,7 +132,8 @@
         "width": 490,
         "height": 350,
         "thumbnail_version": "4061aa1003ae",
-        "id": "pest-management"
+        "id": "pest-management",
+        "featured_preview": true
       },
       {
         "title": "Pest Management menu",
@@ -147,7 +149,6 @@
       {
         "title": "Pest Management rate calculator",
         "collection": "Pest Management",
-        "featured_preview": true,
         "alt": "Pest Management calculator showing a product quantity, tank size, and a photo of ants.",
         "image": "/assets/portfolio/portfolio-cellphone2.webp",
         "thumbnail": "/assets/portfolio/thumbs/portfolio-cellphone2.webp",
@@ -235,7 +236,8 @@
         "thumbnail": "/assets/portfolio/thumbs/filmclick1.webp",
         "width": 400,
         "height": 256,
-        "thumbnail_version": "1962601f7abf"
+        "thumbnail_version": "1962601f7abf",
+        "featured_preview": true
       },
       {
         "title": "FilmClick \u2014 community",

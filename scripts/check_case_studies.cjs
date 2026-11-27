@@ -116,8 +116,16 @@ async function checkGallery(page, workUrl, width, directEntry) {
       const featured = group.items.filter(item => item.featured_preview);
       assert.deepEqual(await section.locator('.thumbnail-card a:visible').evaluateAll(items => items.map(a => a.pathname)), featured.map(item => item.image));
       const frames = await section.locator('.thumbnail-frame:visible').evaluateAll(items => items.map(item => item.getBoundingClientRect().toJSON()));
-      assert.ok(frames[0].width > frames[1].width && frames[0].height > frames[1].height);
-      const openAll = section.getByRole('button', { name: /View all/ });
+      assert.equal(frames.length, 4, 'Four previews form a desktop contact sheet');
+      const [first, second, third, fourth] = frames;
+      assert.ok(frames.every(frame => Math.abs(frame.width - first.width) <= 1 && Math.abs(frame.height - first.height) <= 1));
+      assert.ok(second.x > first.right && third.y > first.bottom);
+      assert.ok(Math.abs(second.y - first.y) <= 1 && Math.abs(fourth.y - third.y) <= 1);
+      assert.ok(Math.abs(third.x - first.x) <= 1 && Math.abs(fourth.x - second.x) <= 1);
+      const project = page.locator('#' + group.id);
+      const heading = await project.locator('.project-heading').boundingBox();
+      assert.ok(Math.abs(first.y - heading.y) <= 1, 'Gallery starts level with the project heading');
+      const openAll = project.locator('.work-links').getByRole('button', { name: /View all/ });
       await openAll.click();
       const dialog = page.getByRole('dialog');
       for (const [i, item] of group.items.entries()) {
@@ -125,7 +133,7 @@ async function checkGallery(page, workUrl, width, directEntry) {
         if (i < group.items.length - 1) await page.keyboard.press('ArrowRight');
       }
       await page.keyboard.press('Escape');
-      await page.waitForFunction(id => document.activeElement === document.querySelector('#gallery-' + id + ' [data-open-collection]'), group.id);
+      await page.waitForFunction(id => document.activeElement === document.querySelector('#' + id + ' [data-open-collection]'), group.id);
     }
     for (const img of await links.locator('img:visible').all()) {
       await img.scrollIntoViewIfNeeded();
