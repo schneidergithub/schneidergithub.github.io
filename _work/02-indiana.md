@@ -7,8 +7,8 @@ index_banner:
   width: 520
   height: 240
 index_case: /work/indiana-case-archives/
-index_metric: "92"
-index_title: counties archiving case files
+index_metric: 92 counties
+index_title: 92 counties archiving case files
 order: 2
 slug: "indiana"
 organization: "Indiana State Department"

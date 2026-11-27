@@ -52,6 +52,10 @@ async function checkDirectory(page, workUrl) {
   assert.match(await page.locator('#propoint').innerText(), /Around 30,000[\s\S]*hundreds of millions/i);
   assert.match(await page.locator('#westinghouse .project-heading').innerText(), /3×\s+Elasticsearch throughput/);
   assert.match(await page.locator('#indiana .project-heading').innerText(), /92\s+counties/);
+  assert.equal(await page.locator('#indiana .work-metric').innerText(), '92 counties');
+  assert.equal(await page.locator('#bucky-ball .work-metric').innerText(), '100 websites');
+  assert.equal(await page.locator('#bayer .work-kicker').innerText(), 'Bayer brands · Ciber engagement');
+  assert.equal(await page.locator('#bayer .work-kicker strong').innerText(), 'Bayer brands');
   const map = page.locator('#indiana .project-banner img');
   assert.match(await map.getAttribute('alt'), /Indiana.*92 counties/);
   assert.equal(await page.locator('#indiana .project-banner :is(a, button)').count(), 0);
@@ -341,7 +345,7 @@ async function checkImageReturns(browser, workUrl) {
   const viewer = page.getByRole('dialog');
   await viewer.waitFor({state:'visible'});
   assert.equal(page.url(), workUrl);
-  assert.match(await viewer.locator('.viewer-caption').innerText(), /^1 of 2/);
+  assert.equal(await viewer.locator('.viewer-caption').innerText(), 'Book a service · 1 of 2');
   assert.ok(await viewer.getByRole('button', {name:'Close',exact:true}).evaluate(el => el === document.activeElement));
   await page.keyboard.press('Shift+Tab');
   assert.ok(await viewer.getByRole('button', {name:'Next',exact:true}).evaluate(el => el === document.activeElement));
@@ -351,7 +355,7 @@ async function checkImageReturns(browser, workUrl) {
   assert.ok(await viewer.getByRole('button', {name:'Previous',exact:true}).isDisabled());
   await checkJoinedArrows(viewer.locator('.gallery-plate'));
   await page.keyboard.press('ArrowRight');
-  assert.match(await viewer.locator('.viewer-caption').innerText(), /^2 of 2/);
+  assert.equal(await viewer.locator('.viewer-caption').innerText(), 'Desktop checkout · 2 of 2');
   assert.ok(await viewer.getByRole('button', {name:'Next',exact:true}).isDisabled());
   await viewer.locator('img').evaluate(img => img.decode());
   await captureWork(page, 'image-viewer');
@@ -398,7 +402,7 @@ async function checkImageReturns(browser, workUrl) {
   const status = strip.locator('.filmstrip-status.visually-hidden');
   await status.filter({hasText:'2 of 12 · Aleve story page'}).waitFor({state:'attached'});
   await strip.locator('.thumbnail-card a').nth(1).press('Enter');
-  assert.match(await viewer.locator('.viewer-caption').innerText(), /^2 of 12/);
+  assert.equal(await viewer.locator('.viewer-caption').innerText(), 'Aleve story page · 2 of 12');
   await page.keyboard.press('Escape');
   await page.goto(workUrl + 'bayer-aleve/');
   await page.locator('.study-image').nth(1).press('Enter');

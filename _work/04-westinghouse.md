@@ -3,7 +3,7 @@ index_order: 2
 index_feature: metric
 index_case: /work/westinghouse-performance/
 index_metric: 3×
-index_title: Elasticsearch throughput
+index_title: 3× Elasticsearch throughput
 order: 4
 slug: "westinghouse"
 organization: "Westinghouse"

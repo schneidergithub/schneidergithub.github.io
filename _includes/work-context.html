@@ -1,0 +1,2 @@
+{% assign lead = include.label | split: ' · ' | first | split: ' / ' | first %}
+<p class="work-kicker"><strong>{{ lead | escape }}</strong>{{ include.label | remove_first: lead | escape }}</p>

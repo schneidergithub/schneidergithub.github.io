@@ -28,6 +28,11 @@
 .image-viewer button:disabled { opacity: .4; cursor: default; }
 .image-viewer button:focus-visible, .viewer-original:focus-visible { outline: 3px solid #ffd58a; outline-offset: 2px; }
 .viewer-close { flex: none; }
+.work-index-viewer .viewer-header h2 { font-size: 1.25rem; color: #f7f3e9; }
+.work-index-viewer :is(.viewer-close, .viewer-original) { font-weight: 500; }
+.work-index-viewer .viewer-caption { color: #aeb9c5; }
+.viewer-image-name { color: #f7f3e9; font-size: 1rem; font-weight: 600; }
+.viewer-image-count { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .viewer-figure { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: .65rem; margin: 0; padding: 1rem; }
 .viewer-stage { position: relative; flex: 1; min-height: 3rem; display: grid; place-items: center; background: #0d1015; overflow: hidden; }
 .viewer-stage img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; }

@@ -1,11 +1,11 @@
-<dialog class="image-viewer" aria-labelledby="image-viewer-title">
+<dialog class="image-viewer{% if include.work_index %} work-index-viewer{% endif %}" aria-labelledby="image-viewer-title">
   <header class="viewer-header">
     <h2 id="image-viewer-title">Project images</h2>
     <button type="button" class="viewer-close" autofocus>Close</button>
   </header>
   <figure class="viewer-figure">
     <div class="viewer-stage"></div>
-    <figcaption class="viewer-caption" aria-live="polite" aria-atomic="true"></figcaption>
+    <figcaption class="viewer-caption" aria-live="polite" aria-atomic="true">{% if include.work_index %}<span class="viewer-image-name"></span> · <span class="viewer-image-count"></span>{% endif %}</figcaption>
   </figure>
   <p class="viewer-error" role="status" hidden>The image could not be loaded. Try opening the original, or choose another image.</p>
   <nav class="viewer-controls{% if include.makers_plate %} viewer-controls-plate{% endif %}" aria-label="Image navigation">
@@ -21,5 +21,5 @@
     {% endif %}
   </nav>
 </dialog>
-<script src="{{ '/assets/portfolio/image-viewer.js' | relative_url }}?v=3" defer></script>
+<script src="{{ '/assets/portfolio/image-viewer.js' | relative_url }}?v=4" defer></script>
 {% if page.collection_index or page.url == '/work/' %}<script src="{{ '/assets/portfolio/work-galleries.js' | relative_url }}?v=2" defer></script>{% endif %}

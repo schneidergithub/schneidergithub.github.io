@@ -3,10 +3,16 @@
 {% assign banner = project.index_banner %}
 {% if group.static_on_work_index %}{% assign banner = group.items | first %}{% endif %}
 {% assign heading = include.heading | default: 'h3' %}
+{% assign project_heading = project.index_title | default: project.title | escape %}
+{% if project.index_metric %}
+  {% assign metric = project.index_metric | escape %}
+  {% capture metric_span %}<span class="work-metric">{{ metric }}</span>{% endcapture %}
+  {% assign project_heading = project_heading | replace_first: metric, metric_span %}
+{% endif %}
 <article class="project-card{% if project.index_feature %} work-support{% endif %}{% if banner or group %} has-evidence{% endif %}" id="{{ project.slug }}" tabindex="-1"{% if group and banner == nil %} data-image-group="{{ group.id }}" data-image-title="{{ group.title | escape }}"{% endif %}>
   <div class="project-copy">
-    <p class="work-kicker">{{ project.context | escape }}</p>
-    <{{ heading }} class="project-heading">{% if project.index_metric %}<span class="work-metric">{{ project.index_metric | escape }}</span> {% endif %}{{ project.index_title | default: project.title | escape }}</{{ heading }}>
+    {% include work-context.html label=project.context %}
+    <{{ heading }} class="project-heading">{{ project_heading }}</{{ heading }}>
     <div class="project-detail">{{ project.content }}</div>
     {% if project.index_case or project.role_id or group.contact_sheet %}
     <div class="work-links">

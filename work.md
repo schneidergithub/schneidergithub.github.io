@@ -14,7 +14,7 @@ lead_case: /work/scientific-ai-benchmark/
 
 <section class="benchmark-feature wrap" aria-labelledby="case-studies-title">
   <div>
-    <p class="work-kicker">Terminal-Bench-Science</p>
+    {% include work-context.html label="Terminal-Bench-Science" %}
     <h2 id="case-studies-title" tabindex="-1">{{ benchmark.title | escape }}</h2>
   </div>
   <div>
@@ -37,7 +37,7 @@ lead_case: /work/scientific-ai-benchmark/
         {% if project.research_publication %}
           {% assign publication = site.data.publications | where: 'id', project.research_publication | first %}
           <section class="research-project" id="{{ project.slug }}" tabindex="-1" aria-labelledby="{{ project.slug }}-title">
-            <p class="work-kicker">{{ project.context | escape }}</p>
+            {% include work-context.html label=project.context %}
             <h2 id="{{ project.slug }}-title">{{ project.title | escape }}</h2>
             <div class="project-detail">{{ project.content }}</div>
             <div class="work-links">
@@ -61,4 +61,4 @@ lead_case: /work/scientific-ai-benchmark/
 </div>
 
 <script src="{{ '/assets/portfolio/gallery-return.js' | relative_url }}?v=3" defer></script>
-{% include image-viewer.html makers_plate=true %}
+{% include image-viewer.html makers_plate=true work_index=true %}

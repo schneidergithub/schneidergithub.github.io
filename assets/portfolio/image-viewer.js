@@ -5,6 +5,8 @@
   const title = dialog.querySelector('h2');
   const stage = dialog.querySelector('.viewer-stage');
   const caption = dialog.querySelector('.viewer-caption');
+  const captionName = caption.querySelector('.viewer-image-name');
+  const captionCount = caption.querySelector('.viewer-image-count');
   const error = dialog.querySelector('.viewer-error');
   const previous = dialog.querySelector('.viewer-previous');
   const next = dialog.querySelector('.viewer-next');
@@ -56,7 +58,13 @@
     error.hidden = true;
     stage.setAttribute('aria-busy', 'true');
     stage.replaceChildren(image);
-    caption.textContent = `${index + 1} of ${images.length} · ${label}`;
+    const count = `${index + 1} of ${images.length}`;
+    if (captionName) {
+      captionName.textContent = label;
+      captionCount.textContent = count;
+    } else {
+      caption.textContent = `${count} · ${label}`;
+    }
     original.href = link.href;
     previous.disabled = index === 0;
     next.disabled = index === images.length - 1;
