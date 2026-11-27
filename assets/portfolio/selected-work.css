@@ -18,6 +18,13 @@
   letter-spacing: .055em;
   text-transform: uppercase;
 }
+.work-projects .work-kicker {
+  color: #bcc7d2;
+  font-size: .875rem;
+  font-weight: 600;
+  letter-spacing: .015em;
+  text-transform: none;
+}
 .benchmark-feature {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
@@ -41,7 +48,7 @@
   display: grid;
   grid-template-columns: 1.2fr 1fr 1fr;
   gap: clamp(1.25rem, 2.8vw, 2.25rem);
-  border-block: 1px solid var(--line);
+  border-block-start: 1px solid var(--line);
   padding-block: clamp(1.35rem, 3vw, 2.2rem);
 }
 .featured-projects > article + article { padding-inline-start: clamp(1rem, 2.2vw, 1.75rem); border-inline-start: 1px solid var(--line); }
@@ -49,6 +56,7 @@
 .project-heading, .research-project h2 { margin: 0 0 .65rem; font-size: clamp(1.5rem, 2.25vw, 1.95rem); }
 .work-metric, .project-detail strong { color: #f1d2a1; font-variant-numeric: lining-nums; }
 .work-projects { padding-bottom: 2rem; }
+.work-research-band { background: var(--panel); }
 .work-research-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -57,7 +65,7 @@
 }
 .research-project { display: flex; flex-direction: column; align-items: flex-start; }
 .research-project .work-links { margin-top: auto; padding-top: .45rem; }
-.work-evidence-link { gap: .7rem; margin-top: .4rem; }
+.work-evidence-link { gap: .7rem; margin-top: .4rem; color: #adc4dd; }
 .work-media-frame {
   flex: none; display: block; position: relative; overflow: hidden;
   height: 4rem; aspect-ratio: 1.65; border-radius: 3px; background: #fff;
@@ -68,7 +76,6 @@
 .work-section-label {
   font-size: clamp(1.95rem, 3vw, 2.5rem);
   padding-block: clamp(1.5rem, 3vw, 2.25rem) clamp(1rem, 2vw, 1.5rem);
-  border-top: 1px solid var(--line);
 }
 .work-index {
   container: work-index / inline-size;
@@ -166,6 +173,7 @@
   display: grid; grid-template-rows: minmax(0, 1fr); aspect-ratio: 4 / 3; padding: .28rem; overflow: hidden;
   background: #202831; border: 1px solid #52606c; border-radius: .28rem;
 }
+.curated-gallery .thumbnail-frame { border-color: #3d4c5a; }
 [data-filmstrip] .thumbnail-frame img { display: block; width: 100%; height: 100%; max-height: none; object-fit: contain; }
 [data-filmstrip] figcaption { padding: .3rem 0 0; font-size: .88rem; color: #dde2e7; line-height: 1.35; }
 [data-filmstrip] .image-enlarge::after { width: 1.55rem; height: 1.55rem; background-size: 1rem; }
