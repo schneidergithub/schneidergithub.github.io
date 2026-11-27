@@ -42,7 +42,7 @@
       </nav>
     </header>
   </div>
-  <main id="main" class="wrap" tabindex="-1">{{ content }}</main>
+  <main id="main"{% unless page.full_width %} class="wrap"{% endunless %} tabindex="-1">{{ content }}</main>
   {% assign social_icons = '/assets/portfolio/social-icons.svg' | relative_url | append: '?v=2' %}
   <footer class="{% if page.contact_footer %}contact-card wrap{% else %}site-footer{% endif %}" id="footer">
     {% if page.contact_footer %}
