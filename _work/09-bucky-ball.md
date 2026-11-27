@@ -1,6 +1,7 @@
 ---
 index_order: 8
 slug: bucky-ball
+index_metric: 100 websites
 title: Building and hosting more than 100 websites
 context: Bucky Ball Web
 role_id: bucky-ball-web
