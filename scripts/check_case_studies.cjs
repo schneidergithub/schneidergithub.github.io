@@ -57,6 +57,11 @@ async function checkDirectory(page, workUrl) {
   assert.equal(await page.locator('#indiana .project-banner :is(a, button)').count(), 0);
   const first = await page.locator('#propoint .project-heading').boundingBox();
   assert.ok(first.y >= 0 && first.y + first.height <= page.viewportSize().height, 'The second project is identifiable without scrolling');
+  const fontSize = el => parseFloat(getComputedStyle(el).fontSize);
+  const sectionSize = await page.locator('#more-projects-title').evaluate(fontSize);
+  const projectSize = await page.locator('#bayer .project-heading').evaluate(fontSize);
+  const leadSize = await feature.locator('h2').evaluate(fontSize);
+  assert.ok(sectionSize < projectSize && projectSize < leadSize, 'Type distinguishes section, project and lead story');
   if (page.viewportSize().width === 1280) {
     const cards = await page.locator('.work-support').evaluateAll(items => items.map(el => el.getBoundingClientRect().top));
     assert.ok(cards.every(top => Math.abs(top - cards[0]) <= 1), 'The three engineering projects share a row');
@@ -64,6 +69,17 @@ async function checkDirectory(page, workUrl) {
       items.map(el => el.getBoundingClientRect().top));
     assert.equal(media.length, 3);
     assert.ok(media.every(top => Math.abs(top - media[0]) <= 1), 'Featured project images align on desktop');
+    const actions = await page.locator('.work-support .work-links a:first-child').evaluateAll(links =>
+      links.map(link => link.getBoundingClientRect().top));
+    assert.equal(actions.length, 3);
+    assert.ok(actions.every(top => Math.abs(top - actions[0]) <= 1), 'Primary reading actions align across the three projects');
+    const slots = await page.locator('.work-evidence-link').evaluateAll(links => links.map(link => ({
+      width: link.firstElementChild.getBoundingClientRect().width,
+      labelOffset: link.lastElementChild.getBoundingClientRect().left - link.getBoundingClientRect().left
+    })));
+    assert.equal(slots.length, 2);
+    assert.ok(Math.abs(slots[0].width - slots[1].width) <= 1 && Math.abs(slots[0].labelOffset - slots[1].labelOffset) <= 1,
+      'Research previews reserve equal space for artwork and align the link labels');
     const archive = page.locator('.work-index');
     assert.deepEqual(await archive.locator('.project-card').evaluateAll(cards => cards.map(card => card.id)),
       ['bayer', 'eli-lilly', 'berkeley', 'bucky-ball']);
@@ -431,6 +447,15 @@ async function check() {
     await checkRoleGalleries(browser, workUrl);
     await checkImageReturns(browser, workUrl);
     if (webkitOnly) return;
+    const responsive = await browser.newPage();
+    await responsive.goto(workUrl);
+    for (const width of [390, 900, 1024]) {
+      await responsive.setViewportSize({width, height: 844});
+      const cards = await responsive.locator('.work-support').evaluateAll(items => items.map(el => el.getBoundingClientRect().toJSON()));
+      assert.ok(cards.slice(1).every((card, i) => card.top >= cards[i].bottom - 1), width + 'px: featured projects stack in reading order');
+      assert.ok(await responsive.evaluate(() => document.documentElement.scrollWidth <= innerWidth), width + 'px: no horizontal overflow');
+    }
+    await responsive.close();
     for (const width of [375, 1280]) {
       const page = await browser.newPage({ viewport: { width, height: width === 375 ? 812 : 900 } });
       await page.goto(new URL('/', workUrl).href);
