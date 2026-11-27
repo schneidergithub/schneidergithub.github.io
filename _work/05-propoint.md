@@ -19,4 +19,4 @@ home_highlight:
 title: "Guest Pass and Super Salon"
 context: "ProPoint Global / Super Salon"
 ---
-I built Guest Pass for mobile booking and Super Salon’s scheduling and checkout software. Around 30,000 salons used Super Salon, handling hundreds of millions of dollars in transactions annually.
+I built Guest Pass for mobile booking and Super Salon’s scheduling and checkout software. Around **30,000 salons** used Super Salon, handling hundreds of millions of dollars in transactions annually.

@@ -32,7 +32,7 @@
     const controls = region.querySelector('.filmstrip-controls');
     const status = controls.querySelector('.filmstrip-status');
     const [previous, next] = controls.querySelectorAll('button');
-    const openAll = region.querySelector('[data-open-collection]');
+    const openAll = region.closest('[data-image-group]')?.querySelector('[data-open-collection]');
     if (openAll && typeof document.querySelector('.image-viewer')?.showModal === 'function') {
       track.classList.add('contact-ready');
       openAll.hidden = false;
