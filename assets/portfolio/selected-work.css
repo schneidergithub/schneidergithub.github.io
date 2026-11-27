@@ -1,7 +1,7 @@
 /* Selected Work index and scientific benchmark case study. */
 .work-mast, .benchmark-feature, .work-projects { overflow-wrap: anywhere; }
 .work-mast { padding-block: clamp(1.2rem, 3vw, 2.35rem) 1rem; }
-.work-mast h1, .benchmark-feature h2, .project-heading, .research-project h2, .work-section-label {
+.work-mast h1, .benchmark-feature h2, .project-heading, .research-project h2 {
   margin: 0;
   color: #f7f3e9;
   font-family: Georgia, "Times New Roman", serif;
@@ -12,18 +12,9 @@
 }
 .work-mast h1 { font-size: clamp(2.3rem, 4.3vw, 3.25rem); }
 .work-kicker {
-  margin: 0 0 .6rem;
-  color: #e1bf86;
-  font: 650 .8rem/1.45 system-ui, sans-serif;
-  letter-spacing: .055em;
-  text-transform: uppercase;
-}
-.work-projects .work-kicker {
-  color: #bcc7d2;
-  font-size: .875rem;
-  font-weight: 600;
-  letter-spacing: .015em;
-  text-transform: none;
+  margin: 0 0 .25rem;
+  color: #aeb9c5;
+  font: 500 .875rem/1.45 system-ui, sans-serif;
 }
 .benchmark-feature {
   display: grid;
@@ -33,7 +24,13 @@
   padding-block: clamp(1.25rem, 2.7vw, 2.1rem);
 }
 .benchmark-feature h2 { max-width: 21ch; font-size: clamp(1.8rem, 3vw, 2.5rem); }
-.benchmark-byline, .project-detail { margin: 0; color: #d2d9e2; }
+.benchmark-byline, .project-detail {
+  margin: 0;
+  max-width: 62ch;
+  color: #d2d9e2;
+  line-height: 1.53;
+  text-wrap: pretty;
+}
 .project-detail p { margin: 0; }
 .work-links { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 1.15rem; margin-top: .45rem; }
 .work-links a, .work-evidence-link {
@@ -42,8 +39,12 @@
   min-height: 44px;
   max-width: 100%;
   font-size: .94rem;
+  font-weight: 400;
+  color: var(--accent);
+  text-decoration: none;
 }
-.work-links a:first-child { font-weight: 650; }
+.work-links a:first-child { font-weight: 500; text-decoration: underline; }
+.work-links a:is(:hover, :focus-visible), .work-evidence-link:is(:hover, :focus-visible) { text-decoration: underline; }
 .featured-projects {
   display: grid;
   grid-template-columns: 1.2fr 1fr 1fr;
@@ -53,7 +54,12 @@
 }
 .featured-projects > article + article { padding-inline-start: clamp(1rem, 2.2vw, 1.75rem); border-inline-start: 1px solid var(--line); }
 .project-card, .research-project, .project-gallery { min-width: 0; scroll-margin-top: 1rem; }
-.project-heading, .research-project h2 { margin: 0 0 .65rem; font-size: clamp(1.5rem, 2.25vw, 1.95rem); }
+.project-heading, .research-project h2 {
+  margin: 0 0 .5rem;
+  font-size: clamp(1.5rem, 2.35vw, 1.875rem);
+  line-height: 1.2;
+  letter-spacing: -.01em;
+}
 .work-metric, .project-detail strong { color: #f1d2a1; font-variant-numeric: lining-nums; }
 .work-projects { padding-bottom: 2rem; }
 .work-research-band { background: var(--panel); }
@@ -65,16 +71,27 @@
 }
 .research-project { display: flex; flex-direction: column; align-items: flex-start; }
 .research-project .work-links { margin-top: auto; padding-top: .45rem; }
-.work-evidence-link { gap: .7rem; margin-top: .4rem; color: #adc4dd; }
+.work-evidence-link { gap: .7rem; margin-top: .4rem; }
 .work-media-frame {
   flex: none; display: block; position: relative; overflow: hidden;
   height: 4rem; aspect-ratio: 1.65; border-radius: 3px; background: #fff;
 }
 .work-media-frame img { width: 100%; height: 100%; object-fit: contain; }
-.chess-preview .work-media-frame { aspect-ratio: 26/25; }
-.chess-preview .work-media-frame img { position: absolute; width: 246.154%; max-width: none; height: auto; left: -71.154%; top: -30%; }
+/* Keep the board crop centered in the same preview slot as the report. */
+.chess-preview .work-media-frame img {
+  position: absolute;
+  height: 144%;
+  width: auto;
+  max-width: none;
+  top: -30%;
+  left: 50%;
+  transform: translateX(-49%);
+}
 .work-section-label {
-  font-size: clamp(1.95rem, 3vw, 2.5rem);
+  margin: 0;
+  color: #c1c9d0;
+  font: 500 1.375rem/1.27 system-ui, sans-serif;
+  letter-spacing: normal;
   padding-block: clamp(1.5rem, 3vw, 2.25rem) clamp(1rem, 2vw, 1.5rem);
 }
 .work-index {
@@ -82,7 +99,6 @@
   display: grid;
   gap: clamp(1.75rem, 2.5vw, 2rem);
 }
-.work-index .project-detail { max-width: 85ch; }
 .work-index .project-card:is(:not(.has-evidence), :has(.work-single-image)) {
   background: #1d242c;
   padding: clamp(1rem, 2vw, 1.5rem);
@@ -93,9 +109,12 @@
   display: block; box-sizing: border-box; width: 100%; height: auto; aspect-ratio: 13 / 6;
   object-fit: contain; background: var(--panel); border: 1px solid var(--line); border-radius: 3px;
 }
-@media (width > 52rem) {
+/* Allow about 17rem of copy in each of the two narrower columns. */
+@media (min-width: 68rem) {
   .featured-projects { row-gap: .7rem; }
   .featured-projects > article { display: grid; grid-row: span 2; grid-template-rows: subgrid; }
+  .featured-projects .project-copy { display: flex; flex-direction: column; }
+  .featured-projects .work-links { margin-top: auto; padding-top: .45rem; }
   .featured-projects :is(.project-gallery, .project-banner) { margin-top: 0; }
 }
 .work-index .project-gallery { margin-top: .75rem; }
@@ -121,7 +140,7 @@
   outline: 3px solid var(--focus); outline-offset: 4px;
 }
 .project-card:focus, .research-project:focus { outline: none; }
-@media (max-width: 52rem) {
+@media (width < 68rem) {
   .featured-projects { grid-template-columns: minmax(0, 1fr); gap: 0; padding-block: 0; }
   .featured-projects > article { padding-block: 1.15rem; }
   .featured-projects > article + article { padding-inline-start: 0; border-inline-start: 0; }
@@ -173,9 +192,10 @@
 .filmstrip-status { color: #d6dde6; font-size: .91rem; font-variant-numeric: tabular-nums; }
 .gallery-open-all {
   display: none; align-items: center; min-height: 44px; margin: 0; padding: .25rem 0;
-  font: 600 .94rem/1.4 system-ui,sans-serif; color: var(--accent); background: transparent; border: 0; cursor: pointer;
+  font: 400 .94rem/1.4 system-ui,sans-serif; color: var(--accent); background: transparent; border: 0; cursor: pointer;
 }
-.gallery-open-all:hover { text-decoration: underline; }
+.gallery-open-all:is(:hover, :focus-visible) { text-decoration: underline; }
+.gallery-open-all:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .filmstrip-ready [data-filmstrip] figcaption { display: none; }
 @container work-index (min-width: 27rem) {
   .work-thumbnails[data-filmstrip] { grid-auto-flow: row; grid-template-columns: repeat(3,minmax(0,1fr)); overflow: visible; padding: 0; }
